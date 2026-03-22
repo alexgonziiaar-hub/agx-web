@@ -795,7 +795,17 @@ let gammaLines = [];
 function initTVChart() {
   const container = document.getElementById('tv-chart');
   if (!container) return;
-  if (tvChart) { tvChart.remove(); tvChart = null; }
+  if (typeof LightweightCharts === 'undefined') {
+    console.error('LightweightCharts not loaded');
+    setTimeout(initTVChart, 500);
+    return;
+  }
+  if (tvChart) { try { tvChart.remove(); } catch(e) {} tvChart = null; }
+  // Ensure container has dimensions
+  if (container.offsetWidth === 0) {
+    setTimeout(initTVChart, 200);
+    return;
+  }
 
   tvChart = LightweightCharts.createChart(container, {
     width:  container.offsetWidth,
@@ -909,42 +919,33 @@ async function loadTVCandles(ticker, tf) {
 function drawGammaLines(levels) {
   if (!tvChart || !candleSeries) return;
 
-  // Remove existing gamma lines
-  gammaLines.forEach(s => { try { tvChart.removeSeries(s); } catch(e) {} });
+  // Remove existing price lines
+  gammaLines.forEach(pl => { try { candleSeries.removePriceLine(pl); } catch(e) {} });
   gammaLines = [];
 
   const lineDefs = [
-    { price: levels.callWall,          color: '#00e5a0', width: 1.5, style: 0, title: 'CALL WALL' },
-    { price: levels.putWall,           color: '#ff3d5a', width: 1.5, style: 0, title: 'PUT WALL'  },
-    { price: levels.gammaFlip,         color: '#d4a843', width: 1,   style: 1, title: 'ZERO γ'    },
-    { price: levels.above,             color: '#00e5a0', width: 1,   style: 2, title: 'RES ↑'     },
-    { price: levels.below,             color: '#ff3d5a', width: 1,   style: 2, title: 'SUP ↓'     },
-    { price: levels.majorPos?.strike,  color: '#00ff88', width: 2,   style: 0, title: 'MAJOR γ+'  },
-    { price: levels.majorNeg?.strike,  color: '#ff1a3d', width: 2,   style: 0, title: 'MAJOR γ−'  },
+    { price: levels.callWall,         color: '#00e5a0', width: 2, style: 0, title: 'CALL WALL ——' },
+    { price: levels.putWall,          color: '#ff3d5a', width: 2, style: 0, title: 'PUT WALL ——'  },
+    { price: levels.gammaFlip,        color: '#d4a843', width: 1, style: 1, title: 'ZERO γ ·····' },
+    { price: levels.above,            color: '#00e5a060', width: 1, style: 2, title: 'RES ↑'      },
+    { price: levels.below,            color: '#ff3d5a60', width: 1, style: 2, title: 'SUP ↓'      },
+    { price: levels.majorPos?.strike, color: '#00ff88', width: 2, style: 0, title: 'MAJOR γ+ ══'  },
+    { price: levels.majorNeg?.strike, color: '#ff1a3d', width: 2, style: 0, title: 'MAJOR γ− ══'  },
   ];
 
   lineDefs.forEach(def => {
     if (!def.price) return;
     try {
-      const ls = tvChart.addLineSeries({
-        color:     def.color,
-        lineWidth: def.width,
-        lineStyle: def.style, // 0=solid, 1=dotted, 2=dashed
-        priceLineVisible: false,
-        lastValueVisible: true,
-        title: def.title,
-        crosshairMarkerVisible: false,
+      const pl = candleSeries.createPriceLine({
+        price:             def.price,
+        color:             def.color,
+        lineWidth:         def.width,
+        lineStyle:         def.style,
+        axisLabelVisible:  true,
+        title:             def.title,
       });
-
-      // Extend line across the entire visible range
-      const now = Math.floor(Date.now() / 1000);
-      const past = now - 30 * 24 * 3600;
-      ls.setData([
-        { time: past, value: def.price },
-        { time: now,  value: def.price },
-      ]);
-      gammaLines.push(ls);
-    } catch(e) {}
+      gammaLines.push(pl);
+    } catch(e) { console.log('PriceLine error:', e); }
   });
 }
 
@@ -1248,6 +1249,14 @@ function toast(msg) {
   el.textContent=msg; el.classList.add('show');
   setTimeout(()=>el.classList.remove('show'),3000);
 }
+
+// Init TV chart on page load
+document.addEventListener('DOMContentLoaded', () => {
+  // Small delay to ensure container has dimensions
+  setTimeout(() => {
+    initTVChart();
+  }, 500);
+});
 </script>
 </body>
 </html>
