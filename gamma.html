@@ -877,7 +877,7 @@ async function loadData() {
 
     // Chart
     if(!tvChart) initChart();
-    const chartTicker = CHART_TICKERS[currentMarket] || ticker;
+    const chartTicker = ticker;
     await await loadCandles(chartTicker, currentTF);
     setTimeout(() => drawPriceLines(levels), 300);
 
