@@ -31,15 +31,12 @@
     .badge.neg{background:var(--red2);color:var(--red);border:1px solid rgba(255,61,90,.25)}
     .st{font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--silver3);margin-bottom:6px;font-weight:600}
     .rrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
-    .rc{padding:12px 16px;border-radius:8px}.rcl{font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.12em;opacity:.5}.rv2{font-family:'Bebas Neue',sans-serif;font-size:20px;margin-top:2px}.rcd{font-size:10px;opacity:.35;margin-top:1px}
+    .rc{padding:12px 16px;border-radius:8px}.rcl{font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.12em;opacity:.5}.rcv{font-family:'Bebas Neue',sans-serif;font-size:20px;margin-top:2px}.rcd{font-size:10px;opacity:.35;margin-top:1px}
     .gw{display:flex;align-items:center;gap:12px}
     .gg{width:60px;height:60px}.gg-bg{fill:none;stroke:var(--silver3);stroke-width:6}.gg-f{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .8s}.gg-t{font-family:'Bebas Neue',sans-serif;font-size:16px;fill:var(--silver)}
-    .legend{display:flex;flex-wrap:wrap;gap:12px;padding:4px 0;margin-bottom:8px}.le{display:flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2)}.ld{width:8px;height:8px;border-radius:2px}
+    .legend{display:flex;flex-wrap:wrap;gap:12px;padding:4px 0;margin-bottom:8px}.li{display:flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2)}.ld{width:8px;height:8px;border-radius:2px}
     .crow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}@media(max-width:1100px){.crow{grid-template-columns:1fr}}
     .cbox{border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.06);height:650px;position:relative;background:#03050a}
-    #gex-wrap{cursor:grab}#gex-wrap:active{cursor:grabbing}
-    #gex-wrap canvas{display:block}
-    .gex-tt{position:absolute;background:rgba(3,5,10,.95);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:10px 14px;pointer-events:none;font-family:'Share Tech Mono',monospace;font-size:12px;z-index:20;display:none;white-space:nowrap;line-height:1.6}
     .llist{display:flex;flex-direction:column;gap:5px;margin-bottom:20px}
     .lhdr{display:grid;grid-template-columns:30px 180px 95px 65px 1fr 80px;gap:10px;padding:0 14px 5px;font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--silver3);font-weight:600}
     .lhdr span:nth-child(3),.lhdr span:nth-child(4),.lhdr span:nth-child(6){text-align:right}.lhdr span:nth-child(5){text-align:center}
@@ -66,24 +63,24 @@
     <div class="badge pos" id="pn">Net GEX: --</div>
   </div>
   <div class="rrow">
-    <div class="rc" id="rcg" style="background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.25)"><div class="rcl">Gamma Regime</div><div class="rv2" id="rgv" style="color:var(--green)">--</div><div class="rcd" id="rgd">Loading...</div></div>
-    <div class="rc" id="rcv2" style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25)"><div class="rcl">Volatility Regime</div><div class="rv2" id="rvv" style="color:var(--cyan)">--</div><div class="rcd" id="rvd">Loading...</div></div>
+    <div class="rc" id="rcg" style="background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.25)"><div class="rcl">Gamma Regime</div><div class="rcv" id="rgv" style="color:var(--green)">--</div><div class="rcd" id="rgd">Loading...</div></div>
+    <div class="rc" id="rcv2" style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25)"><div class="rcl">Volatility Regime</div><div class="rcv" id="rvv" style="color:var(--cyan)">--</div><div class="rcd" id="rvd">Loading...</div></div>
     <div class="rc" style="background:rgba(255,255,255,.02);border:1px solid var(--silver3)"><div class="rcl">Volatility Meter</div><div class="gw"><svg class="gg" viewBox="0 0 80 80"><circle class="gg-bg" cx="40" cy="40" r="32" stroke-dasharray="150.8" stroke-dashoffset="0" transform="rotate(-90 40 40)"/><circle class="gg-f" id="gf" cx="40" cy="40" r="32" stroke-dasharray="150.8" stroke-dashoffset="150.8" transform="rotate(-90 40 40)" stroke="var(--green)"/><text class="gg-t" x="40" y="44" text-anchor="middle" id="gp">0%</text></svg><div><div style="font-family:'Bebas Neue',sans-serif;font-size:18px" id="gl">Calm</div><div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver3);margin-top:2px">Trend: <span id="gt">—</span></div></div></div></div>
   </div>
   <div class="legend">
-    <div class="le"><div class="ld" style="background:var(--zg)"></div>Zero Gamma</div>
-    <div class="le"><div class="ld" style="background:var(--mg)"></div>Max + Gamma</div>
-    <div class="le"><div class="ld" style="background:var(--mn)"></div>Max - Gamma</div>
-    <div class="le"><div class="ld" style="background:var(--cw)"></div>Call Wall</div>
-    <div class="le"><div class="ld" style="background:var(--pw)"></div>Put Wall</div>
-    <div class="le"><div class="ld" style="background:var(--hvl)"></div>HVL</div>
-    <div class="le"><div class="ld" style="background:var(--poc)"></div>POC</div>
-    <div class="le" style="margin-left:16px"><div class="ld" style="background:var(--cyan)"></div>+GEX Buyers</div>
-    <div class="le"><div class="ld" style="background:var(--purple)"></div>-GEX Sellers</div>
+    <div class="li"><div class="ld" style="background:var(--zg)"></div>Zero Gamma</div>
+    <div class="li"><div class="ld" style="background:var(--mg)"></div>Max + Gamma</div>
+    <div class="li"><div class="ld" style="background:var(--mn)"></div>Max - Gamma</div>
+    <div class="li"><div class="ld" style="background:var(--cw)"></div>Call Wall</div>
+    <div class="li"><div class="ld" style="background:var(--pw)"></div>Put Wall</div>
+    <div class="li"><div class="ld" style="background:var(--hvl)"></div>HVL</div>
+    <div class="li"><div class="ld" style="background:var(--poc)"></div>POC</div>
+    <div class="li" style="margin-left:16px"><div class="ld" style="background:var(--cyan)"></div>+GEX Buyers</div>
+    <div class="li"><div class="ld" style="background:var(--purple)"></div>-GEX Sellers</div>
   </div>
   <div class="crow">
     <div><div class="st">Price Chart + Gamma Levels</div><div class="cbox" id="chart-wrap"></div></div>
-    <div><div class="st">GEX Distribution by Strike</div><div class="cbox" id="gex-wrap"><canvas id="gex-c"></canvas><div class="gex-tt" id="gtt"></div></div></div>
+    <div><div class="st">GEX Distribution by Strike <span style="color:var(--silver2);font-weight:400;font-size:9px">— scroll · zoom · drag</span></div><div class="cbox" id="gex-wrap"></div></div>
   </div>
   <div class="st">Key Gamma Levels</div>
   <div class="lhdr"><span></span><span>Level</span><span>Strike</span><span>Dist</span><span>GEX Bar</span><span>GEX</span></div>
@@ -94,18 +91,16 @@
 const API='/.netlify/functions/gamma-levels',REFRESH=60000;
 let ticker='ES',timer=null,D=null;
 let priceChart=null,priceLine=null,priceVol=null,priceLevelLines=[];
-
-// GEX state for interactivity
-const G={offset:0,zoom:1,drag:false,dragY0:0,dragOff0:0,hover:-1,mx:0,my:0};
+let gexChart=null,gexCallSeries=null,gexPutSeries=null,gexLevelLines=[];
 
 const STY={
-  zeroGamma:{icon:'⚡',color:'#FACC15',lw:3,dash:[10,5]},
-  maxPositive:{icon:'🟢',color:'#00e5a0',lw:3,dash:[8,4]},
-  maxNegative:{icon:'🔴',color:'#ff3d5a',lw:3,dash:[8,4]},
-  callWall:{icon:'🔵',color:'#3B82F6',lw:2.5,dash:[6,4]},
-  putWall:{icon:'🟣',color:'#A855F7',lw:2.5,dash:[6,4]},
-  hvl:{icon:'🟠',color:'#F97316',lw:2,dash:[4,6]},
-  poc:{icon:'◆',color:'#00cfff',lw:2,dash:[3,3]},
+  zeroGamma:{icon:'⚡',color:'#FACC15',lw:3},
+  maxPositive:{icon:'🟢',color:'#00e5a0',lw:3},
+  maxNegative:{icon:'🔴',color:'#ff3d5a',lw:3},
+  callWall:{icon:'🔵',color:'#3B82F6',lw:2.5},
+  putWall:{icon:'🟣',color:'#A855F7',lw:2.5},
+  hvl:{icon:'🟠',color:'#F97316',lw:2},
+  poc:{icon:'◆',color:'#00cfff',lw:2},
 };
 function fp(v){return v?v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'--'}
 function fg(v){if(!v&&v!==0)return'--';const a=Math.abs(v);if(a>=1e9)return(v/1e9).toFixed(2)+'B';if(a>=1e6)return(v/1e6).toFixed(1)+'M';if(a>=1e3)return(v/1e3).toFixed(1)+'K';return v.toFixed(0)}
@@ -114,7 +109,7 @@ function setS(ok,t){document.getElementById('dot').className='dot'+(ok?'':' err'
 function showE(m){const e=document.getElementById('err');e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',8000)}
 
 // ═══ PRICE CHART ═══
-function initPC(){
+function initPriceChart(){
   const w=document.getElementById('chart-wrap');w.innerHTML='';
   priceChart=LightweightCharts.createChart(w,{
     width:w.clientWidth,height:w.clientHeight,
@@ -122,13 +117,14 @@ function initPC(){
     grid:{vertLines:{color:'rgba(255,255,255,0.03)'},horzLines:{color:'rgba(255,255,255,0.03)'}},
     rightPriceScale:{borderColor:'rgba(255,255,255,0.06)',scaleMargins:{top:0.05,bottom:0.15}},
     timeScale:{borderColor:'rgba(255,255,255,0.06)',timeVisible:true,secondsVisible:false},
-    crosshair:{mode:0},
+    crosshair:{mode:0,vertLine:{color:'rgba(255,255,255,0.1)',width:1,style:3},horzLine:{color:'rgba(255,255,255,0.1)',width:1,style:3}},
   });
-  priceLine=priceChart.addAreaSeries({topColor:'rgba(0,229,160,0.15)',bottomColor:'rgba(0,229,160,0.01)',lineColor:'#00e5a0',lineWidth:2});
+  priceLine=priceChart.addAreaSeries({topColor:'rgba(0,229,160,0.15)',bottomColor:'rgba(0,229,160,0.01)',lineColor:'#00e5a0',lineWidth:2,crosshairMarkerRadius:4,crosshairMarkerBorderColor:'#00e5a0',crosshairMarkerBackgroundColor:'#03050a'});
   priceVol=priceChart.addHistogramSeries({color:'rgba(0,229,160,0.2)',priceFormat:{type:'volume'},priceScaleId:'vol'});
   priceChart.priceScale('vol').applyOptions({scaleMargins:{top:0.85,bottom:0}});
 }
-function updatePC(d){
+
+function updatePriceChart(d){
   if(!priceChart||!priceLine)return;
   const c=d.candles||[];if(!c.length)return;
   priceLine.setData(c.map(x=>({time:x.time,value:x.close})));
@@ -142,204 +138,88 @@ function updatePC(d){
   priceChart.applyOptions({width:document.getElementById('chart-wrap').clientWidth,height:document.getElementById('chart-wrap').clientHeight});
 }
 
-// ═══ GEX DISTRIBUTION (Interactive Canvas) ═══
-function drawGex(){
-  if(!D||!D.distribution||!D.distribution.length)return;
-  const wrap=document.getElementById('gex-wrap');
-  const canvas=document.getElementById('gex-c');
-  const dpr=window.devicePixelRatio||1;
-  const W=wrap.clientWidth,H=wrap.clientHeight;
-  canvas.width=W*dpr;canvas.height=H*dpr;
-  canvas.style.width=W+'px';canvas.style.height=H+'px';
-  const c=canvas.getContext('2d');c.scale(dpr,dpr);
+// ═══ GEX DISTRIBUTION CHART (Lightweight Charts — native scroll/zoom) ═══
+// We use time axis with fake timestamps (1 per strike) to get native interactivity
+function initGexChart(){
+  const w=document.getElementById('gex-wrap');w.innerHTML='';
+  gexChart=LightweightCharts.createChart(w,{
+    width:w.clientWidth,height:w.clientHeight,
+    layout:{background:{type:'solid',color:'#03050a'},textColor:'rgba(255,255,255,0.3)',fontFamily:'Share Tech Mono,monospace',fontSize:10},
+    grid:{vertLines:{color:'rgba(255,255,255,0.03)'},horzLines:{color:'rgba(255,255,255,0.03)'}},
+    rightPriceScale:{borderColor:'rgba(255,255,255,0.06)',visible:true,scaleMargins:{top:0.05,bottom:0.05}},
+    leftPriceScale:{borderColor:'rgba(255,255,255,0.06)',visible:false},
+    timeScale:{borderColor:'rgba(255,255,255,0.06)',tickMarkFormatter:(t)=>{
+      // Convert fake timestamp back to strike
+      if(D&&D.distribution){
+        const idx=t-1000000;
+        if(idx>=0&&idx<D.distribution.length) return D.distribution[idx].strike.toFixed(0);
+      }
+      return '';
+    }},
+    crosshair:{mode:0,vertLine:{color:'rgba(255,255,255,0.15)',width:1,style:3,labelVisible:true},horzLine:{color:'rgba(255,255,255,0.15)',width:1,style:3}},
+  });
 
-  const dist=D.distribution;
-  const spot=D.spotPrice;
-  const N=dist.length;
-  const strikes=dist.map(x=>x.strike);
-  const cGV=dist.map(x=>x.callGex||0);
-  const pGV=dist.map(x=>x.putGex||0);
-  const maxA=Math.max(...dist.map(x=>Math.abs(x.gex)),1);
+  // Calls (+GEX) — cyan histogram (positive values above zero)
+  gexCallSeries=gexChart.addHistogramSeries({
+    color:'#00cfff',
+    priceFormat:{type:'custom',formatter:(p)=>fg(p)},
+    priceScaleId:'right',
+  });
 
-  const pT=35,pB=25,pL=65,pR=65;
-  const cW=W-pL-pR;
-  const virtualH=Math.max(H-pT-pB,(H-pT-pB)*G.zoom);
-  const barH=Math.max(5,virtualH/N-1);
-  const zX=pL+cW/2;
-
-  // Clamp offset
-  const maxOff=Math.max(0,virtualH-(H-pT-pB));
-  G.offset=Math.max(0,Math.min(maxOff,G.offset));
-
-  // Background
-  c.fillStyle='#03050a';c.fillRect(0,0,W,H);
-
-  // Clip
-  c.save();c.beginPath();c.rect(0,pT,W,H-pT-pB);c.clip();
-
-  // Grid
-  c.strokeStyle='rgba(255,255,255,0.04)';c.lineWidth=1;
-  for(let i=0;i<=4;i++){const x=pL+(cW/4)*i;c.beginPath();c.moveTo(x,pT);c.lineTo(x,H-pB);c.stroke()}
-
-  // Zero line
-  c.strokeStyle='rgba(255,255,255,0.18)';c.lineWidth=2;
-  c.beginPath();c.moveTo(zX,pT);c.lineTo(zX,H-pB);c.stroke();
-
-  // Hover index
-  const hIdx=(G.my>=pT&&G.my<=H-pB)?Math.floor((G.my-pT+G.offset)/virtualH*N):-1;
-
-  // Bars
-  for(let i=0;i<N;i++){
-    const y=pT+(i/N)*virtualH-G.offset;
-    if(y+barH<pT||y>H-pB)continue;
-    const cg=cGV[i],pg=pGV[i];
-    const isH=i===hIdx;
-
-    // Buyers — cyan
-    if(cg>0){
-      const bW=(cg/maxA)*(cW/2);
-      const gr=c.createLinearGradient(zX,0,zX+bW,0);
-      gr.addColorStop(0,'rgba(0,207,255,0.25)');gr.addColorStop(1,isH?'rgba(0,207,255,0.95)':'rgba(0,207,255,0.7)');
-      c.fillStyle=gr;c.fillRect(zX+1,y,bW,barH);
-      if(isH){c.strokeStyle='#00cfff';c.lineWidth=2;c.strokeRect(zX+1,y,bW,barH)}
-    }
-    // Sellers — purple
-    if(pg<0){
-      const bW=(Math.abs(pg)/maxA)*(cW/2);
-      const gr=c.createLinearGradient(zX-bW,0,zX,0);
-      gr.addColorStop(0,isH?'rgba(179,102,255,0.95)':'rgba(179,102,255,0.7)');gr.addColorStop(1,'rgba(179,102,255,0.25)');
-      c.fillStyle=gr;c.fillRect(zX-bW-1,y,bW,barH);
-      if(isH){c.strokeStyle='#b366ff';c.lineWidth=2;c.strokeRect(zX-bW-1,y,bW,barH)}
-    }
-  }
-
-  // Strike labels — BIGGER
-  const step=Math.max(1,Math.floor(N/(20*G.zoom)));
-  c.font='bold 12px "Share Tech Mono"';c.fillStyle='rgba(255,255,255,.4)';
-  for(let i=0;i<N;i+=step){
-    const y=pT+(i/N)*virtualH-G.offset+barH/2+4;
-    if(y<pT||y>H-pB)continue;
-    c.textAlign='left';c.fillText(strikes[i].toFixed(0),W-pR+6,y);
-    c.textAlign='right';c.fillText(strikes[i].toFixed(0),pL-6,y);
-  }
-
-  // Level lines — BIGGER labels
-  for(const[k,v]of Object.entries(D.levels)){
-    if(!v.strike||!STY[k])continue;
-    const idx=strikes.findIndex(s=>Math.abs(s-v.strike)<(N>1?Math.abs(strikes[1]-strikes[0])*2:9999));
-    if(idx<0)continue;
-    const ly=pT+(idx/N)*virtualH-G.offset;
-    if(ly<pT-15||ly>H-pB+15)continue;
-    const st=STY[k];
-    c.strokeStyle=st.color;c.lineWidth=st.lw;c.setLineDash(st.dash||[6,4]);
-    c.beginPath();c.moveTo(pL,ly);c.lineTo(W-pR,ly);c.stroke();c.setLineDash([]);
-    // BIG label
-    const txt=v.shortLabel+' '+v.strike.toFixed(0);
-    c.font='bold 13px "Share Tech Mono"';
-    const tw=c.measureText(txt).width+16;
-    c.fillStyle=st.color+'55';
-    c.beginPath();c.roundRect(zX-tw/2,ly-17,tw,20,4);c.fill();
-    c.fillStyle=st.color;c.textAlign='center';
-    c.fillText(txt,zX,ly-2);
-  }
-
-  // Spot line
-  const si=strikes.findIndex(s=>s>=spot);
-  if(si>=0){
-    const sy=pT+(si/N)*virtualH-G.offset;
-    if(sy>=pT-10&&sy<=H-pB+10){
-      c.strokeStyle='#fff';c.lineWidth=2.5;c.setLineDash([4,3]);
-      c.beginPath();c.moveTo(pL,sy);c.lineTo(W-pR,sy);c.stroke();c.setLineDash([]);
-      c.font='bold 14px "Share Tech Mono"';c.fillStyle='rgba(255,255,255,.9)';c.textAlign='center';
-      c.fillText('◆ SPOT '+fp(spot),zX,sy-8);
-    }
-  }
-
-  // Hover crosshair
-  if(hIdx>=0&&hIdx<N){
-    const hy=pT+(hIdx/N)*virtualH-G.offset;
-    if(hy>=pT&&hy<=H-pB){
-      c.strokeStyle='rgba(255,255,255,0.25)';c.lineWidth=1;c.setLineDash([2,2]);
-      c.beginPath();c.moveTo(pL,hy);c.lineTo(W-pR,hy);c.stroke();c.setLineDash([]);
-    }
-  }
-
-  c.restore();
-
-  // Headers — BIGGER
-  c.font='bold 13px "Share Tech Mono"';c.textAlign='center';
-  c.fillStyle='#b366ff';c.fillText('— SELLERS (Puts)',pL+cW*.25,18);
-  c.fillStyle='#00cfff';c.fillText('BUYERS (Calls) +',pL+cW*.75,18);
-  c.fillStyle='rgba(255,255,255,.2)';c.font='11px "Share Tech Mono"';c.fillText('0',zX,18);
-
-  // Bottom
-  c.fillStyle='rgba(255,255,255,.15)';c.font='10px "Share Tech Mono"';c.textAlign='center';
-  const zoomPct=Math.round(G.zoom*100);
-  c.fillText('Zoom: '+zoomPct+'% | Scroll to pan · Ctrl+Scroll to zoom',W/2,H-6);
-
-  // Tooltip
-  const tt=document.getElementById('gtt');
-  if(hIdx>=0&&hIdx<N){
-    const d2=dist[hIdx];
-    tt.style.display='block';
-    tt.style.left=Math.min(W-180,Math.max(10,G.mx+15))+'px';
-    tt.style.top=Math.min(H-120,Math.max(10,G.my-70))+'px';
-    tt.innerHTML=`<div style="color:#fff;font-weight:700;font-size:14px;margin-bottom:4px">Strike: ${fp(d2.strike)}</div>
-      <div style="color:#00cfff;font-size:13px">+GEX (Calls): ${fg(d2.callGex||0)}</div>
-      <div style="color:#b366ff;font-size:13px">-GEX (Puts): ${fg(d2.putGex||0)}</div>
-      <div style="color:${d2.gex>=0?'#00e5a0':'#ff3d5a'};font-size:13px;font-weight:700">Net GEX: ${fg(d2.gex)}</div>
-      <div style="color:var(--silver3);font-size:11px;margin-top:2px">OI: ${(d2.oi||0).toLocaleString()}</div>`;
-  }else{tt.style.display='none'}
+  // Puts (-GEX) — purple histogram (negative values below zero)
+  gexPutSeries=gexChart.addHistogramSeries({
+    color:'#b366ff',
+    priceFormat:{type:'custom',formatter:(p)=>fg(p)},
+    priceScaleId:'right',
+  });
 }
 
-// ═══ GEX EVENT SETUP ═══
-function setupGex(){
-  const el=document.getElementById('gex-c');
+function updateGexChart(d){
+  if(!gexChart||!gexCallSeries||!gexPutSeries)return;
+  const dist=d.distribution||[];if(!dist.length)return;
 
-  // Wheel: scroll (normal) or zoom (ctrl)
-  el.addEventListener('wheel',function(e){
-    e.preventDefault();
-    e.stopPropagation();
-    if(e.ctrlKey||e.metaKey){
-      const d=e.deltaY>0?0.85:1.15;
-      G.zoom=Math.max(1,Math.min(6,G.zoom*d));
-    }else{
-      G.offset+=e.deltaY*1.5;
-    }
-    requestAnimationFrame(drawGex);
-  },{passive:false});
+  // Use fake timestamps: 1000000 + index (each strike gets a unique "time")
+  const callData=[];
+  const putData=[];
 
-  // Mouse drag
-  el.addEventListener('mousedown',function(e){
-    G.drag=true;G.dragY0=e.offsetY;G.dragOff0=G.offset;
-    e.preventDefault();
+  dist.forEach((item,i)=>{
+    const t=1000000+i;
+    const cg=item.callGex||0;
+    const pg=item.putGex||0;
+    callData.push({time:t,value:cg>0?cg:0,color:cg>0?'rgba(0,207,255,0.7)':'rgba(0,207,255,0.05)'});
+    putData.push({time:t,value:pg<0?pg:0,color:pg<0?'rgba(179,102,255,0.7)':'rgba(179,102,255,0.05)'});
   });
-  window.addEventListener('mousemove',function(e){
-    const rect=el.getBoundingClientRect();
-    G.mx=e.clientX-rect.left;G.my=e.clientY-rect.top;
-    if(G.drag){
-      G.offset=G.dragOff0-(e.clientY-rect.top-G.dragY0);
-      requestAnimationFrame(drawGex);
-    }else if(G.mx>=0&&G.mx<=rect.width&&G.my>=0&&G.my<=rect.height){
-      requestAnimationFrame(drawGex);
-    }
-  });
-  window.addEventListener('mouseup',function(){G.drag=false});
-  el.addEventListener('mouseleave',function(){G.hover=-1;G.my=-1;requestAnimationFrame(drawGex)});
 
-  // Touch support
-  let touchY0=0,touchOff0=0;
-  el.addEventListener('touchstart',function(e){
-    if(e.touches.length===1){touchY0=e.touches[0].clientY;touchOff0=G.offset}
-    e.preventDefault();
-  },{passive:false});
-  el.addEventListener('touchmove',function(e){
-    if(e.touches.length===1){
-      G.offset=touchOff0-(e.touches[0].clientY-touchY0);
-      requestAnimationFrame(drawGex);
-    }
-    e.preventDefault();
-  },{passive:false});
+  gexCallSeries.setData(callData);
+  gexPutSeries.setData(putData);
+
+  // Level price lines on GEX chart
+  gexLevelLines.forEach(l=>{try{gexCallSeries.removePriceLine(l)}catch(e){}});
+  gexLevelLines=[];
+
+  // Zero line
+  gexLevelLines.push(gexCallSeries.createPriceLine({price:0,color:'rgba(255,255,255,0.2)',lineWidth:1,lineStyle:LightweightCharts.LineStyle.Solid,axisLabelVisible:false,title:''}));
+
+  // Add markers for key levels on the time axis
+  const markers=[];
+  for(const[k,v]of Object.entries(d.levels)){
+    if(!v.strike||!STY[k])continue;
+    const idx=dist.findIndex(x=>Math.abs(x.strike-v.strike)<(dist.length>1?Math.abs(dist[1].strike-dist[0].strike)*2:9999));
+    if(idx<0)continue;
+    markers.push({
+      time:1000000+idx,
+      position:'aboveBar',
+      color:STY[k].color,
+      shape:'arrowDown',
+      text:v.shortLabel,
+    });
+  }
+  // Sort markers by time
+  markers.sort((a,b)=>a.time-b.time);
+  gexCallSeries.setMarkers(markers);
+
+  gexChart.timeScale().fitContent();
+  gexChart.applyOptions({width:document.getElementById('gex-wrap').clientWidth,height:document.getElementById('gex-wrap').clientHeight});
 }
 
 // ═══ DATA ═══
@@ -352,12 +232,7 @@ async function load(tk){
     D=d;render(d);setS(true,'LIVE — '+new Date().toLocaleTimeString());
   }catch(e){console.error(e);setS(false,'ERROR');showE(e.message)}
 }
-function sw(tk,btn){
-  ticker=tk;document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
-  if(btn)btn.classList.add('on');
-  G.offset=0;G.zoom=1;
-  initPC();load(tk);resetT();
-}
+function sw(tk,btn){ticker=tk;document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');initPriceChart();initGexChart();load(tk);resetT()}
 function resetT(){if(timer)clearInterval(timer);timer=setInterval(()=>load(ticker),REFRESH)}
 
 function render(d){
@@ -385,11 +260,11 @@ function render(d){
   document.getElementById('gp').textContent=vs.score+'%';
   document.getElementById('gl').textContent=vs.label;
   document.getElementById('gt').textContent=gP?'↑ Pinning':'↓ Trending';
-  updatePC(d);drawGex();renderLevels(d);
+  updatePriceChart(d);updateGexChart(d);renderLevels(d);
 }
 
 function renderLevels(d){
-  const el=document.getElementById('ll'),spot=d.spotPrice,rows=[];
+  const c=document.getElementById('ll'),spot=d.spotPrice,rows=[];
   for(const[k,v]of Object.entries(d.levels)){const s=STY[k];if(!s||!v.strike)continue;rows.push({key:k,...v,...s,bg:s.color+'14',bdr:s.color+'40'})}
   rows.sort((a,b)=>b.strike-a.strike);
   const mA=Math.max(...rows.map(r=>Math.abs(r.gex||0)),1);
@@ -402,18 +277,13 @@ function renderLevels(d){
       <div class="ls">${fp(r.strike)}</div><div class="ldi" style="color:${above?'var(--green)':'var(--red)'}">${above?'+':''}${dist}%</div>
       <div class="lbc"><div class="lbm"></div><div class="lb" style="left:${bL};width:${pct}%;background:linear-gradient(90deg,${r.color}66,${r.color});animation-delay:${i*.05+.1}s"></div></div>
       <div class="lg" style="color:${gv>=0?'var(--green)':'var(--red)'}">${gv>=0?'+':''}${fg(gv)}</div></div>`;
-  });el.innerHTML=h;
+  });c.innerHTML=h;
 }
 
-document.addEventListener('DOMContentLoaded',function(){
-  initPC();
-  setupGex();
-  load(ticker);
-  resetT();
-});
-window.addEventListener('resize',function(){
+document.addEventListener('DOMContentLoaded',()=>{initPriceChart();initGexChart();load(ticker);resetT()});
+window.addEventListener('resize',()=>{
   if(priceChart)priceChart.applyOptions({width:document.getElementById('chart-wrap').clientWidth,height:document.getElementById('chart-wrap').clientHeight});
-  drawGex();
+  if(gexChart)gexChart.applyOptions({width:document.getElementById('gex-wrap').clientWidth,height:document.getElementById('gex-wrap').clientHeight});
 });
 </script>
 </body>
