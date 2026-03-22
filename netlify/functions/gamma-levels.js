@@ -45,10 +45,12 @@ exports.handler = async(event)=>{
     const etf=map.etf, mult=map.multiplier, isFut=raw==="ES"||raw==="NQ";
     const apiKey=process.env.MASSIVE_API_KEY;
     if(!apiKey) return {statusCode:500,headers:H,body:JSON.stringify({error:"MASSIVE_API_KEY not configured"})};
+
     // ETF price
     const sd=await fetchJson(`https://api.polygon.io/v2/aggs/ticker/${etf}/prev?adjusted=true&apiKey=${apiKey}`);
     let etfP=0;
     if(sd.results&&sd.results.length>0) etfP=sd.results[0].c;
+
     // Futures/index price
     let futP=Math.round(etfP*mult*100)/100;
     if(isFut){
@@ -60,11 +62,12 @@ exports.handler = async(event)=>{
     }
     const displayP=isFut?futP:etfP;
     const spot=etfP||1;
+
     // Options chain
     const od=await fetchJson(`https://api.polygon.io/v3/snapshot/options/${etf}?limit=250&apiKey=${apiKey}`);
     if(!od.results||od.results.length===0)
       return {statusCode:404,headers:H,body:JSON.stringify({error:`No options data for ${etf}`})};
-    if(spot===1&&od.results[0].underlying_asset) {/*fallback*/}
+
     const contracts=[], expSet=new Set();
     for(const o of od.results){
       const d=o.details||{}, g=o.greeks||{}, oi=o.open_interest||0;
@@ -74,6 +77,7 @@ exports.handler = async(event)=>{
     }
     const selExps=new Set([...expSet].sort().slice(0,maxExp));
     const filt=contracts.filter(c=>selExps.has(c.expiration));
+
     // GEX calc
     const gexS={}, cGex={}, pGex={};
     for(const c of filt){
@@ -86,6 +90,7 @@ exports.handler = async(event)=>{
       if(c.type==="call") cGex[s]=(cGex[s]||0)+gx; else pGex[s]=(pGex[s]||0)+gx;
     }
     const strikes=Object.keys(gexS).map(Number).sort((a,b)=>a-b);
+
     let cw={strike:0,gex:0},pw={strike:0,gex:0},mp={strike:0,gex:0},mn={strike:0,gex:0},gf=spot,net=0;
     for(const s of strikes){
       const g=gexS[s]; net+=g;
@@ -101,14 +106,17 @@ exports.handler = async(event)=>{
     const hvlC=strikes.filter(s=>s>=spot*0.95&&s<=spot*1.05);
     let hvl=spot,hvlM=0;
     for(const s of hvlC){if(Math.abs(gexS[s])>hvlM){hvlM=Math.abs(gexS[s]);hvl=s;}}
+
     const toDP=s=>isFut?Math.round(s*mult*100)/100:s;
     const cStk=strikes.filter(s=>s>=spot*0.92&&s<=spot*1.08);
     const dist=cStk.map(s=>({strike:toDP(s),etfStrike:s,gex:Math.round(gexS[s]),callGex:Math.round(cGex[s]||0),putGex:Math.round(pGex[s]||0)}));
+
     const gReg=spot>gf?"POSITIVE":"NEGATIVE";
     const vReg=spot>hvl?"LOW_VOL":"HIGH_VOL";
     const maxAbs=Math.max(Math.abs(mp.gex),Math.abs(mn.gex),1);
     const vScore=Math.min(100,Math.round(Math.abs(net)/maxAbs*100));
     let vLabel="Calm"; if(vScore>70) vLabel="Extreme"; else if(vScore>40) vLabel="Elevated"; else if(vScore>20) vLabel="Moderate";
+
     return {statusCode:200,headers:H,body:JSON.stringify({
       ticker:raw,name:map.name,isFutures:isFut,
       spotPrice:Math.round(displayP*100)/100,etfPrice:Math.round(etfP*100)/100,etfTicker:etf,multiplier:mult,
