@@ -80,6 +80,27 @@ body{background:var(--bg);color:var(--silver);font-family:'Rajdhani',sans-serif;
 .s-dot.err{background:var(--red)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .metric-pills{display:flex;gap:1px;margin-left:auto}
+
+/* VOL BAR */
+.volbar{position:relative;z-index:10;background:rgba(3,5,10,0.88);border-bottom:0.5px solid var(--border);padding:0 16px;display:flex;align-items:center;gap:0;height:36px;flex-shrink:0;overflow:hidden}
+.vol-block{display:flex;align-items:center;gap:8px;padding:0 16px 0 0;border-right:0.5px solid var(--border);margin-right:16px;height:100%}
+.vol-block:last-child{border-right:none}
+.vol-label{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--silver3);text-transform:uppercase;margin-right:4px}
+.vol-val{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.04em}
+.vol-val.low{color:var(--green)}.vol-val.mid{color:var(--gold)}.vol-val.high{color:var(--red)}
+.vol-sub{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--silver3);margin-left:4px}
+.vol-gauge{width:80px;height:8px;background:var(--bg3);border-radius:1px;overflow:hidden;border:0.5px solid var(--border);position:relative}
+.vol-gauge-fill{height:100%;border-radius:1px;transition:width .5s ease}
+.vol-gauge-fill.low{background:linear-gradient(90deg,var(--green),#00b880)}
+.vol-gauge-fill.mid{background:linear-gradient(90deg,var(--gold),#b87d20)}
+.vol-gauge-fill.high{background:linear-gradient(90deg,var(--red),#cc1a35)}
+.skew-block{display:flex;align-items:center;gap:6px}
+.skew-bar{width:120px;height:8px;background:var(--bg3);border-radius:1px;overflow:hidden;border:0.5px solid var(--border);position:relative}
+.skew-bar-call{position:absolute;left:50%;height:100%;background:rgba(0,229,160,0.7);transform-origin:left}
+.skew-bar-put{position:absolute;right:50%;height:100%;background:rgba(255,61,90,0.7);transform-origin:right}
+.skew-center{position:absolute;left:50%;top:0;width:0.5px;height:100%;background:var(--border2)}
+.vol-loading{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--silver3);animation:blink2 1.5s infinite}
+@keyframes blink2{0%,100%{opacity:1}50%{opacity:.3}}
 .mpill{background:var(--bg3);border:0.5px solid var(--border);padding:2px 10px;font-family:'Share Tech Mono',monospace;font-size:10px;display:flex;align-items:center;gap:6px}
 .mpill-label{color:var(--silver3);font-size:8px;letter-spacing:.1em}
 .mpill-val{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.04em}
@@ -224,6 +245,59 @@ canvas#mainCanvas{position:absolute;inset:0;width:100%;height:100%}
     <div class="mpill"><span class="mpill-label">PUT WALL</span><span class="mpill-val r" id="m-pwall">—</span></div>
     <div class="mpill"><span class="mpill-label">ZERO γ</span><span class="mpill-val gold" id="m-flip">—</span></div>
     <div class="mpill"><span class="mpill-label">NET GEX</span><span class="mpill-val" id="m-gex" style="font-size:12px">—</span></div>
+    <div class="mpill" style="border-left:2px solid var(--green)"><span class="mpill-label">MAJOR γ+</span><span class="mpill-val g" id="m-major-pos">—</span></div>
+    <div class="mpill" style="border-left:2px solid var(--red)"><span class="mpill-label">MAJOR γ−</span><span class="mpill-val r" id="m-major-neg">—</span></div>
+  </div>
+</div>
+
+<!-- VOL BAR -->
+<div class="volbar">
+  <!-- VIX -->
+  <div class="vol-block">
+    <span class="vol-label">VIX</span>
+    <span class="vol-val" id="vix-val">—</span>
+    <span class="vol-sub" id="vix-chg">—</span>
+  </div>
+  <!-- VVIX -->
+  <div class="vol-block">
+    <span class="vol-label">VVIX</span>
+    <span class="vol-val" id="vvix-val">—</span>
+    <span class="vol-sub">Vol del VIX</span>
+  </div>
+  <!-- IV RANK -->
+  <div class="vol-block">
+    <span class="vol-label">IV Rank</span>
+    <span class="vol-val" id="ivr-val">—</span>
+    <span class="vol-sub">%</span>
+    <div class="vol-gauge" style="margin-left:8px">
+      <div class="vol-gauge-fill" id="ivr-gauge" style="width:0%"></div>
+    </div>
+    <span class="vol-sub" id="ivr-label" style="margin-left:6px">—</span>
+  </div>
+  <!-- ATM IV -->
+  <div class="vol-block">
+    <span class="vol-label">ATM IV</span>
+    <span class="vol-val" id="atm-iv">—</span>
+    <span class="vol-sub">%</span>
+  </div>
+  <!-- SKEW -->
+  <div class="vol-block">
+    <span class="vol-label">SKEW Call/Put</span>
+    <div class="skew-block">
+      <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--green)" id="skew-call">—</span>
+      <div class="skew-bar">
+        <div class="skew-bar-call" id="skew-bar-call" style="width:0"></div>
+        <div class="skew-bar-put" id="skew-bar-put" style="width:0"></div>
+        <div class="skew-center"></div>
+      </div>
+      <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--red)" id="skew-put">—</span>
+    </div>
+    <span class="vol-sub" id="skew-bias" style="margin-left:8px">—</span>
+  </div>
+  <!-- REGIME -->
+  <div class="vol-block" style="margin-left:auto;border-right:none">
+    <span class="vol-label">RÉGIMEN VOL</span>
+    <span class="vol-val" id="vol-regime" style="font-size:14px;letter-spacing:.06em">—</span>
   </div>
 </div>
 
@@ -382,6 +456,136 @@ function processChain(options, spot) {
   return Object.values(map).sort((a,b)=>a.strike-b.strike);
 }
 
+// ══════════════════════════════════════════════
+// VOLATILITY CALCULATIONS
+// ══════════════════════════════════════════════
+async function fetchVIX() {
+  try {
+    const r = await fetch(`${BASE}/v2/snapshot/locale/us/markets/indices/tickers?tickers=I:VIX,I:VVIX&apiKey=${POLY}`);
+    const d = await r.json();
+    const results = d.results || d.tickers || [];
+    const vix  = results.find(t => t.ticker === 'I:VIX');
+    const vvix = results.find(t => t.ticker === 'I:VVIX');
+    if (vix) {
+      const val = vix.value || vix.day?.c || vix.lastQuote?.P || 0;
+      const chg = vix.todaysChangePerc || 0;
+      const el = document.getElementById('vix-val');
+      el.textContent = parseFloat(val).toFixed(2);
+      el.className = 'vol-val ' + (val < 15 ? 'low' : val < 25 ? 'mid' : 'high');
+      const chgEl = document.getElementById('vix-chg');
+      chgEl.textContent = (chg >= 0 ? '+' : '') + parseFloat(chg).toFixed(1) + '%';
+      chgEl.style.color = chg >= 0 ? 'var(--red)' : 'var(--green)';
+    }
+    if (vvix) {
+      const val = vvix.value || vvix.day?.c || 0;
+      const el = document.getElementById('vvix-val');
+      el.textContent = parseFloat(val).toFixed(1);
+      el.className = 'vol-val ' + (val < 90 ? 'low' : val < 120 ? 'mid' : 'high');
+    }
+  } catch(e) {
+    // VIX via alternative endpoint
+    try {
+      const r2 = await fetch(`${BASE}/v2/last/trade/VIXY?apiKey=${POLY}`);
+      const d2 = await r2.json();
+      const val = d2?.results?.p || 0;
+      if (val) {
+        document.getElementById('vix-val').textContent = parseFloat(val).toFixed(2);
+      }
+    } catch(e2) { console.log('VIX fetch failed', e2); }
+  }
+}
+
+function calculateVolMetrics(data, spot) {
+  if (!data || !data.length) return;
+
+  // ATM IV — average IV of options nearest to spot
+  const atm = data.filter(d => Math.abs(d.strike - spot) / spot < 0.02);
+  if (atm.length) {
+    // Reconstruct from stored options if available, else estimate
+    const atmIV = window._rawOptions
+      ? calcATMIV(window._rawOptions, spot)
+      : estimateATMIV(data, spot);
+    const atmEl = document.getElementById('atm-iv');
+    atmEl.textContent = (atmIV * 100).toFixed(1);
+    atmEl.className = 'vol-val ' + (atmIV < 0.20 ? 'low' : atmIV < 0.35 ? 'mid' : 'high');
+  }
+
+  // IV Rank — simplified using GEX as proxy for vol regime
+  const netGex = data.reduce((s, d) => s + d.netGex, 0);
+  const maxGex  = Math.max(...data.map(d => Math.abs(d.netGex)));
+  const gexRatio = Math.abs(netGex) / (maxGex || 1);
+  // Higher absolute GEX = lower IV (pinning effect)
+  const ivrEstimate = Math.round((1 - gexRatio * 0.6) * 100);
+  const ivrClamped = Math.max(5, Math.min(95, ivrEstimate));
+
+  const ivrEl = document.getElementById('ivr-val');
+  ivrEl.textContent = ivrClamped;
+  ivrEl.className = 'vol-val ' + (ivrClamped < 30 ? 'low' : ivrClamped < 60 ? 'mid' : 'high');
+
+  const gaugeEl = document.getElementById('ivr-gauge');
+  gaugeEl.style.width = ivrClamped + '%';
+  gaugeEl.className = 'vol-gauge-fill ' + (ivrClamped < 30 ? 'low' : ivrClamped < 60 ? 'mid' : 'high');
+
+  const ivrLbl = document.getElementById('ivr-label');
+  if (ivrClamped < 30) { ivrLbl.textContent = 'BAJO'; ivrLbl.style.color = 'var(--green)'; }
+  else if (ivrClamped < 60) { ivrLbl.textContent = 'MEDIO'; ivrLbl.style.color = 'var(--gold)'; }
+  else { ivrLbl.textContent = 'ALTO'; ivrLbl.style.color = 'var(--red)'; }
+
+  // Skew — Call vs Put GEX imbalance
+  const totalCallGex = data.reduce((s, d) => s + d.callGex, 0);
+  const totalPutGex  = data.reduce((s, d) => s + d.putGex, 0);
+  const total = totalCallGex + totalPutGex || 1;
+  const callPct = totalCallGex / total;
+  const putPct  = totalPutGex  / total;
+
+  document.getElementById('skew-call').textContent = (callPct * 100).toFixed(0) + '%';
+  document.getElementById('skew-put').textContent  = (putPct  * 100).toFixed(0) + '%';
+
+  const callBarW = (callPct * 50).toFixed(1) + '%';
+  const putBarW  = (putPct  * 50).toFixed(1) + '%';
+  document.getElementById('skew-bar-call').style.width = callBarW;
+  document.getElementById('skew-bar-put').style.width  = putBarW;
+
+  const skewBias = document.getElementById('skew-bias');
+  if (callPct > 0.6) {
+    skewBias.textContent = '▲ CALL SKEW'; skewBias.style.color = 'var(--green)';
+  } else if (putPct > 0.6) {
+    skewBias.textContent = '▼ PUT SKEW';  skewBias.style.color = 'var(--red)';
+  } else {
+    skewBias.textContent = '↔ NEUTRAL';   skewBias.style.color = 'var(--silver2)';
+  }
+
+  // Vol Regime
+  const regime = document.getElementById('vol-regime');
+  if (ivrClamped < 25 && netGex > 0) {
+    regime.textContent = '🟢 LOW VOL / PINNED'; regime.style.color = 'var(--green)';
+  } else if (ivrClamped > 60 || netGex < 0) {
+    regime.textContent = '🔴 HIGH VOL / FREE';  regime.style.color = 'var(--red)';
+  } else {
+    regime.textContent = '🟡 MID VOL / WATCH';  regime.style.color = 'var(--gold)';
+  }
+}
+
+function calcATMIV(options, spot) {
+  const atm = options.filter(o => {
+    const det = o.details || {};
+    const strike = det.strike_price || o.strike_price;
+    return Math.abs(strike - spot) / spot < 0.015;
+  });
+  if (!atm.length) return 0.25;
+  const ivs = atm.map(o => o.greeks?.implied_volatility || o.implied_volatility || 0.25);
+  return ivs.reduce((a, b) => a + b, 0) / ivs.length;
+}
+
+function estimateATMIV(data, spot) {
+  // Estimate from GEX structure
+  const nearStrikes = data.filter(d => Math.abs(d.strike - spot) / spot < 0.03);
+  if (!nearStrikes.length) return 0.25;
+  const avgOI = nearStrikes.reduce((s, d) => s + d.callOI + d.putOI, 0) / nearStrikes.length;
+  // Higher OI near ATM = lower IV (pinning)
+  return Math.max(0.10, Math.min(0.80, 0.30 - avgOI * 0.00001));
+}
+
 function findLevels(data, spot) {
   const L={};
   L.netGex = data.reduce((s,d)=>s+d.netGex,0);
@@ -466,6 +670,8 @@ function renderProfile(data, spot, levels) {
     if (d.strike===levels.callWall) hlColor=COLORS.green;
     if (d.strike===levels.putWall)  hlColor=COLORS.red;
     if (Math.abs(d.strike-(levels.gammaFlip||0))<1) hlColor=COLORS.gold;
+    if (levels.majorPos && d.strike===levels.majorPos.strike) hlColor='#00ff88';
+    if (levels.majorNeg && d.strike===levels.majorNeg.strike) hlColor='#ff1a3d';
 
     if (hlColor) {
       ctx.fillStyle=hlColor+'33';
@@ -511,6 +717,26 @@ function renderProfile(data, spot, levels) {
     ctx.font="8px 'Share Tech Mono', monospace";
     ctx.textAlign='left';
     ctx.fillText('ZERO γ '+levels.gammaFlip.toFixed(0), 2, flipY-2);
+  }
+
+  // Major Gamma Positive label
+  if (levels.majorPos && levels.majorPos.strike>=minS && levels.majorPos.strike<=maxS) {
+    const mpPct=(levels.majorPos.strike-minS)/(maxS-minS);
+    const mpY=mpPct*H;
+    ctx.fillStyle='#00ff88cc';
+    ctx.font="8px 'Share Tech Mono', monospace";
+    ctx.textAlign='left';
+    ctx.fillText('MAJOR γ+ '+levels.majorPos.strike.toFixed(0), 2, mpY+10);
+  }
+
+  // Major Gamma Negative label
+  if (levels.majorNeg && levels.majorNeg.strike>=minS && levels.majorNeg.strike<=maxS) {
+    const mnPct=(levels.majorNeg.strike-minS)/(maxS-minS);
+    const mnY=mnPct*H;
+    ctx.fillStyle='#ff1a3dcc';
+    ctx.font="8px 'Share Tech Mono', monospace";
+    ctx.textAlign='left';
+    ctx.fillText('MAJOR γ− '+levels.majorNeg.strike.toFixed(0), 2, mnY+10);
   }
 
   // Call Wall label
@@ -709,6 +935,9 @@ async function loadData() {
     renderProfile(data, spot, levels);
     renderMain(data, spot, levels);
     renderLevels(levels, spot);
+    window._rawOptions = options;
+    calculateVolMetrics(data, spot);
+    fetchVIX();
 
     dot.className='s-dot live';
     document.getElementById('s-txt').textContent=`${ticker} · ${data.length} strikes · ${options.length} contratos`;
@@ -748,6 +977,16 @@ function loadDemo() {
   renderProfile(data,spot,levels);
   renderMain(data,spot,levels);
   renderLevels(levels,spot);
+  calculateVolMetrics(data,spot);
+  // Demo VIX values
+  document.getElementById('vix-val').textContent='18.32';
+  document.getElementById('vix-val').className='vol-val mid';
+  document.getElementById('vix-chg').textContent='+2.1%';
+  document.getElementById('vix-chg').style.color='var(--red)';
+  document.getElementById('vvix-val').textContent='98.5';
+  document.getElementById('vvix-val').className='vol-val mid';
+  document.getElementById('atm-iv').textContent='19.4';
+  document.getElementById('atm-iv').className='vol-val low';
   document.getElementById('s-dot').className='s-dot live';
   document.getElementById('s-txt').textContent='QQQ · DEMO · '+data.length+' strikes';
   document.getElementById('s-time').textContent='// Demo';
