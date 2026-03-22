@@ -5,990 +5,515 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AGX Dashboard — Gamma Levels</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
   <style>
     :root {
-      --bg: #03050a;
-      --bg2: rgba(5,10,18,0.92);
-      --bg3: rgba(8,14,24,0.96);
-      --green: #00e5a0;
-      --green2: rgba(0,229,160,0.1);
-      --red: #ff3d5a;
-      --red2: rgba(255,61,90,0.1);
-      --gold: #d4a843;
-      --cyan: #00cfff;
-      --silver: #ddeeff;
-      --silver2: #7a9ab8;
-      --silver3: #2a3a50;
-      --border: rgba(0,229,160,0.1);
-      --border2: rgba(0,229,160,0.28);
-      /* Level colors */
-      --zero-gamma: #FACC15;
-      --zero-gamma-bg: rgba(250,204,21,0.08);
-      --zero-gamma-border: rgba(250,204,21,0.25);
-      --max-positive: #00e5a0;
-      --max-positive-bg: rgba(0,229,160,0.08);
-      --max-positive-border: rgba(0,229,160,0.25);
-      --max-negative: #ff3d5a;
-      --max-negative-bg: rgba(255,61,90,0.08);
-      --max-negative-border: rgba(255,61,90,0.25);
-      --call-wall: #3B82F6;
-      --call-wall-bg: rgba(59,130,246,0.08);
-      --call-wall-border: rgba(59,130,246,0.25);
-      --put-wall: #A855F7;
-      --put-wall-bg: rgba(168,85,247,0.08);
-      --put-wall-border: rgba(168,85,247,0.25);
-      --hvl: #F97316;
-      --hvl-bg: rgba(249,115,22,0.08);
-      --hvl-border: rgba(249,115,22,0.25);
+      --bg:#03050a;--bg2:rgba(5,10,18,0.92);--bg3:rgba(8,14,24,0.96);
+      --green:#00e5a0;--green2:rgba(0,229,160,0.1);
+      --red:#ff3d5a;--red2:rgba(255,61,90,0.1);
+      --gold:#d4a843;--cyan:#00cfff;
+      --silver:#ddeeff;--silver2:#7a9ab8;--silver3:#2a3a50;
+      --border:rgba(0,229,160,0.1);--border2:rgba(0,229,160,0.28);
+      --zg:#FACC15;--zg-bg:rgba(250,204,21,0.08);--zg-b:rgba(250,204,21,0.25);
+      --mg:#00e5a0;--mg-bg:rgba(0,229,160,0.08);--mg-b:rgba(0,229,160,0.25);
+      --mn:#ff3d5a;--mn-bg:rgba(255,61,90,0.08);--mn-b:rgba(255,61,90,0.25);
+      --cw:#3B82F6;--cw-bg:rgba(59,130,246,0.08);--cw-b:rgba(59,130,246,0.25);
+      --pw:#A855F7;--pw-bg:rgba(168,85,247,0.08);--pw-b:rgba(168,85,247,0.25);
+      --hvl:#F97316;--hvl-bg:rgba(249,115,22,0.08);--hvl-b:rgba(249,115,22,0.25);
     }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{background:var(--bg);color:var(--silver);font-family:'Rajdhani',sans-serif;min-height:100vh}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    @keyframes barGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      background: var(--bg);
-      color: var(--silver);
-      font-family: 'Rajdhani', sans-serif;
-      min-height: 100vh;
-    }
+    .header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.015) 0%,transparent 100%)}
+    .logo{font-family:'Bebas Neue',sans-serif;font-size:26px;background:linear-gradient(135deg,var(--gold),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .header-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2);letter-spacing:.15em;text-transform:uppercase;margin-left:14px}
+    .live{display:flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2)}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}
+    .dot.err{background:var(--red);animation:none}
 
-    /* ── Animations ── */
-    @keyframes fadeSlideIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes pulse-dot {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-    @keyframes barGrow {
-      from { transform: scaleX(0); }
-      to { transform: scaleX(1); }
-    }
-    @keyframes glow-pulse {
-      0%, 100% { box-shadow: 0 0 8px rgba(0,229,160,0.3); }
-      50% { box-shadow: 0 0 20px rgba(0,229,160,0.6); }
-    }
+    .dash{max-width:1400px;margin:0 auto;padding:20px 24px}
+    .tbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+    .tbtn{font-family:'Share Tech Mono',monospace;font-size:13px;padding:7px 16px;border-radius:6px;border:1px solid var(--silver3);background:rgba(255,255,255,.02);color:var(--silver2);cursor:pointer;transition:all .2s}
+    .tbtn:hover{border-color:var(--border2);color:var(--silver)}
+    .tbtn.on{border-color:var(--gold);background:rgba(212,168,67,.08);color:var(--gold);font-weight:700}
+    .rinfo{margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver3)}
 
-    /* ── Header ── */
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 28px;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255,255,255,0.015) 0%, transparent 100%);
-    }
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-    .logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px;
-      letter-spacing: 0.05em;
-      background: linear-gradient(135deg, var(--gold), var(--green));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .header-subtitle {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 11px;
-      color: var(--silver2);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-    .live-indicator {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 11px;
-      color: var(--silver2);
-    }
-    .live-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      animation: pulse-dot 2s ease infinite;
-    }
-    .live-dot.paused { background: var(--gold); animation: none; }
-    .live-dot.error { background: var(--red); animation: none; }
+    .price-row{display:flex;align-items:baseline;gap:14px;margin-bottom:16px}
+    .price-val{font-family:'Bebas Neue',sans-serif;font-size:44px;color:#fff;letter-spacing:.02em}
+    .price-tk{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--silver2)}
+    .price-name{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--silver3)}
+    .net-badge{font-family:'Share Tech Mono',monospace;font-size:11px;padding:3px 10px;border-radius:4px;font-weight:600}
+    .net-badge.pos{background:var(--green2);color:var(--green);border:1px solid var(--mg-b)}
+    .net-badge.neg{background:var(--red2);color:var(--red);border:1px solid var(--mn-b)}
 
-    /* ── Main container ── */
-    .dashboard {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px 28px;
-    }
+    .stitle{font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--silver3);margin-bottom:10px;font-weight:600}
 
-    /* ── Ticker selector ── */
-    .ticker-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .ticker-btn {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 13px;
-      padding: 8px 18px;
-      border-radius: 6px;
-      border: 1px solid var(--silver3);
-      background: rgba(255,255,255,0.02);
-      color: var(--silver2);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .ticker-btn:hover { border-color: var(--border2); color: var(--silver); }
-    .ticker-btn.active {
-      border-color: var(--gold);
-      background: rgba(212,168,67,0.08);
-      color: var(--gold);
-      font-weight: 700;
-    }
-    .refresh-info {
-      margin-left: auto;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 10px;
-      color: var(--silver3);
-    }
+    /* ── Regime + Volatility row ── */
+    .regime-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px}
+    .rcard{padding:12px 16px;border-radius:8px}
+    .rcard-label{font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.12em;opacity:.5}
+    .rcard-val{font-family:'Bebas Neue',sans-serif;font-size:18px;margin-top:3px;letter-spacing:.03em}
+    .rcard-desc{font-size:10px;opacity:.35;margin-top:1px}
 
-    /* ── Price header ── */
-    .price-header {
-      display: flex;
-      align-items: baseline;
-      gap: 16px;
-      margin-bottom: 20px;
-      animation: fadeSlideIn 0.4s ease;
-    }
-    .price-value {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 42px;
-      letter-spacing: 0.02em;
-      color: #fff;
-    }
-    .price-ticker {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 14px;
-      color: var(--silver2);
-    }
-    .net-gex-badge {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 12px;
-      padding: 4px 12px;
-      border-radius: 4px;
-      font-weight: 600;
-    }
-    .net-gex-badge.positive { background: var(--green2); color: var(--green); border: 1px solid var(--max-positive-border); }
-    .net-gex-badge.negative { background: var(--red2); color: var(--red); border: 1px solid var(--max-negative-border); }
-
-    /* ── Regime cards ── */
-    .regime-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .regime-card {
-      padding: 14px 18px;
-      border-radius: 10px;
-      animation: fadeSlideIn 0.5s ease both;
-    }
-    .regime-card:nth-child(2) { animation-delay: 0.08s; }
-    .regime-label {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      opacity: 0.5;
-    }
-    .regime-value {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 20px;
-      margin-top: 4px;
-      letter-spacing: 0.03em;
-    }
-    .regime-desc {
-      font-size: 11px;
-      opacity: 0.4;
-      margin-top: 2px;
-    }
+    /* ── Volatility gauge ── */
+    .gauge-wrap{display:flex;align-items:center;gap:12px}
+    .gauge{width:80px;height:80px;position:relative}
+    .gauge-bg{fill:none;stroke:var(--silver3);stroke-width:6}
+    .gauge-fill{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .8s ease}
+    .gauge-text{font-family:'Bebas Neue',sans-serif;font-size:20px;fill:var(--silver)}
+    .gauge-label{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--silver2)}
 
     /* ── Legend ── */
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      padding: 10px 0;
-      margin-bottom: 16px;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 10px;
-      color: var(--silver2);
-    }
-    .legend-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 2px;
-    }
+    .legend{display:flex;flex-wrap:wrap;gap:12px;padding:8px 0;margin-bottom:14px}
+    .leg-item{display:flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2)}
+    .leg-dot{width:8px;height:8px;border-radius:2px}
 
-    /* ── Section titles ── */
-    .section-title {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--silver3);
-      margin-bottom: 12px;
-      font-weight: 600;
-    }
+    /* ── Main charts area: Price Map (left) + GEX Chart (right) ── */
+    .charts-row{display:grid;grid-template-columns:1fr 340px;gap:14px;margin-bottom:18px}
+    @media(max-width:900px){.charts-row{grid-template-columns:1fr}}
+
+    /* ── Price Level Map ── */
+    .pmap{border-radius:10px;background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.04);overflow:hidden;position:relative;min-height:400px}
+    .pmap canvas{width:100%;height:100%;display:block}
+
+    /* ── GEX Vertical Chart ── */
+    .gex-vert{border-radius:10px;background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.04);overflow:hidden;position:relative}
+    .gex-vert canvas{width:100%;height:100%;display:block}
 
     /* ── Levels table ── */
-    .levels-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 28px;
-    }
-    .level-row {
-      display: grid;
-      grid-template-columns: 32px 180px 100px 70px 1fr 80px;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      cursor: default;
-    }
-    .level-row:hover {
-      transform: translateX(3px);
-    }
-    .level-icon { text-align: center; font-size: 15px; }
-    .level-name {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .level-desc {
-      font-size: 10px;
-      opacity: 0.35;
-      margin-top: 1px;
-    }
-    .level-strike {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 17px;
-      font-weight: 700;
-      color: #fff;
-      text-align: right;
-    }
-    .level-distance {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 12px;
-      font-weight: 600;
-      text-align: right;
-    }
-    .level-bar-container {
-      position: relative;
-      height: 18px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .level-bar {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      border-radius: 3px;
-      animation: barGrow 0.7s ease both;
-    }
-    .level-bar-center {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: 1px;
-      height: 100%;
-      background: rgba(255,255,255,0.1);
-    }
-    .level-gex-value {
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 12px;
-      font-weight: 600;
-      text-align: right;
-    }
+    .lvl-list{display:flex;flex-direction:column;gap:5px;margin-bottom:24px}
+    .lvl-hdr{display:grid;grid-template-columns:28px 170px 90px 65px 1fr 75px;gap:8px;padding:0 12px 5px;font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--silver3);font-weight:600}
+    .lvl-hdr span:nth-child(3),.lvl-hdr span:nth-child(4),.lvl-hdr span:nth-child(6){text-align:right}
+    .lvl-hdr span:nth-child(5){text-align:center}
+    .lvl-row{display:grid;grid-template-columns:28px 170px 90px 65px 1fr 75px;align-items:center;gap:8px;padding:9px 12px;border-radius:7px;transition:transform .2s,box-shadow .2s;cursor:default}
+    .lvl-row:hover{transform:translateX(3px)}
+    .lvl-icon{text-align:center;font-size:14px}
+    .lvl-name{font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+    .lvl-desc{font-size:9px;opacity:.35;margin-top:1px}
+    .lvl-strike{font-family:'Share Tech Mono',monospace;font-size:16px;font-weight:700;color:#fff;text-align:right}
+    .lvl-dist{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:600;text-align:right}
+    .lvl-bar-c{position:relative;height:16px;background:rgba(255,255,255,.03);border-radius:3px;overflow:hidden}
+    .lvl-bar{position:absolute;top:0;height:100%;border-radius:3px;animation:barGrow .6s ease both;transform-origin:bottom}
+    .lvl-bar-mid{position:absolute;top:0;left:50%;width:1px;height:100%;background:rgba(255,255,255,.08)}
+    .lvl-gex{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:600;text-align:right}
 
-    /* ── Table header ── */
-    .levels-header {
-      display: grid;
-      grid-template-columns: 32px 180px 100px 70px 1fr 80px;
-      gap: 10px;
-      padding: 0 14px 6px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--silver3);
-      font-weight: 600;
-    }
-    .levels-header span:nth-child(3),
-    .levels-header span:nth-child(4),
-    .levels-header span:nth-child(6) { text-align: right; }
-    .levels-header span:nth-child(5) { text-align: center; }
-
-    /* ── GEX Chart ── */
-    .chart-container {
-      margin-bottom: 28px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.015);
-      border: 1px solid rgba(255,255,255,0.04);
-      padding: 16px;
-      overflow: hidden;
-    }
-    #gex-chart {
-      width: 100%;
-      height: 320px;
-    }
-
-    /* ── Price map ── */
-    .price-map {
-      position: relative;
-      height: 280px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.015);
-      border: 1px solid rgba(255,255,255,0.04);
-      overflow: hidden;
-      margin-bottom: 28px;
-    }
-    .price-map-grid {
-      position: absolute;
-      inset: 0;
-      background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.025) 40px);
-    }
-    .map-level-line {
-      position: absolute;
-      left: 0;
-      right: 0;
-      display: flex;
-      align-items: center;
-      transform: translateY(-50%);
-    }
-    .map-level-price {
-      flex: 0 0 100px;
-      text-align: right;
-      padding-right: 12px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 11px;
-      font-weight: 600;
-    }
-    .map-level-dash {
-      flex: 1;
-      height: 1px;
-      position: relative;
-    }
-    .map-level-dot {
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-    }
-    .map-level-label {
-      flex: 0 0 140px;
-      padding-left: 12px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .spot-line {
-      z-index: 10;
-    }
-    .spot-line .map-level-price {
-      font-size: 13px;
-      font-weight: 800;
-      color: #fff;
-    }
-    .spot-line .map-level-price span {
-      background: rgba(255,255,255,0.1);
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-    .spot-line .map-level-dash {
-      height: 2px;
-      background: linear-gradient(90deg, #fff, rgba(255,255,255,0.1));
-    }
-    .spot-line .map-level-dot {
-      width: 10px;
-      height: 10px;
-      background: #fff;
-      box-shadow: 0 0 12px rgba(255,255,255,0.5);
-      animation: pulse-dot 2s ease infinite;
-    }
-    .spot-line .map-level-label {
-      font-size: 10px;
-      color: #fff;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-    }
-
-    /* ── Footer ── */
-    .footer {
-      margin-top: 32px;
-      padding: 16px 0;
-      border-top: 1px solid rgba(255,255,255,0.04);
-      display: flex;
-      justify-content: space-between;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 10px;
-      color: var(--silver3);
-    }
-
-    /* ── Loading / Error states ── */
-    .loading-overlay {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 60px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 14px;
-      color: var(--silver2);
-    }
-    .error-msg {
-      background: var(--red2);
-      border: 1px solid var(--max-negative-border);
-      color: var(--red);
-      padding: 12px 18px;
-      border-radius: 8px;
-      font-family: 'Share Tech Mono', monospace;
-      font-size: 12px;
-      margin-bottom: 16px;
-      display: none;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 768px) {
-      .regime-row { grid-template-columns: 1fr; }
-      .level-row { grid-template-columns: 28px 1fr 80px 60px; font-size: 11px; }
-      .level-bar-container, .level-gex-value { display: none; }
-      .levels-header { display: none; }
-      .price-value { font-size: 32px; }
+    .footer{margin-top:24px;padding:14px 0;border-top:1px solid rgba(255,255,255,.04);display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver3)}
+    .err-msg{background:var(--red2);border:1px solid var(--mn-b);color:var(--red);padding:10px 16px;border-radius:7px;font-family:'Share Tech Mono',monospace;font-size:11px;margin-bottom:14px;display:none}
+    @media(max-width:768px){
+      .regime-row{grid-template-columns:1fr}
+      .lvl-row,.lvl-hdr{grid-template-columns:24px 1fr 75px 55px}
+      .lvl-bar-c,.lvl-gex{display:none}
+      .price-val{font-size:32px}
     }
   </style>
 </head>
 <body>
 
-<!-- ═══ HEADER ═══ -->
 <div class="header">
-  <div class="header-left">
+  <div style="display:flex;align-items:center">
     <div class="logo">AGX</div>
-    <div class="header-subtitle">Gamma Exposure Dashboard</div>
+    <div class="header-sub">Gamma Exposure · Futures</div>
   </div>
-  <div class="live-indicator">
-    <div class="live-dot" id="live-dot"></div>
-    <span id="live-status">CONNECTING...</span>
-  </div>
+  <div class="live"><div class="dot" id="dot"></div><span id="status">CONNECTING...</span></div>
 </div>
 
-<!-- ═══ DASHBOARD ═══ -->
-<div class="dashboard">
+<div class="dash">
+  <div class="err-msg" id="err"></div>
 
-  <!-- Error message -->
-  <div class="error-msg" id="error-msg"></div>
-
-  <!-- Ticker selector -->
-  <div class="ticker-bar">
-    <button class="ticker-btn active" data-ticker="SPY" onclick="switchTicker('SPY', this)">SPY <span style="opacity:0.5;font-size:11px">S&P 500</span></button>
-    <button class="ticker-btn" data-ticker="QQQ" onclick="switchTicker('QQQ', this)">QQQ <span style="opacity:0.5;font-size:11px">Nasdaq 100</span></button>
-    <button class="ticker-btn" data-ticker="IWM" onclick="switchTicker('IWM', this)">IWM <span style="opacity:0.5;font-size:11px">Russell 2000</span></button>
-    <div class="refresh-info" id="refresh-info">Auto-refresh: 1 min</div>
+  <div class="tbar">
+    <button class="tbtn on" onclick="sw('ES',this)">ES <span style="opacity:.5;font-size:10px">S&P 500</span></button>
+    <button class="tbtn" onclick="sw('NQ',this)">NQ <span style="opacity:.5;font-size:10px">Nasdaq 100</span></button>
+    <div class="rinfo">Auto-refresh: 1 min</div>
   </div>
 
-  <!-- Price header -->
-  <div class="price-header" id="price-header">
-    <div class="price-value" id="spot-price">--</div>
-    <div class="price-ticker" id="ticker-label">SPY</div>
-    <div class="net-gex-badge positive" id="net-gex-badge">Net GEX: --</div>
+  <div class="price-row">
+    <div class="price-val" id="p-price">--</div>
+    <div class="price-tk" id="p-tk">ES</div>
+    <div class="price-name" id="p-name">E-mini S&P 500</div>
+    <div class="net-badge pos" id="p-net">Net GEX: --</div>
   </div>
 
-  <!-- Regime cards -->
-  <div class="regime-row" id="regime-row">
-    <div class="regime-card" id="gamma-regime-card" style="background:var(--max-positive-bg);border:1px solid var(--max-positive-border);">
-      <div class="regime-label">Gamma Regime</div>
-      <div class="regime-value" id="gamma-regime-value" style="color:var(--green)">--</div>
-      <div class="regime-desc" id="gamma-regime-desc">Loading...</div>
+  <!-- Regime + Volatility -->
+  <div class="regime-row">
+    <div class="rcard" id="rc-gamma" style="background:var(--mg-bg);border:1px solid var(--mg-b)">
+      <div class="rcard-label">Gamma Regime</div>
+      <div class="rcard-val" id="rc-gv" style="color:var(--green)">--</div>
+      <div class="rcard-desc" id="rc-gd">Loading...</div>
     </div>
-    <div class="regime-card" id="vol-regime-card" style="background:var(--call-wall-bg);border:1px solid var(--call-wall-border);">
-      <div class="regime-label">Volatility Regime</div>
-      <div class="regime-value" id="vol-regime-value" style="color:var(--cyan)">--</div>
-      <div class="regime-desc" id="vol-regime-desc">Loading...</div>
+    <div class="rcard" id="rc-vol" style="background:var(--cw-bg);border:1px solid var(--cw-b)">
+      <div class="rcard-label">Volatility Regime</div>
+      <div class="rcard-val" id="rc-vv" style="color:var(--cyan)">--</div>
+      <div class="rcard-desc" id="rc-vd">Loading...</div>
+    </div>
+    <div class="rcard" style="background:rgba(255,255,255,.02);border:1px solid var(--silver3)">
+      <div class="rcard-label">Volatility Meter</div>
+      <div class="gauge-wrap">
+        <svg class="gauge" viewBox="0 0 80 80">
+          <circle class="gauge-bg" cx="40" cy="40" r="32" stroke-dasharray="150.8" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+          <circle class="gauge-fill" id="g-fill" cx="40" cy="40" r="32" stroke-dasharray="150.8" stroke-dashoffset="150.8" transform="rotate(-90 40 40)" stroke="var(--green)"/>
+          <text class="gauge-text" x="40" y="44" text-anchor="middle" id="g-pct">0%</text>
+        </svg>
+        <div>
+          <div class="gauge-label" id="g-label">Calm</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--silver3);margin-top:2px">Trend: <span id="g-trend">— Neutral</span></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Legend -->
   <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:var(--zero-gamma)"></div>Zero Gamma (0GEX)</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--max-positive)"></div>Max Positive Gamma</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--max-negative)"></div>Max Negative Gamma</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--call-wall)"></div>Call Wall</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--put-wall)"></div>Put Wall</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--hvl)"></div>HVL</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--zg)"></div>Zero Gamma (ZG)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--mg)"></div>Max Positive (MG+)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--mn)"></div>Max Negative (MG-)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--cw)"></div>Call Wall (CW)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--pw)"></div>Put Wall (PW)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--hvl)"></div>HVL</div>
   </div>
 
-  <!-- Price map -->
-  <div class="section-title">Price Level Map</div>
-  <div class="price-map" id="price-map">
-    <div class="price-map-grid"></div>
-    <div class="loading-overlay" id="map-loading">Loading levels...</div>
+  <!-- Price Map + GEX vertical chart -->
+  <div class="charts-row">
+    <div>
+      <div class="stitle">Price Level Map</div>
+      <div class="pmap" id="pmap"><canvas id="pmap-c"></canvas></div>
+    </div>
+    <div>
+      <div class="stitle">GEX Distribution</div>
+      <div class="gex-vert" id="gex-vert"><canvas id="gex-c"></canvas></div>
+    </div>
   </div>
 
   <!-- Levels table -->
-  <div class="section-title">Key Gamma Levels</div>
-  <div class="levels-header">
-    <span></span>
-    <span>Level</span>
-    <span>Strike</span>
-    <span>Distance</span>
-    <span>GEX Distribution</span>
-    <span>GEX Value</span>
-  </div>
-  <div class="levels-list" id="levels-list">
-    <div class="loading-overlay" id="levels-loading">Loading levels...</div>
-  </div>
+  <div class="stitle">Key Gamma Levels</div>
+  <div class="lvl-hdr"><span></span><span>Level</span><span>Strike</span><span>Distance</span><span>GEX Distribution</span><span>GEX Value</span></div>
+  <div class="lvl-list" id="lvl-list"></div>
 
-  <!-- GEX Distribution Chart -->
-  <div class="section-title">GEX Distribution by Strike</div>
-  <div class="chart-container">
-    <div id="gex-chart">
-      <div class="loading-overlay" id="chart-loading">Loading chart...</div>
-    </div>
-  </div>
-
-  <!-- Footer -->
   <div class="footer">
-    <span>AGX Community — Gamma Exposure Analysis</span>
-    <span id="footer-info">Data: Massive API · Auto-refresh every 1 min</span>
+    <span>AGX Community — Gamma Exposure · Futures Trading</span>
+    <span>Data: Massive API · Refresh 1 min</span>
   </div>
 </div>
 
 <script>
-// ═════════════════════════════════════════════════════════════
-// AGX GAMMA DASHBOARD — Frontend Logic
-// ═════════════════════════════════════════════════════════════
+const API='/.netlify/functions/gamma-levels';
+const REFRESH=60000;
+let ticker='ES',timer=null,data=null;
 
-// ── Config ──
-const REFRESH_INTERVAL_MS = 60 * 1000; // 1 minute
-const API_BASE = '/.netlify/functions/gamma-levels';
-
-let currentTicker = 'SPY';
-let refreshTimer = null;
-let lastData = null;
-let gexChart = null;
-
-// ── Level styling config ──
-const LEVEL_STYLES = {
-  zeroGamma:   { icon: '⚡', color: 'var(--zero-gamma)',   bg: 'var(--zero-gamma-bg)',   border: 'var(--zero-gamma-border)',   priority: 1 },
-  maxPositive: { icon: '🟢', color: 'var(--max-positive)', bg: 'var(--max-positive-bg)', border: 'var(--max-positive-border)', priority: 2 },
-  maxNegative: { icon: '🔴', color: 'var(--max-negative)', bg: 'var(--max-negative-bg)', border: 'var(--max-negative-border)', priority: 3 },
-  callWall:    { icon: '🔵', color: 'var(--call-wall)',    bg: 'var(--call-wall-bg)',    border: 'var(--call-wall-border)',    priority: 4 },
-  putWall:     { icon: '🟣', color: 'var(--put-wall)',     bg: 'var(--put-wall-bg)',     border: 'var(--put-wall-border)',     priority: 5 },
-  hvl:         { icon: '🟠', color: 'var(--hvl)',          bg: 'var(--hvl-bg)',          border: 'var(--hvl-border)',          priority: 6 },
+const STYLES={
+  zeroGamma:{icon:'⚡',color:'#FACC15',bg:'var(--zg-bg)',bdr:'var(--zg-b)'},
+  maxPositive:{icon:'🟢',color:'#00e5a0',bg:'var(--mg-bg)',bdr:'var(--mg-b)'},
+  maxNegative:{icon:'🔴',color:'#ff3d5a',bg:'var(--mn-bg)',bdr:'var(--mn-b)'},
+  callWall:{icon:'🔵',color:'#3B82F6',bg:'var(--cw-bg)',bdr:'var(--cw-b)'},
+  putWall:{icon:'🟣',color:'#A855F7',bg:'var(--pw-bg)',bdr:'var(--pw-b)'},
+  hvl:{icon:'🟠',color:'#F97316',bg:'var(--hvl-bg)',bdr:'var(--hvl-b)'},
 };
 
-// ── Helpers ──
-function formatPrice(v) {
-  return v ? v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '--';
+function fp(v){return v?v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'--';}
+function fg(v){if(!v&&v!==0)return'--';const a=Math.abs(v);if(a>=1e9)return(v/1e9).toFixed(2)+'B';if(a>=1e6)return(v/1e6).toFixed(1)+'M';if(a>=1e3)return(v/1e3).toFixed(1)+'K';return v.toFixed(0);}
+function dp(spot,strike){if(!spot)return'--';return((strike-spot)/spot*100).toFixed(2);}
+
+function setS(ok,txt){
+  document.getElementById('dot').className='dot'+(ok?'':' err');
+  document.getElementById('status').textContent=txt;
+}
+function showErr(m){const e=document.getElementById('err');e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',8000);}
+
+async function load(tk){
+  setS(true,'LOADING...');
+  try{
+    const r=await fetch(`${API}?ticker=${tk}&expirations=4`);
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    if(d.error)throw new Error(d.error);
+    data=d;render(d);
+    setS(true,'LIVE — '+new Date().toLocaleTimeString());
+  }catch(e){console.error(e);setS(false,'ERROR');showErr(e.message);}
 }
 
-function formatGex(v) {
-  if (!v && v !== 0) return '--';
-  const abs = Math.abs(v);
-  if (abs >= 1e9) return (v/1e9).toFixed(2) + 'B';
-  if (abs >= 1e6) return (v/1e6).toFixed(1) + 'M';
-  if (abs >= 1e3) return (v/1e3).toFixed(1) + 'K';
-  if (abs === 0) return '0';
-  return v.toFixed(0);
+function sw(tk,btn){
+  ticker=tk;
+  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  load(tk);resetT();
+}
+function resetT(){if(timer)clearInterval(timer);timer=setInterval(()=>load(ticker),REFRESH);}
+
+function render(d){
+  // Price header
+  document.getElementById('p-price').textContent=fp(d.spotPrice);
+  document.getElementById('p-tk').textContent=d.ticker;
+  document.getElementById('p-name').textContent=d.name;
+  const nb=document.getElementById('p-net');
+  nb.className='net-badge '+(d.netGex>=0?'pos':'neg');
+  nb.textContent='Net GEX: '+(d.netGex>=0?'+':'')+d.netGexFormatted;
+
+  // Regime cards
+  const gPos=d.gammaRegime==='POSITIVE';
+  const gc=document.getElementById('rc-gamma');
+  gc.style.background=gPos?'var(--mg-bg)':'var(--mn-bg)';
+  gc.style.borderColor=gPos?'var(--mg-b)':'var(--mn-b)';
+  document.getElementById('rc-gv').style.color=gPos?'var(--green)':'var(--red)';
+  document.getElementById('rc-gv').textContent=gPos?'Positive Gamma':'Negative Gamma';
+  document.getElementById('rc-gd').textContent=gPos?'Mean reversion likely':'Breakouts likely';
+
+  const lv=d.volRegime==='LOW_VOL';
+  const vc=document.getElementById('rc-vol');
+  vc.style.background=lv?'var(--cw-bg)':'var(--hvl-bg)';
+  vc.style.borderColor=lv?'var(--cw-b)':'var(--hvl-b)';
+  document.getElementById('rc-vv').style.color=lv?'var(--cyan)':'#F97316';
+  document.getElementById('rc-vv').textContent=lv?'Low Volatility':'High Volatility';
+  document.getElementById('rc-vd').textContent=lv?'Compressed volatility':'Expanded volatility';
+
+  // Volatility gauge
+  const vs=d.volatility||{score:0,label:'Calm'};
+  const circum=150.8;
+  const offset=circum-(vs.score/100*circum);
+  const gfill=document.getElementById('g-fill');
+  gfill.setAttribute('stroke-dashoffset',offset);
+  let gc2='var(--green)';
+  if(vs.score>70)gc2='var(--red)';else if(vs.score>40)gc2='var(--gold)';else if(vs.score>20)gc2='var(--cyan)';
+  gfill.setAttribute('stroke',gc2);
+  document.getElementById('g-pct').textContent=vs.score+'%';
+  document.getElementById('g-label').textContent=vs.label;
+  document.getElementById('g-trend').textContent=gPos?'↑ Pinning':'↓ Trending';
+
+  renderPMap(d);
+  renderGexVert(d);
+  renderLevels(d);
 }
 
-function distancePct(spot, strike) {
-  if (!spot) return '--';
-  return ((strike - spot) / spot * 100).toFixed(2);
-}
+// ═══ PRICE LEVEL MAP (horizontal lines like TradingView) ═══
+function renderPMap(d){
+  const wrap=document.getElementById('pmap');
+  const canvas=document.getElementById('pmap-c');
+  const dpr=window.devicePixelRatio||1;
+  const W=wrap.clientWidth, H=Math.max(400,wrap.clientHeight);
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
 
-function setStatus(status, text) {
-  const dot = document.getElementById('live-dot');
-  const label = document.getElementById('live-status');
-  dot.className = 'live-dot' + (status === 'error' ? ' error' : status === 'paused' ? ' paused' : '');
-  label.textContent = text;
-}
-
-function showError(msg) {
-  const el = document.getElementById('error-msg');
-  el.textContent = msg;
-  el.style.display = 'block';
-  setTimeout(() => el.style.display = 'none', 10000);
-}
-
-// ── Fetch data ──
-async function fetchGammaLevels(ticker) {
-  setStatus('live', 'LOADING...');
-  try {
-    const url = `${API_BASE}?ticker=${encodeURIComponent(ticker)}&expirations=4`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    lastData = data;
-    renderDashboard(data);
-    setStatus('live', `LIVE — ${new Date().toLocaleTimeString()}`);
-  } catch (err) {
-    console.error('Fetch error:', err);
-    setStatus('error', 'ERROR');
-    showError('Error loading data: ' + err.message);
+  const spot=d.spotPrice;
+  const lvls=[];
+  for(const[k,v]of Object.entries(d.levels)){
+    if(v.strike&&STYLES[k]) lvls.push({...v,...STYLES[k],key:k});
   }
-}
+  // Sort by strike
+  lvls.sort((a,b)=>a.strike-b.strike);
+  const allPrices=[spot,...lvls.map(l=>l.strike)];
+  const mn=Math.min(...allPrices), mx=Math.max(...allPrices);
+  const range=mx-mn, pad=range*.15;
+  const top=mx+pad, bot=mn-pad, full=top-bot;
 
-// ── Switch ticker ──
-function switchTicker(ticker, btnEl) {
-  currentTicker = ticker;
-  document.querySelectorAll('.ticker-btn').forEach(b => b.classList.remove('active'));
-  if (btnEl) btnEl.classList.add('active');
-  fetchGammaLevels(ticker);
-  resetRefreshTimer();
-}
+  const pL=90, pR=140, pT=20, pB=20;
+  const cW=W-pL-pR, cH=H-pT-pB;
+  const getY=p=>pT+(top-p)/full*cH;
 
-// ── Auto-refresh ──
-function resetRefreshTimer() {
-  if (refreshTimer) clearInterval(refreshTimer);
-  refreshTimer = setInterval(() => fetchGammaLevels(currentTicker), REFRESH_INTERVAL_MS);
-}
-
-// ── Render everything ──
-function renderDashboard(data) {
-  renderPriceHeader(data);
-  renderRegimeCards(data);
-  renderLevelsTable(data);
-  renderPriceMap(data);
-  renderGexChart(data);
-}
-
-// ── Price header ──
-function renderPriceHeader(data) {
-  document.getElementById('spot-price').textContent = formatPrice(data.spotPrice);
-  document.getElementById('ticker-label').textContent = data.ticker;
-
-  const badge = document.getElementById('net-gex-badge');
-  const isPos = data.netGex >= 0;
-  badge.className = 'net-gex-badge ' + (isPos ? 'positive' : 'negative');
-  badge.textContent = `Net GEX: ${isPos ? '+' : ''}${data.netGexFormatted || formatGex(data.netGex)}`;
-}
-
-// ── Regime cards ──
-function renderRegimeCards(data) {
-  const gc = document.getElementById('gamma-regime-card');
-  const gv = document.getElementById('gamma-regime-value');
-  const gd = document.getElementById('gamma-regime-desc');
-  const isPositiveGamma = data.gammaRegime === 'POSITIVE';
-  gc.style.background = isPositiveGamma ? 'var(--max-positive-bg)' : 'var(--max-negative-bg)';
-  gc.style.borderColor = isPositiveGamma ? 'var(--max-positive-border)' : 'var(--max-negative-border)';
-  gv.style.color = isPositiveGamma ? 'var(--green)' : 'var(--red)';
-  gv.textContent = isPositiveGamma ? 'Positive Gamma' : 'Negative Gamma';
-  gd.textContent = isPositiveGamma
-    ? 'Dealers hedge against trend — mean reversion likely'
-    : 'Dealers amplify trend — breakouts likely';
-
-  const vc = document.getElementById('vol-regime-card');
-  const vv = document.getElementById('vol-regime-value');
-  const vd = document.getElementById('vol-regime-desc');
-  const isLowVol = data.volRegime === 'LOW_VOL';
-  vc.style.background = isLowVol ? 'var(--call-wall-bg)' : 'var(--hvl-bg)';
-  vc.style.borderColor = isLowVol ? 'var(--call-wall-border)' : 'var(--hvl-border)';
-  vv.style.color = isLowVol ? 'var(--cyan)' : 'var(--hvl)';
-  vv.textContent = isLowVol ? 'Low Volatility' : 'High Volatility';
-  vd.textContent = isLowVol
-    ? 'Price above HVL — compressed volatility'
-    : 'Price below HVL — expanded volatility';
-}
-
-// ── Levels table ──
-function renderLevelsTable(data) {
-  const container = document.getElementById('levels-list');
-  const levels = data.levels;
-  const spot = data.spotPrice;
-
-  // Build array of levels sorted by strike (high to low)
-  const rows = [];
-  for (const [key, lvl] of Object.entries(levels)) {
-    const style = LEVEL_STYLES[key];
-    if (!style || !lvl.strike) continue;
-    rows.push({ key, ...lvl, ...style });
+  // Background grid
+  ctx.strokeStyle='rgba(255,255,255,0.03)';
+  ctx.lineWidth=1;
+  const gridStep=Math.pow(10,Math.floor(Math.log10(range)))/2;
+  for(let p=Math.floor(bot/gridStep)*gridStep;p<=top;p+=gridStep){
+    const y=getY(p);
+    if(y<pT||y>H-pB) continue;
+    ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(W-pR,y);ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,0.12)';
+    ctx.font='10px "Share Tech Mono"';ctx.textAlign='right';
+    ctx.fillText(p.toFixed(0),pL-8,y+3);
   }
-  rows.sort((a, b) => b.strike - a.strike);
 
-  // Find max absolute GEX for bar scaling
-  const maxAbsGex = Math.max(...rows.map(r => Math.abs(r.gex || 0)), 1);
-
-  let html = '';
-  rows.forEach((row, i) => {
-    const dist = distancePct(spot, row.strike);
-    const isAbove = row.strike >= spot;
-    const gexVal = row.gex || 0;
-    const barPct = maxAbsGex > 0 ? (Math.abs(gexVal) / maxAbsGex * 50) : 0;
-    const barLeft = gexVal >= 0 ? '50%' : (50 - barPct) + '%';
-    const barGrad = `linear-gradient(90deg, ${row.color}66, ${row.color})`;
-
-    html += `
-      <div class="level-row" style="background:${row.bg};border:1px solid ${row.border};animation:fadeSlideIn 0.4s ease ${i * 0.06}s both;"
-           onmouseover="this.style.boxShadow='0 0 18px ${row.border}'"
-           onmouseout="this.style.boxShadow='none'">
-        <div class="level-icon">${row.icon}</div>
-        <div>
-          <div class="level-name" style="color:${row.color}">${row.label}</div>
-          <div class="level-desc">${row.description}</div>
-        </div>
-        <div class="level-strike">${formatPrice(row.strike)}</div>
-        <div class="level-distance" style="color:${isAbove ? 'var(--green)' : 'var(--red)'}">
-          ${isAbove ? '+' : ''}${dist}%
-        </div>
-        <div class="level-bar-container">
-          <div class="level-bar-center"></div>
-          <div class="level-bar" style="left:${barLeft};width:${barPct}%;background:${barGrad};animation-delay:${i * 0.06 + 0.15}s;"></div>
-        </div>
-        <div class="level-gex-value" style="color:${gexVal >= 0 ? 'var(--green)' : 'var(--red)'}">
-          ${gexVal >= 0 ? '+' : ''}${formatGex(gexVal)}
-        </div>
-      </div>`;
-  });
-
-  container.innerHTML = html;
-}
-
-// ── Price map ──
-function renderPriceMap(data) {
-  const map = document.getElementById('price-map');
-  const levels = data.levels;
-  const spot = data.spotPrice;
-
-  // Collect all strikes
-  const allStrikes = [];
-  for (const [key, lvl] of Object.entries(levels)) {
-    if (lvl.strike && LEVEL_STYLES[key]) {
-      allStrikes.push({ strike: lvl.strike, key, label: lvl.label, ...LEVEL_STYLES[key] });
+  // Deconflict labels: push overlapping levels apart
+  const labelH=22;
+  const positioned=lvls.map(l=>({...l,y:getY(l.strike)}));
+  positioned.sort((a,b)=>a.y-b.y);
+  for(let i=1;i<positioned.length;i++){
+    const diff=positioned[i].y-positioned[i-1].y;
+    if(diff<labelH){
+      const push=(labelH-diff)/2;
+      positioned[i-1].y-=push;
+      positioned[i].y+=push;
     }
   }
-  allStrikes.push({ strike: spot, key: 'spot' });
 
-  const min = Math.min(...allStrikes.map(s => s.strike));
-  const max = Math.max(...allStrikes.map(s => s.strike));
-  const range = max - min;
-  const pad = range * 0.12;
+  // Draw level lines
+  for(const l of positioned){
+    const realY=getY(l.strike);
+    // Horizontal line at actual price
+    ctx.strokeStyle=l.color+'88';
+    ctx.lineWidth=2;
+    ctx.setLineDash([8,4]);
+    ctx.beginPath();ctx.moveTo(pL,realY);ctx.lineTo(W-pR,realY);ctx.stroke();
+    ctx.setLineDash([]);
 
-  function getY(price) {
-    return ((max + pad - price) / (range + 2 * pad)) * 100;
+    // Colored band
+    ctx.fillStyle=l.color+'11';
+    ctx.fillRect(pL,realY-4,cW,8);
+
+    // Left label (at deconflicted Y)
+    ctx.fillStyle=l.color;
+    ctx.font='bold 11px "Share Tech Mono"';ctx.textAlign='right';
+    ctx.fillText(fp(l.strike),pL-8,l.y+4);
+
+    // Right label
+    ctx.textAlign='left';
+    ctx.fillText(l.shortLabel+' '+fp(l.strike),W-pR+8,l.y+4);
+
+    // Small connector if deconflicted
+    if(Math.abs(l.y-realY)>2){
+      ctx.strokeStyle=l.color+'44';
+      ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(pL-4,l.y);ctx.lineTo(pL,realY);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(W-pR+4,l.y);ctx.lineTo(W-pR,realY);ctx.stroke();
+    }
   }
 
-  let html = '<div class="price-map-grid"></div>';
+  // Spot price line (thick, white)
+  const spotY=getY(spot);
+  ctx.strokeStyle='#fff';
+  ctx.lineWidth=2;
+  ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(pL,spotY);ctx.lineTo(W-pR,spotY);ctx.stroke();
 
-  // Level lines
-  for (const lvl of allStrikes) {
-    if (lvl.key === 'spot') continue;
-    const y = getY(lvl.strike);
-    html += `
-      <div class="map-level-line" style="top:${y}%">
-        <div class="map-level-price" style="color:${lvl.color}">${formatPrice(lvl.strike)}</div>
-        <div class="map-level-dash" style="background:linear-gradient(90deg, ${lvl.color}, ${lvl.color}33)">
-          <div class="map-level-dot" style="background:${lvl.color};box-shadow:0 0 8px ${lvl.color}"></div>
-        </div>
-        <div class="map-level-label" style="color:${lvl.color}">${lvl.label}</div>
-      </div>`;
+  // Spot dot
+  ctx.fillStyle='#fff';
+  ctx.beginPath();ctx.arc(pL+10,spotY,5,0,Math.PI*2);ctx.fill();
+  ctx.shadowColor='rgba(255,255,255,0.5)';ctx.shadowBlur=10;
+  ctx.beginPath();ctx.arc(pL+10,spotY,5,0,Math.PI*2);ctx.fill();
+  ctx.shadowBlur=0;
+
+  // Spot labels
+  ctx.fillStyle='#fff';
+  ctx.font='bold 13px "Share Tech Mono"';ctx.textAlign='right';
+  ctx.fillText(fp(spot),pL-8,spotY+4);
+  ctx.textAlign='left';
+  ctx.font='bold 10px "Share Tech Mono"';
+  ctx.fillText('◆ SPOT PRICE',W-pR+8,spotY+4);
+}
+
+// ═══ GEX VERTICAL CHART ═══
+function renderGexVert(d){
+  const wrap=document.getElementById('gex-vert');
+  const canvas=document.getElementById('gex-c');
+  const dpr=window.devicePixelRatio||1;
+  const W=wrap.clientWidth||340, H=document.getElementById('pmap').clientHeight||400;
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  wrap.style.height=H+'px';
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+
+  const dist=d.distribution||[];
+  if(!dist.length) return;
+
+  const spot=d.spotPrice;
+  const strikes=dist.map(x=>x.strike);
+  const gexVals=dist.map(x=>x.gex);
+  const maxAbs=Math.max(...gexVals.map(Math.abs),1);
+
+  const pT=20,pB=20,pL=10,pR=50;
+  const cW=W-pL-pR, cH=H-pT-pB;
+  const barH=Math.max(2,cH/strikes.length-1);
+
+  // Zero line (vertical center)
+  const zeroX=pL+cW/2;
+  ctx.strokeStyle='rgba(255,255,255,0.12)';
+  ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(zeroX,pT);ctx.lineTo(zeroX,H-pB);ctx.stroke();
+
+  // Bars (horizontal, one per strike, vertical axis = strikes)
+  strikes.forEach((strike,i)=>{
+    const gex=gexVals[i];
+    const barW=(Math.abs(gex)/maxAbs)*(cW/2);
+    const y=pT+(i/strikes.length)*cH;
+    const x=gex>=0?zeroX:zeroX-barW;
+    const color=gex>=0?'#00e5a0':'#ff3d5a';
+
+    ctx.fillStyle=color+'88';
+    ctx.fillRect(x,y,barW,barH);
+
+    // Strike label on right
+    if(i%Math.max(1,Math.floor(strikes.length/15))===0){
+      ctx.fillStyle='rgba(255,255,255,0.25)';
+      ctx.font='9px "Share Tech Mono"';
+      ctx.textAlign='left';
+      ctx.fillText(strike.toFixed(0),W-pR+4,y+barH/2+3);
+    }
+  });
+
+  // Spot line
+  const spotIdx=strikes.findIndex(s=>s>=spot);
+  if(spotIdx>=0){
+    const spotYY=pT+(spotIdx/strikes.length)*cH;
+    ctx.strokeStyle='rgba(255,255,255,0.5)';
+    ctx.lineWidth=1;
+    ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(pL,spotYY);ctx.lineTo(W-pR,spotYY);ctx.stroke();
+    ctx.setLineDash([]);
   }
 
-  // Spot price line
-  const spotY = getY(spot);
-  html += `
-    <div class="map-level-line spot-line" style="top:${spotY}%">
-      <div class="map-level-price"><span>${formatPrice(spot)}</span></div>
-      <div class="map-level-dash">
-        <div class="map-level-dot"></div>
-      </div>
-      <div class="map-level-label">SPOT PRICE</div>
+  // Mark key levels
+  for(const[k,v]of Object.entries(d.levels)){
+    if(!v.strike||!STYLES[k])continue;
+    const idx=strikes.findIndex(s=>Math.abs(s-v.strike)<(strikes.length>1?Math.abs(strikes[1]-strikes[0])*1.5:999));
+    if(idx<0)continue;
+    const ly=pT+(idx/strikes.length)*cH;
+    ctx.strokeStyle=STYLES[k].color+'88';
+    ctx.lineWidth=1;
+    ctx.setLineDash([3,3]);
+    ctx.beginPath();ctx.moveTo(pL,ly);ctx.lineTo(W-pR,ly);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=STYLES[k].color;
+    ctx.font='bold 8px "Share Tech Mono"';
+    ctx.textAlign='right';
+    ctx.fillText(v.shortLabel,pL+cW/2-4,ly-2);
+  }
+
+  // Axis labels
+  ctx.fillStyle='rgba(255,255,255,0.2)';
+  ctx.font='8px "Share Tech Mono"';
+  ctx.textAlign='center';
+  ctx.fillText('+GEX',zeroX+cW/4,H-4);
+  ctx.fillText('-GEX',zeroX-cW/4,H-4);
+}
+
+// ═══ LEVELS TABLE ═══
+function renderLevels(d){
+  const c=document.getElementById('lvl-list');
+  const spot=d.spotPrice;
+  const rows=[];
+  for(const[k,v]of Object.entries(d.levels)){
+    const s=STYLES[k];if(!s||!v.strike)continue;
+    rows.push({key:k,...v,...s});
+  }
+  rows.sort((a,b)=>b.strike-a.strike);
+  const maxAbs=Math.max(...rows.map(r=>Math.abs(r.gex||0)),1);
+
+  let h='';
+  rows.forEach((r,i)=>{
+    const dist=dp(spot,r.strike);
+    const above=r.strike>=spot;
+    const gv=r.gex||0;
+    const pct=maxAbs>0?(Math.abs(gv)/maxAbs*50):0;
+    const bL=gv>=0?'50%':(50-pct)+'%';
+    const bg=`linear-gradient(90deg,${r.color}66,${r.color})`;
+
+    h+=`<div class="lvl-row" style="background:${r.bg};border:1px solid ${r.bdr};animation:fadeIn .4s ease ${i*.05}s both"
+         onmouseover="this.style.boxShadow='0 0 16px ${r.bdr}'" onmouseout="this.style.boxShadow='none'">
+      <div class="lvl-icon">${r.icon}</div>
+      <div><div class="lvl-name" style="color:${r.color}">${r.label}</div><div class="lvl-desc">${r.description}</div></div>
+      <div class="lvl-strike">${fp(r.strike)}</div>
+      <div class="lvl-dist" style="color:${above?'var(--green)':'var(--red)'}">${above?'+':''}${dist}%</div>
+      <div class="lvl-bar-c"><div class="lvl-bar-mid"></div><div class="lvl-bar" style="left:${bL};width:${pct}%;background:${bg};animation-delay:${i*.05+.1}s"></div></div>
+      <div class="lvl-gex" style="color:${gv>=0?'var(--green)':'var(--red)'}">${gv>=0?'+':''}${fg(gv)}</div>
     </div>`;
-
-  map.innerHTML = html;
-}
-
-// ── GEX Chart (using lightweight-charts) ──
-function renderGexChart(data) {
-  const container = document.getElementById('gex-chart');
-  const dist = data.distribution;
-  if (!dist || dist.length === 0) {
-    container.innerHTML = '<div class="loading-overlay">No distribution data</div>';
-    return;
-  }
-
-  container.innerHTML = '';
-
-  // Build simple bar chart with canvas
-  const canvas = document.createElement('canvas');
-  canvas.width = container.clientWidth * 2;
-  canvas.height = 640;
-  canvas.style.width = '100%';
-  canvas.style.height = '320px';
-  container.appendChild(canvas);
-
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width;
-  const H = canvas.height;
-  const paddingLeft = 100;
-  const paddingRight = 20;
-  const paddingTop = 20;
-  const paddingBottom = 60;
-  const chartW = W - paddingLeft - paddingRight;
-  const chartH = H - paddingTop - paddingBottom;
-
-  // Data
-  const strikes = dist.map(d => d.strike);
-  const gexValues = dist.map(d => d.gex);
-  const maxAbs = Math.max(...gexValues.map(Math.abs), 1);
-  const barW = Math.max(2, chartW / strikes.length - 2);
-
-  // Background
-  ctx.fillStyle = 'transparent';
-  ctx.fillRect(0, 0, W, H);
-
-  // Grid lines
-  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-  ctx.lineWidth = 1;
-  const zeroY = paddingTop + chartH / 2;
-  for (let i = 0; i <= 4; i++) {
-    const y = paddingTop + (chartH / 4) * i;
-    ctx.beginPath();
-    ctx.moveTo(paddingLeft, y);
-    ctx.lineTo(W - paddingRight, y);
-    ctx.stroke();
-  }
-
-  // Zero line
-  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(paddingLeft, zeroY);
-  ctx.lineTo(W - paddingRight, zeroY);
-  ctx.stroke();
-
-  // Spot price line
-  const spotIdx = strikes.findIndex(s => s >= data.spotPrice);
-  if (spotIdx >= 0) {
-    const spotX = paddingLeft + (spotIdx / strikes.length) * chartW + barW / 2;
-    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([8, 4]);
-    ctx.beginPath();
-    ctx.moveTo(spotX, paddingTop);
-    ctx.lineTo(spotX, H - paddingBottom);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Label
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 18px "Share Tech Mono"';
-    ctx.textAlign = 'center';
-    ctx.fillText('SPOT', spotX, paddingTop + 16);
-  }
-
-  // Bars
-  strikes.forEach((strike, i) => {
-    const gex = gexValues[i];
-    const barH = (Math.abs(gex) / maxAbs) * (chartH / 2);
-    const x = paddingLeft + (i / strikes.length) * chartW;
-    const y = gex >= 0 ? zeroY - barH : zeroY;
-
-    // Color based on positive/negative
-    const color = gex >= 0 ? '#00e5a0' : '#ff3d5a';
-    ctx.fillStyle = color + '99';
-    ctx.fillRect(x, y, barW, barH);
-
-    // Subtle border
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 1;
-    ctx.strokeRect(x, y, barW, barH);
   });
-
-  // Y-axis labels
-  ctx.fillStyle = 'rgba(255,255,255,0.3)';
-  ctx.font = '18px "Share Tech Mono"';
-  ctx.textAlign = 'right';
-  ctx.fillText('+' + formatGex(maxAbs), paddingLeft - 10, paddingTop + 16);
-  ctx.fillText('0', paddingLeft - 10, zeroY + 6);
-  ctx.fillText('-' + formatGex(maxAbs), paddingLeft - 10, H - paddingBottom);
-
-  // X-axis labels (show every Nth)
-  ctx.textAlign = 'center';
-  ctx.font = '16px "Share Tech Mono"';
-  const step = Math.max(1, Math.floor(strikes.length / 12));
-  for (let i = 0; i < strikes.length; i += step) {
-    const x = paddingLeft + (i / strikes.length) * chartW + barW / 2;
-    ctx.fillText(strikes[i].toFixed(0), x, H - paddingBottom + 30);
-  }
-
-  // Mark key levels on chart
-  const levelMarks = [
-    { key: 'zeroGamma', label: '0GEX' },
-    { key: 'callWall', label: 'CALL WALL' },
-    { key: 'putWall', label: 'PUT WALL' },
-  ];
-  for (const mark of levelMarks) {
-    const lvl = data.levels[mark.key];
-    if (!lvl || !lvl.strike) continue;
-    const style = LEVEL_STYLES[mark.key];
-    const idx = strikes.findIndex(s => Math.abs(s - lvl.strike) < (strikes[1] - strikes[0]) * 1.5);
-    if (idx < 0) continue;
-    const x = paddingLeft + (idx / strikes.length) * chartW + barW / 2;
-
-    // Compute the color from CSS variable — use raw hex
-    let hexColor;
-    switch(mark.key) {
-      case 'zeroGamma': hexColor = '#FACC15'; break;
-      case 'callWall': hexColor = '#3B82F6'; break;
-      case 'putWall': hexColor = '#A855F7'; break;
-      default: hexColor = '#fff';
-    }
-
-    ctx.strokeStyle = hexColor;
-    ctx.lineWidth = 2;
-    ctx.setLineDash([4, 4]);
-    ctx.beginPath();
-    ctx.moveTo(x, paddingTop + 24);
-    ctx.lineTo(x, H - paddingBottom);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    ctx.fillStyle = hexColor;
-    ctx.font = 'bold 16px "Share Tech Mono"';
-    ctx.textAlign = 'center';
-    ctx.fillText(mark.label, x, H - paddingBottom + 50);
-  }
+  c.innerHTML=h;
 }
 
-// ── Init ──
-document.addEventListener('DOMContentLoaded', () => {
-  fetchGammaLevels(currentTicker);
-  resetRefreshTimer();
-});
+// ═══ INIT ═══
+document.addEventListener('DOMContentLoaded',()=>{load(ticker);resetT();});
+window.addEventListener('resize',()=>{if(data)render(data);});
 </script>
-
 </body>
 </html>
