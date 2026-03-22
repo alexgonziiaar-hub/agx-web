@@ -1,325 +1,132 @@
 // netlify/functions/gamma-levels.js
-// ═══════════════════════════════════════════════════════════════
-// AGX COMMUNITY — Gamma Levels API (Netlify Serverless Function)
-// Calls Massive (ex-Polygon) Option Chain Snapshot API,
-// calculates GEX per strike, and returns key gamma levels.
-// ═══════════════════════════════════════════════════════════════
-
 const https = require("https");
-
-// ── Config ──
 const CONTRACT_SIZE = 100;
 const RISK_FREE_RATE = 0.05;
-
-// ── Helpers ──
-
-// Standard normal PDF
-function normPdf(x) {
-  return Math.exp(-0.5 * x * x) / Math.sqrt(2 * Math.PI);
+const FUTURES_MAP = {
+  ES: { etf: "SPY", multiplier: 10, name: "E-mini S&P 500" },
+  NQ: { etf: "QQQ", multiplier: 40, name: "E-mini Nasdaq 100" },
+  SPY: { etf: "SPY", multiplier: 1, name: "S&P 500 ETF" },
+  QQQ: { etf: "QQQ", multiplier: 1, name: "Nasdaq 100 ETF" },
+};
+function normPdf(x) { return Math.exp(-0.5*x*x)/Math.sqrt(2*Math.PI); }
+function bsGamma(S,K,T,r,sigma) {
+  if(T<=0||sigma<=0||S<=0||K<=0) return 0;
+  const d1=(Math.log(S/K)+(r+0.5*sigma*sigma)*T)/(sigma*Math.sqrt(T));
+  return normPdf(d1)/(S*sigma*Math.sqrt(T));
 }
-
-// Black-Scholes gamma
-function bsGamma(S, K, T, r, sigma) {
-  if (T <= 0 || sigma <= 0 || S <= 0 || K <= 0) return 0;
-  const d1 = (Math.log(S / K) + (r + 0.5 * sigma * sigma) * T) / (sigma * Math.sqrt(T));
-  return normPdf(d1) / (S * sigma * Math.sqrt(T));
+function timeToExpiry(s) {
+  const e=new Date(s+"T16:00:00Z"), n=new Date();
+  return Math.max((e-n)/(1000*60*60*24*365),1/365);
 }
-
-// Time to expiry in years
-function timeToExpiry(expirationStr) {
-  const exp = new Date(expirationStr + "T16:00:00Z");
-  const now = new Date();
-  const days = (exp - now) / (1000 * 60 * 60 * 24);
-  return Math.max(days / 365, 1 / 365);
-}
-
-// Fetch JSON from URL (returns promise)
 function fetchJson(url) {
-  return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
-      let data = "";
-      res.on("data", (chunk) => (data += chunk));
-      res.on("end", () => {
-        try {
-          resolve(JSON.parse(data));
-        } catch (e) {
-          reject(new Error("Failed to parse API response"));
-        }
-      });
-      res.on("error", reject);
-    }).on("error", reject);
+  return new Promise((resolve,reject)=>{
+    https.get(url,(res)=>{
+      let d=""; res.on("data",(c)=>d+=c);
+      res.on("end",()=>{ try{resolve(JSON.parse(d))}catch(e){reject(e)} });
+      res.on("error",reject);
+    }).on("error",reject);
   });
 }
-
-// Format large numbers
-function formatGex(val) {
-  const abs = Math.abs(val);
-  if (abs >= 1e9) return (val / 1e9).toFixed(2) + "B";
-  if (abs >= 1e6) return (val / 1e6).toFixed(1) + "M";
-  if (abs >= 1e3) return (val / 1e3).toFixed(1) + "K";
-  return val.toFixed(0);
+function fmtGex(v) {
+  const a=Math.abs(v);
+  if(a>=1e9) return (v/1e9).toFixed(2)+"B";
+  if(a>=1e6) return (v/1e6).toFixed(1)+"M";
+  if(a>=1e3) return (v/1e3).toFixed(1)+"K";
+  return v.toFixed(0);
 }
-
-// ── Main handler ──
-exports.handler = async (event) => {
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Content-Type": "application/json",
-  };
-
-  // Handle CORS preflight
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 200, headers, body: "" };
-  }
-
+exports.handler = async(event)=>{
+  const H={"Access-Control-Allow-Origin":"*","Access-Control-Allow-Headers":"Content-Type","Content-Type":"application/json"};
+  if(event.httpMethod==="OPTIONS") return {statusCode:200,headers:H,body:""};
   try {
-    // Get ticker from query params (default: SPY)
-    const params = event.queryStringParameters || {};
-    const ticker = (params.ticker || "SPY").toUpperCase();
-    const maxExpirations = parseInt(params.expirations || "4", 10);
-
-    // API key from environment variable (set in Netlify dashboard)
-    const apiKey = process.env.MASSIVE_API_KEY;
-    if (!apiKey) {
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({ error: "MASSIVE_API_KEY not configured" }),
-      };
+    const p=event.queryStringParameters||{};
+    const raw=(p.ticker||"ES").toUpperCase();
+    const maxExp=parseInt(p.expirations||"4",10);
+    const map=FUTURES_MAP[raw]||FUTURES_MAP.ES;
+    const etf=map.etf, mult=map.multiplier, isFut=raw==="ES"||raw==="NQ";
+    const apiKey=process.env.MASSIVE_API_KEY;
+    if(!apiKey) return {statusCode:500,headers:H,body:JSON.stringify({error:"MASSIVE_API_KEY not configured"})};
+    // ETF price
+    const sd=await fetchJson(`https://api.polygon.io/v2/aggs/ticker/${etf}/prev?adjusted=true&apiKey=${apiKey}`);
+    let etfP=0;
+    if(sd.results&&sd.results.length>0) etfP=sd.results[0].c;
+    // Futures/index price
+    let futP=Math.round(etfP*mult*100)/100;
+    if(isFut){
+      try{
+        const idx=raw==="ES"?"I:SPX":"I:NDX";
+        const id=await fetchJson(`https://api.polygon.io/v2/aggs/ticker/${idx}/prev?adjusted=true&apiKey=${apiKey}`);
+        if(id.results&&id.results.length>0) futP=id.results[0].c;
+      }catch(e){}
     }
-
-    // ── Step 1: Get current price from stock snapshot ──
-    const stockUrl = `https://api.polygon.io/v2/aggs/ticker/${ticker}/prev?adjusted=true&apiKey=${apiKey}`;
-    const stockData = await fetchJson(stockUrl);
-    
-    let spotPrice = 0;
-    if (stockData.results && stockData.results.length > 0) {
-      spotPrice = stockData.results[0].c; // close price
+    const displayP=isFut?futP:etfP;
+    const spot=etfP||1;
+    // Options chain
+    const od=await fetchJson(`https://api.polygon.io/v3/snapshot/options/${etf}?limit=250&apiKey=${apiKey}`);
+    if(!od.results||od.results.length===0)
+      return {statusCode:404,headers:H,body:JSON.stringify({error:`No options data for ${etf}`})};
+    if(spot===1&&od.results[0].underlying_asset) {/*fallback*/}
+    const contracts=[], expSet=new Set();
+    for(const o of od.results){
+      const d=o.details||{}, g=o.greeks||{}, oi=o.open_interest||0;
+      if(oi<=0) continue;
+      expSet.add(d.expiration_date);
+      contracts.push({strike:d.strike_price,type:d.contract_type,expiration:d.expiration_date,oi,gamma:g.gamma||0,iv:o.implied_volatility||0.3,delta:g.delta||0});
     }
-
-    // For indices like SPX, try the snapshot endpoint
-    if (spotPrice === 0) {
-      const snapUrl = `https://api.polygon.io/v3/snapshot?ticker.any_of=${ticker}&apiKey=${apiKey}`;
-      const snapData = await fetchJson(snapUrl);
-      if (snapData.results && snapData.results.length > 0) {
-        spotPrice = snapData.results[0].value || snapData.results[0].session?.close || 0;
-      }
+    const selExps=new Set([...expSet].sort().slice(0,maxExp));
+    const filt=contracts.filter(c=>selExps.has(c.expiration));
+    // GEX calc
+    const gexS={}, cGex={}, pGex={};
+    for(const c of filt){
+      let gm=c.gamma;
+      if(!gm) gm=bsGamma(spot,c.strike,timeToExpiry(c.expiration),RISK_FREE_RATE,c.iv);
+      let gx=gm*c.oi*CONTRACT_SIZE*spot*spot*0.01;
+      if(c.type==="put") gx*=-1;
+      const s=c.strike;
+      gexS[s]=(gexS[s]||0)+gx;
+      if(c.type==="call") cGex[s]=(cGex[s]||0)+gx; else pGex[s]=(pGex[s]||0)+gx;
     }
-
-    // ── Step 2: Get option chain snapshot ──
-    const optionsUrl = `https://api.polygon.io/v3/snapshot/options/${ticker}?limit=250&apiKey=${apiKey}`;
-    const optionsData = await fetchJson(optionsUrl);
-
-    if (!optionsData.results || optionsData.results.length === 0) {
-      return {
-        statusCode: 404,
-        headers,
-        body: JSON.stringify({ error: `No options data found for ${ticker}` }),
-      };
+    const strikes=Object.keys(gexS).map(Number).sort((a,b)=>a-b);
+    let cw={strike:0,gex:0},pw={strike:0,gex:0},mp={strike:0,gex:0},mn={strike:0,gex:0},gf=spot,net=0;
+    for(const s of strikes){
+      const g=gexS[s]; net+=g;
+      if(g>mp.gex) mp={strike:s,gex:g};
+      if(g<mn.gex) mn={strike:s,gex:g};
+      const c=cGex[s]||0; if(c>cw.gex) cw={strike:s,gex:c};
+      const pp=pGex[s]||0; if(pp<pw.gex) pw={strike:s,gex:pp};
     }
-
-    // Use underlying price from first option result if we don't have spot
-    if (spotPrice === 0 && optionsData.results[0].underlying_asset) {
-      spotPrice = optionsData.results[0].underlying_asset.price;
+    for(let i=1;i<strikes.length;i++){
+      const g1=gexS[strikes[i-1]],g2=gexS[strikes[i]];
+      if(g1*g2<0){gf=Math.round((strikes[i-1]+(0-g1)*(strikes[i]-strikes[i-1])/(g2-g1))*100)/100;break;}
     }
-
-    // ── Step 3: Process option chain ──
-    const contracts = [];
-    const expirationSet = new Set();
-
-    for (const opt of optionsData.results) {
-      const details = opt.details || {};
-      const greeks = opt.greeks || {};
-      const oi = opt.open_interest || 0;
-
-      if (oi <= 0) continue;
-
-      expirationSet.add(details.expiration_date);
-
-      contracts.push({
-        strike: details.strike_price,
-        type: details.contract_type, // "call" or "put"
-        expiration: details.expiration_date,
-        oi: oi,
-        gamma: greeks.gamma || 0,
-        iv: opt.implied_volatility || 0.3,
-        delta: greeks.delta || 0,
-      });
-    }
-
-    // Filter to nearest N expirations
-    const sortedExps = [...expirationSet].sort();
-    const selectedExps = new Set(sortedExps.slice(0, maxExpirations));
-    const filtered = contracts.filter((c) => selectedExps.has(c.expiration));
-
-    // ── Step 4: Calculate GEX per strike ──
-    const gexByStrike = {};
-    const callGexByStrike = {};
-    const putGexByStrike = {};
-
-    for (const c of filtered) {
-      // Use API gamma if available, otherwise calculate with BS
-      let gamma = c.gamma;
-      if (!gamma || gamma === 0) {
-        const T = timeToExpiry(c.expiration);
-        gamma = bsGamma(spotPrice, c.strike, T, RISK_FREE_RATE, c.iv);
-      }
-
-      // GEX = gamma × OI × 100 × spot² × 0.01
-      let gex = gamma * c.oi * CONTRACT_SIZE * spotPrice * spotPrice * 0.01;
-
-      // Dealer perspective: long calls = positive gamma, long puts = negative gamma
-      if (c.type === "put") gex *= -1;
-
-      const strike = c.strike;
-      gexByStrike[strike] = (gexByStrike[strike] || 0) + gex;
-
-      if (c.type === "call") {
-        callGexByStrike[strike] = (callGexByStrike[strike] || 0) + gex;
-      } else {
-        putGexByStrike[strike] = (putGexByStrike[strike] || 0) + gex;
-      }
-    }
-
-    // ── Step 5: Find key levels ──
-    const strikes = Object.keys(gexByStrike)
-      .map(Number)
-      .sort((a, b) => a - b);
-
-    let callWall = { strike: 0, gex: 0 };
-    let putWall = { strike: 0, gex: 0 };
-    let maxPositive = { strike: 0, gex: 0 };
-    let maxNegative = { strike: 0, gex: 0 };
-    let gammaFlip = spotPrice;
-    let netGex = 0;
-
-    for (const s of strikes) {
-      const g = gexByStrike[s];
-      netGex += g;
-
-      if (g > maxPositive.gex) maxPositive = { strike: s, gex: g };
-      if (g < maxNegative.gex) maxNegative = { strike: s, gex: g };
-
-      const cg = callGexByStrike[s] || 0;
-      if (cg > callWall.gex) callWall = { strike: s, gex: cg };
-
-      const pg = putGexByStrike[s] || 0;
-      if (pg < putWall.gex) putWall = { strike: s, gex: pg };
-    }
-
-    // Find gamma flip (zero crossing)
-    for (let i = 1; i < strikes.length; i++) {
-      const g1 = gexByStrike[strikes[i - 1]];
-      const g2 = gexByStrike[strikes[i]];
-      if (g1 * g2 < 0) {
-        // Linear interpolation
-        const s1 = strikes[i - 1];
-        const s2 = strikes[i];
-        gammaFlip = s1 + ((0 - g1) * (s2 - s1)) / (g2 - g1);
-        gammaFlip = Math.round(gammaFlip * 100) / 100;
-        break;
-      }
-    }
-
-    // High Vol Level (HVL) — strike nearest to spot with highest absolute GEX
-    const hvlCandidates = strikes.filter(
-      (s) => s >= spotPrice * 0.95 && s <= spotPrice * 1.05
-    );
-    let hvl = spotPrice;
-    let hvlMaxGex = 0;
-    for (const s of hvlCandidates) {
-      if (Math.abs(gexByStrike[s]) > hvlMaxGex) {
-        hvlMaxGex = Math.abs(gexByStrike[s]);
-        hvl = s;
-      }
-    }
-
-    // ── Step 6: Build GEX distribution for chart ──
-    // Filter to strikes within ±10% of spot for chart readability
-    const chartStrikes = strikes.filter(
-      (s) => s >= spotPrice * 0.9 && s <= spotPrice * 1.1
-    );
-
-    const distribution = chartStrikes.map((s) => ({
-      strike: s,
-      gex: Math.round(gexByStrike[s]),
-      callGex: Math.round(callGexByStrike[s] || 0),
-      putGex: Math.round(putGexByStrike[s] || 0),
-    }));
-
-    // ── Step 7: Regime detection ──
-    const gammaRegime = spotPrice > gammaFlip ? "POSITIVE" : "NEGATIVE";
-    const volRegime = spotPrice > hvl ? "LOW_VOL" : "HIGH_VOL";
-
-    // ── Response ──
-    const result = {
-      ticker,
-      spotPrice: Math.round(spotPrice * 100) / 100,
-      timestamp: new Date().toISOString(),
-      expirations: [...selectedExps],
-      contractCount: filtered.length,
-      netGex: Math.round(netGex),
-      netGexFormatted: formatGex(netGex),
-      gammaRegime,
-      volRegime,
-      levels: {
-        zeroGamma: {
-          strike: gammaFlip,
-          label: "Zero Gamma (0GEX)",
-          description: "Gamma flip zone — volatility regime change",
-        },
-        maxPositive: {
-          strike: maxPositive.strike,
-          gex: Math.round(maxPositive.gex),
-          gexFormatted: formatGex(maxPositive.gex),
-          label: "Max Positive Gamma",
-          description: "Strong support — dealer hedging pins price",
-        },
-        maxNegative: {
-          strike: maxNegative.strike,
-          gex: Math.round(maxNegative.gex),
-          gexFormatted: formatGex(maxNegative.gex),
-          label: "Max Negative Gamma",
-          description: "Amplified moves — dealers accelerate trend",
-        },
-        callWall: {
-          strike: callWall.strike,
-          gex: Math.round(callWall.gex),
-          gexFormatted: formatGex(callWall.gex),
-          label: "Call Wall",
-          description: "Resistance — highest call OI gamma concentration",
-        },
-        putWall: {
-          strike: putWall.strike,
-          gex: Math.round(putWall.gex),
-          gexFormatted: formatGex(putWall.gex),
-          label: "Put Wall",
-          description: "Support — highest put OI gamma concentration",
-        },
-        hvl: {
-          strike: hvl,
-          label: "High Vol Level (HVL)",
-          description: "Above = low vol regime, Below = high vol regime",
-        },
+    const hvlC=strikes.filter(s=>s>=spot*0.95&&s<=spot*1.05);
+    let hvl=spot,hvlM=0;
+    for(const s of hvlC){if(Math.abs(gexS[s])>hvlM){hvlM=Math.abs(gexS[s]);hvl=s;}}
+    const toDP=s=>isFut?Math.round(s*mult*100)/100:s;
+    const cStk=strikes.filter(s=>s>=spot*0.92&&s<=spot*1.08);
+    const dist=cStk.map(s=>({strike:toDP(s),etfStrike:s,gex:Math.round(gexS[s]),callGex:Math.round(cGex[s]||0),putGex:Math.round(pGex[s]||0)}));
+    const gReg=spot>gf?"POSITIVE":"NEGATIVE";
+    const vReg=spot>hvl?"LOW_VOL":"HIGH_VOL";
+    const maxAbs=Math.max(Math.abs(mp.gex),Math.abs(mn.gex),1);
+    const vScore=Math.min(100,Math.round(Math.abs(net)/maxAbs*100));
+    let vLabel="Calm"; if(vScore>70) vLabel="Extreme"; else if(vScore>40) vLabel="Elevated"; else if(vScore>20) vLabel="Moderate";
+    return {statusCode:200,headers:H,body:JSON.stringify({
+      ticker:raw,name:map.name,isFutures:isFut,
+      spotPrice:Math.round(displayP*100)/100,etfPrice:Math.round(etfP*100)/100,etfTicker:etf,multiplier:mult,
+      timestamp:new Date().toISOString(),expirations:[...selExps],contractCount:filt.length,
+      netGex:Math.round(net),netGexFormatted:fmtGex(net),gammaRegime:gReg,volRegime:vReg,
+      volatility:{score:vScore,label:vLabel},
+      levels:{
+        zeroGamma:{strike:toDP(gf),etfStrike:gf,label:"Zero Gamma",shortLabel:"ZG",description:"Gamma flip — volatility regime change"},
+        maxPositive:{strike:toDP(mp.strike),etfStrike:mp.strike,gex:Math.round(mp.gex),gexFormatted:fmtGex(mp.gex),label:"Max Positive Gamma",shortLabel:"MG+",description:"Strong support — dealer hedging pins price"},
+        maxNegative:{strike:toDP(mn.strike),etfStrike:mn.strike,gex:Math.round(mn.gex),gexFormatted:fmtGex(mn.gex),label:"Max Negative Gamma",shortLabel:"MG-",description:"Amplified moves — dealers accelerate trend"},
+        callWall:{strike:toDP(cw.strike),etfStrike:cw.strike,gex:Math.round(cw.gex),gexFormatted:fmtGex(cw.gex),label:"Call Wall",shortLabel:"CW",description:"Resistance — highest call gamma concentration"},
+        putWall:{strike:toDP(pw.strike),etfStrike:pw.strike,gex:Math.round(pw.gex),gexFormatted:fmtGex(pw.gex),label:"Put Wall",shortLabel:"PW",description:"Support — highest put gamma concentration"},
+        hvl:{strike:toDP(hvl),etfStrike:hvl,label:"HVL",shortLabel:"HVL",description:"Above = low vol, Below = high vol regime"},
       },
-      distribution,
-    };
-
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify(result),
-    };
-  } catch (err) {
-    console.error("Gamma levels error:", err);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({
-        error: "Failed to calculate gamma levels",
-        details: err.message,
-      }),
-    };
+      distribution:dist,
+    })};
+  } catch(err){
+    console.error("Error:",err);
+    return {statusCode:500,headers:H,body:JSON.stringify({error:"Failed",details:err.message})};
   }
 };
