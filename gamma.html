@@ -6,6 +6,7 @@
 <title>AGX Gamma Profile — Live</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 <style>
 :root{
   --bg:#03050a;--bg2:rgba(5,10,18,0.92);--bg3:rgba(8,14,24,0.96);
@@ -318,15 +319,41 @@ canvas#mainCanvas{position:absolute;inset:0;width:100%;height:100%}
     </div>
   </div>
 
-  <!-- CENTER — GEX NET bars -->
+  <!-- CENTER — TradingView Chart -->
   <div class="center-panel">
-    <div class="panel-header">NET GEX por Strike</div>
-    <div class="center-top">
-      <canvas id="mainCanvas"></canvas>
+    <div class="panel-header" style="justify-content:space-between">
+      <span>PRICE CHART — Niveles Gamma</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select class="tb-select" id="tf-sel" onchange="changeTF()" style="font-size:9px;padding:2px 6px">
+          <option value="1">1m</option>
+          <option value="5" selected>5m</option>
+          <option value="15">15m</option>
+          <option value="60">1H</option>
+          <option value="D">1D</option>
+        </select>
+        <div style="display:flex;gap:6px;font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--silver3)">
+          <span><span style="color:var(--green)">━</span> Call Wall</span>
+          <span><span style="color:var(--red)">━</span> Put Wall</span>
+          <span><span style="color:var(--gold)">━</span> Zero γ</span>
+          <span><span style="color:var(--cyan)">╌</span> Spot</span>
+          <span><span style="color:#00ff88">━</span> Major γ+</span>
+          <span><span style="color:#ff1a3d">━</span> Major γ−</span>
+        </div>
+      </div>
+    </div>
+    <div class="center-top" id="tv-chart-container" style="position:relative">
+      <div id="tv-chart" style="position:absolute;inset:0"></div>
+      <div id="tv-placeholder" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver3)">// Carga datos para ver el gráfico de precio</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--border2)">Los niveles gamma se dibujarán automáticamente</div>
+      </div>
     </div>
     <div class="legend">
-      <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>GEX POSITIVO</div>
-      <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>GEX NEGATIVO</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>CALL WALL</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>PUT WALL</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>ZERO GAMMA</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#00ff88"></div>MAJOR γ+</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#ff1a3d"></div>MAJOR γ−</div>
       <span style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--silver3)" id="center-info"></span>
     </div>
   </div>
@@ -760,8 +787,183 @@ function renderProfile(data, spot, levels) {
   }
 }
 
+// ── TRADINGVIEW CHART ──
+let tvChart = null, candleSeries = null, priceLineSeries = null;
+let currentTicker = 'QQQ', currentTF = '5';
+let gammaLines = [];
+
+function initTVChart() {
+  const container = document.getElementById('tv-chart');
+  if (!container) return;
+  if (tvChart) { tvChart.remove(); tvChart = null; }
+
+  tvChart = LightweightCharts.createChart(container, {
+    width:  container.offsetWidth,
+    height: container.offsetHeight,
+    layout: {
+      background: { color: '#03050a' },
+      textColor:  '#7a9ab8',
+    },
+    grid: {
+      vertLines: { color: 'rgba(0,229,160,0.05)' },
+      horzLines: { color: 'rgba(0,229,160,0.05)' },
+    },
+    crosshair: {
+      mode: LightweightCharts.CrosshairMode.Normal,
+      vertLine: { color: 'rgba(0,207,255,0.4)', labelBackgroundColor: '#0d1220' },
+      horzLine: { color: 'rgba(0,207,255,0.4)', labelBackgroundColor: '#0d1220' },
+    },
+    rightPriceScale: {
+      borderColor: 'rgba(0,229,160,0.15)',
+      textColor: '#7a9ab8',
+    },
+    timeScale: {
+      borderColor: 'rgba(0,229,160,0.15)',
+      textColor: '#334455',
+      timeVisible: true,
+      secondsVisible: false,
+    },
+    watermark: {
+      visible: true,
+      fontSize: 11,
+      horzAlign: 'left',
+      vertAlign: 'bottom',
+      color: 'rgba(0,229,160,0.08)',
+      text: 'AGX Community — Gamma Levels',
+    },
+  });
+
+  candleSeries = tvChart.addCandlestickSeries({
+    upColor:   '#00e5a0',
+    downColor: '#ff3d5a',
+    borderUpColor:   '#00e5a0',
+    borderDownColor: '#ff3d5a',
+    wickUpColor:   '#00e5a0',
+    wickDownColor: '#ff3d5a',
+  });
+
+  // Resize observer
+  const ro = new ResizeObserver(() => {
+    if (tvChart && container) {
+      tvChart.applyOptions({
+        width:  container.offsetWidth,
+        height: container.offsetHeight,
+      });
+    }
+  });
+  ro.observe(container);
+}
+
+async function loadTVCandles(ticker, tf) {
+  try {
+    const multiplier = isNaN(tf) ? 1 : parseInt(tf);
+    const timespan   = isNaN(tf) ? 'day' : (tf==='60' ? 'hour' : 'minute');
+    const to   = new Date().toISOString().slice(0,10);
+    const daysBack = timespan==='minute' ? 5 : timespan==='hour' ? 60 : 365;
+    const from = new Date(Date.now() - daysBack * 24*3600*1000).toISOString().slice(0,10);
+
+    const url = `${BASE}/v2/aggs/ticker/${ticker}/range/${multiplier}/${timespan}/${from}/${to}?adjusted=true&sort=asc&limit=500&apiKey=${POLY}`;
+    const r = await fetch(url);
+    const d = await r.json();
+
+    let results = d.results || [];
+
+    // Fallback to daily if intraday empty (market closed)
+    if (!results.length && timespan === 'minute') {
+      const url2 = `${BASE}/v2/aggs/ticker/${ticker}/range/1/day/${new Date(Date.now()-180*24*3600*1000).toISOString().slice(0,10)}/${to}?adjusted=true&sort=asc&limit=180&apiKey=${POLY}`;
+      const r2 = await fetch(url2);
+      const d2 = await r2.json();
+      results = d2.results || [];
+      if (results.length) {
+        document.getElementById('center-info').textContent = `${ticker} · ${results.length} velas diarias (mercado cerrado)`;
+      }
+    }
+
+    if (!results.length) {
+      console.log('No candle data available');
+      return;
+    }
+
+    const candles = results.map(bar => ({
+      time:  bar.t / 1000,
+      open:  bar.o,
+      high:  bar.h,
+      low:   bar.l,
+      close: bar.c,
+    }));
+
+    if (candleSeries) {
+      candleSeries.setData(candles);
+      tvChart.timeScale().fitContent();
+    }
+
+    document.getElementById('tv-placeholder').style.display = 'none';
+    if (!document.getElementById('center-info').textContent.includes('mercado')) {
+      document.getElementById('center-info').textContent = `${ticker} · ${candles.length} velas · ${tf}${isNaN(tf)?'':'m'}`;
+    }
+  } catch(e) {
+    console.error('TV candles error:', e);
+  }
+}
+
+function drawGammaLines(levels) {
+  if (!tvChart || !candleSeries) return;
+
+  // Remove existing gamma lines
+  gammaLines.forEach(s => { try { tvChart.removeSeries(s); } catch(e) {} });
+  gammaLines = [];
+
+  const lineDefs = [
+    { price: levels.callWall,          color: '#00e5a0', width: 1.5, style: 0, title: 'CALL WALL' },
+    { price: levels.putWall,           color: '#ff3d5a', width: 1.5, style: 0, title: 'PUT WALL'  },
+    { price: levels.gammaFlip,         color: '#d4a843', width: 1,   style: 1, title: 'ZERO γ'    },
+    { price: levels.above,             color: '#00e5a0', width: 1,   style: 2, title: 'RES ↑'     },
+    { price: levels.below,             color: '#ff3d5a', width: 1,   style: 2, title: 'SUP ↓'     },
+    { price: levels.majorPos?.strike,  color: '#00ff88', width: 2,   style: 0, title: 'MAJOR γ+'  },
+    { price: levels.majorNeg?.strike,  color: '#ff1a3d', width: 2,   style: 0, title: 'MAJOR γ−'  },
+  ];
+
+  lineDefs.forEach(def => {
+    if (!def.price) return;
+    try {
+      const ls = tvChart.addLineSeries({
+        color:     def.color,
+        lineWidth: def.width,
+        lineStyle: def.style, // 0=solid, 1=dotted, 2=dashed
+        priceLineVisible: false,
+        lastValueVisible: true,
+        title: def.title,
+        crosshairMarkerVisible: false,
+      });
+
+      // Extend line across the entire visible range
+      const now = Math.floor(Date.now() / 1000);
+      const past = now - 30 * 24 * 3600;
+      ls.setData([
+        { time: past, value: def.price },
+        { time: now,  value: def.price },
+      ]);
+      gammaLines.push(ls);
+    } catch(e) {}
+  });
+}
+
+function changeTF() {
+  currentTF = document.getElementById('tf-sel').value;
+  if (currentTicker) loadTVCandles(currentTicker, currentTF);
+}
+
 function renderMain(data, spot, levels) {
+  // No longer renders canvas bars — handled by TradingView
+  document.getElementById('center-info').textContent =
+    data.length + ' strikes · max GEX: $' + (Math.max(...data.map(d=>Math.abs(d.netGex)))/1e6).toFixed(1) + 'M';
+  // Draw gamma lines on TradingView chart
+  if (tvChart) drawGammaLines(levels);
+}
+
+function renderMainOLD(data, spot, levels) {
   const canvas = document.getElementById('mainCanvas');
+  if (!canvas) return;
   const W = canvas.offsetWidth, H = canvas.offsetHeight;
   canvas.width=W; canvas.height=H;
   const ctx = canvas.getContext('2d');
@@ -930,6 +1132,10 @@ async function loadData() {
     const levels = findLevels(data, spot);
 
     currentData=data; currentSpot=spot; currentLevels=levels;
+    currentTicker = ticker;
+
+    // Init TV chart if needed
+    if (!tvChart) initTVChart();
 
     updateMetrics(levels, spot);
     renderProfile(data, spot, levels);
@@ -938,6 +1144,10 @@ async function loadData() {
     window._rawOptions = options;
     calculateVolMetrics(data, spot);
     fetchVIX();
+
+    // Load candles and draw gamma lines
+    await loadTVCandles(ticker, currentTF);
+    drawGammaLines(levels);
 
     dot.className='s-dot live';
     document.getElementById('s-txt').textContent=`${ticker} · ${data.length} strikes · ${options.length} contratos`;
@@ -987,10 +1197,50 @@ function loadDemo() {
   document.getElementById('vvix-val').className='vol-val mid';
   document.getElementById('atm-iv').textContent='19.4';
   document.getElementById('atm-iv').className='vol-val low';
+  currentTicker='QQQ'; currentTF='5';
+  if (!tvChart) initTVChart();
+  // Load simulated demo candles so chart works without API
+  loadDemoCandles(spot, levels);
   document.getElementById('s-dot').className='s-dot live';
   document.getElementById('s-txt').textContent='QQQ · DEMO · '+data.length+' strikes';
   document.getElementById('s-time').textContent='// Demo';
   toast('✓ Demo QQQ cargado');
+}
+
+function loadDemoCandles(spot, levels) {
+  if (!tvChart || !candleSeries) return;
+
+  // Generate realistic simulated candles around spot price
+  const candles = [];
+  const now = Math.floor(Date.now() / 1000);
+  const barSize = 5 * 60; // 5 minutes
+  const numBars = 120;
+  let price = spot - 3;
+  let seed = 42;
+
+  function rand() {
+    seed = (seed * 1664525 + 1013904223) & 0xffffffff;
+    return (seed >>> 0) / 0xffffffff;
+  }
+
+  for (let i = numBars; i >= 0; i--) {
+    const time = now - i * barSize;
+    const change = (rand() - 0.49) * 1.2;
+    const open  = price;
+    const close = price + change;
+    const high  = Math.max(open, close) + rand() * 0.5;
+    const low   = Math.min(open, close) - rand() * 0.5;
+    candles.push({ time, open, high, low, close });
+    price = close;
+  }
+
+  candleSeries.setData(candles);
+  tvChart.timeScale().fitContent();
+  document.getElementById('tv-placeholder').style.display = 'none';
+  document.getElementById('center-info').textContent = 'QQQ · DEMO · ' + candles.length + ' velas simuladas';
+
+  // Draw gamma levels on top
+  setTimeout(() => drawGammaLines(levels), 100);
 }
 
 function toast(msg) {
