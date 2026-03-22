@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:#03050a;--bg2:rgba(5,10,18,0.92);--bg3:rgba(8,14,24,0.96);
+      --bg:#03050a;--bg2:rgba(5,10,18,0.95);
       --green:#00e5a0;--green2:rgba(0,229,160,0.1);
       --red:#ff3d5a;--red2:rgba(255,61,90,0.1);
       --gold:#d4a843;--cyan:#00cfff;
@@ -24,88 +24,97 @@
     html,body{background:var(--bg);color:var(--silver);font-family:'Rajdhani',sans-serif;min-height:100vh}
     @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-    @keyframes barGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+    @keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
-    .header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.015) 0%,transparent 100%)}
-    .logo{font-family:'Bebas Neue',sans-serif;font-size:26px;background:linear-gradient(135deg,var(--gold),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .header-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2);letter-spacing:.15em;text-transform:uppercase;margin-left:14px}
-    .live{display:flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2)}
-    .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}
+    /* ── Header ── */
+    .header{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.015) 0%,transparent 100%)}
+    .logo{font-family:'Bebas Neue',sans-serif;font-size:30px;background:linear-gradient(135deg,var(--gold),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .header-sub{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--silver2);letter-spacing:.15em;text-transform:uppercase;margin-left:16px}
+    .live{display:flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--silver2)}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}
     .dot.err{background:var(--red);animation:none}
 
-    .dash{max-width:1400px;margin:0 auto;padding:20px 24px}
-    .tbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-    .tbtn{font-family:'Share Tech Mono',monospace;font-size:13px;padding:7px 16px;border-radius:6px;border:1px solid var(--silver3);background:rgba(255,255,255,.02);color:var(--silver2);cursor:pointer;transition:all .2s}
+    .dash{padding:16px 28px}
+
+    /* ── Ticker bar ── */
+    .tbar{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+    .tbtn{font-family:'Share Tech Mono',monospace;font-size:14px;padding:8px 20px;border-radius:6px;border:1px solid var(--silver3);background:rgba(255,255,255,.02);color:var(--silver2);cursor:pointer;transition:all .2s}
     .tbtn:hover{border-color:var(--border2);color:var(--silver)}
     .tbtn.on{border-color:var(--gold);background:rgba(212,168,67,.08);color:var(--gold);font-weight:700}
-    .rinfo{margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver3)}
+    .rinfo{margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--silver3)}
 
-    .price-row{display:flex;align-items:baseline;gap:14px;margin-bottom:16px}
-    .price-val{font-family:'Bebas Neue',sans-serif;font-size:44px;color:#fff;letter-spacing:.02em}
-    .price-tk{font-family:'Share Tech Mono',monospace;font-size:14px;color:var(--silver2)}
-    .price-name{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--silver3)}
-    .net-badge{font-family:'Share Tech Mono',monospace;font-size:11px;padding:3px 10px;border-radius:4px;font-weight:600}
+    /* ── Price + info row ── */
+    .info-row{display:flex;align-items:center;gap:20px;margin-bottom:14px;flex-wrap:wrap}
+    .price-val{font-family:'Bebas Neue',sans-serif;font-size:52px;color:#fff;letter-spacing:.02em;line-height:1}
+    .price-tk{font-family:'Share Tech Mono',monospace;font-size:16px;color:var(--silver2)}
+    .price-name{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--silver3)}
+    .net-badge{font-family:'Share Tech Mono',monospace;font-size:13px;padding:4px 12px;border-radius:4px;font-weight:600}
     .net-badge.pos{background:var(--green2);color:var(--green);border:1px solid var(--mg-b)}
     .net-badge.neg{background:var(--red2);color:var(--red);border:1px solid var(--mn-b)}
 
-    .stitle{font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--silver3);margin-bottom:10px;font-weight:600}
+    .stitle{font-family:'Share Tech Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--silver3);margin-bottom:8px;font-weight:600}
 
-    /* ── Regime + Volatility row ── */
-    .regime-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px}
-    .rcard{padding:12px 16px;border-radius:8px}
-    .rcard-label{font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.12em;opacity:.5}
-    .rcard-val{font-family:'Bebas Neue',sans-serif;font-size:18px;margin-top:3px;letter-spacing:.03em}
-    .rcard-desc{font-size:10px;opacity:.35;margin-top:1px}
-
-    /* ── Volatility gauge ── */
-    .gauge-wrap{display:flex;align-items:center;gap:12px}
-    .gauge{width:80px;height:80px;position:relative}
+    /* ── Regime row (3 cards) ── */
+    .regime-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+    .rcard{padding:14px 18px;border-radius:8px}
+    .rcard-label{font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;opacity:.5}
+    .rcard-val{font-family:'Bebas Neue',sans-serif;font-size:22px;margin-top:3px}
+    .rcard-desc{font-size:11px;opacity:.35;margin-top:1px}
+    .gauge-wrap{display:flex;align-items:center;gap:14px}
+    .gauge{width:70px;height:70px}
     .gauge-bg{fill:none;stroke:var(--silver3);stroke-width:6}
     .gauge-fill{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .8s ease}
-    .gauge-text{font-family:'Bebas Neue',sans-serif;font-size:20px;fill:var(--silver)}
-    .gauge-label{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--silver2)}
+    .gauge-text{font-family:'Bebas Neue',sans-serif;font-size:18px;fill:var(--silver)}
 
     /* ── Legend ── */
-    .legend{display:flex;flex-wrap:wrap;gap:12px;padding:8px 0;margin-bottom:14px}
-    .leg-item{display:flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2)}
-    .leg-dot{width:8px;height:8px;border-radius:2px}
+    .legend{display:flex;flex-wrap:wrap;gap:14px;padding:6px 0;margin-bottom:10px}
+    .leg-item{display:flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--silver2)}
+    .leg-dot{width:10px;height:10px;border-radius:2px}
 
-    /* ── Main charts area: Price Map (left) + GEX Chart (right) ── */
-    .charts-row{display:grid;grid-template-columns:1fr 340px;gap:14px;margin-bottom:18px}
-    @media(max-width:900px){.charts-row{grid-template-columns:1fr}}
+    /* ── Main chart area ── */
+    .chart-area{display:grid;grid-template-columns:1fr 280px;gap:12px;margin-bottom:16px}
+    @media(max-width:1000px){.chart-area{grid-template-columns:1fr}}
 
-    /* ── Price Level Map ── */
-    .pmap{border-radius:10px;background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.04);overflow:hidden;position:relative;min-height:400px}
-    .pmap canvas{width:100%;height:100%;display:block}
+    /* ── TradingView chart with level overlays ── */
+    .tv-wrap{position:relative;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.06);height:620px}
+    .tv-embed{width:100%;height:100%}
+    .tv-overlay{position:absolute;top:0;right:0;width:160px;height:100%;pointer-events:none;z-index:10}
 
-    /* ── GEX Vertical Chart ── */
-    .gex-vert{border-radius:10px;background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.04);overflow:hidden;position:relative}
+    /* ── Level tags on chart ── */
+    .lvl-tag{position:absolute;right:0;padding:2px 10px;font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:700;border-radius:3px 0 0 3px;white-space:nowrap;letter-spacing:.03em;pointer-events:auto;opacity:.9}
+    .lvl-tag::before{content:'';position:absolute;left:-6px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent}
+
+    /* ── GEX vertical chart ── */
+    .gex-vert{border-radius:10px;background:rgba(255,255,255,.015);border:1px solid rgba(255,255,255,.04);overflow:hidden;height:620px}
     .gex-vert canvas{width:100%;height:100%;display:block}
 
     /* ── Levels table ── */
-    .lvl-list{display:flex;flex-direction:column;gap:5px;margin-bottom:24px}
-    .lvl-hdr{display:grid;grid-template-columns:28px 170px 90px 65px 1fr 75px;gap:8px;padding:0 12px 5px;font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--silver3);font-weight:600}
+    .lvl-list{display:flex;flex-direction:column;gap:5px;margin-bottom:20px}
+    .lvl-hdr{display:grid;grid-template-columns:32px 200px 110px 80px 1fr 90px;gap:10px;padding:0 14px 6px;font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--silver3);font-weight:600}
     .lvl-hdr span:nth-child(3),.lvl-hdr span:nth-child(4),.lvl-hdr span:nth-child(6){text-align:right}
     .lvl-hdr span:nth-child(5){text-align:center}
-    .lvl-row{display:grid;grid-template-columns:28px 170px 90px 65px 1fr 75px;align-items:center;gap:8px;padding:9px 12px;border-radius:7px;transition:transform .2s,box-shadow .2s;cursor:default}
-    .lvl-row:hover{transform:translateX(3px)}
-    .lvl-icon{text-align:center;font-size:14px}
-    .lvl-name{font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
-    .lvl-desc{font-size:9px;opacity:.35;margin-top:1px}
-    .lvl-strike{font-family:'Share Tech Mono',monospace;font-size:16px;font-weight:700;color:#fff;text-align:right}
-    .lvl-dist{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:600;text-align:right}
-    .lvl-bar-c{position:relative;height:16px;background:rgba(255,255,255,.03);border-radius:3px;overflow:hidden}
-    .lvl-bar{position:absolute;top:0;height:100%;border-radius:3px;animation:barGrow .6s ease both;transform-origin:bottom}
+    .lvl-row{display:grid;grid-template-columns:32px 200px 110px 80px 1fr 90px;align-items:center;gap:10px;padding:12px 14px;border-radius:8px;transition:transform .2s,box-shadow .2s;cursor:default}
+    .lvl-row:hover{transform:translateX(4px)}
+    .lvl-icon{text-align:center;font-size:16px}
+    .lvl-name{font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+    .lvl-desc{font-size:10px;opacity:.35;margin-top:2px}
+    .lvl-strike{font-family:'Share Tech Mono',monospace;font-size:20px;font-weight:700;color:#fff;text-align:right}
+    .lvl-dist{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:600;text-align:right}
+    .lvl-bar-c{position:relative;height:18px;background:rgba(255,255,255,.03);border-radius:3px;overflow:hidden}
+    .lvl-bar{position:absolute;top:0;height:100%;border-radius:3px;animation:barGrow .6s ease both}
     .lvl-bar-mid{position:absolute;top:0;left:50%;width:1px;height:100%;background:rgba(255,255,255,.08)}
-    .lvl-gex{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:600;text-align:right}
+    .lvl-gex{font-family:'Share Tech Mono',monospace;font-size:13px;font-weight:600;text-align:right}
 
-    .footer{margin-top:24px;padding:14px 0;border-top:1px solid rgba(255,255,255,.04);display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver3)}
-    .err-msg{background:var(--red2);border:1px solid var(--mn-b);color:var(--red);padding:10px 16px;border-radius:7px;font-family:'Share Tech Mono',monospace;font-size:11px;margin-bottom:14px;display:none}
+    .footer{padding:14px 0;border-top:1px solid rgba(255,255,255,.04);display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver3)}
+    .err-msg{background:var(--red2);border:1px solid var(--mn-b);color:var(--red);padding:10px 16px;border-radius:7px;font-family:'Share Tech Mono',monospace;font-size:12px;margin-bottom:14px;display:none}
+
     @media(max-width:768px){
       .regime-row{grid-template-columns:1fr}
-      .lvl-row,.lvl-hdr{grid-template-columns:24px 1fr 75px 55px}
+      .lvl-row,.lvl-hdr{grid-template-columns:24px 1fr 80px 60px}
       .lvl-bar-c,.lvl-gex{display:none}
-      .price-val{font-size:32px}
+      .price-val{font-size:36px}
+      .tv-wrap{height:400px}
+      .gex-vert{height:400px}
     }
   </style>
 </head>
@@ -123,19 +132,17 @@
   <div class="err-msg" id="err"></div>
 
   <div class="tbar">
-    <button class="tbtn on" onclick="sw('ES',this)">ES <span style="opacity:.5;font-size:10px">S&P 500</span></button>
-    <button class="tbtn" onclick="sw('NQ',this)">NQ <span style="opacity:.5;font-size:10px">Nasdaq 100</span></button>
+    <button class="tbtn on" onclick="sw('ES',this)">ES <span style="opacity:.5;font-size:11px">S&P 500</span></button>
+    <button class="tbtn" onclick="sw('NQ',this)">NQ <span style="opacity:.5;font-size:11px">Nasdaq 100</span></button>
     <div class="rinfo">Auto-refresh: 1 min</div>
   </div>
 
-  <div class="price-row">
+  <div class="info-row">
     <div class="price-val" id="p-price">--</div>
-    <div class="price-tk" id="p-tk">ES</div>
-    <div class="price-name" id="p-name">E-mini S&P 500</div>
+    <div><div class="price-tk" id="p-tk">ES</div><div class="price-name" id="p-name">E-mini S&P 500</div></div>
     <div class="net-badge pos" id="p-net">Net GEX: --</div>
   </div>
 
-  <!-- Regime + Volatility -->
   <div class="regime-row">
     <div class="rcard" id="rc-gamma" style="background:var(--mg-bg);border:1px solid var(--mg-b)">
       <div class="rcard-label">Gamma Regime</div>
@@ -156,8 +163,8 @@
           <text class="gauge-text" x="40" y="44" text-anchor="middle" id="g-pct">0%</text>
         </svg>
         <div>
-          <div class="gauge-label" id="g-label">Calm</div>
-          <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--silver3);margin-top:2px">Trend: <span id="g-trend">— Neutral</span></div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px" id="g-label">Calm</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver3);margin-top:2px">Trend: <span id="g-trend">— Neutral</span></div>
         </div>
       </div>
     </div>
@@ -172,11 +179,16 @@
     <div class="leg-item"><div class="leg-dot" style="background:var(--hvl)"></div>HVL</div>
   </div>
 
-  <!-- Price Map + GEX vertical chart -->
-  <div class="charts-row">
+  <!-- Main chart area -->
+  <div class="chart-area">
     <div>
-      <div class="stitle">Price Level Map</div>
-      <div class="pmap" id="pmap"><canvas id="pmap-c"></canvas></div>
+      <div class="stitle">Price Chart + Gamma Levels</div>
+      <div class="tv-wrap" id="tv-wrap">
+        <!-- TradingView embed -->
+        <div id="tv-container" class="tv-embed"></div>
+        <!-- Overlay for gamma level tags -->
+        <div class="tv-overlay" id="tv-overlay"></div>
+      </div>
     </div>
     <div>
       <div class="stitle">GEX Distribution</div>
@@ -191,14 +203,20 @@
 
   <div class="footer">
     <span>AGX Community — Gamma Exposure · Futures Trading</span>
-    <span>Data: Massive API · Refresh 1 min</span>
+    <span>Chart: TradingView · Data: Massive API · Refresh 1 min</span>
   </div>
 </div>
+
+<!-- TradingView Widget Library -->
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
 <script>
 const API='/.netlify/functions/gamma-levels';
 const REFRESH=60000;
-let ticker='ES',timer=null,data=null;
+let ticker='ES',timer=null,data=null,tvWidget=null;
+
+// TradingView symbol mapping
+const TV_SYMBOLS={ES:'CME_MINI:ES1!',NQ:'CME_MINI:NQ1!'};
 
 const STYLES={
   zeroGamma:{icon:'⚡',color:'#FACC15',bg:'var(--zg-bg)',bdr:'var(--zg-b)'},
@@ -213,12 +231,101 @@ function fp(v){return v?v.toLocaleString('en-US',{minimumFractionDigits:2,maximu
 function fg(v){if(!v&&v!==0)return'--';const a=Math.abs(v);if(a>=1e9)return(v/1e9).toFixed(2)+'B';if(a>=1e6)return(v/1e6).toFixed(1)+'M';if(a>=1e3)return(v/1e3).toFixed(1)+'K';return v.toFixed(0);}
 function dp(spot,strike){if(!spot)return'--';return((strike-spot)/spot*100).toFixed(2);}
 
-function setS(ok,txt){
-  document.getElementById('dot').className='dot'+(ok?'':' err');
-  document.getElementById('status').textContent=txt;
-}
+function setS(ok,txt){document.getElementById('dot').className='dot'+(ok?'':' err');document.getElementById('status').textContent=txt;}
 function showErr(m){const e=document.getElementById('err');e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',8000);}
 
+// ═══ TradingView Chart ═══
+function initTV(tk){
+  const container=document.getElementById('tv-container');
+  container.innerHTML='';
+  const sym=TV_SYMBOLS[tk]||TV_SYMBOLS.ES;
+
+  tvWidget=new TradingView.widget({
+    container_id:'tv-container',
+    symbol:sym,
+    interval:'5',
+    timezone:'America/New_York',
+    theme:'dark',
+    style:'3', // Area/Line chart
+    locale:'en',
+    toolbar_bg:'#03050a',
+    enable_publishing:false,
+    hide_top_toolbar:false,
+    hide_legend:true,
+    save_image:false,
+    backgroundColor:'#03050a',
+    gridColor:'rgba(255,255,255,0.03)',
+    width:'100%',
+    height:'100%',
+    hide_side_toolbar:true,
+    allow_symbol_change:false,
+    details:false,
+    calendar:false,
+    studies:[],
+    overrides:{
+      'mainSeriesProperties.lineStyle.color':'#00e5a0',
+      'mainSeriesProperties.lineStyle.linewidth':2,
+      'mainSeriesProperties.areaStyle.color1':'rgba(0,229,160,0.12)',
+      'mainSeriesProperties.areaStyle.color2':'rgba(0,229,160,0.01)',
+      'mainSeriesProperties.areaStyle.linecolor':'#00e5a0',
+      'mainSeriesProperties.areaStyle.linewidth':2,
+      'paneProperties.background':'#03050a',
+      'paneProperties.backgroundType':'solid',
+      'scalesProperties.backgroundColor':'#03050a',
+      'scalesProperties.textColor':'rgba(255,255,255,0.3)',
+    },
+  });
+}
+
+// ═══ Level Overlays on TV Chart ═══
+function renderOverlay(d){
+  const overlay=document.getElementById('tv-overlay');
+  const wrap=document.getElementById('tv-wrap');
+  const H=wrap.clientHeight;
+  const spot=d.spotPrice;
+
+  const lvls=[];
+  for(const[k,v]of Object.entries(d.levels)){
+    if(v.strike&&STYLES[k]) lvls.push({...v,...STYLES[k],key:k});
+  }
+  lvls.sort((a,b)=>b.strike-a.strike);
+
+  // Calculate Y positions based on price range
+  const allP=[spot,...lvls.map(l=>l.strike)];
+  const mn=Math.min(...allP), mx=Math.max(...allP);
+  const range=mx-mn, pad=range*.2;
+  const top=mx+pad, bot=mn-pad, full=top-bot;
+
+  // Chart area is roughly 85% of widget height (toolbar takes ~15%)
+  const chartTop=H*.08, chartBot=H*.92, chartH=chartBot-chartTop;
+  const getY=p=>chartTop+(top-p)/full*chartH;
+
+  // Deconflict overlapping labels
+  const tagH=22;
+  const positioned=lvls.map(l=>({...l,y:getY(l.strike)}));
+  positioned.sort((a,b)=>a.y-b.y);
+  for(let i=1;i<positioned.length;i++){
+    const diff=positioned[i].y-positioned[i-1].y;
+    if(diff<tagH){
+      positioned[i-1].y-=(tagH-diff)/2;
+      positioned[i].y+=(tagH-diff)/2;
+    }
+  }
+
+  let html='';
+  for(const l of positioned){
+    const y=Math.max(chartTop,Math.min(chartBot-tagH,l.y));
+    html+=`<div class="lvl-tag" style="top:${y}px;background:${l.color}22;color:${l.color};border:1px solid ${l.color}44;border-right:none">${l.shortLabel} ${fp(l.strike)}</div>`;
+  }
+
+  // Spot price tag
+  const spotY=Math.max(chartTop,Math.min(chartBot-tagH,getY(spot)));
+  html+=`<div class="lvl-tag" style="top:${spotY}px;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);border-right:none;font-weight:800">◆ ${fp(spot)}</div>`;
+
+  overlay.innerHTML=html;
+}
+
+// ═══ Data Fetch ═══
 async function load(tk){
   setS(true,'LOADING...');
   try{
@@ -235,12 +342,13 @@ function sw(tk,btn){
   ticker=tk;
   document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
   if(btn)btn.classList.add('on');
+  initTV(tk);
   load(tk);resetT();
 }
 function resetT(){if(timer)clearInterval(timer);timer=setInterval(()=>load(ticker),REFRESH);}
 
+// ═══ Render All ═══
 function render(d){
-  // Price header
   document.getElementById('p-price').textContent=fp(d.spotPrice);
   document.getElementById('p-tk').textContent=d.ticker;
   document.getElementById('p-name').textContent=d.name;
@@ -248,15 +356,14 @@ function render(d){
   nb.className='net-badge '+(d.netGex>=0?'pos':'neg');
   nb.textContent='Net GEX: '+(d.netGex>=0?'+':'')+d.netGexFormatted;
 
-  // Regime cards
-  const gPos=d.gammaRegime==='POSITIVE';
+  // Regimes
+  const gP=d.gammaRegime==='POSITIVE';
   const gc=document.getElementById('rc-gamma');
-  gc.style.background=gPos?'var(--mg-bg)':'var(--mn-bg)';
-  gc.style.borderColor=gPos?'var(--mg-b)':'var(--mn-b)';
-  document.getElementById('rc-gv').style.color=gPos?'var(--green)':'var(--red)';
-  document.getElementById('rc-gv').textContent=gPos?'Positive Gamma':'Negative Gamma';
-  document.getElementById('rc-gd').textContent=gPos?'Mean reversion likely':'Breakouts likely';
-
+  gc.style.background=gP?'var(--mg-bg)':'var(--mn-bg)';
+  gc.style.borderColor=gP?'var(--mg-b)':'var(--mn-b)';
+  document.getElementById('rc-gv').style.color=gP?'var(--green)':'var(--red)';
+  document.getElementById('rc-gv').textContent=gP?'Positive Gamma':'Negative Gamma';
+  document.getElementById('rc-gd').textContent=gP?'Mean reversion likely':'Breakouts likely';
   const lv=d.volRegime==='LOW_VOL';
   const vc=document.getElementById('rc-vol');
   vc.style.background=lv?'var(--cw-bg)':'var(--hvl-bg)';
@@ -265,246 +372,107 @@ function render(d){
   document.getElementById('rc-vv').textContent=lv?'Low Volatility':'High Volatility';
   document.getElementById('rc-vd').textContent=lv?'Compressed volatility':'Expanded volatility';
 
-  // Volatility gauge
+  // Gauge
   const vs=d.volatility||{score:0,label:'Calm'};
-  const circum=150.8;
-  const offset=circum-(vs.score/100*circum);
-  const gfill=document.getElementById('g-fill');
-  gfill.setAttribute('stroke-dashoffset',offset);
-  let gc2='var(--green)';
-  if(vs.score>70)gc2='var(--red)';else if(vs.score>40)gc2='var(--gold)';else if(vs.score>20)gc2='var(--cyan)';
-  gfill.setAttribute('stroke',gc2);
+  const off=150.8-(vs.score/100*150.8);
+  const gf=document.getElementById('g-fill');
+  gf.setAttribute('stroke-dashoffset',off);
+  let gc2='var(--green)';if(vs.score>70)gc2='var(--red)';else if(vs.score>40)gc2='var(--gold)';else if(vs.score>20)gc2='var(--cyan)';
+  gf.setAttribute('stroke',gc2);
   document.getElementById('g-pct').textContent=vs.score+'%';
   document.getElementById('g-label').textContent=vs.label;
-  document.getElementById('g-trend').textContent=gPos?'↑ Pinning':'↓ Trending';
+  document.getElementById('g-label').style.color=gc2.replace('var(','').replace(')','');
+  document.getElementById('g-trend').textContent=gP?'↑ Pinning':'↓ Trending';
 
-  renderPMap(d);
-  renderGexVert(d);
+  renderOverlay(d);
+  renderGex(d);
   renderLevels(d);
 }
 
-// ═══ PRICE LEVEL MAP (horizontal lines like TradingView) ═══
-function renderPMap(d){
-  const wrap=document.getElementById('pmap');
-  const canvas=document.getElementById('pmap-c');
-  const dpr=window.devicePixelRatio||1;
-  const W=wrap.clientWidth, H=Math.max(400,wrap.clientHeight);
-  canvas.width=W*dpr; canvas.height=H*dpr;
-  canvas.style.width=W+'px'; canvas.style.height=H+'px';
-  const ctx=canvas.getContext('2d');
-  ctx.scale(dpr,dpr);
-
-  const spot=d.spotPrice;
-  const lvls=[];
-  for(const[k,v]of Object.entries(d.levels)){
-    if(v.strike&&STYLES[k]) lvls.push({...v,...STYLES[k],key:k});
-  }
-  // Sort by strike
-  lvls.sort((a,b)=>a.strike-b.strike);
-  const allPrices=[spot,...lvls.map(l=>l.strike)];
-  const mn=Math.min(...allPrices), mx=Math.max(...allPrices);
-  const range=mx-mn, pad=range*.15;
-  const top=mx+pad, bot=mn-pad, full=top-bot;
-
-  const pL=90, pR=140, pT=20, pB=20;
-  const cW=W-pL-pR, cH=H-pT-pB;
-  const getY=p=>pT+(top-p)/full*cH;
-
-  // Background grid
-  ctx.strokeStyle='rgba(255,255,255,0.03)';
-  ctx.lineWidth=1;
-  const gridStep=Math.pow(10,Math.floor(Math.log10(range)))/2;
-  for(let p=Math.floor(bot/gridStep)*gridStep;p<=top;p+=gridStep){
-    const y=getY(p);
-    if(y<pT||y>H-pB) continue;
-    ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(W-pR,y);ctx.stroke();
-    ctx.fillStyle='rgba(255,255,255,0.12)';
-    ctx.font='10px "Share Tech Mono"';ctx.textAlign='right';
-    ctx.fillText(p.toFixed(0),pL-8,y+3);
-  }
-
-  // Deconflict labels: push overlapping levels apart
-  const labelH=22;
-  const positioned=lvls.map(l=>({...l,y:getY(l.strike)}));
-  positioned.sort((a,b)=>a.y-b.y);
-  for(let i=1;i<positioned.length;i++){
-    const diff=positioned[i].y-positioned[i-1].y;
-    if(diff<labelH){
-      const push=(labelH-diff)/2;
-      positioned[i-1].y-=push;
-      positioned[i].y+=push;
-    }
-  }
-
-  // Draw level lines
-  for(const l of positioned){
-    const realY=getY(l.strike);
-    // Horizontal line at actual price
-    ctx.strokeStyle=l.color+'88';
-    ctx.lineWidth=2;
-    ctx.setLineDash([8,4]);
-    ctx.beginPath();ctx.moveTo(pL,realY);ctx.lineTo(W-pR,realY);ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Colored band
-    ctx.fillStyle=l.color+'11';
-    ctx.fillRect(pL,realY-4,cW,8);
-
-    // Left label (at deconflicted Y)
-    ctx.fillStyle=l.color;
-    ctx.font='bold 11px "Share Tech Mono"';ctx.textAlign='right';
-    ctx.fillText(fp(l.strike),pL-8,l.y+4);
-
-    // Right label
-    ctx.textAlign='left';
-    ctx.fillText(l.shortLabel+' '+fp(l.strike),W-pR+8,l.y+4);
-
-    // Small connector if deconflicted
-    if(Math.abs(l.y-realY)>2){
-      ctx.strokeStyle=l.color+'44';
-      ctx.lineWidth=1;
-      ctx.beginPath();ctx.moveTo(pL-4,l.y);ctx.lineTo(pL,realY);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(W-pR+4,l.y);ctx.lineTo(W-pR,realY);ctx.stroke();
-    }
-  }
-
-  // Spot price line (thick, white)
-  const spotY=getY(spot);
-  ctx.strokeStyle='#fff';
-  ctx.lineWidth=2;
-  ctx.setLineDash([]);
-  ctx.beginPath();ctx.moveTo(pL,spotY);ctx.lineTo(W-pR,spotY);ctx.stroke();
-
-  // Spot dot
-  ctx.fillStyle='#fff';
-  ctx.beginPath();ctx.arc(pL+10,spotY,5,0,Math.PI*2);ctx.fill();
-  ctx.shadowColor='rgba(255,255,255,0.5)';ctx.shadowBlur=10;
-  ctx.beginPath();ctx.arc(pL+10,spotY,5,0,Math.PI*2);ctx.fill();
-  ctx.shadowBlur=0;
-
-  // Spot labels
-  ctx.fillStyle='#fff';
-  ctx.font='bold 13px "Share Tech Mono"';ctx.textAlign='right';
-  ctx.fillText(fp(spot),pL-8,spotY+4);
-  ctx.textAlign='left';
-  ctx.font='bold 10px "Share Tech Mono"';
-  ctx.fillText('◆ SPOT PRICE',W-pR+8,spotY+4);
-}
-
-// ═══ GEX VERTICAL CHART ═══
-function renderGexVert(d){
+// ═══ GEX Vertical Chart ═══
+function renderGex(d){
   const wrap=document.getElementById('gex-vert');
   const canvas=document.getElementById('gex-c');
   const dpr=window.devicePixelRatio||1;
-  const W=wrap.clientWidth||340, H=document.getElementById('pmap').clientHeight||400;
-  canvas.width=W*dpr; canvas.height=H*dpr;
-  canvas.style.width=W+'px'; canvas.style.height=H+'px';
-  wrap.style.height=H+'px';
-  const ctx=canvas.getContext('2d');
-  ctx.scale(dpr,dpr);
+  const W=wrap.clientWidth||280, H=wrap.clientHeight||620;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
 
-  const dist=d.distribution||[];
-  if(!dist.length) return;
-
-  const spot=d.spotPrice;
-  const strikes=dist.map(x=>x.strike);
-  const gexVals=dist.map(x=>x.gex);
-  const maxAbs=Math.max(...gexVals.map(Math.abs),1);
-
-  const pT=20,pB=20,pL=10,pR=50;
+  const dist=d.distribution||[];if(!dist.length)return;
+  const strikes=dist.map(x=>x.strike), gexV=dist.map(x=>x.gex);
+  const maxAbs=Math.max(...gexV.map(Math.abs),1);
+  const pT=16,pB=24,pL=8,pR=52;
   const cW=W-pL-pR, cH=H-pT-pB;
   const barH=Math.max(2,cH/strikes.length-1);
-
-  // Zero line (vertical center)
   const zeroX=pL+cW/2;
-  ctx.strokeStyle='rgba(255,255,255,0.12)';
-  ctx.lineWidth=1;
+
+  // Zero line
+  ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.lineWidth=1;
   ctx.beginPath();ctx.moveTo(zeroX,pT);ctx.lineTo(zeroX,H-pB);ctx.stroke();
 
-  // Bars (horizontal, one per strike, vertical axis = strikes)
-  strikes.forEach((strike,i)=>{
-    const gex=gexVals[i];
-    const barW=(Math.abs(gex)/maxAbs)*(cW/2);
+  // Bars
+  strikes.forEach((s,i)=>{
+    const gex=gexV[i];
+    const bW=(Math.abs(gex)/maxAbs)*(cW/2);
     const y=pT+(i/strikes.length)*cH;
-    const x=gex>=0?zeroX:zeroX-barW;
-    const color=gex>=0?'#00e5a0':'#ff3d5a';
-
-    ctx.fillStyle=color+'88';
-    ctx.fillRect(x,y,barW,barH);
-
-    // Strike label on right
-    if(i%Math.max(1,Math.floor(strikes.length/15))===0){
-      ctx.fillStyle='rgba(255,255,255,0.25)';
-      ctx.font='9px "Share Tech Mono"';
-      ctx.textAlign='left';
-      ctx.fillText(strike.toFixed(0),W-pR+4,y+barH/2+3);
-    }
+    const x=gex>=0?zeroX:zeroX-bW;
+    ctx.fillStyle=(gex>=0?'#00e5a0':'#ff3d5a')+'88';
+    ctx.fillRect(x,y,bW,barH);
   });
 
-  // Spot line
-  const spotIdx=strikes.findIndex(s=>s>=spot);
-  if(spotIdx>=0){
-    const spotYY=pT+(spotIdx/strikes.length)*cH;
-    ctx.strokeStyle='rgba(255,255,255,0.5)';
-    ctx.lineWidth=1;
-    ctx.setLineDash([4,3]);
-    ctx.beginPath();ctx.moveTo(pL,spotYY);ctx.lineTo(W-pR,spotYY);ctx.stroke();
-    ctx.setLineDash([]);
+  // Strike labels
+  const step=Math.max(1,Math.floor(strikes.length/20));
+  ctx.fillStyle='rgba(255,255,255,0.25)';ctx.font='9px "Share Tech Mono"';ctx.textAlign='left';
+  for(let i=0;i<strikes.length;i+=step){
+    const y=pT+(i/strikes.length)*cH+barH/2+3;
+    ctx.fillText(strikes[i].toFixed(0),W-pR+4,y);
   }
 
-  // Mark key levels
+  // Level markers
   for(const[k,v]of Object.entries(d.levels)){
     if(!v.strike||!STYLES[k])continue;
     const idx=strikes.findIndex(s=>Math.abs(s-v.strike)<(strikes.length>1?Math.abs(strikes[1]-strikes[0])*1.5:999));
     if(idx<0)continue;
     const ly=pT+(idx/strikes.length)*cH;
-    ctx.strokeStyle=STYLES[k].color+'88';
-    ctx.lineWidth=1;
-    ctx.setLineDash([3,3]);
-    ctx.beginPath();ctx.moveTo(pL,ly);ctx.lineTo(W-pR,ly);ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle=STYLES[k].color;
-    ctx.font='bold 8px "Share Tech Mono"';
-    ctx.textAlign='right';
-    ctx.fillText(v.shortLabel,pL+cW/2-4,ly-2);
+    ctx.strokeStyle=STYLES[k].color+'66';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+    ctx.beginPath();ctx.moveTo(pL,ly);ctx.lineTo(W-pR,ly);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=STYLES[k].color;ctx.font='bold 9px "Share Tech Mono"';ctx.textAlign='right';
+    ctx.fillText(v.shortLabel,zeroX-4,ly-3);
   }
 
-  // Axis labels
-  ctx.fillStyle='rgba(255,255,255,0.2)';
-  ctx.font='8px "Share Tech Mono"';
-  ctx.textAlign='center';
-  ctx.fillText('+GEX',zeroX+cW/4,H-4);
-  ctx.fillText('-GEX',zeroX-cW/4,H-4);
+  // Spot marker
+  const spotIdx=strikes.findIndex(s=>s>=d.spotPrice);
+  if(spotIdx>=0){
+    const sy=pT+(spotIdx/strikes.length)*cH;
+    ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(pL,sy);ctx.lineTo(W-pR,sy);ctx.stroke();ctx.setLineDash([]);
+  }
+
+  ctx.fillStyle='rgba(255,255,255,0.18)';ctx.font='9px "Share Tech Mono"';ctx.textAlign='center';
+  ctx.fillText('-GEX',zeroX-cW/4,H-4);ctx.fillText('+GEX',zeroX+cW/4,H-4);
 }
 
-// ═══ LEVELS TABLE ═══
+// ═══ Levels Table ═══
 function renderLevels(d){
   const c=document.getElementById('lvl-list');
   const spot=d.spotPrice;
   const rows=[];
-  for(const[k,v]of Object.entries(d.levels)){
-    const s=STYLES[k];if(!s||!v.strike)continue;
-    rows.push({key:k,...v,...s});
-  }
+  for(const[k,v]of Object.entries(d.levels)){const s=STYLES[k];if(!s||!v.strike)continue;rows.push({key:k,...v,...s});}
   rows.sort((a,b)=>b.strike-a.strike);
   const maxAbs=Math.max(...rows.map(r=>Math.abs(r.gex||0)),1);
-
   let h='';
   rows.forEach((r,i)=>{
-    const dist=dp(spot,r.strike);
-    const above=r.strike>=spot;
-    const gv=r.gex||0;
+    const dist=dp(spot,r.strike),above=r.strike>=spot,gv=r.gex||0;
     const pct=maxAbs>0?(Math.abs(gv)/maxAbs*50):0;
     const bL=gv>=0?'50%':(50-pct)+'%';
-    const bg=`linear-gradient(90deg,${r.color}66,${r.color})`;
-
     h+=`<div class="lvl-row" style="background:${r.bg};border:1px solid ${r.bdr};animation:fadeIn .4s ease ${i*.05}s both"
          onmouseover="this.style.boxShadow='0 0 16px ${r.bdr}'" onmouseout="this.style.boxShadow='none'">
       <div class="lvl-icon">${r.icon}</div>
       <div><div class="lvl-name" style="color:${r.color}">${r.label}</div><div class="lvl-desc">${r.description}</div></div>
       <div class="lvl-strike">${fp(r.strike)}</div>
       <div class="lvl-dist" style="color:${above?'var(--green)':'var(--red)'}">${above?'+':''}${dist}%</div>
-      <div class="lvl-bar-c"><div class="lvl-bar-mid"></div><div class="lvl-bar" style="left:${bL};width:${pct}%;background:${bg};animation-delay:${i*.05+.1}s"></div></div>
+      <div class="lvl-bar-c"><div class="lvl-bar-mid"></div><div class="lvl-bar" style="left:${bL};width:${pct}%;background:linear-gradient(90deg,${r.color}66,${r.color});animation-delay:${i*.05+.1}s"></div></div>
       <div class="lvl-gex" style="color:${gv>=0?'var(--green)':'var(--red)'}">${gv>=0?'+':''}${fg(gv)}</div>
     </div>`;
   });
@@ -512,8 +480,8 @@ function renderLevels(d){
 }
 
 // ═══ INIT ═══
-document.addEventListener('DOMContentLoaded',()=>{load(ticker);resetT();});
-window.addEventListener('resize',()=>{if(data)render(data);});
+document.addEventListener('DOMContentLoaded',()=>{initTV(ticker);load(ticker);resetT();});
+window.addEventListener('resize',()=>{if(data){renderOverlay(data);renderGex(data);}});
 </script>
 </body>
 </html>
