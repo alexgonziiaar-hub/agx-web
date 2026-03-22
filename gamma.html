@@ -409,6 +409,13 @@ function switchMarket(mkt) {
   currentMarket = mkt;
   document.getElementById('tab-sp500').classList.toggle('active', mkt==='SP500');
   document.getElementById('tab-nq').classList.toggle('active', mkt==='NQ');
+  // Reset chart and data
+  priceLines.forEach(pl=>{try{candleSeries?.removePriceLine(pl);}catch(e){}});
+  priceLines=[];
+  document.getElementById('sdot').className='sdot';
+  document.getElementById('stxt').textContent=`Mercado cambiado a ${mkt} — pulsa LIVE`;
+  document.getElementById('tb-price').textContent='—';
+  document.getElementById('tb-chg').textContent='—';
 }
 
 // ══════════════════
@@ -599,12 +606,16 @@ function updateStatusbar(levels, spot) {
 // TRADINGVIEW CHART
 // ══════════════════
 function initChart() {
-  const container=document.getElementById('tv-chart');
-  if(!container||typeof LightweightCharts==='undefined') {
-    setTimeout(initChart,300); return;
+  const container = document.getElementById('tv-chart');
+  if (!container) { console.error('tv-chart container not found'); return; }
+  if (typeof LightweightCharts === 'undefined') {
+    console.warn('LightweightCharts not loaded yet, retrying...');
+    setTimeout(initChart, 400); return;
   }
-  if(tvChart) { try{tvChart.remove();}catch(e){} tvChart=null; }
-  if(container.offsetWidth===0) { setTimeout(initChart,200); return; }
+  if (tvChart) { try { tvChart.remove(); } catch(e) {} tvChart = null; candleSeries = null; }
+  const W = container.offsetWidth, H = container.offsetHeight;
+  if (W === 0 || H === 0) { setTimeout(initChart, 300); return; }
+  console.log('Initializing TradingView chart', W, 'x', H);
 
   tvChart=LightweightCharts.createChart(container,{
     width:container.offsetWidth, height:container.offsetHeight,
@@ -631,17 +642,24 @@ function initChart() {
 }
 
 async function loadCandles(ticker, tf) {
-  if(!tvChart||!candleSeries) return;
+  if (!tvChart || !candleSeries) {
+    console.warn('Chart not ready, initializing...');
+    initChart();
+    await new Promise(r => setTimeout(r, 600));
+    if (!tvChart || !candleSeries) { console.error('Chart still not ready'); return; }
+  }
   try {
-    const mult=isNaN(tf)?1:parseInt(tf);
-    const ts=isNaN(tf)?'day':tf==='60'?'hour':'minute';
-    const days=ts==='minute'?3:ts==='hour'?30:365;
-    const to=new Date().toISOString().slice(0,10);
-    const from=new Date(Date.now()-days*24*3600*1000).toISOString().slice(0,10);
-    const r=await fetch(`${BASE}/v2/aggs/ticker/${ticker}/range/${mult}/${ts}/${from}/${to}?adjusted=true&sort=asc&limit=500&apiKey=${POLY}`);
-    const d=await r.json();
-    if(!d.results?.length) return;
-    candleSeries.setData(d.results.map(b=>({time:b.t/1000,open:b.o,high:b.h,low:b.l,close:b.c})));
+    const mult = isNaN(tf) ? 1 : parseInt(tf);
+    const ts   = isNaN(tf) ? 'day' : tf === '60' ? 'hour' : 'minute';
+    const days  = ts === 'minute' ? 3 : ts === 'hour' ? 30 : 365;
+    const to   = new Date().toISOString().slice(0,10);
+    const from = new Date(Date.now() - days*24*3600*1000).toISOString().slice(0,10);
+    console.log(`Loading candles: ${ticker} ${mult}/${ts} from ${from} to ${to}`);
+    const r = await fetch(`${BASE}/v2/aggs/ticker/${ticker}/range/${mult}/${ts}/${from}/${to}?adjusted=true&sort=asc&limit=500&apiKey=${POLY}`);
+    const d = await r.json();
+    console.log('Candles response:', d.resultsCount, 'candles, status:', d.status);
+    if (!d.results?.length) { console.warn('No candles returned for', ticker); return; }
+    candleSeries.setData(d.results.map(b => ({ time: b.t/1000, open: b.o, high: b.h, low: b.l, close: b.c })));
     tvChart.timeScale().fitContent();
     // Update spot price display
     const last=d.results[d.results.length-1];
@@ -859,8 +877,9 @@ async function loadData() {
 
     // Chart
     if(!tvChart) initChart();
-    await loadCandles(ticker,currentTF);
-    drawPriceLines(levels);
+    const chartTicker = CHART_TICKERS[currentMarket] || ticker;
+    await await loadCandles(chartTicker, currentTF);
+    setTimeout(() => drawPriceLines(levels), 300);
 
     // Fetch touch counts async
     fetchTouchCounts(ticker,levels,spot).then(()=>renderLevels(levels,spot));
@@ -897,7 +916,7 @@ async function loadData() {
 // DEMO
 // ══════════════════
 function loadDemo() {
-  const spot=5650;
+  const spot = currentMarket==='NQ' ? 24400 : 5650;
   const data=[];
   for(let s=5400;s<=5900;s+=5) {
     const dist=Math.abs(s-spot);
@@ -925,7 +944,8 @@ function loadDemo() {
   updateGexMini(data);
 
   // Demo price display
-  document.getElementById('tb-price').textContent='5,650.00';
+  const demoP = currentMarket==='NQ' ? '24,400.00' : '5,650.00';
+  document.getElementById('tb-price').textContent = demoP;
   document.getElementById('tb-chg').textContent='+0.42%';
   document.getElementById('tb-chg').className='mkt-chg up';
 
@@ -940,7 +960,7 @@ function loadDemo() {
   document.getElementById('atm-v').style.color='var(--green)';
 
   if(!tvChart) initChart();
-  loadCandles('SPY',currentTF).then(()=>drawPriceLines(levels));
+  loadCandles(CHART_TICKERS[currentMarket]||'SPY',currentTF).then(()=>{ setTimeout(()=>drawPriceLines(levels), 300); });
 
   document.getElementById('sdot').className='sdot live';
   document.getElementById('stxt').textContent=`SP500 · DEMO · ${data.length} strikes`;
