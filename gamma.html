@@ -13,158 +13,172 @@ html,body{background:var(--bg);color:var(--silver);font-family:'Rajdhani',sans-s
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 @keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-@keyframes squeezePulse{0%,100%{box-shadow:0 0 8px rgba(250,204,21,.3)}50%{box-shadow:0 0 24px rgba(250,204,21,.7)}}
-
-/* Header */
+@keyframes sqPulse{0%,100%{box-shadow:0 0 6px rgba(250,204,21,.2)}50%{box-shadow:0 0 20px rgba(250,204,21,.6)}}
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;border-bottom:1px solid var(--border)}
 .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;background:linear-gradient(135deg,var(--gold),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .hsub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2);letter-spacing:.15em;text-transform:uppercase;margin-left:14px}
 .live{display:flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2)}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}.dot.err{background:var(--red);animation:none}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}.dot.err{background:var(--red);animation:none}.dot.ws{background:var(--cyan)}
 .main{padding:10px 20px}
-
-/* Top bar: ticker + price + regime cards inline */
-.topbar{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
 .tbtn{font-family:'Share Tech Mono',monospace;font-size:13px;padding:6px 14px;border-radius:5px;border:1px solid var(--silver3);background:rgba(255,255,255,.02);color:var(--silver2);cursor:pointer;transition:all .15s}.tbtn:hover{border-color:rgba(0,229,160,.28);color:var(--silver)}.tbtn.on{border-color:var(--gold);background:rgba(212,168,67,.08);color:var(--gold);font-weight:700}
-.pv{font-family:'Bebas Neue',sans-serif;font-size:40px;color:#fff;line-height:1;margin-left:8px}
+.pv{font-family:'Bebas Neue',sans-serif;font-size:42px;color:#fff;line-height:1;margin-left:6px;transition:color .15s}
+.pv.up{color:var(--green)}.pv.dn{color:var(--red)}
 .ptk{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--silver2)}
 .badge{font-family:'Share Tech Mono',monospace;font-size:11px;padding:3px 10px;border-radius:4px;font-weight:600}
 .badge.pos{background:var(--green2);color:var(--green);border:1px solid rgba(0,229,160,.25)}
 .badge.neg{background:var(--red2);color:var(--red);border:1px solid rgba(255,61,90,.25)}
-
-/* Info strip */
 .strip{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:stretch}
-.scard{padding:8px 14px;border-radius:6px;flex:1;min-width:140px}
-.scl{font-family:'Share Tech Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.12em;opacity:.45}
-.scv{font-family:'Bebas Neue',sans-serif;font-size:17px;margin-top:1px}
+.sc{padding:8px 12px;border-radius:6px;flex:1;min-width:130px}
+.scl{font-family:'Share Tech Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.1em;opacity:.45}
+.scv{font-family:'Bebas Neue',sans-serif;font-size:16px;margin-top:1px}
 .scd{font-size:9px;opacity:.3;margin-top:1px}
-/* Squeeze card */
-.squeeze-card{animation:squeezePulse 2s ease infinite}
-.squeeze-off{animation:none}
-/* Gauge mini */
-.gm{display:flex;align-items:center;gap:8px}
-.gm svg{width:42px;height:42px}
-.gm-bg{fill:none;stroke:var(--silver3);stroke-width:5}.gm-f{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .5s}.gm-t{font-family:'Bebas Neue',sans-serif;font-size:13px;fill:var(--silver)}
-
-/* Tabs */
-.tabs{display:flex;gap:2px;margin-bottom:8px}
-.tab{font-family:'Share Tech Mono',monospace;font-size:12px;padding:8px 20px;border-radius:6px 6px 0 0;border:1px solid transparent;border-bottom:none;background:rgba(255,255,255,.02);color:var(--silver3);cursor:pointer;transition:all .15s}
-.tab:hover{color:var(--silver2)}
-.tab.on{background:rgba(255,255,255,.05);color:var(--green);border-color:rgba(0,229,160,.15)}
-.panel{display:none;border-radius:0 8px 8px 8px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.01);overflow:hidden}
-.panel.on{display:block}
-
-/* Chart containers */
-.chart-box{height:600px;position:relative;background:#03050a}
-
-/* Legend */
-.legend{display:flex;flex-wrap:wrap;gap:10px;padding:6px 14px;background:rgba(255,255,255,.02);border-bottom:1px solid rgba(255,255,255,.04)}
-.le{display:flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--silver2)}.ld{width:7px;height:7px;border-radius:2px}
-
-/* GEX canvas */
-#gex-box{height:600px;position:relative;background:#03050a;cursor:grab}
-#gex-box:active{cursor:grabbing}
+.sq-on{animation:sqPulse 2s ease infinite}
+.gw{display:flex;align-items:center;gap:8px}
+.gg{width:48px;height:48px}.gg-bg{fill:none;stroke:var(--silver3);stroke-width:5}.gg-f{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .5s}.gg-t{font-family:'Bebas Neue',sans-serif;font-size:12px;fill:var(--silver)}
+.tabs{display:flex;gap:2px;margin-bottom:6px}
+.tab{font-family:'Share Tech Mono',monospace;font-size:11px;padding:7px 18px;border-radius:5px 5px 0 0;border:1px solid transparent;border-bottom:none;background:rgba(255,255,255,.02);color:var(--silver3);cursor:pointer;transition:all .15s}
+.tab:hover{color:var(--silver2)}.tab.on{background:rgba(255,255,255,.05);color:var(--green);border-color:rgba(0,229,160,.15)}
+.pan{display:none;border-radius:0 6px 6px 6px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.01);overflow:hidden}.pan.on{display:block}
+.cbox{height:600px;position:relative;background:#03050a}
+.leg{display:flex;flex-wrap:wrap;gap:8px;padding:5px 12px;background:rgba(255,255,255,.02);border-bottom:1px solid rgba(255,255,255,.04)}
+.le{display:flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--silver2)}.ld{width:6px;height:6px;border-radius:2px}
+#gex-box{height:600px;position:relative;background:#03050a;cursor:grab}#gex-box:active{cursor:grabbing}
 #gex-c{display:block}
-.gtt{position:absolute;background:rgba(3,5,10,.95);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:10px 14px;pointer-events:none;font-family:'Share Tech Mono',monospace;font-size:12px;z-index:20;display:none;white-space:nowrap;line-height:1.6}
-
-/* Levels table */
-.st{font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--silver3);margin:12px 0 6px;font-weight:600}
-.ll{display:flex;flex-direction:column;gap:4px;margin-bottom:16px}
-.lh{display:grid;grid-template-columns:28px 170px 90px 60px 1fr 75px;gap:8px;padding:0 12px 4px;font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--silver3);font-weight:600}
+.gtt{position:absolute;background:rgba(3,5,10,.95);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:8px 12px;pointer-events:none;font-family:'Share Tech Mono',monospace;font-size:11px;z-index:20;display:none;white-space:nowrap;line-height:1.5}
+.st{font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--silver3);margin:10px 0 5px;font-weight:600}
+.ll{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
+.lh{display:grid;grid-template-columns:26px 165px 88px 58px 1fr 72px;gap:8px;padding:0 10px 4px;font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--silver3);font-weight:600}
 .lh span:nth-child(3),.lh span:nth-child(4),.lh span:nth-child(6){text-align:right}.lh span:nth-child(5){text-align:center}
-.lr{display:grid;grid-template-columns:28px 170px 90px 60px 1fr 75px;align-items:center;gap:8px;padding:10px 12px;border-radius:7px;transition:transform .15s;cursor:default}.lr:hover{transform:translateX(3px)}
-.li{text-align:center;font-size:14px}.ln{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}.lds{font-size:9px;opacity:.3;margin-top:1px}.ls{font-family:'Share Tech Mono',monospace;font-size:17px;font-weight:700;color:#fff;text-align:right}.ldi{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:600;text-align:right}
-.lbc{position:relative;height:14px;background:rgba(255,255,255,.03);border-radius:3px;overflow:hidden}.lb{position:absolute;top:0;height:100%;border-radius:3px;animation:barGrow .5s ease both}.lbm{position:absolute;top:0;left:50%;width:1px;height:100%;background:rgba(255,255,255,.06)}.lg{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:600;text-align:right}
-.footer{padding:10px 0;border-top:1px solid rgba(255,255,255,.04);display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--silver3)}
-.err{background:var(--red2);border:1px solid rgba(255,61,90,.25);color:var(--red);padding:8px 14px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:11px;margin-bottom:8px;display:none}
-@media(max-width:900px){.strip{flex-direction:column}.chart-box,#gex-box{height:400px}.lr,.lh{grid-template-columns:24px 1fr 70px 50px}.lbc,.lg{display:none}.pv{font-size:30px}}
+.lr{display:grid;grid-template-columns:26px 165px 88px 58px 1fr 72px;align-items:center;gap:8px;padding:9px 10px;border-radius:6px;transition:transform .15s;cursor:default}.lr:hover{transform:translateX(3px)}
+.li{text-align:center;font-size:13px}.ln{font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}.lds{font-size:9px;opacity:.3;margin-top:1px}.ls{font-family:'Share Tech Mono',monospace;font-size:16px;font-weight:700;color:#fff;text-align:right}.ldi{font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:600;text-align:right}
+.lbc{position:relative;height:13px;background:rgba(255,255,255,.03);border-radius:3px;overflow:hidden}.lb{position:absolute;top:0;height:100%;border-radius:3px;animation:barGrow .5s ease both}.lbm{position:absolute;top:0;left:50%;width:1px;height:100%;background:rgba(255,255,255,.06)}.lg{font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:600;text-align:right}
+.ft{padding:8px 0;border-top:1px solid rgba(255,255,255,.04);display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--silver3)}
+.err{background:var(--red2);border:1px solid rgba(255,61,90,.25);color:var(--red);padding:8px 12px;border-radius:5px;font-family:'Share Tech Mono',monospace;font-size:11px;margin-bottom:6px;display:none}
+/* Real-time price flash */
+.price-flash{transition:text-shadow .3s}.price-flash.flash-up{text-shadow:0 0 12px rgba(0,229,160,.6)}.price-flash.flash-dn{text-shadow:0 0 12px rgba(255,61,90,.6)}
+@media(max-width:900px){.strip{flex-direction:column}.cbox,#gex-box{height:400px}.lr,.lh{grid-template-columns:22px 1fr 65px 45px}.lbc,.lg{display:none}.pv{font-size:30px}}
 </style>
 </head>
 <body>
-<div class="hdr"><div style="display:flex;align-items:center"><div class="logo">AGX</div><div class="hsub">Gamma · Futures</div></div><div class="live"><div class="dot" id="dot"></div><span id="st">CONNECTING...</span></div></div>
+<div class="hdr"><div style="display:flex;align-items:center"><div class="logo">AGX</div><div class="hsub">Gamma · Futures · Real-Time</div></div><div class="live"><div class="dot ws" id="dot"></div><span id="st">CONNECTING...</span></div></div>
 <div class="main">
 <div class="err" id="err"></div>
-<!-- Top bar -->
 <div class="topbar">
   <button class="tbtn on" onclick="sw('ES',this)">ES</button>
   <button class="tbtn" onclick="sw('NQ',this)">NQ</button>
-  <div class="pv" id="pp">--</div>
-  <div><div class="ptk" id="ptk">ES · <span id="pnm">E-mini S&P 500</span></div></div>
+  <div class="pv price-flash" id="pp">--</div>
+  <div><div class="ptk" id="ptk">ES · E-mini S&P 500</div></div>
   <div class="badge pos" id="pn">Net GEX: --</div>
-  <div style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver3)">Refresh: 1 min</div>
+  <div style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--silver3)">WebSocket Real-Time</div>
 </div>
-<!-- Info strip -->
 <div class="strip">
-  <div class="scard" id="sc-gr" style="background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2)"><div class="scl">Gamma Regime</div><div class="scv" id="sv-gr" style="color:var(--green)">--</div><div class="scd" id="sd-gr">--</div></div>
-  <div class="scard" id="sc-vr" style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2)"><div class="scl">Vol Regime</div><div class="scv" id="sv-vr" style="color:var(--cyan)">--</div><div class="scd" id="sd-vr">--</div></div>
-  <div class="scard squeeze-off" id="sc-sq" style="background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.2)"><div class="scl">Gamma Squeeze</div><div class="scv" id="sv-sq" style="color:var(--zg)">--</div><div class="scd" id="sd-sq">--</div></div>
-  <div class="scard" style="background:rgba(255,255,255,.02);border:1px solid var(--silver3)">
-    <div class="scl">Volatility</div>
-    <div class="gm"><svg viewBox="0 0 50 50"><circle class="gm-bg" cx="25" cy="25" r="20" stroke-dasharray="125.6" stroke-dashoffset="0" transform="rotate(-90 25 25)"/><circle class="gm-f" id="gf" cx="25" cy="25" r="20" stroke-dasharray="125.6" stroke-dashoffset="125.6" transform="rotate(-90 25 25)" stroke="var(--green)"/><text class="gm-t" x="25" y="29" text-anchor="middle" id="gp">0%</text></svg><div><div style="font-family:'Bebas Neue',sans-serif;font-size:16px" id="gl">Calm</div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--silver3)" id="gt">—</div></div></div>
-  </div>
+  <div class="sc" id="sc-gr" style="background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2)"><div class="scl">Gamma Regime</div><div class="scv" id="sv-gr" style="color:var(--green)">--</div><div class="scd" id="sd-gr">--</div></div>
+  <div class="sc" id="sc-vr" style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2)"><div class="scl">Vol Regime</div><div class="scv" id="sv-vr" style="color:var(--cyan)">--</div><div class="scd" id="sd-vr">--</div></div>
+  <div class="sc" id="sc-sq" style="background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.2)"><div class="scl">Gamma Squeeze</div><div class="scv" id="sv-sq" style="color:var(--zg)">--</div><div class="scd" id="sd-sq">--</div></div>
+  <div class="sc" style="background:rgba(255,255,255,.02);border:1px solid var(--silver3)"><div class="scl">Volatility</div><div class="gw"><svg class="gg" viewBox="0 0 50 50"><circle class="gg-bg" cx="25" cy="25" r="20" stroke-dasharray="125.6" stroke-dashoffset="0" transform="rotate(-90 25 25)"/><circle class="gg-f" id="gf" cx="25" cy="25" r="20" stroke-dasharray="125.6" stroke-dashoffset="125.6" transform="rotate(-90 25 25)" stroke="var(--green)"/><text class="gg-t" x="25" y="29" text-anchor="middle" id="gp">0%</text></svg><div><div style="font-family:'Bebas Neue',sans-serif;font-size:15px" id="gl">Calm</div><div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--silver3)" id="gt">—</div></div></div></div>
 </div>
-<!-- Tabs -->
 <div class="tabs">
   <div class="tab on" onclick="showTab(0,this)">📈 Price Chart</div>
   <div class="tab" onclick="showTab(1,this)">📊 GEX Distribution</div>
-  <div class="tab" onclick="showTab(2,this)">📋 Levels Table</div>
+  <div class="tab" onclick="showTab(2,this)">📋 Levels</div>
 </div>
-<!-- Panel 0: Price Chart -->
-<div class="panel on" id="pan0">
-  <div class="legend">
-    <div class="le"><div class="ld" style="background:var(--zg)"></div>ZG</div>
-    <div class="le"><div class="ld" style="background:var(--mg)"></div>MG+</div>
-    <div class="le"><div class="ld" style="background:var(--mn)"></div>MG-</div>
-    <div class="le"><div class="ld" style="background:var(--cw)"></div>CW</div>
-    <div class="le"><div class="ld" style="background:var(--pw)"></div>PW</div>
-    <div class="le"><div class="ld" style="background:var(--hvl)"></div>HVL</div>
-    <div class="le"><div class="ld" style="background:var(--poc)"></div>POC</div>
-    <div class="le" style="margin-left:12px"><div class="ld" style="background:var(--zg);border-radius:50%"></div>Squeeze Zone</div>
-  </div>
-  <div class="chart-box" id="price-box"></div>
+<div class="pan on" id="pan0">
+  <div class="leg"><div class="le"><div class="ld" style="background:var(--zg)"></div>ZG</div><div class="le"><div class="ld" style="background:var(--mg)"></div>MG+</div><div class="le"><div class="ld" style="background:var(--mn)"></div>MG-</div><div class="le"><div class="ld" style="background:var(--cw)"></div>CW</div><div class="le"><div class="ld" style="background:var(--pw)"></div>PW</div><div class="le"><div class="ld" style="background:var(--hvl)"></div>HVL</div><div class="le"><div class="ld" style="background:var(--poc)"></div>POC</div><div class="le" style="margin-left:10px"><div class="ld" style="background:var(--zg);border-radius:50%"></div>Squeeze</div></div>
+  <div class="cbox" id="price-box"></div>
 </div>
-<!-- Panel 1: GEX -->
-<div class="panel" id="pan1">
-  <div class="legend">
-    <div class="le"><div class="ld" style="background:var(--cyan)"></div>+GEX Buyers (Calls)</div>
-    <div class="le"><div class="ld" style="background:var(--purple)"></div>-GEX Sellers (Puts)</div>
-    <div class="le" style="margin-left:12px;font-size:8px;opacity:.5">Scroll to pan · Ctrl+Scroll to zoom · Hover for details</div>
-  </div>
+<div class="pan" id="pan1">
+  <div class="leg"><div class="le"><div class="ld" style="background:var(--cyan)"></div>+GEX Buyers</div><div class="le"><div class="ld" style="background:var(--purple)"></div>-GEX Sellers</div><div class="le" style="margin-left:10px;font-size:8px;opacity:.4">Scroll pan · Ctrl+Scroll zoom · Hover details</div></div>
   <div id="gex-box"><canvas id="gex-c"></canvas><div class="gtt" id="gtt"></div></div>
 </div>
-<!-- Panel 2: Levels -->
-<div class="panel" id="pan2" style="padding:14px">
+<div class="pan" id="pan2" style="padding:12px">
   <div class="lh"><span></span><span>Level</span><span>Strike</span><span>Dist</span><span>GEX Bar</span><span>GEX</span></div>
   <div class="ll" id="ll"></div>
 </div>
-<div class="footer"><span>AGX Community — Gamma Exposure</span><span>Massive API · 1 min refresh</span></div>
+<div class="ft"><span>AGX Community — Gamma Exposure</span><span>WebSocket Real-Time · Railway + Massive API</span></div>
 </div>
 <script>
-const API='/.netlify/functions/gamma-levels',REFRESH=60000;
-let ticker='ES',timer=null,D=null,activeTab=0;
-let pc=null,pl=null,pv=null,pLL=[];
-const G={off:0,zm:1,drag:false,dy0:0,do0:0,hov:-1,mx:0,my:0};
+// ═══ CONFIG ═══
+const WS_URL='wss://agx-gamma-server-production.up.railway.app/ws';
+const REST_URL='https://agx-gamma-server-production.up.railway.app/api/gamma';
+let ticker='ES',D=null,ws=null,activeTab=0,lastPrice=0,reconnectTimer=null;
+let pc=null,pl=null,pvol=null,pLL=[];
+const G={off:0,zm:1,drag:false,dy0:0,do0:0,mx:0,my:0};
 const STY={zeroGamma:{icon:'⚡',c:'#FACC15',lw:3},maxPositive:{icon:'🟢',c:'#00e5a0',lw:3},maxNegative:{icon:'🔴',c:'#ff3d5a',lw:3},callWall:{icon:'🔵',c:'#3B82F6',lw:2.5},putWall:{icon:'🟣',c:'#A855F7',lw:2.5},hvl:{icon:'🟠',c:'#F97316',lw:2},poc:{icon:'◆',c:'#00cfff',lw:2}};
 function fp(v){return v?v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'--'}
 function fg(v){if(!v&&v!==0)return'--';const a=Math.abs(v);if(a>=1e9)return(v/1e9).toFixed(2)+'B';if(a>=1e6)return(v/1e6).toFixed(1)+'M';if(a>=1e3)return(v/1e3).toFixed(1)+'K';return v.toFixed(0)}
-function dp(s,k){if(!s)return'--';return((k-s)/s*100).toFixed(2)}
-function setS(ok,t){document.getElementById('dot').className='dot'+(ok?'':' err');document.getElementById('st').textContent=t}
-function showE(m){const e=document.getElementById('err');e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',6000)}
+function dpf(s,k){if(!s)return'--';return((k-s)/s*100).toFixed(2)}
+function $(id){return document.getElementById(id)}
+function setS(cls,t){$('dot').className='dot '+cls;$('st').textContent=t}
+function showE(m){const e=$('err');e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',6000)}
+function showTab(i,el){activeTab=i;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.pan').forEach(p=>p.classList.remove('on'));if(el)el.classList.add('on');$('pan'+i).classList.add('on');if(i===0&&D)updatePC(D);if(i===1)requestAnimationFrame(drawGex)}
 
-// Tabs
-function showTab(i,el){
-  activeTab=i;
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
-  if(el)el.classList.add('on');
-  document.getElementById('pan'+i).classList.add('on');
-  if(i===0&&D)updatePC(D);
-  if(i===1&&D)requestAnimationFrame(drawGex);
+// ═══ WEBSOCKET CONNECTION ═══
+function connectWS(){
+  setS('','CONNECTING...');
+  try{ws=new WebSocket(WS_URL)}catch(e){setS('err','WS ERROR');setTimeout(connectWS,5000);return}
+  ws.onopen=()=>{setS('ws','LIVE · WebSocket');console.log('WS connected');ws.send(JSON.stringify({type:'requestGamma',ticker}))};
+  ws.onmessage=(e)=>{
+    try{
+      const msg=JSON.parse(e.data);
+      if(msg.type==='price'){handlePrice(msg)}
+      if(msg.type==='gamma'){handleGamma(msg)}
+    }catch(err){}
+  };
+  ws.onclose=()=>{setS('err','DISCONNECTED');console.log('WS closed, reconnecting...');if(reconnectTimer)clearTimeout(reconnectTimer);reconnectTimer=setTimeout(connectWS,3000)};
+  ws.onerror=(e)=>{console.error('WS error:',e)};
 }
 
-// ═══ PRICE CHART + GAMMA SQUEEZE ═══
+// ═══ REAL-TIME PRICE HANDLING ═══
+function handlePrice(msg){
+  const priceField=ticker==='ES'?'es':'nq';
+  const price=msg[priceField];
+  if(!price||price<=0)return;
+  const prev=lastPrice;
+  lastPrice=price;
+  // Update price display with flash
+  const el=$('pp');
+  el.textContent=fp(price);
+  el.classList.remove('flash-up','flash-dn');
+  if(prev>0){
+    el.classList.add(price>prev?'flash-up':'flash-dn');
+    setTimeout(()=>el.classList.remove('flash-up','flash-dn'),300);
+  }
+  // Update price line on chart (add point)
+  if(pl&&activeTab===0){
+    const now=Math.floor(Date.now()/1000);
+    pl.update({time:now,value:price});
+  }
+  // Recalculate squeeze with new price
+  if(D){
+    D.spotPrice=price;
+    updateSqueeze(D);
+    updateVolMeter(D);
+  }
+}
+
+// ═══ GAMMA DATA HANDLING ═══
+function handleGamma(msg){
+  if(msg.ticker!==ticker)return;
+  D=msg.data;
+  D.spotPrice=lastPrice||D.spotPrice;
+  renderAll(D);
+}
+
+// ═══ FALLBACK: REST fetch if WS not available ═══
+async function fetchREST(){
+  try{
+    const r=await fetch(`${REST_URL}/${ticker}`);
+    if(!r.ok)return;
+    const d=await r.json();
+    D=d;if(!lastPrice)lastPrice=d.spotPrice;
+    renderAll(d);
+  }catch(e){console.error('REST error:',e)}
+}
+
+// ═══ PRICE CHART ═══
 function initPC(){
-  const w=document.getElementById('price-box');w.innerHTML='';
+  const w=$('price-box');w.innerHTML='';
   pc=LightweightCharts.createChart(w,{
     width:w.clientWidth,height:w.clientHeight,
     layout:{background:{type:'solid',color:'#03050a'},textColor:'rgba(255,255,255,0.3)',fontFamily:'Share Tech Mono,monospace',fontSize:10},
@@ -174,197 +188,134 @@ function initPC(){
     crosshair:{mode:0},
   });
   pl=pc.addAreaSeries({topColor:'rgba(0,229,160,0.15)',bottomColor:'rgba(0,229,160,0.01)',lineColor:'#00e5a0',lineWidth:2});
-  pv=pc.addHistogramSeries({color:'rgba(0,229,160,0.2)',priceFormat:{type:'volume'},priceScaleId:'vol'});
+  pvol=pc.addHistogramSeries({color:'rgba(0,229,160,0.2)',priceFormat:{type:'volume'},priceScaleId:'vol'});
   pc.priceScale('vol').applyOptions({scaleMargins:{top:0.85,bottom:0}});
 }
 function updatePC(d){
   if(!pc||!pl)return;
-  const cn=d.candles||[];if(!cn.length)return;
-  pl.setData(cn.map(x=>({time:x.time,value:x.close})));
-  pv.setData(cn.map(x=>({time:x.time,value:x.volume,color:x.close>=x.open?'rgba(0,229,160,0.25)':'rgba(255,61,90,0.25)'})));
-  // Remove old level lines
+  const cn=d.candles||[];if(cn.length){
+    pl.setData(cn.map(x=>({time:x.time,value:x.close})));
+    pvol.setData(cn.map(x=>({time:x.time,value:x.volume,color:x.close>=x.open?'rgba(0,229,160,0.25)':'rgba(255,61,90,0.25)'})));
+  }
   pLL.forEach(l=>{try{pl.removePriceLine(l)}catch(e){}});pLL=[];
-  // Add level lines
   for(const[k,v]of Object.entries(d.levels)){
     if(!v.strike||!STY[k])continue;
     pLL.push(pl.createPriceLine({price:v.strike,color:STY[k].c,lineWidth:STY[k].lw,lineStyle:LightweightCharts.LineStyle.Dashed,axisLabelVisible:true,title:v.shortLabel}));
   }
-  // Gamma Squeeze zone — highlight between ZG and nearest wall
-  const zg=d.levels.zeroGamma?.strike;
-  const cw=d.levels.callWall?.strike;
-  const pw=d.levels.putWall?.strike;
-  if(zg&&cw&&pw){
-    // Squeeze = price is between put wall and call wall, near zero gamma
-    const spot=d.spotPrice;
-    const sqDist=Math.abs(spot-zg)/(cw-pw)*100;
-    // Add squeeze zone markers
-    if(sqDist<30){
-      // Tight squeeze — add highlighted zone
-      pLL.push(pl.createPriceLine({price:zg,color:'#FACC15',lineWidth:4,lineStyle:LightweightCharts.LineStyle.Solid,axisLabelVisible:true,title:'⚡ SQUEEZE ZONE'}));
-    }
+  // Squeeze zone
+  const sq=calcSqueeze(d);
+  if(sq.active){
+    pLL.push(pl.createPriceLine({price:d.levels.zeroGamma?.strike||0,color:'#FACC15',lineWidth:4,lineStyle:LightweightCharts.LineStyle.Solid,axisLabelVisible:true,title:'⚡ SQUEEZE'}));
   }
   pc.timeScale().fitContent();
-  pc.applyOptions({width:document.getElementById('price-box').clientWidth,height:document.getElementById('price-box').clientHeight});
+  pc.applyOptions({width:$('price-box').clientWidth,height:$('price-box').clientHeight});
 }
 
-// ═══ GAMMA SQUEEZE CALCULATION ═══
+// ═══ SQUEEZE ═══
 function calcSqueeze(d){
-  const zg=d.levels.zeroGamma?.strike||0;
-  const cw=d.levels.callWall?.strike||0;
-  const pw=d.levels.putWall?.strike||0;
-  const spot=d.spotPrice;
-  if(!zg||!cw||!pw||cw<=pw)return{active:false,pct:0,label:'None',desc:'No squeeze detected'};
-  const range=cw-pw;
-  const distToZG=Math.abs(spot-zg);
-  const pct=Math.max(0,100-Math.round(distToZG/range*200));
-  if(pct>60)return{active:true,pct,label:'ACTIVE ⚡',desc:'Price near ZG — volatility compression'};
-  if(pct>30)return{active:false,pct,label:'Building',desc:'Approaching squeeze zone'};
-  return{active:false,pct:Math.max(0,pct),label:'None',desc:'Price away from squeeze zone'};
+  const zg=d.levels?.zeroGamma?.strike||0,cw=d.levels?.callWall?.strike||0,pw=d.levels?.putWall?.strike||0,spot=d.spotPrice;
+  if(!zg||!cw||!pw||cw<=pw)return{active:false,pct:0,label:'None',desc:'No squeeze'};
+  const range=cw-pw,dist=Math.abs(spot-zg);
+  const pct=Math.max(0,100-Math.round(dist/range*200));
+  if(pct>60)return{active:true,pct,label:'ACTIVE ⚡',desc:'Volatility compression'};
+  if(pct>30)return{active:false,pct,label:'Building',desc:'Approaching zone'};
+  return{active:false,pct:Math.max(0,pct),label:'None',desc:'Away from zone'};
+}
+function updateSqueeze(d){
+  const sq=calcSqueeze(d);
+  $('sc-sq').className='sc '+(sq.active?'sq-on':'');
+  $('sv-sq').textContent=sq.label;$('sv-sq').style.color=sq.active?'var(--zg)':'var(--silver3)';
+  $('sd-sq').textContent=sq.desc+' ('+sq.pct+'%)';
+}
+function updateVolMeter(d){
+  const vs=d.volatility||{score:0,label:'Calm'};
+  $('gf').setAttribute('stroke-dashoffset',125.6-(vs.score/100*125.6));
+  let c='var(--green)';if(vs.score>70)c='var(--red)';else if(vs.score>40)c='var(--gold)';else if(vs.score>20)c='var(--cyan)';
+  $('gf').setAttribute('stroke',c);$('gp').textContent=vs.score+'%';$('gl').textContent=vs.label;
+  $('gt').textContent=d.gammaRegime==='POSITIVE'?'↑ Pinning':'↓ Trending';
 }
 
-// ═══ GEX DISTRIBUTION (Interactive Canvas) ═══
+// ═══ GEX DISTRIBUTION ═══
 function drawGex(){
   if(!D||!D.distribution||!D.distribution.length)return;
-  const wrap=document.getElementById('gex-box');
-  const canvas=document.getElementById('gex-c');
-  if(!wrap.offsetWidth)return; // hidden tab
-  const dpr=window.devicePixelRatio||1;
-  const W=wrap.clientWidth,H=wrap.clientHeight;
-  canvas.width=W*dpr;canvas.height=H*dpr;
-  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  const wrap=$('gex-box'),canvas=$('gex-c');
+  if(!wrap.offsetWidth)return;
+  const dpr=window.devicePixelRatio||1,W=wrap.clientWidth,H=wrap.clientHeight;
+  canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.width=W+'px';canvas.style.height=H+'px';
   const c=canvas.getContext('2d');c.scale(dpr,dpr);
-
   const dist=D.distribution,N=dist.length,spot=D.spotPrice;
   const strikes=dist.map(x=>x.strike),cGV=dist.map(x=>x.callGex||0),pGV=dist.map(x=>x.putGex||0);
   const maxA=Math.max(...dist.map(x=>Math.abs(x.gex)),1);
-  const pT=32,pB=22,pL=62,pR=62;
-  const cW=W-pL-pR,vH=Math.max(H-pT-pB,(H-pT-pB)*G.zm);
-  const barH=Math.max(5,vH/N-1),zX=pL+cW/2;
-  const maxOff=Math.max(0,vH-(H-pT-pB));
-  G.off=Math.max(0,Math.min(maxOff,G.off));
-
+  const pT=30,pB=22,pL=58,pR=58,cW=W-pL-pR;
+  const vH=Math.max(H-pT-pB,(H-pT-pB)*G.zm),barH=Math.max(5,vH/N-1),zX=pL+cW/2;
+  const maxOff=Math.max(0,vH-(H-pT-pB));G.off=Math.max(0,Math.min(maxOff,G.off));
   c.fillStyle='#03050a';c.fillRect(0,0,W,H);
   c.save();c.beginPath();c.rect(0,pT,W,H-pT-pB);c.clip();
-
-  // Grid
-  c.strokeStyle='rgba(255,255,255,0.04)';c.lineWidth=1;
-  for(let i=0;i<=4;i++){const x=pL+(cW/4)*i;c.beginPath();c.moveTo(x,pT);c.lineTo(x,H-pB);c.stroke()}
-  c.strokeStyle='rgba(255,255,255,0.18)';c.lineWidth=2;
-  c.beginPath();c.moveTo(zX,pT);c.lineTo(zX,H-pB);c.stroke();
-
+  c.strokeStyle='rgba(255,255,255,0.04)';c.lineWidth=1;for(let i=0;i<=4;i++){const x=pL+(cW/4)*i;c.beginPath();c.moveTo(x,pT);c.lineTo(x,H-pB);c.stroke()}
+  c.strokeStyle='rgba(255,255,255,0.18)';c.lineWidth=2;c.beginPath();c.moveTo(zX,pT);c.lineTo(zX,H-pB);c.stroke();
   const hI=(G.my>=pT&&G.my<=H-pB)?Math.floor((G.my-pT+G.off)/vH*N):-1;
-
   for(let i=0;i<N;i++){
-    const y=pT+(i/N)*vH-G.off;
-    if(y+barH<pT||y>H-pB)continue;
+    const y=pT+(i/N)*vH-G.off;if(y+barH<pT||y>H-pB)continue;
     const cg=cGV[i],pg=pGV[i],isH=i===hI;
     if(cg>0){const bW=(cg/maxA)*(cW/2);const gr=c.createLinearGradient(zX,0,zX+bW,0);gr.addColorStop(0,'rgba(0,207,255,0.2)');gr.addColorStop(1,isH?'rgba(0,207,255,1)':'rgba(0,207,255,0.7)');c.fillStyle=gr;c.fillRect(zX+1,y,bW,barH);if(isH){c.strokeStyle='#00cfff';c.lineWidth=2;c.strokeRect(zX+1,y,bW,barH)}}
     if(pg<0){const bW=(Math.abs(pg)/maxA)*(cW/2);const gr=c.createLinearGradient(zX-bW,0,zX,0);gr.addColorStop(0,isH?'rgba(179,102,255,1)':'rgba(179,102,255,0.7)');gr.addColorStop(1,'rgba(179,102,255,0.2)');c.fillStyle=gr;c.fillRect(zX-bW-1,y,bW,barH);if(isH){c.strokeStyle='#b366ff';c.lineWidth=2;c.strokeRect(zX-bW-1,y,bW,barH)}}
   }
-
-  // Strike labels
-  const step=Math.max(1,Math.floor(N/(22*G.zm)));
-  c.font='bold 12px "Share Tech Mono"';c.fillStyle='rgba(255,255,255,.4)';
-  for(let i=0;i<N;i+=step){const y=pT+(i/N)*vH-G.off+barH/2+4;if(y<pT||y>H-pB)continue;c.textAlign='left';c.fillText(strikes[i].toFixed(0),W-pR+5,y);c.textAlign='right';c.fillText(strikes[i].toFixed(0),pL-5,y)}
-
-  // Levels
+  const step=Math.max(1,Math.floor(N/(22*G.zm)));c.font='bold 12px "Share Tech Mono"';c.fillStyle='rgba(255,255,255,.4)';
+  for(let i=0;i<N;i+=step){const y=pT+(i/N)*vH-G.off+barH/2+4;if(y<pT||y>H-pB)continue;c.textAlign='left';c.fillText(strikes[i].toFixed(0),W-pR+4,y);c.textAlign='right';c.fillText(strikes[i].toFixed(0),pL-4,y)}
   for(const[k,v]of Object.entries(D.levels)){
-    if(!v.strike||!STY[k])continue;
-    const idx=strikes.findIndex(s=>Math.abs(s-v.strike)<(N>1?Math.abs(strikes[1]-strikes[0])*2:9999));
-    if(idx<0)continue;
+    if(!v.strike||!STY[k])continue;const idx=strikes.findIndex(s=>Math.abs(s-v.strike)<(N>1?Math.abs(strikes[1]-strikes[0])*2:9999));if(idx<0)continue;
     const ly=pT+(idx/N)*vH-G.off;if(ly<pT-15||ly>H-pB+15)continue;
-    c.strokeStyle=STY[k].c;c.lineWidth=STY[k].lw;c.setLineDash([8,4]);
-    c.beginPath();c.moveTo(pL,ly);c.lineTo(W-pR,ly);c.stroke();c.setLineDash([]);
-    const txt=v.shortLabel+' '+v.strike.toFixed(0);c.font='bold 13px "Share Tech Mono"';
-    const tw=c.measureText(txt).width+14;
-    c.fillStyle=STY[k].c+'55';c.beginPath();c.roundRect?c.roundRect(zX-tw/2,ly-16,tw,19,4):c.fillRect(zX-tw/2,ly-16,tw,19);c.fill();
+    c.strokeStyle=STY[k].c;c.lineWidth=STY[k].lw;c.setLineDash([8,4]);c.beginPath();c.moveTo(pL,ly);c.lineTo(W-pR,ly);c.stroke();c.setLineDash([]);
+    const txt=v.shortLabel+' '+v.strike.toFixed(0);c.font='bold 13px "Share Tech Mono"';const tw=c.measureText(txt).width+14;
+    c.fillStyle=STY[k].c+'55';if(c.roundRect)c.roundRect(zX-tw/2,ly-16,tw,19,4);else c.rect(zX-tw/2,ly-16,tw,19);c.fill();
     c.fillStyle=STY[k].c;c.textAlign='center';c.fillText(txt,zX,ly-2);
   }
-
-  // Spot
-  const si=strikes.findIndex(s=>s>=spot);
-  if(si>=0){const sy=pT+(si/N)*vH-G.off;if(sy>=pT-10&&sy<=H-pB+10){c.strokeStyle='#fff';c.lineWidth=2.5;c.setLineDash([4,3]);c.beginPath();c.moveTo(pL,sy);c.lineTo(W-pR,sy);c.stroke();c.setLineDash([]);c.font='bold 14px "Share Tech Mono"';c.fillStyle='rgba(255,255,255,.9)';c.textAlign='center';c.fillText('◆ SPOT '+fp(spot),zX,sy-7)}}
-
+  const si=strikes.findIndex(s=>s>=spot);if(si>=0){const sy=pT+(si/N)*vH-G.off;if(sy>=pT-10&&sy<=H-pB+10){c.strokeStyle='#fff';c.lineWidth=2.5;c.setLineDash([4,3]);c.beginPath();c.moveTo(pL,sy);c.lineTo(W-pR,sy);c.stroke();c.setLineDash([]);c.font='bold 14px "Share Tech Mono"';c.fillStyle='rgba(255,255,255,.9)';c.textAlign='center';c.fillText('◆ '+fp(spot),zX,sy-7)}}
   if(hI>=0&&hI<N){const hy=pT+(hI/N)*vH-G.off;if(hy>=pT&&hy<=H-pB){c.strokeStyle='rgba(255,255,255,0.2)';c.lineWidth=1;c.setLineDash([2,2]);c.beginPath();c.moveTo(pL,hy);c.lineTo(W-pR,hy);c.stroke();c.setLineDash([])}}
   c.restore();
-
   c.font='bold 13px "Share Tech Mono"';c.textAlign='center';c.fillStyle='#b366ff';c.fillText('— SELLERS',pL+cW*.25,16);c.fillStyle='#00cfff';c.fillText('BUYERS +',pL+cW*.75,16);
-  c.fillStyle='rgba(255,255,255,.12)';c.font='9px "Share Tech Mono"';c.fillText('Zoom:'+Math.round(G.zm*100)+'% · Scroll pan · Ctrl+Scroll zoom',W/2,H-5);
-
-  const tt=document.getElementById('gtt');
-  if(hI>=0&&hI<N){const d2=dist[hI];tt.style.display='block';tt.style.left=Math.min(W-170,Math.max(10,G.mx+12))+'px';tt.style.top=Math.min(H-110,Math.max(10,G.my-60))+'px';tt.innerHTML=`<div style="color:#fff;font-weight:700;font-size:14px">Strike: ${fp(d2.strike)}</div><div style="color:#00cfff">+GEX: ${fg(d2.callGex||0)}</div><div style="color:#b366ff">-GEX: ${fg(d2.putGex||0)}</div><div style="color:${d2.gex>=0?'#00e5a0':'#ff3d5a'};font-weight:700">Net: ${fg(d2.gex)}</div><div style="color:var(--silver3);font-size:10px">OI: ${(d2.oi||0).toLocaleString()}</div>`}else{tt.style.display='none'}
+  c.fillStyle='rgba(255,255,255,.1)';c.font='9px "Share Tech Mono"';c.fillText('Zoom:'+Math.round(G.zm*100)+'%',W/2,H-5);
+  const tt=$('gtt');
+  if(hI>=0&&hI<N){const d2=dist[hI];tt.style.display='block';tt.style.left=Math.min(W-160,Math.max(10,G.mx+12))+'px';tt.style.top=Math.min(H-100,Math.max(10,G.my-55))+'px';tt.innerHTML=`<div style="color:#fff;font-weight:700;font-size:13px">Strike: ${fp(d2.strike)}</div><div style="color:#00cfff">+GEX: ${fg(d2.callGex||0)}</div><div style="color:#b366ff">-GEX: ${fg(d2.putGex||0)}</div><div style="color:${d2.gex>=0?'#00e5a0':'#ff3d5a'};font-weight:700">Net: ${fg(d2.gex)}</div><div style="color:var(--silver3);font-size:9px">OI: ${(d2.oi||0).toLocaleString()}</div>`}else{tt.style.display='none'}
 }
-
 function setupGex(){
-  const el=document.getElementById('gex-c');
+  const el=$('gex-c');
   el.addEventListener('wheel',function(e){e.preventDefault();e.stopPropagation();if(e.ctrlKey||e.metaKey){G.zm=Math.max(1,Math.min(6,G.zm*(e.deltaY>0?.85:1.15)))}else{G.off+=e.deltaY*1.5}requestAnimationFrame(drawGex)},{passive:false});
   el.addEventListener('mousedown',function(e){G.drag=true;G.dy0=e.offsetY;G.do0=G.off;e.preventDefault()});
   window.addEventListener('mousemove',function(e){const r=el.getBoundingClientRect();G.mx=e.clientX-r.left;G.my=e.clientY-r.top;if(G.drag){G.off=G.do0-(e.clientY-r.top-G.dy0);requestAnimationFrame(drawGex)}else if(G.mx>=0&&G.mx<=r.width&&G.my>=0&&G.my<=r.height){requestAnimationFrame(drawGex)}});
   window.addEventListener('mouseup',function(){G.drag=false});
-  el.addEventListener('mouseleave',function(){G.hov=-1;G.my=-1;requestAnimationFrame(drawGex)});
+  el.addEventListener('mouseleave',function(){G.my=-1;requestAnimationFrame(drawGex)});
   let ty0=0,to0=0;
   el.addEventListener('touchstart',function(e){if(e.touches.length===1){ty0=e.touches[0].clientY;to0=G.off}e.preventDefault()},{passive:false});
   el.addEventListener('touchmove',function(e){if(e.touches.length===1){G.off=to0-(e.touches[0].clientY-ty0);requestAnimationFrame(drawGex)}e.preventDefault()},{passive:false});
 }
 
-// ═══ DATA ═══
-async function load(tk){
-  setS(true,'LOADING...');
-  try{const r=await fetch(`${API}?ticker=${tk}&expirations=4`);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();if(d.error)throw new Error(d.error);D=d;render(d);setS(true,'LIVE — '+new Date().toLocaleTimeString())}catch(e){console.error(e);setS(false,'ERROR');showE(e.message)}
-}
-function sw(tk,btn){ticker=tk;document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');G.off=0;G.zm=1;initPC();load(tk);resetT()}
-function resetT(){if(timer)clearInterval(timer);timer=setInterval(()=>load(ticker),REFRESH)}
-
-function render(d){
-  document.getElementById('pp').textContent=fp(d.spotPrice);
-  document.getElementById('ptk').innerHTML=d.ticker+' · <span id="pnm">'+d.name+'</span>';
-  const nb=document.getElementById('pn');nb.className='badge '+(d.netGex>=0?'pos':'neg');nb.textContent='Net GEX: '+(d.netGex>=0?'+':'')+d.netGexFormatted;
-
-  // Regime
+// ═══ RENDER ═══
+function renderAll(d){
+  $('pp').textContent=fp(d.spotPrice);$('ptk').textContent=d.ticker+' · '+d.name;
+  const nb=$('pn');nb.className='badge '+(d.netGex>=0?'pos':'neg');nb.textContent='Net GEX: '+(d.netGex>=0?'+':'')+d.netGexFormatted;
   const gP=d.gammaRegime==='POSITIVE';
-  const gc=document.getElementById('sc-gr');gc.style.background=gP?'rgba(0,229,160,.06)':'rgba(255,61,90,.06)';gc.style.borderColor=gP?'rgba(0,229,160,.2)':'rgba(255,61,90,.2)';
-  document.getElementById('sv-gr').style.color=gP?'var(--green)':'var(--red)';document.getElementById('sv-gr').textContent=gP?'POSITIVE':'NEGATIVE';document.getElementById('sd-gr').textContent=gP?'Mean reversion':'Breakouts';
+  $('sc-gr').style.background=gP?'rgba(0,229,160,.06)':'rgba(255,61,90,.06)';$('sc-gr').style.borderColor=gP?'rgba(0,229,160,.2)':'rgba(255,61,90,.2)';
+  $('sv-gr').style.color=gP?'var(--green)':'var(--red)';$('sv-gr').textContent=gP?'POSITIVE':'NEGATIVE';$('sd-gr').textContent=gP?'Mean reversion':'Breakouts';
   const lv=d.volRegime==='LOW_VOL';
-  const vc=document.getElementById('sc-vr');vc.style.background=lv?'rgba(59,130,246,.06)':'rgba(249,115,22,.06)';vc.style.borderColor=lv?'rgba(59,130,246,.2)':'rgba(249,115,22,.2)';
-  document.getElementById('sv-vr').style.color=lv?'var(--cyan)':'#F97316';document.getElementById('sv-vr').textContent=lv?'LOW VOL':'HIGH VOL';document.getElementById('sd-vr').textContent=lv?'Compressed':'Expanded';
-
-  // Squeeze
-  const sq=calcSqueeze(d);
-  const sqc=document.getElementById('sc-sq');sqc.className='scard '+(sq.active?'squeeze-card':'squeeze-off');
-  document.getElementById('sv-sq').textContent=sq.label;document.getElementById('sv-sq').style.color=sq.active?'var(--zg)':'var(--silver3)';
-  document.getElementById('sd-sq').textContent=sq.desc+' ('+sq.pct+'%)';
-
-  // Gauge
-  const vs=d.volatility||{score:0,label:'Calm'};
-  document.getElementById('gf').setAttribute('stroke-dashoffset',125.6-(vs.score/100*125.6));
-  let clr='var(--green)';if(vs.score>70)clr='var(--red)';else if(vs.score>40)clr='var(--gold)';else if(vs.score>20)clr='var(--cyan)';
-  document.getElementById('gf').setAttribute('stroke',clr);document.getElementById('gp').textContent=vs.score+'%';
-  document.getElementById('gl').textContent=vs.label;document.getElementById('gt').textContent=gP?'↑ Pinning':'↓ Trending';
-
-  if(activeTab===0)updatePC(d);
-  if(activeTab===1)requestAnimationFrame(drawGex);
-  renderLevels(d);
+  $('sc-vr').style.background=lv?'rgba(59,130,246,.06)':'rgba(249,115,22,.06)';$('sc-vr').style.borderColor=lv?'rgba(59,130,246,.2)':'rgba(249,115,22,.2)';
+  $('sv-vr').style.color=lv?'var(--cyan)':'#F97316';$('sv-vr').textContent=lv?'LOW VOL':'HIGH VOL';$('sd-vr').textContent=lv?'Compressed':'Expanded';
+  updateSqueeze(d);updateVolMeter(d);
+  if(activeTab===0)updatePC(d);if(activeTab===1)requestAnimationFrame(drawGex);renderLevels(d);
 }
-
 function renderLevels(d){
-  const el=document.getElementById('ll'),spot=d.spotPrice,rows=[];
+  const el=$('ll'),spot=d.spotPrice,rows=[];
   for(const[k,v]of Object.entries(d.levels)){const s=STY[k];if(!s||!v.strike)continue;rows.push({key:k,...v,...s,bg:s.c+'14',bdr:s.c+'40'})}
-  rows.sort((a,b)=>b.strike-a.strike);
-  const mA=Math.max(...rows.map(r=>Math.abs(r.gex||0)),1);
-  let h='';
-  rows.forEach((r,i)=>{
-    const di=dp(spot,r.strike),ab=r.strike>=spot,gv=r.gex||0;
-    const pct=mA>0?(Math.abs(gv)/mA*50):0;const bL=gv>=0?'50%':(50-pct)+'%';
-    h+=`<div class="lr" style="background:${r.bg};border:1px solid ${r.bdr};animation:fadeIn .3s ease ${i*.04}s both" onmouseover="this.style.boxShadow='0 0 14px ${r.bdr}'" onmouseout="this.style.boxShadow='none'">
-      <div class="li">${r.icon}</div><div><div class="ln" style="color:${r.c}">${r.label}</div><div class="lds">${r.description}</div></div>
-      <div class="ls">${fp(r.strike)}</div><div class="ldi" style="color:${ab?'var(--green)':'var(--red)'}">${ab?'+':''}${di}%</div>
-      <div class="lbc"><div class="lbm"></div><div class="lb" style="left:${bL};width:${pct}%;background:linear-gradient(90deg,${r.c}66,${r.c});animation-delay:${i*.04+.1}s"></div></div>
-      <div class="lg" style="color:${gv>=0?'var(--green)':'var(--red)'}">${gv>=0?'+':''}${fg(gv)}</div></div>`;
-  });el.innerHTML=h;
+  rows.sort((a,b)=>b.strike-a.strike);const mA=Math.max(...rows.map(r=>Math.abs(r.gex||0)),1);
+  let h='';rows.forEach((r,i)=>{const di=dpf(spot,r.strike),ab=r.strike>=spot,gv=r.gex||0;const pct=mA>0?(Math.abs(gv)/mA*50):0;const bL=gv>=0?'50%':(50-pct)+'%';
+    h+=`<div class="lr" style="background:${r.bg};border:1px solid ${r.bdr};animation:fadeIn .3s ease ${i*.04}s both" onmouseover="this.style.boxShadow='0 0 12px ${r.bdr}'" onmouseout="this.style.boxShadow='none'"><div class="li">${r.icon}</div><div><div class="ln" style="color:${r.c}">${r.label}</div><div class="lds">${r.description}</div></div><div class="ls">${fp(r.strike)}</div><div class="ldi" style="color:${ab?'var(--green)':'var(--red)'}">${ab?'+':''}${di}%</div><div class="lbc"><div class="lbm"></div><div class="lb" style="left:${bL};width:${pct}%;background:linear-gradient(90deg,${r.c}66,${r.c});animation-delay:${i*.04+.08}s"></div></div><div class="lg" style="color:${gv>=0?'var(--green)':'var(--red)'}">${gv>=0?'+':''}${fg(gv)}</div></div>`});
+  el.innerHTML=h;
 }
 
-document.addEventListener('DOMContentLoaded',function(){initPC();setupGex();load(ticker);resetT()});
-window.addEventListener('resize',function(){if(pc)pc.applyOptions({width:document.getElementById('price-box').clientWidth,height:document.getElementById('price-box').clientHeight});if(activeTab===1)drawGex()});
+// ═══ INIT ═══
+function sw(tk,btn){ticker=tk;lastPrice=0;G.off=0;G.zm=1;document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');initPC();if(ws&&ws.readyState===WebSocket.OPEN){ws.send(JSON.stringify({type:'requestGamma',ticker:tk}))}else{fetchREST()}}
+document.addEventListener('DOMContentLoaded',function(){initPC();setupGex();connectWS();setTimeout(fetchREST,2000)});
+window.addEventListener('resize',function(){if(pc)pc.applyOptions({width:$('price-box').clientWidth,height:$('price-box').clientHeight});if(activeTab===1)drawGex()});
 </script>
 </body>
 </html>
