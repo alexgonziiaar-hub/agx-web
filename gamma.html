@@ -1,386 +1,370 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AGX Dashboard — Gamma Levels</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
-  <style>
-    :root{--bg:#03050a;--green:#00e5a0;--green2:rgba(0,229,160,.1);--red:#ff3d5a;--red2:rgba(255,61,90,.1);--gold:#d4a843;--cyan:#00cfff;--purple:#b366ff;--silver:#ddeeff;--silver2:#7a9ab8;--silver3:#2a3a50;--border:rgba(0,229,160,.1);--zg:#FACC15;--mg:#00e5a0;--mn:#ff3d5a;--cw:#3B82F6;--pw:#A855F7;--hvl:#F97316;--poc:#00cfff}
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{background:var(--bg);color:var(--silver);font-family:'Rajdhani',sans-serif;min-height:100vh}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-    @keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-    .header{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.015) 0%,transparent 100%)}
-    .logo{font-family:'Bebas Neue',sans-serif;font-size:30px;background:linear-gradient(135deg,var(--gold),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .hsub{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--silver2);letter-spacing:.15em;text-transform:uppercase;margin-left:16px}
-    .live{display:flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--silver2)}
-    .dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}.dot.err{background:var(--red);animation:none}
-    .dash{padding:12px 24px}
-    .tbar{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-    .tbtn{font-family:'Share Tech Mono',monospace;font-size:14px;padding:7px 18px;border-radius:6px;border:1px solid var(--silver3);background:rgba(255,255,255,.02);color:var(--silver2);cursor:pointer;transition:all .2s}.tbtn:hover{border-color:rgba(0,229,160,.28);color:var(--silver)}.tbtn.on{border-color:var(--gold);background:rgba(212,168,67,.08);color:var(--gold);font-weight:700}
-    .rinfo{margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--silver3)}
-    .irow{display:flex;align-items:center;gap:18px;margin-bottom:10px;flex-wrap:wrap}
-    .pv{font-family:'Bebas Neue',sans-serif;font-size:48px;color:#fff;line-height:1}
-    .ptk{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--silver2)}
-    .pnm{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--silver3)}
-    .badge{font-family:'Share Tech Mono',monospace;font-size:12px;padding:4px 12px;border-radius:4px;font-weight:600}
-    .badge.pos{background:var(--green2);color:var(--green);border:1px solid rgba(0,229,160,.25)}
-    .badge.neg{background:var(--red2);color:var(--red);border:1px solid rgba(255,61,90,.25)}
-    .st{font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--silver3);margin-bottom:6px;font-weight:600}
-    .rrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
-    .rc{padding:12px 16px;border-radius:8px}.rcl{font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.12em;opacity:.5}.rcv{font-family:'Bebas Neue',sans-serif;font-size:20px;margin-top:2px}.rcd{font-size:10px;opacity:.35;margin-top:1px}
-    .gw{display:flex;align-items:center;gap:12px}
-    .gg{width:60px;height:60px}.gg-bg{fill:none;stroke:var(--silver3);stroke-width:6}.gg-f{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .8s}.gg-t{font-family:'Bebas Neue',sans-serif;font-size:16px;fill:var(--silver)}
-    .legend{display:flex;flex-wrap:wrap;gap:12px;padding:4px 0;margin-bottom:8px}.li{display:flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2)}.ld{width:8px;height:8px;border-radius:2px}
-    .crow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}@media(max-width:1100px){.crow{grid-template-columns:1fr}}
-    .cbox{border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.06);height:650px;position:relative;background:#03050a}
-    .gex-canvas{cursor:grab;width:100%;height:100%;display:block}
-    .gex-canvas:active{cursor:grabbing}
-    .gex-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--silver3);pointer-events:none;opacity:.6}
-    .llist{display:flex;flex-direction:column;gap:5px;margin-bottom:20px}
-    .lhdr{display:grid;grid-template-columns:30px 180px 95px 65px 1fr 80px;gap:10px;padding:0 14px 5px;font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--silver3);font-weight:600}
-    .lhdr span:nth-child(3),.lhdr span:nth-child(4),.lhdr span:nth-child(6){text-align:right}.lhdr span:nth-child(5){text-align:center}
-    .lr{display:grid;grid-template-columns:30px 180px 95px 65px 1fr 80px;align-items:center;gap:10px;padding:11px 14px;border-radius:8px;transition:transform .2s,box-shadow .2s;cursor:default}.lr:hover{transform:translateX(4px)}
-    .li2{text-align:center;font-size:15px}.ln{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}.lde{font-size:10px;opacity:.35;margin-top:1px}.ls{font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:700;color:#fff;text-align:right}.ldi{font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:600;text-align:right}
-    .lbc{position:relative;height:16px;background:rgba(255,255,255,.03);border-radius:3px;overflow:hidden}.lb{position:absolute;top:0;height:100%;border-radius:3px;animation:barGrow .6s ease both}.lbm{position:absolute;top:0;left:50%;width:1px;height:100%;background:rgba(255,255,255,.08)}.lg{font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:600;text-align:right}
-    .footer{padding:12px 0;border-top:1px solid rgba(255,255,255,.04);display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver3)}
-    .err{background:var(--red2);border:1px solid rgba(255,61,90,.25);color:var(--red);padding:10px 16px;border-radius:7px;font-family:'Share Tech Mono',monospace;font-size:12px;margin-bottom:10px;display:none}
-    /* Tooltip */
-    .gex-tooltip{position:absolute;background:rgba(3,5,10,.95);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:8px 12px;pointer-events:none;font-family:'Share Tech Mono',monospace;font-size:11px;z-index:20;display:none;white-space:nowrap}
-    @media(max-width:768px){.rrow{grid-template-columns:1fr}.lr,.lhdr{grid-template-columns:24px 1fr 75px 55px}.lbc,.lg{display:none}.pv{font-size:32px}.cbox{height:400px}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGX — Gamma Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+<style>
+:root{--bg:#03050a;--green:#00e5a0;--green2:rgba(0,229,160,.1);--red:#ff3d5a;--red2:rgba(255,61,90,.1);--gold:#d4a843;--cyan:#00cfff;--purple:#b366ff;--silver:#ddeeff;--silver2:#7a9ab8;--silver3:#2a3a50;--border:rgba(0,229,160,.1);--zg:#FACC15;--mg:#00e5a0;--mn:#ff3d5a;--cw:#3B82F6;--pw:#A855F7;--hvl:#F97316;--poc:#00cfff}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--silver);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes squeezePulse{0%,100%{box-shadow:0 0 8px rgba(250,204,21,.3)}50%{box-shadow:0 0 24px rgba(250,204,21,.7)}}
+
+/* Header */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 20px;border-bottom:1px solid var(--border)}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:28px;background:linear-gradient(135deg,var(--gold),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hsub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2);letter-spacing:.15em;text-transform:uppercase;margin-left:14px}
+.live{display:flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver2)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease infinite}.dot.err{background:var(--red);animation:none}
+.main{padding:10px 20px}
+
+/* Top bar: ticker + price + regime cards inline */
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.tbtn{font-family:'Share Tech Mono',monospace;font-size:13px;padding:6px 14px;border-radius:5px;border:1px solid var(--silver3);background:rgba(255,255,255,.02);color:var(--silver2);cursor:pointer;transition:all .15s}.tbtn:hover{border-color:rgba(0,229,160,.28);color:var(--silver)}.tbtn.on{border-color:var(--gold);background:rgba(212,168,67,.08);color:var(--gold);font-weight:700}
+.pv{font-family:'Bebas Neue',sans-serif;font-size:40px;color:#fff;line-height:1;margin-left:8px}
+.ptk{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--silver2)}
+.badge{font-family:'Share Tech Mono',monospace;font-size:11px;padding:3px 10px;border-radius:4px;font-weight:600}
+.badge.pos{background:var(--green2);color:var(--green);border:1px solid rgba(0,229,160,.25)}
+.badge.neg{background:var(--red2);color:var(--red);border:1px solid rgba(255,61,90,.25)}
+
+/* Info strip */
+.strip{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:stretch}
+.scard{padding:8px 14px;border-radius:6px;flex:1;min-width:140px}
+.scl{font-family:'Share Tech Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.12em;opacity:.45}
+.scv{font-family:'Bebas Neue',sans-serif;font-size:17px;margin-top:1px}
+.scd{font-size:9px;opacity:.3;margin-top:1px}
+/* Squeeze card */
+.squeeze-card{animation:squeezePulse 2s ease infinite}
+.squeeze-off{animation:none}
+/* Gauge mini */
+.gm{display:flex;align-items:center;gap:8px}
+.gm svg{width:42px;height:42px}
+.gm-bg{fill:none;stroke:var(--silver3);stroke-width:5}.gm-f{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .5s}.gm-t{font-family:'Bebas Neue',sans-serif;font-size:13px;fill:var(--silver)}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;margin-bottom:8px}
+.tab{font-family:'Share Tech Mono',monospace;font-size:12px;padding:8px 20px;border-radius:6px 6px 0 0;border:1px solid transparent;border-bottom:none;background:rgba(255,255,255,.02);color:var(--silver3);cursor:pointer;transition:all .15s}
+.tab:hover{color:var(--silver2)}
+.tab.on{background:rgba(255,255,255,.05);color:var(--green);border-color:rgba(0,229,160,.15)}
+.panel{display:none;border-radius:0 8px 8px 8px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.01);overflow:hidden}
+.panel.on{display:block}
+
+/* Chart containers */
+.chart-box{height:600px;position:relative;background:#03050a}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:10px;padding:6px 14px;background:rgba(255,255,255,.02);border-bottom:1px solid rgba(255,255,255,.04)}
+.le{display:flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--silver2)}.ld{width:7px;height:7px;border-radius:2px}
+
+/* GEX canvas */
+#gex-box{height:600px;position:relative;background:#03050a;cursor:grab}
+#gex-box:active{cursor:grabbing}
+#gex-c{display:block}
+.gtt{position:absolute;background:rgba(3,5,10,.95);border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:10px 14px;pointer-events:none;font-family:'Share Tech Mono',monospace;font-size:12px;z-index:20;display:none;white-space:nowrap;line-height:1.6}
+
+/* Levels table */
+.st{font-family:'Share Tech Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--silver3);margin:12px 0 6px;font-weight:600}
+.ll{display:flex;flex-direction:column;gap:4px;margin-bottom:16px}
+.lh{display:grid;grid-template-columns:28px 170px 90px 60px 1fr 75px;gap:8px;padding:0 12px 4px;font-family:'Share Tech Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--silver3);font-weight:600}
+.lh span:nth-child(3),.lh span:nth-child(4),.lh span:nth-child(6){text-align:right}.lh span:nth-child(5){text-align:center}
+.lr{display:grid;grid-template-columns:28px 170px 90px 60px 1fr 75px;align-items:center;gap:8px;padding:10px 12px;border-radius:7px;transition:transform .15s;cursor:default}.lr:hover{transform:translateX(3px)}
+.li{text-align:center;font-size:14px}.ln{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}.lds{font-size:9px;opacity:.3;margin-top:1px}.ls{font-family:'Share Tech Mono',monospace;font-size:17px;font-weight:700;color:#fff;text-align:right}.ldi{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:600;text-align:right}
+.lbc{position:relative;height:14px;background:rgba(255,255,255,.03);border-radius:3px;overflow:hidden}.lb{position:absolute;top:0;height:100%;border-radius:3px;animation:barGrow .5s ease both}.lbm{position:absolute;top:0;left:50%;width:1px;height:100%;background:rgba(255,255,255,.06)}.lg{font-family:'Share Tech Mono',monospace;font-size:11px;font-weight:600;text-align:right}
+.footer{padding:10px 0;border-top:1px solid rgba(255,255,255,.04);display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--silver3)}
+.err{background:var(--red2);border:1px solid rgba(255,61,90,.25);color:var(--red);padding:8px 14px;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:11px;margin-bottom:8px;display:none}
+@media(max-width:900px){.strip{flex-direction:column}.chart-box,#gex-box{height:400px}.lr,.lh{grid-template-columns:24px 1fr 70px 50px}.lbc,.lg{display:none}.pv{font-size:30px}}
+</style>
 </head>
 <body>
-<div class="header"><div style="display:flex;align-items:center"><div class="logo">AGX</div><div class="hsub">Gamma Exposure · Futures</div></div><div class="live"><div class="dot" id="dot"></div><span id="st">CONNECTING...</span></div></div>
-<div class="dash">
-  <div class="err" id="err"></div>
-  <div class="tbar">
-    <button class="tbtn on" onclick="sw('ES',this)">ES <span style="opacity:.5;font-size:11px">S&P 500</span></button>
-    <button class="tbtn" onclick="sw('NQ',this)">NQ <span style="opacity:.5;font-size:11px">Nasdaq 100</span></button>
-    <div class="rinfo">Auto-refresh: 1 min</div>
+<div class="hdr"><div style="display:flex;align-items:center"><div class="logo">AGX</div><div class="hsub">Gamma · Futures</div></div><div class="live"><div class="dot" id="dot"></div><span id="st">CONNECTING...</span></div></div>
+<div class="main">
+<div class="err" id="err"></div>
+<!-- Top bar -->
+<div class="topbar">
+  <button class="tbtn on" onclick="sw('ES',this)">ES</button>
+  <button class="tbtn" onclick="sw('NQ',this)">NQ</button>
+  <div class="pv" id="pp">--</div>
+  <div><div class="ptk" id="ptk">ES · <span id="pnm">E-mini S&P 500</span></div></div>
+  <div class="badge pos" id="pn">Net GEX: --</div>
+  <div style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver3)">Refresh: 1 min</div>
+</div>
+<!-- Info strip -->
+<div class="strip">
+  <div class="scard" id="sc-gr" style="background:rgba(0,229,160,.06);border:1px solid rgba(0,229,160,.2)"><div class="scl">Gamma Regime</div><div class="scv" id="sv-gr" style="color:var(--green)">--</div><div class="scd" id="sd-gr">--</div></div>
+  <div class="scard" id="sc-vr" style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2)"><div class="scl">Vol Regime</div><div class="scv" id="sv-vr" style="color:var(--cyan)">--</div><div class="scd" id="sd-vr">--</div></div>
+  <div class="scard squeeze-off" id="sc-sq" style="background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.2)"><div class="scl">Gamma Squeeze</div><div class="scv" id="sv-sq" style="color:var(--zg)">--</div><div class="scd" id="sd-sq">--</div></div>
+  <div class="scard" style="background:rgba(255,255,255,.02);border:1px solid var(--silver3)">
+    <div class="scl">Volatility</div>
+    <div class="gm"><svg viewBox="0 0 50 50"><circle class="gm-bg" cx="25" cy="25" r="20" stroke-dasharray="125.6" stroke-dashoffset="0" transform="rotate(-90 25 25)"/><circle class="gm-f" id="gf" cx="25" cy="25" r="20" stroke-dasharray="125.6" stroke-dashoffset="125.6" transform="rotate(-90 25 25)" stroke="var(--green)"/><text class="gm-t" x="25" y="29" text-anchor="middle" id="gp">0%</text></svg><div><div style="font-family:'Bebas Neue',sans-serif;font-size:16px" id="gl">Calm</div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--silver3)" id="gt">—</div></div></div>
   </div>
-  <div class="irow">
-    <div class="pv" id="pp">--</div>
-    <div><div class="ptk" id="ptk">ES</div><div class="pnm" id="pnm">E-mini S&P 500</div></div>
-    <div class="badge pos" id="pn">Net GEX: --</div>
-  </div>
-  <div class="rrow">
-    <div class="rc" id="rcg" style="background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.25)"><div class="rcl">Gamma Regime</div><div class="rcv" id="rgv" style="color:var(--green)">--</div><div class="rcd" id="rgd">Loading...</div></div>
-    <div class="rc" id="rcv2" style="background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25)"><div class="rcl">Volatility Regime</div><div class="rcv" id="rvv" style="color:var(--cyan)">--</div><div class="rcd" id="rvd">Loading...</div></div>
-    <div class="rc" style="background:rgba(255,255,255,.02);border:1px solid var(--silver3)"><div class="rcl">Volatility Meter</div><div class="gw"><svg class="gg" viewBox="0 0 80 80"><circle class="gg-bg" cx="40" cy="40" r="32" stroke-dasharray="150.8" stroke-dashoffset="0" transform="rotate(-90 40 40)"/><circle class="gg-f" id="gf" cx="40" cy="40" r="32" stroke-dasharray="150.8" stroke-dashoffset="150.8" transform="rotate(-90 40 40)" stroke="var(--green)"/><text class="gg-t" x="40" y="44" text-anchor="middle" id="gp">0%</text></svg><div><div style="font-family:'Bebas Neue',sans-serif;font-size:18px" id="gl">Calm</div><div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--silver3);margin-top:2px">Trend: <span id="gt">—</span></div></div></div></div>
-  </div>
+</div>
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab on" onclick="showTab(0,this)">📈 Price Chart</div>
+  <div class="tab" onclick="showTab(1,this)">📊 GEX Distribution</div>
+  <div class="tab" onclick="showTab(2,this)">📋 Levels Table</div>
+</div>
+<!-- Panel 0: Price Chart -->
+<div class="panel on" id="pan0">
   <div class="legend">
-    <div class="li"><div class="ld" style="background:var(--zg)"></div>Zero Gamma</div>
-    <div class="li"><div class="ld" style="background:var(--mg)"></div>Max + Gamma</div>
-    <div class="li"><div class="ld" style="background:var(--mn)"></div>Max - Gamma</div>
-    <div class="li"><div class="ld" style="background:var(--cw)"></div>Call Wall</div>
-    <div class="li"><div class="ld" style="background:var(--pw)"></div>Put Wall</div>
-    <div class="li"><div class="ld" style="background:var(--hvl)"></div>HVL</div>
-    <div class="li"><div class="ld" style="background:var(--poc)"></div>POC</div>
-    <div class="li" style="margin-left:16px"><div class="ld" style="background:var(--cyan)"></div>+GEX Buyers</div>
-    <div class="li"><div class="ld" style="background:var(--purple)"></div>-GEX Sellers</div>
+    <div class="le"><div class="ld" style="background:var(--zg)"></div>ZG</div>
+    <div class="le"><div class="ld" style="background:var(--mg)"></div>MG+</div>
+    <div class="le"><div class="ld" style="background:var(--mn)"></div>MG-</div>
+    <div class="le"><div class="ld" style="background:var(--cw)"></div>CW</div>
+    <div class="le"><div class="ld" style="background:var(--pw)"></div>PW</div>
+    <div class="le"><div class="ld" style="background:var(--hvl)"></div>HVL</div>
+    <div class="le"><div class="ld" style="background:var(--poc)"></div>POC</div>
+    <div class="le" style="margin-left:12px"><div class="ld" style="background:var(--zg);border-radius:50%"></div>Squeeze Zone</div>
   </div>
-  <div class="crow">
-    <div><div class="st">Price Chart + Gamma Levels</div><div class="cbox" id="chart-wrap"></div></div>
-    <div><div class="st">GEX Distribution by Strike — <span style="color:var(--silver2);font-weight:400">scroll · zoom · hover</span></div>
-      <div class="cbox" id="gex-wrap">
-        <canvas id="gex-c" class="gex-canvas"></canvas>
-        <div class="gex-tooltip" id="gex-tt"></div>
-        <div class="gex-hint">Scroll to pan · Ctrl+Scroll to zoom · Hover for details</div>
-      </div>
-    </div>
+  <div class="chart-box" id="price-box"></div>
+</div>
+<!-- Panel 1: GEX -->
+<div class="panel" id="pan1">
+  <div class="legend">
+    <div class="le"><div class="ld" style="background:var(--cyan)"></div>+GEX Buyers (Calls)</div>
+    <div class="le"><div class="ld" style="background:var(--purple)"></div>-GEX Sellers (Puts)</div>
+    <div class="le" style="margin-left:12px;font-size:8px;opacity:.5">Scroll to pan · Ctrl+Scroll to zoom · Hover for details</div>
   </div>
-  <div class="st">Key Gamma Levels</div>
-  <div class="lhdr"><span></span><span>Level</span><span>Strike</span><span>Dist</span><span>GEX Bar</span><span>GEX</span></div>
-  <div class="llist" id="ll"></div>
-  <div class="footer"><span>AGX Community — Gamma Exposure · Futures</span><span>Data: Massive API · Refresh 1 min</span></div>
+  <div id="gex-box"><canvas id="gex-c"></canvas><div class="gtt" id="gtt"></div></div>
+</div>
+<!-- Panel 2: Levels -->
+<div class="panel" id="pan2" style="padding:14px">
+  <div class="lh"><span></span><span>Level</span><span>Strike</span><span>Dist</span><span>GEX Bar</span><span>GEX</span></div>
+  <div class="ll" id="ll"></div>
+</div>
+<div class="footer"><span>AGX Community — Gamma Exposure</span><span>Massive API · 1 min refresh</span></div>
 </div>
 <script>
 const API='/.netlify/functions/gamma-levels',REFRESH=60000;
-let ticker='ES',timer=null,D=null,chart=null,lineSeries=null,volSeries=null,levelLines=[];
-
-// GEX chart state
-let gexState={offsetY:0,zoom:1,dragging:false,dragStartY:0,dragStartOffset:0,mouseY:-1};
-
-const STY={
-  zeroGamma:{icon:'⚡',color:'#FACC15',lw:3,dash:[10,5]},
-  maxPositive:{icon:'🟢',color:'#00e5a0',lw:3,dash:[8,4]},
-  maxNegative:{icon:'🔴',color:'#ff3d5a',lw:3,dash:[8,4]},
-  callWall:{icon:'🔵',color:'#3B82F6',lw:2.5,dash:[6,4]},
-  putWall:{icon:'🟣',color:'#A855F7',lw:2.5,dash:[6,4]},
-  hvl:{icon:'🟠',color:'#F97316',lw:2,dash:[4,6]},
-  poc:{icon:'◆',color:'#00cfff',lw:2,dash:[3,3]},
-};
+let ticker='ES',timer=null,D=null,activeTab=0;
+let pc=null,pl=null,pv=null,pLL=[];
+const G={off:0,zm:1,drag:false,dy0:0,do0:0,hov:-1,mx:0,my:0};
+const STY={zeroGamma:{icon:'⚡',c:'#FACC15',lw:3},maxPositive:{icon:'🟢',c:'#00e5a0',lw:3},maxNegative:{icon:'🔴',c:'#ff3d5a',lw:3},callWall:{icon:'🔵',c:'#3B82F6',lw:2.5},putWall:{icon:'🟣',c:'#A855F7',lw:2.5},hvl:{icon:'🟠',c:'#F97316',lw:2},poc:{icon:'◆',c:'#00cfff',lw:2}};
 function fp(v){return v?v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}):'--'}
 function fg(v){if(!v&&v!==0)return'--';const a=Math.abs(v);if(a>=1e9)return(v/1e9).toFixed(2)+'B';if(a>=1e6)return(v/1e6).toFixed(1)+'M';if(a>=1e3)return(v/1e3).toFixed(1)+'K';return v.toFixed(0)}
-function dpct(s,k){if(!s)return'--';return((k-s)/s*100).toFixed(2)}
+function dp(s,k){if(!s)return'--';return((k-s)/s*100).toFixed(2)}
 function setS(ok,t){document.getElementById('dot').className='dot'+(ok?'':' err');document.getElementById('st').textContent=t}
-function showE(m){const e=document.getElementById('err');e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',8000)}
+function showE(m){const e=document.getElementById('err');e.textContent=m;e.style.display='block';setTimeout(()=>e.style.display='none',6000)}
 
-// ═══ PRICE CHART (Lightweight Charts) ═══
-function initChart(){
-  const w=document.getElementById('chart-wrap');w.innerHTML='';
-  chart=LightweightCharts.createChart(w,{
+// Tabs
+function showTab(i,el){
+  activeTab=i;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  if(el)el.classList.add('on');
+  document.getElementById('pan'+i).classList.add('on');
+  if(i===0&&D)updatePC(D);
+  if(i===1&&D)requestAnimationFrame(drawGex);
+}
+
+// ═══ PRICE CHART + GAMMA SQUEEZE ═══
+function initPC(){
+  const w=document.getElementById('price-box');w.innerHTML='';
+  pc=LightweightCharts.createChart(w,{
     width:w.clientWidth,height:w.clientHeight,
     layout:{background:{type:'solid',color:'#03050a'},textColor:'rgba(255,255,255,0.3)',fontFamily:'Share Tech Mono,monospace',fontSize:10},
     grid:{vertLines:{color:'rgba(255,255,255,0.03)'},horzLines:{color:'rgba(255,255,255,0.03)'}},
-    rightPriceScale:{borderColor:'rgba(255,255,255,0.06)',scaleMargins:{top:0.05,bottom:0.15}},
+    rightPriceScale:{borderColor:'rgba(255,255,255,0.06)',scaleMargins:{top:0.05,bottom:0.12}},
     timeScale:{borderColor:'rgba(255,255,255,0.06)',timeVisible:true,secondsVisible:false},
-    crosshair:{mode:0,vertLine:{color:'rgba(255,255,255,0.1)',width:1,style:3},horzLine:{color:'rgba(255,255,255,0.1)',width:1,style:3}},
+    crosshair:{mode:0},
   });
-  lineSeries=chart.addAreaSeries({topColor:'rgba(0,229,160,0.15)',bottomColor:'rgba(0,229,160,0.01)',lineColor:'#00e5a0',lineWidth:2,crosshairMarkerRadius:4,crosshairMarkerBorderColor:'#00e5a0',crosshairMarkerBackgroundColor:'#03050a'});
-  volSeries=chart.addHistogramSeries({color:'rgba(0,229,160,0.2)',priceFormat:{type:'volume'},priceScaleId:'vol'});
-  chart.priceScale('vol').applyOptions({scaleMargins:{top:0.85,bottom:0}});
+  pl=pc.addAreaSeries({topColor:'rgba(0,229,160,0.15)',bottomColor:'rgba(0,229,160,0.01)',lineColor:'#00e5a0',lineWidth:2});
+  pv=pc.addHistogramSeries({color:'rgba(0,229,160,0.2)',priceFormat:{type:'volume'},priceScaleId:'vol'});
+  pc.priceScale('vol').applyOptions({scaleMargins:{top:0.85,bottom:0}});
 }
-function updateChart(d){
-  if(!chart||!lineSeries)return;
-  const c=d.candles||[];if(!c.length)return;
-  lineSeries.setData(c.map(x=>({time:x.time,value:x.close})));
-  volSeries.setData(c.map(x=>({time:x.time,value:x.volume,color:x.close>=x.open?'rgba(0,229,160,0.25)':'rgba(255,61,90,0.25)'})));
-  levelLines.forEach(l=>{try{lineSeries.removePriceLine(l)}catch(e){}});levelLines=[];
+function updatePC(d){
+  if(!pc||!pl)return;
+  const cn=d.candles||[];if(!cn.length)return;
+  pl.setData(cn.map(x=>({time:x.time,value:x.close})));
+  pv.setData(cn.map(x=>({time:x.time,value:x.volume,color:x.close>=x.open?'rgba(0,229,160,0.25)':'rgba(255,61,90,0.25)'})));
+  // Remove old level lines
+  pLL.forEach(l=>{try{pl.removePriceLine(l)}catch(e){}});pLL=[];
+  // Add level lines
   for(const[k,v]of Object.entries(d.levels)){
     if(!v.strike||!STY[k])continue;
-    const s=STY[k];
-    levelLines.push(lineSeries.createPriceLine({price:v.strike,color:s.color,lineWidth:s.lw,lineStyle:LightweightCharts.LineStyle.Dashed,axisLabelVisible:true,title:v.shortLabel}));
+    pLL.push(pl.createPriceLine({price:v.strike,color:STY[k].c,lineWidth:STY[k].lw,lineStyle:LightweightCharts.LineStyle.Dashed,axisLabelVisible:true,title:v.shortLabel}));
   }
-  chart.timeScale().fitContent();
-  chart.applyOptions({width:document.getElementById('chart-wrap').clientWidth,height:document.getElementById('chart-wrap').clientHeight});
+  // Gamma Squeeze zone — highlight between ZG and nearest wall
+  const zg=d.levels.zeroGamma?.strike;
+  const cw=d.levels.callWall?.strike;
+  const pw=d.levels.putWall?.strike;
+  if(zg&&cw&&pw){
+    // Squeeze = price is between put wall and call wall, near zero gamma
+    const spot=d.spotPrice;
+    const sqDist=Math.abs(spot-zg)/(cw-pw)*100;
+    // Add squeeze zone markers
+    if(sqDist<30){
+      // Tight squeeze — add highlighted zone
+      pLL.push(pl.createPriceLine({price:zg,color:'#FACC15',lineWidth:4,lineStyle:LightweightCharts.LineStyle.Solid,axisLabelVisible:true,title:'⚡ SQUEEZE ZONE'}));
+    }
+  }
+  pc.timeScale().fitContent();
+  pc.applyOptions({width:document.getElementById('price-box').clientWidth,height:document.getElementById('price-box').clientHeight});
 }
 
-// ═══ INTERACTIVE GEX DISTRIBUTION ═══
+// ═══ GAMMA SQUEEZE CALCULATION ═══
+function calcSqueeze(d){
+  const zg=d.levels.zeroGamma?.strike||0;
+  const cw=d.levels.callWall?.strike||0;
+  const pw=d.levels.putWall?.strike||0;
+  const spot=d.spotPrice;
+  if(!zg||!cw||!pw||cw<=pw)return{active:false,pct:0,label:'None',desc:'No squeeze detected'};
+  const range=cw-pw;
+  const distToZG=Math.abs(spot-zg);
+  const pct=Math.max(0,100-Math.round(distToZG/range*200));
+  if(pct>60)return{active:true,pct,label:'ACTIVE ⚡',desc:'Price near ZG — volatility compression'};
+  if(pct>30)return{active:false,pct,label:'Building',desc:'Approaching squeeze zone'};
+  return{active:false,pct:Math.max(0,pct),label:'None',desc:'Price away from squeeze zone'};
+}
+
+// ═══ GEX DISTRIBUTION (Interactive Canvas) ═══
 function drawGex(){
-  if(!D)return;
-  const wrap=document.getElementById('gex-wrap');
+  if(!D||!D.distribution||!D.distribution.length)return;
+  const wrap=document.getElementById('gex-box');
   const canvas=document.getElementById('gex-c');
+  if(!wrap.offsetWidth)return; // hidden tab
   const dpr=window.devicePixelRatio||1;
   const W=wrap.clientWidth,H=wrap.clientHeight;
   canvas.width=W*dpr;canvas.height=H*dpr;
   canvas.style.width=W+'px';canvas.style.height=H+'px';
-  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  const c=canvas.getContext('2d');c.scale(dpr,dpr);
 
-  const dist=D.distribution||[];if(!dist.length)return;
-  const spot=D.spotPrice;
+  const dist=D.distribution,N=dist.length,spot=D.spotPrice;
   const strikes=dist.map(x=>x.strike),cGV=dist.map(x=>x.callGex||0),pGV=dist.map(x=>x.putGex||0);
-  const maxAbs=Math.max(...dist.map(x=>Math.abs(x.gex)),1);
+  const maxA=Math.max(...dist.map(x=>Math.abs(x.gex)),1);
+  const pT=32,pB=22,pL=62,pR=62;
+  const cW=W-pL-pR,vH=Math.max(H-pT-pB,(H-pT-pB)*G.zm);
+  const barH=Math.max(5,vH/N-1),zX=pL+cW/2;
+  const maxOff=Math.max(0,vH-(H-pT-pB));
+  G.off=Math.max(0,Math.min(maxOff,G.off));
 
-  const pT=30,pB=30,pL=58,pR=58;
-  const cW=W-pL-pR;
-  // Virtual height with zoom
-  const totalH=(H-pT-pB)*gexState.zoom;
-  const barH=Math.max(4,totalH/strikes.length-1);
-  const zX=pL+cW/2;
-
-  // Clamp offset
-  const maxOff=Math.max(0,totalH-(H-pT-pB));
-  gexState.offsetY=Math.max(0,Math.min(maxOff,gexState.offsetY));
-
-  ctx.fillStyle='#03050a';ctx.fillRect(0,0,W,H);
-
-  // Clip region
-  ctx.save();ctx.beginPath();ctx.rect(0,pT,W,H-pT-pB);ctx.clip();
+  c.fillStyle='#03050a';c.fillRect(0,0,W,H);
+  c.save();c.beginPath();c.rect(0,pT,W,H-pT-pB);c.clip();
 
   // Grid
-  ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=1;
-  for(let i=0;i<=4;i++){const x=pL+(cW/4)*i;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,H-pB);ctx.stroke()}
+  c.strokeStyle='rgba(255,255,255,0.04)';c.lineWidth=1;
+  for(let i=0;i<=4;i++){const x=pL+(cW/4)*i;c.beginPath();c.moveTo(x,pT);c.lineTo(x,H-pB);c.stroke()}
+  c.strokeStyle='rgba(255,255,255,0.18)';c.lineWidth=2;
+  c.beginPath();c.moveTo(zX,pT);c.lineTo(zX,H-pB);c.stroke();
 
-  // Zero line
-  ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=1.5;
-  ctx.beginPath();ctx.moveTo(zX,pT);ctx.lineTo(zX,H-pB);ctx.stroke();
+  const hI=(G.my>=pT&&G.my<=H-pB)?Math.floor((G.my-pT+G.off)/vH*N):-1;
 
-  // Bars
-  const hoverIdx=gexState.mouseY>=0?Math.floor((gexState.mouseY-pT+gexState.offsetY)/totalH*strikes.length):-1;
-
-  strikes.forEach((s,i)=>{
-    const y=pT+(i/strikes.length)*totalH-gexState.offsetY;
-    if(y+barH<pT||y>H-pB)return; // cull offscreen
-    const cg=cGV[i],pg=pGV[i];
-    const isHover=i===hoverIdx;
-    const alpha=isHover?1:.7;
-
-    if(cg>0){
-      const bW=(cg/maxAbs)*(cW/2);
-      const gr=ctx.createLinearGradient(zX,0,zX+bW,0);
-      gr.addColorStop(0,`rgba(0,207,255,${.2*alpha})`);gr.addColorStop(1,`rgba(0,207,255,${.7*alpha})`);
-      ctx.fillStyle=gr;ctx.fillRect(zX+1,y,bW,barH);
-      if(isHover){ctx.strokeStyle='#00cfff';ctx.lineWidth=1.5;ctx.strokeRect(zX+1,y,bW,barH)}
-    }
-    if(pg<0){
-      const bW=(Math.abs(pg)/maxAbs)*(cW/2);
-      const gr=ctx.createLinearGradient(zX-bW,0,zX,0);
-      gr.addColorStop(0,`rgba(179,102,255,${.7*alpha})`);gr.addColorStop(1,`rgba(179,102,255,${.2*alpha})`);
-      ctx.fillStyle=gr;ctx.fillRect(zX-bW-1,y,bW,barH);
-      if(isHover){ctx.strokeStyle='#b366ff';ctx.lineWidth=1.5;ctx.strokeRect(zX-bW-1,y,bW,barH)}
-    }
-  });
+  for(let i=0;i<N;i++){
+    const y=pT+(i/N)*vH-G.off;
+    if(y+barH<pT||y>H-pB)continue;
+    const cg=cGV[i],pg=pGV[i],isH=i===hI;
+    if(cg>0){const bW=(cg/maxA)*(cW/2);const gr=c.createLinearGradient(zX,0,zX+bW,0);gr.addColorStop(0,'rgba(0,207,255,0.2)');gr.addColorStop(1,isH?'rgba(0,207,255,1)':'rgba(0,207,255,0.7)');c.fillStyle=gr;c.fillRect(zX+1,y,bW,barH);if(isH){c.strokeStyle='#00cfff';c.lineWidth=2;c.strokeRect(zX+1,y,bW,barH)}}
+    if(pg<0){const bW=(Math.abs(pg)/maxA)*(cW/2);const gr=c.createLinearGradient(zX-bW,0,zX,0);gr.addColorStop(0,isH?'rgba(179,102,255,1)':'rgba(179,102,255,0.7)');gr.addColorStop(1,'rgba(179,102,255,0.2)');c.fillStyle=gr;c.fillRect(zX-bW-1,y,bW,barH);if(isH){c.strokeStyle='#b366ff';c.lineWidth=2;c.strokeRect(zX-bW-1,y,bW,barH)}}
+  }
 
   // Strike labels
-  const step=Math.max(1,Math.floor(strikes.length/(18*gexState.zoom)));
-  ctx.fillStyle='rgba(255,255,255,.3)';ctx.font='10px "Share Tech Mono"';
-  for(let i=0;i<strikes.length;i+=step){
-    const y=pT+(i/strikes.length)*totalH-gexState.offsetY+barH/2+3;
-    if(y<pT||y>H-pB)continue;
-    ctx.textAlign='left';ctx.fillText(strikes[i].toFixed(0),W-pR+5,y);
-    ctx.textAlign='right';ctx.fillText(strikes[i].toFixed(0),pL-5,y);
-  }
+  const step=Math.max(1,Math.floor(N/(22*G.zm)));
+  c.font='bold 12px "Share Tech Mono"';c.fillStyle='rgba(255,255,255,.4)';
+  for(let i=0;i<N;i+=step){const y=pT+(i/N)*vH-G.off+barH/2+4;if(y<pT||y>H-pB)continue;c.textAlign='left';c.fillText(strikes[i].toFixed(0),W-pR+5,y);c.textAlign='right';c.fillText(strikes[i].toFixed(0),pL-5,y)}
 
-  // Level markers
+  // Levels
   for(const[k,v]of Object.entries(D.levels)){
     if(!v.strike||!STY[k])continue;
-    const idx=strikes.findIndex(s=>Math.abs(s-v.strike)<(strikes.length>1?Math.abs(strikes[1]-strikes[0])*2:9999));
+    const idx=strikes.findIndex(s=>Math.abs(s-v.strike)<(N>1?Math.abs(strikes[1]-strikes[0])*2:9999));
     if(idx<0)continue;
-    const ly=pT+(idx/strikes.length)*totalH-gexState.offsetY;
-    if(ly<pT-10||ly>H-pB+10)continue;
-    const st=STY[k];
-    ctx.strokeStyle=st.color;ctx.lineWidth=st.lw;ctx.setLineDash(st.dash||[6,4]);
-    ctx.beginPath();ctx.moveTo(pL,ly);ctx.lineTo(W-pR,ly);ctx.stroke();ctx.setLineDash([]);
-    const txt=v.shortLabel+' '+v.strike.toFixed(0);
-    const tw=ctx.measureText(txt).width+12;
-    ctx.fillStyle=st.color+'44';ctx.fillRect(zX-tw/2,ly-14,tw,16);
-    ctx.fillStyle=st.color;ctx.font='bold 10px "Share Tech Mono"';ctx.textAlign='center';
-    ctx.fillText(txt,zX,ly-3);
+    const ly=pT+(idx/N)*vH-G.off;if(ly<pT-15||ly>H-pB+15)continue;
+    c.strokeStyle=STY[k].c;c.lineWidth=STY[k].lw;c.setLineDash([8,4]);
+    c.beginPath();c.moveTo(pL,ly);c.lineTo(W-pR,ly);c.stroke();c.setLineDash([]);
+    const txt=v.shortLabel+' '+v.strike.toFixed(0);c.font='bold 13px "Share Tech Mono"';
+    const tw=c.measureText(txt).width+14;
+    c.fillStyle=STY[k].c+'55';c.beginPath();c.roundRect?c.roundRect(zX-tw/2,ly-16,tw,19,4):c.fillRect(zX-tw/2,ly-16,tw,19);c.fill();
+    c.fillStyle=STY[k].c;c.textAlign='center';c.fillText(txt,zX,ly-2);
   }
 
-  // Spot line
+  // Spot
   const si=strikes.findIndex(s=>s>=spot);
-  if(si>=0){
-    const sy=pT+(si/strikes.length)*totalH-gexState.offsetY;
-    if(sy>=pT&&sy<=H-pB){
-      ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.setLineDash([3,3]);
-      ctx.beginPath();ctx.moveTo(pL,sy);ctx.lineTo(W-pR,sy);ctx.stroke();ctx.setLineDash([]);
-      ctx.fillStyle='rgba(255,255,255,.85)';ctx.font='bold 11px "Share Tech Mono"';ctx.textAlign='center';
-      ctx.fillText('◆ SPOT '+fp(spot),zX,sy-6);
-    }
-  }
+  if(si>=0){const sy=pT+(si/N)*vH-G.off;if(sy>=pT-10&&sy<=H-pB+10){c.strokeStyle='#fff';c.lineWidth=2.5;c.setLineDash([4,3]);c.beginPath();c.moveTo(pL,sy);c.lineTo(W-pR,sy);c.stroke();c.setLineDash([]);c.font='bold 14px "Share Tech Mono"';c.fillStyle='rgba(255,255,255,.9)';c.textAlign='center';c.fillText('◆ SPOT '+fp(spot),zX,sy-7)}}
 
-  ctx.restore();
+  if(hI>=0&&hI<N){const hy=pT+(hI/N)*vH-G.off;if(hy>=pT&&hy<=H-pB){c.strokeStyle='rgba(255,255,255,0.2)';c.lineWidth=1;c.setLineDash([2,2]);c.beginPath();c.moveTo(pL,hy);c.lineTo(W-pR,hy);c.stroke();c.setLineDash([])}}
+  c.restore();
 
-  // Crosshair line
-  if(hoverIdx>=0&&hoverIdx<strikes.length){
-    const hy=pT+(hoverIdx/strikes.length)*totalH-gexState.offsetY;
-    if(hy>=pT&&hy<=H-pB){
-      ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=1;ctx.setLineDash([2,2]);
-      ctx.beginPath();ctx.moveTo(pL,hy);ctx.lineTo(W-pR,hy);ctx.stroke();ctx.setLineDash([]);
-    }
-  }
+  c.font='bold 13px "Share Tech Mono"';c.textAlign='center';c.fillStyle='#b366ff';c.fillText('— SELLERS',pL+cW*.25,16);c.fillStyle='#00cfff';c.fillText('BUYERS +',pL+cW*.75,16);
+  c.fillStyle='rgba(255,255,255,.12)';c.font='9px "Share Tech Mono"';c.fillText('Zoom:'+Math.round(G.zm*100)+'% · Scroll pan · Ctrl+Scroll zoom',W/2,H-5);
 
-  // Headers
-  ctx.fillStyle='#b366ff';ctx.font='bold 11px "Share Tech Mono"';ctx.textAlign='center';
-  ctx.fillText('— SELLERS',pL+cW*.25,16);
-  ctx.fillStyle='#00cfff';ctx.fillText('BUYERS +',pL+cW*.75,16);
-  ctx.fillStyle='rgba(255,255,255,.15)';ctx.font='9px "Share Tech Mono"';ctx.fillText('0',zX,16);
-
-  // Bottom
-  ctx.fillStyle='#b366ff';ctx.font='bold 10px "Share Tech Mono"';ctx.textAlign='center';
-  ctx.fillText('-GEX',pL+cW*.25,H-8);ctx.fillStyle='#00cfff';ctx.fillText('+GEX',pL+cW*.75,H-8);
-
-  // Tooltip
-  const tt=document.getElementById('gex-tt');
-  if(hoverIdx>=0&&hoverIdx<strikes.length){
-    const d2=dist[hoverIdx];
-    tt.style.display='block';
-    tt.style.left=(gexState.mouseX||W/2)+'px';
-    tt.style.top=Math.max(30,Math.min(H-80,(gexState.mouseRawY||0)-60))+'px';
-    tt.innerHTML=`<div style="color:#fff;font-weight:700;font-size:13px">Strike: ${fp(d2.strike)}</div>
-      <div style="color:#00cfff">+GEX (Calls): ${fg(d2.callGex||0)}</div>
-      <div style="color:#b366ff">-GEX (Puts): ${fg(d2.putGex||0)}</div>
-      <div style="color:${d2.gex>=0?'#00e5a0':'#ff3d5a'}">Net GEX: ${fg(d2.gex)}</div>
-      <div style="color:var(--silver3)">OI: ${(d2.oi||0).toLocaleString()}</div>`;
-  }else{tt.style.display='none'}
+  const tt=document.getElementById('gtt');
+  if(hI>=0&&hI<N){const d2=dist[hI];tt.style.display='block';tt.style.left=Math.min(W-170,Math.max(10,G.mx+12))+'px';tt.style.top=Math.min(H-110,Math.max(10,G.my-60))+'px';tt.innerHTML=`<div style="color:#fff;font-weight:700;font-size:14px">Strike: ${fp(d2.strike)}</div><div style="color:#00cfff">+GEX: ${fg(d2.callGex||0)}</div><div style="color:#b366ff">-GEX: ${fg(d2.putGex||0)}</div><div style="color:${d2.gex>=0?'#00e5a0':'#ff3d5a'};font-weight:700">Net: ${fg(d2.gex)}</div><div style="color:var(--silver3);font-size:10px">OI: ${(d2.oi||0).toLocaleString()}</div>`}else{tt.style.display='none'}
 }
 
-// GEX interaction events
-function setupGexEvents(){
-  const canvas=document.getElementById('gex-c');
-  canvas.addEventListener('wheel',(e)=>{
-    e.preventDefault();
-    if(e.ctrlKey||e.metaKey){
-      // Zoom
-      const delta=e.deltaY>0?0.9:1.1;
-      gexState.zoom=Math.max(1,Math.min(5,gexState.zoom*delta));
-    }else{
-      // Scroll/pan
-      gexState.offsetY+=e.deltaY*0.8;
-    }
-    drawGex();
-  },{passive:false});
-
-  canvas.addEventListener('mousedown',(e)=>{
-    gexState.dragging=true;gexState.dragStartY=e.offsetY;gexState.dragStartOffset=gexState.offsetY;
-  });
-  canvas.addEventListener('mousemove',(e)=>{
-    gexState.mouseY=e.offsetY;gexState.mouseX=e.offsetX;gexState.mouseRawY=e.offsetY;
-    if(gexState.dragging){
-      gexState.offsetY=gexState.dragStartOffset-(e.offsetY-gexState.dragStartY);
-    }
-    drawGex();
-  });
-  canvas.addEventListener('mouseup',()=>{gexState.dragging=false});
-  canvas.addEventListener('mouseleave',()=>{gexState.dragging=false;gexState.mouseY=-1;drawGex()});
+function setupGex(){
+  const el=document.getElementById('gex-c');
+  el.addEventListener('wheel',function(e){e.preventDefault();e.stopPropagation();if(e.ctrlKey||e.metaKey){G.zm=Math.max(1,Math.min(6,G.zm*(e.deltaY>0?.85:1.15)))}else{G.off+=e.deltaY*1.5}requestAnimationFrame(drawGex)},{passive:false});
+  el.addEventListener('mousedown',function(e){G.drag=true;G.dy0=e.offsetY;G.do0=G.off;e.preventDefault()});
+  window.addEventListener('mousemove',function(e){const r=el.getBoundingClientRect();G.mx=e.clientX-r.left;G.my=e.clientY-r.top;if(G.drag){G.off=G.do0-(e.clientY-r.top-G.dy0);requestAnimationFrame(drawGex)}else if(G.mx>=0&&G.mx<=r.width&&G.my>=0&&G.my<=r.height){requestAnimationFrame(drawGex)}});
+  window.addEventListener('mouseup',function(){G.drag=false});
+  el.addEventListener('mouseleave',function(){G.hov=-1;G.my=-1;requestAnimationFrame(drawGex)});
+  let ty0=0,to0=0;
+  el.addEventListener('touchstart',function(e){if(e.touches.length===1){ty0=e.touches[0].clientY;to0=G.off}e.preventDefault()},{passive:false});
+  el.addEventListener('touchmove',function(e){if(e.touches.length===1){G.off=to0-(e.touches[0].clientY-ty0);requestAnimationFrame(drawGex)}e.preventDefault()},{passive:false});
 }
 
 // ═══ DATA ═══
 async function load(tk){
   setS(true,'LOADING...');
-  try{
-    const r=await fetch(`${API}?ticker=${tk}&expirations=4`);
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const d=await r.json();if(d.error)throw new Error(d.error);
-    D=d;render(d);setS(true,'LIVE — '+new Date().toLocaleTimeString());
-  }catch(e){console.error(e);setS(false,'ERROR');showE(e.message)}
+  try{const r=await fetch(`${API}?ticker=${tk}&expirations=4`);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();if(d.error)throw new Error(d.error);D=d;render(d);setS(true,'LIVE — '+new Date().toLocaleTimeString())}catch(e){console.error(e);setS(false,'ERROR');showE(e.message)}
 }
-function sw(tk,btn){ticker=tk;document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');gexState={offsetY:0,zoom:1,dragging:false,dragStartY:0,dragStartOffset:0,mouseY:-1};initChart();load(tk);resetT()}
+function sw(tk,btn){ticker=tk;document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));if(btn)btn.classList.add('on');G.off=0;G.zm=1;initPC();load(tk);resetT()}
 function resetT(){if(timer)clearInterval(timer);timer=setInterval(()=>load(ticker),REFRESH)}
 
 function render(d){
   document.getElementById('pp').textContent=fp(d.spotPrice);
-  document.getElementById('ptk').textContent=d.ticker;
-  document.getElementById('pnm').textContent=d.name;
-  const nb=document.getElementById('pn');nb.className='badge '+(d.netGex>=0?'pos':'neg');
-  nb.textContent='Net GEX: '+(d.netGex>=0?'+':'')+d.netGexFormatted;
+  document.getElementById('ptk').innerHTML=d.ticker+' · <span id="pnm">'+d.name+'</span>';
+  const nb=document.getElementById('pn');nb.className='badge '+(d.netGex>=0?'pos':'neg');nb.textContent='Net GEX: '+(d.netGex>=0?'+':'')+d.netGexFormatted;
+
+  // Regime
   const gP=d.gammaRegime==='POSITIVE';
-  document.getElementById('rcg').style.background=gP?'rgba(0,229,160,.08)':'rgba(255,61,90,.08)';
-  document.getElementById('rcg').style.borderColor=gP?'rgba(0,229,160,.25)':'rgba(255,61,90,.25)';
-  document.getElementById('rgv').style.color=gP?'var(--green)':'var(--red)';
-  document.getElementById('rgv').textContent=gP?'Positive Gamma':'Negative Gamma';
-  document.getElementById('rgd').textContent=gP?'Mean reversion likely':'Breakouts likely';
+  const gc=document.getElementById('sc-gr');gc.style.background=gP?'rgba(0,229,160,.06)':'rgba(255,61,90,.06)';gc.style.borderColor=gP?'rgba(0,229,160,.2)':'rgba(255,61,90,.2)';
+  document.getElementById('sv-gr').style.color=gP?'var(--green)':'var(--red)';document.getElementById('sv-gr').textContent=gP?'POSITIVE':'NEGATIVE';document.getElementById('sd-gr').textContent=gP?'Mean reversion':'Breakouts';
   const lv=d.volRegime==='LOW_VOL';
-  document.getElementById('rcv2').style.background=lv?'rgba(59,130,246,.08)':'rgba(249,115,22,.08)';
-  document.getElementById('rcv2').style.borderColor=lv?'rgba(59,130,246,.25)':'rgba(249,115,22,.25)';
-  document.getElementById('rvv').style.color=lv?'var(--cyan)':'#F97316';
-  document.getElementById('rvv').textContent=lv?'Low Volatility':'High Volatility';
-  document.getElementById('rvd').textContent=lv?'Compressed vol':'Expanded vol';
+  const vc=document.getElementById('sc-vr');vc.style.background=lv?'rgba(59,130,246,.06)':'rgba(249,115,22,.06)';vc.style.borderColor=lv?'rgba(59,130,246,.2)':'rgba(249,115,22,.2)';
+  document.getElementById('sv-vr').style.color=lv?'var(--cyan)':'#F97316';document.getElementById('sv-vr').textContent=lv?'LOW VOL':'HIGH VOL';document.getElementById('sd-vr').textContent=lv?'Compressed':'Expanded';
+
+  // Squeeze
+  const sq=calcSqueeze(d);
+  const sqc=document.getElementById('sc-sq');sqc.className='scard '+(sq.active?'squeeze-card':'squeeze-off');
+  document.getElementById('sv-sq').textContent=sq.label;document.getElementById('sv-sq').style.color=sq.active?'var(--zg)':'var(--silver3)';
+  document.getElementById('sd-sq').textContent=sq.desc+' ('+sq.pct+'%)';
+
+  // Gauge
   const vs=d.volatility||{score:0,label:'Calm'};
-  document.getElementById('gf').setAttribute('stroke-dashoffset',150.8-(vs.score/100*150.8));
+  document.getElementById('gf').setAttribute('stroke-dashoffset',125.6-(vs.score/100*125.6));
   let clr='var(--green)';if(vs.score>70)clr='var(--red)';else if(vs.score>40)clr='var(--gold)';else if(vs.score>20)clr='var(--cyan)';
-  document.getElementById('gf').setAttribute('stroke',clr);
-  document.getElementById('gp').textContent=vs.score+'%';
-  document.getElementById('gl').textContent=vs.label;
-  document.getElementById('gt').textContent=gP?'↑ Pinning':'↓ Trending';
-  updateChart(d);drawGex();renderLevels(d);
+  document.getElementById('gf').setAttribute('stroke',clr);document.getElementById('gp').textContent=vs.score+'%';
+  document.getElementById('gl').textContent=vs.label;document.getElementById('gt').textContent=gP?'↑ Pinning':'↓ Trending';
+
+  if(activeTab===0)updatePC(d);
+  if(activeTab===1)requestAnimationFrame(drawGex);
+  renderLevels(d);
 }
 
 function renderLevels(d){
-  const c=document.getElementById('ll'),spot=d.spotPrice,rows=[];
-  for(const[k,v]of Object.entries(d.levels)){const s=STY[k];if(!s||!v.strike)continue;rows.push({key:k,...v,...s,bg:s.color+'14',bdr:s.color+'40'})}
+  const el=document.getElementById('ll'),spot=d.spotPrice,rows=[];
+  for(const[k,v]of Object.entries(d.levels)){const s=STY[k];if(!s||!v.strike)continue;rows.push({key:k,...v,...s,bg:s.c+'14',bdr:s.c+'40'})}
   rows.sort((a,b)=>b.strike-a.strike);
   const mA=Math.max(...rows.map(r=>Math.abs(r.gex||0)),1);
   let h='';
   rows.forEach((r,i)=>{
-    const dist=dpct(spot,r.strike),above=r.strike>=spot,gv=r.gex||0;
+    const di=dp(spot,r.strike),ab=r.strike>=spot,gv=r.gex||0;
     const pct=mA>0?(Math.abs(gv)/mA*50):0;const bL=gv>=0?'50%':(50-pct)+'%';
-    h+=`<div class="lr" style="background:${r.bg};border:1px solid ${r.bdr};animation:fadeIn .4s ease ${i*.05}s both" onmouseover="this.style.boxShadow='0 0 16px ${r.bdr}'" onmouseout="this.style.boxShadow='none'">
-      <div class="li2">${r.icon}</div><div><div class="ln" style="color:${r.color}">${r.label}</div><div class="lde">${r.description}</div></div>
-      <div class="ls">${fp(r.strike)}</div><div class="ldi" style="color:${above?'var(--green)':'var(--red)'}">${above?'+':''}${dist}%</div>
-      <div class="lbc"><div class="lbm"></div><div class="lb" style="left:${bL};width:${pct}%;background:linear-gradient(90deg,${r.color}66,${r.color});animation-delay:${i*.05+.1}s"></div></div>
+    h+=`<div class="lr" style="background:${r.bg};border:1px solid ${r.bdr};animation:fadeIn .3s ease ${i*.04}s both" onmouseover="this.style.boxShadow='0 0 14px ${r.bdr}'" onmouseout="this.style.boxShadow='none'">
+      <div class="li">${r.icon}</div><div><div class="ln" style="color:${r.c}">${r.label}</div><div class="lds">${r.description}</div></div>
+      <div class="ls">${fp(r.strike)}</div><div class="ldi" style="color:${ab?'var(--green)':'var(--red)'}">${ab?'+':''}${di}%</div>
+      <div class="lbc"><div class="lbm"></div><div class="lb" style="left:${bL};width:${pct}%;background:linear-gradient(90deg,${r.c}66,${r.c});animation-delay:${i*.04+.1}s"></div></div>
       <div class="lg" style="color:${gv>=0?'var(--green)':'var(--red)'}">${gv>=0?'+':''}${fg(gv)}</div></div>`;
-  });c.innerHTML=h;
+  });el.innerHTML=h;
 }
 
-document.addEventListener('DOMContentLoaded',()=>{initChart();setupGexEvents();load(ticker);resetT()});
-window.addEventListener('resize',()=>{if(chart)chart.applyOptions({width:document.getElementById('chart-wrap').clientWidth,height:document.getElementById('chart-wrap').clientHeight});if(D)drawGex()});
+document.addEventListener('DOMContentLoaded',function(){initPC();setupGex();load(ticker);resetT()});
+window.addEventListener('resize',function(){if(pc)pc.applyOptions({width:document.getElementById('price-box').clientWidth,height:document.getElementById('price-box').clientHeight});if(activeTab===1)drawGex()});
 </script>
 </body>
 </html>
