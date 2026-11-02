@@ -2,7 +2,7 @@
 // Netlify la ejecuta sola cada 10 minutos (Scheduled Functions). No necesita dependencias.
 //
 // Un mensaje cuenta como logro cuando un validador (tú o un moderador) reacciona con:
-//   💰 payout cobrado   ·   🎯 evaluación superada   ·   ⭐ otro logro
+//   💰 payout cobrado   ·   🎯 evaluación superada   ·   ✅ o ⭐ otro logro
 // Si quita la reacción o se borra el mensaje, el logro desaparece del ranking en la siguiente pasada.
 
 const API = 'https://discord.com/api/v10';
@@ -12,6 +12,7 @@ export const TIPOS = [
   { emoji: '💰', tipo: 'payout' },
   { emoji: '🎯', tipo: 'evaluacion' },
   { emoji: '⭐', tipo: 'otro' },
+  { emoji: '✅', tipo: 'otro' }, // la validación que ya usáis en el canal
 ];
 
 const PRESUPUESTO_MS = 24000; // las funciones programadas tienen 30 s; dejamos margen
