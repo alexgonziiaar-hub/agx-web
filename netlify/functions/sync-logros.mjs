@@ -1,9 +1,10 @@
-// Ranking AGX: lee el canal de logros de Discord y guarda en Supabase los logros validados.
-// Netlify la ejecuta sola cada 10 minutos (Scheduled Functions). No necesita dependencias.
+// Ranking AGX: lee el canal de logros de Discord y guarda los logros validados en Netlify Blobs.
+// Netlify la ejecuta sola cada 10 minutos (Scheduled Functions).
 //
 // Un mensaje cuenta como logro cuando un validador (tú o un moderador) reacciona con:
 //   💰 payout cobrado   ·   🎯 evaluación superada   ·   ✅ o ⭐ otro logro
 // Si quita la reacción o se borra el mensaje, el logro desaparece del ranking en la siguiente pasada.
+import { getStore } from '@netlify/blobs';
 
 const API = 'https://discord.com/api/v10';
 
@@ -39,26 +40,10 @@ async function discord(ruta, intento = 0) {
     return discord(ruta, intento + 1);
   }
   if (r.status === 404) return null;
+  if (r.status === 401) throw new Error('Discord rechaza el token: revisa DISCORD_TOKEN');
+  if (r.status === 403) throw new Error('El bot no tiene acceso al canal: invítalo al servidor y dale permiso para ver el canal y leer el historial');
   if (!r.ok) throw new Error(`Discord ${r.status} en ${ruta}: ${await r.text()}`);
   return r.json();
-}
-
-async function supa(ruta, { method = 'GET', body, prefer } = {}) {
-  const key = env('SUPABASE_SERVICE_KEY');
-  const r = await fetch(`${env('SUPABASE_URL').replace(/\/$/, '')}/rest/v1/${ruta}`, {
-    method,
-    headers: {
-      apikey: key,
-      // Las claves nuevas de Supabase (sb_secret_…) van solo en apikey; la service_role clásica, también en Authorization
-      ...(key.startsWith('sb_') ? {} : { Authorization: `Bearer ${key}` }),
-      'Content-Type': 'application/json',
-      ...(prefer ? { Prefer: prefer } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  const txt = await r.text();
-  if (!r.ok) throw new Error(`Supabase ${r.status} en ${ruta}: ${txt}`);
-  return txt ? JSON.parse(txt) : null;
 }
 
 const limpiar = (s = '') =>
@@ -84,7 +69,7 @@ function fila(m, tipo, validador, guild, canal) {
   };
 }
 
-export async function sincronizar(ahora = Date.now()) {
+export async function sincronizar(ahora = Date.now(), store = getStore('ranking-agx')) {
   const t0 = Date.now();
   const sinTiempo = () => Date.now() - t0 > PRESUPUESTO_MS;
   const canal = env('DISCORD_CANAL_LOGROS');
@@ -94,7 +79,7 @@ export async function sincronizar(ahora = Date.now()) {
   const corte = ahora - ventanaDias * 864e5;
 
   const info = await discord(`/channels/${canal}`);
-  if (!info) throw new Error('No encuentro el canal: revisa DISCORD_CANAL_LOGROS y que el bot pueda verlo');
+  if (!info) throw new Error('No encuentro el canal: revisa DISCORD_CANAL_LOGROS');
   const guild = info.guild_id;
 
   // 1. Mensajes de la ventana, del más nuevo al más antiguo
@@ -112,11 +97,9 @@ export async function sincronizar(ahora = Date.now()) {
     antes = lote[lote.length - 1].id;
   }
 
-  // 2. Lo que ya está guardado dentro de la ventana
-  const desde = encodeURIComponent(new Date(corte).toISOString());
-  const guardados = new Map(
-    ((await supa(`logros?select=message_id,tipo,validado_por&fecha=gte.${desde}`)) || []).map((r) => [r.message_id, r])
-  );
+  // 2. Lo que ya está guardado
+  const todos = (await store.get('logros', { type: 'json' })) || [];
+  const guardados = new Map(todos.filter((r) => Date.parse(r.fecha) >= corte).map((r) => [r.message_id, r]));
 
   // 3. Comprobar qué mensajes están validados
   const validos = [];
@@ -149,31 +132,20 @@ export async function sincronizar(ahora = Date.now()) {
     if (elegido) validos.push(fila(m, elegido.tipo, validador, guild, canal));
   }
 
-  // 4. Guardar los válidos (insertar o actualizar nombre, avatar y tipo)
-  for (let i = 0; i < validos.length; i += 200) {
-    await supa('logros?on_conflict=message_id', {
-      method: 'POST',
-      body: validos.slice(i, i + 200),
-      prefer: 'resolution=merge-duplicates,return=minimal',
-    });
-  }
-
-  // 5. Retirar los que ya no cuentan: sin validación o mensaje borrado
+  // 4. Retirar los que ya no cuentan (sin validación o mensaje borrado) y guardar los válidos
   const vistos = new Set(mensajes.map((m) => m.id));
   const validosIds = new Set(validos.map((v) => v.message_id));
   const retirar = [...guardados.keys()].filter(
     (id) => !validosIds.has(id) && (revisados.has(id) || (completo && !vistos.has(id)))
   );
-  for (let i = 0; i < retirar.length; i += 100) {
-    await supa(`logros?message_id=in.(${retirar.slice(i, i + 100).join(',')})`, { method: 'DELETE', prefer: 'return=minimal' });
-  }
+  const mapa = new Map(todos.map((r) => [r.message_id, r]));
+  retirar.forEach((id) => mapa.delete(id));
+  validos.forEach((v) => mapa.set(v.message_id, v));
+  const final = [...mapa.values()].sort((a, b) => Date.parse(b.fecha) - Date.parse(a.fecha));
+  await store.setJSON('logros', final);
 
-  const resumen = { mensajes: mensajes.length, validados: validos.length, retirados: retirar.length, pendientes, completo };
-  await supa('sync_estado?on_conflict=id', {
-    method: 'POST',
-    body: [{ id: 1, actualizado: new Date().toISOString(), mensajes: mensajes.length, detalle: JSON.stringify(resumen) }],
-    prefer: 'resolution=merge-duplicates,return=minimal',
-  });
+  const resumen = { mensajes: mensajes.length, validados: validos.length, retirados: retirar.length, pendientes, completo, total: final.length };
+  await store.setJSON('estado', { actualizado: new Date().toISOString(), ...resumen });
   return resumen;
 }
 
