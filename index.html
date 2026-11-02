@@ -1024,6 +1024,41 @@ html.vt-modo::view-transition-new(root){z-index:2}
 .avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .alumno-txt a.salir{color:var(--violeta-claro);text-decoration:none}
 .alumno-txt a.salir:hover{text-decoration:underline}
+
+/* ===================== Alumnos (revisión de Alex) ===================== */
+.al-buscar{width:min(300px,100%);min-height:42px;padding:0 14px;border:1px solid var(--borde-2);border-radius:12px;background:var(--fondo);color:var(--tinta);font-size:15px}
+.al-buscar:focus{outline:2px solid var(--violeta);outline-offset:1px}
+.al-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.al-card{display:flex;flex-direction:column;gap:14px;min-width:0;padding:18px;border:1px solid var(--borde);border-radius:18px;background:var(--fondo);color:var(--tinta);text-decoration:none;transition:border-color .2s,box-shadow .25s,transform .25s}
+.al-card:hover{border-color:var(--violeta);box-shadow:var(--sombra);transform:translateY(-3px)}
+.al-top{display:flex;align-items:center;gap:12px;min-width:0}
+.al-top .rk-av{width:46px;height:46px;font-size:15px}
+.al-quien{display:flex;flex-direction:column;min-width:0}
+.al-nom{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:16px;font-weight:720}
+.al-sub{font-size:13px;color:var(--tinta-2)}
+.al-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding-top:12px;border-top:1px solid var(--borde)}
+.al-stats>span{display:flex;flex-direction:column;gap:2px;min-width:0;font-size:12px;color:var(--tinta-2)}
+.al-stats b{font-size:17px;font-weight:750;color:var(--tinta);font-variant-numeric:tabular-nums;white-space:nowrap}
+.al-stats .p b{color:var(--compra)}
+.al-stats .n b{color:var(--venta)}
+.al-pend,.al-ok{align-self:flex-start;padding:4px 10px;border-radius:999px;font-size:12.5px;font-weight:700}
+.al-pend{background:var(--morado-suave);color:var(--morado)}
+.al-ok{background:var(--compra-suave);color:var(--compra)}
+.admin-carga{display:flex;flex-direction:column;align-items:center;gap:12px;padding:60px 20px;text-align:center;color:var(--tinta-2)}
+.admin-carga .entrada-carga span{background:var(--violeta)}
+.volver{display:inline-flex;align-items:center;gap:6px;margin-bottom:10px;color:var(--morado);font-size:14px;font-weight:650;text-decoration:none}
+.volver:hover{text-decoration:underline}
+.volver svg{width:14px;height:14px}
+.rev-cab{display:flex;align-items:center;gap:12px}
+.rev-cab .rk-av{width:44px;height:44px;font-size:15px}
+.det-alex.rev{align-items:flex-start}
+.rev-com{flex:1;min-width:0}
+.rev-com textarea{display:block;width:100%;margin-top:6px;padding:10px 12px;border:1px solid var(--borde-2);border-radius:10px;background:var(--fondo);color:var(--tinta);font-size:14.5px;line-height:1.45;resize:vertical}
+.rev-com textarea:focus{outline:2px solid var(--violeta);outline-offset:1px}
+.rev-acc{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:8px}
+.rev-estado{font-size:13px;color:var(--tinta-2)}
+@media (max-width:1060px){ .al-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:640px){ .al-grid{grid-template-columns:minmax(0,1fr)} }
 </style>
 
 </head>
@@ -1043,6 +1078,7 @@ html.vt-modo::view-transition-new(root){z-index:2}
       <a href="#diario" data-ruta="diario"><span class="nav-ico" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16l4-5 3 3 6-8"/><path d="M13 6h3v3"/></svg></span><span class="nav-txt"><b>Diario de trading</b><small>Operaciones y estadísticas</small></span></a>
       <a href="#formacion" data-ruta="formacion"><span class="nav-ico" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7l8-4 8 4-8 4z"/><path d="M5 9v4c0 1.5 2.5 3 5 3s5-1.5 5-3V9"/></svg></span><span class="nav-txt"><b>Formación</b><small>Test por temas y examen</small></span></a>
       <a href="#ranking" data-ruta="ranking"><span class="nav-ico" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8v4.5a4 4 0 01-8 0z"/><path d="M6 5H3.5c0 2 1.2 3.3 3 3.4M14 5h2.5c0 2-1.2 3.3-3 3.4"/><path d="M10 11.5V14M7 17h6M8 14h4"/></svg></span><span class="nav-txt"><b>Ranking</b><small>Logros y premio del mes</small></span></a>
+      <a href="#alumnos" data-ruta="alumnos" id="nav-alumnos" hidden><span class="nav-ico" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="7" r="3"/><path d="M2 17c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M13 4.2a3 3 0 010 5.6M15.5 12.4c1.5.7 2.5 2.4 2.5 4.6"/></svg></span><span class="nav-txt"><b>Alumnos</b><small>Revisa sus operaciones</small></span></a>
     </nav>
     <div class="lat-widgets" id="lat-widgets"></div>
     <div class="alumno"><span class="avatar" id="alumno-av" aria-hidden="true">JM</span><span class="alumno-txt"><b id="alumno-nombre">Javi Martín</b><span id="alumno-sub">Alumno de Flow Advanced</span></span></div>
@@ -1133,6 +1169,7 @@ const vista=$('#vista');
 const HOY=new Date();
 const SERVIDOR=/(^|\.)agxcommunity\.com$|\.netlify\.app$/.test(location.hostname);
 let YO=null;
+let revId=null, REV=null, estadoPropio=null, adminLista=null, adminCarga=0;
 const REDUCIR=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 try{ if(localStorage.getItem('agx-modo')==='oscuro') document.documentElement.dataset.modo='oscuro'; }catch(e){}
 
@@ -2172,6 +2209,7 @@ function cargar(){
 }
 let tGuardar=null;
 function guardar(){
+  if(REV) return;
   if(!SERVIDOR){ try{ localStorage.setItem(CLAVE,JSON.stringify(state)); }catch(e){} return; }
   clearTimeout(tGuardar); tGuardar=setTimeout(()=>{ tGuardar=null; subirDatos(false); },700);
 }
@@ -2327,6 +2365,7 @@ function capturaEjemplo(t){
 function obtenerCaptura(id){
   const t=state.trades.find(x=>x.id===id); if(!t) return Promise.resolve(null);
   if(capturas.has(id)) return Promise.resolve(capturas.get(id));
+  if(REV) return fetch('/api/admin/captura?alumno='+encodeURIComponent(REV.id)+'&id='+encodeURIComponent(id),{credentials:'same-origin'}).then(r=>r.ok?r.text():null).then(u=>{ if(u) capturas.set(id,u); return u; }).catch(()=>null);
   if(t.ejemplo) return Promise.resolve(capturaEjemplo(t));
   return IDB.get(id).then(u=>{ if(u) capturas.set(id,u); return u||null; }).catch(()=>null);
 }
@@ -2380,7 +2419,8 @@ function progresoForm(){
   TEMAS.forEach(t=>{ const pr=state.temas[t.id]; if(pr) dom+=pr.mejor; });
   return {dom,total,pct:dom/total};
 }
-function pintarLateral(){
+function pintarLateral(){ if(estadoPropio){ const s=state; state=estadoPropio; try{ pintarLateral0(); } finally { state=s; } } else pintarLateral0(); }
+function pintarLateral0(){
   let u=0, n=0; state.trades.forEach(t=>{ if(enSemana(t.fecha)){ u+=calc(t).usd; n++; } });
   const f=progresoForm();
   $('#lat-widgets').innerHTML=`<div class="lw"><p>Esta semana, ${n} ${n===1?'operación':'operaciones'}</p><b class="${claseO(u)}">${n?fmtUSD(u):MENOS}</b></div>
@@ -2392,13 +2432,14 @@ function pintarLateral(){
 function vistaDiario(){
   const seg=['semana','mes','todo'].map(k=>`<button type="button" data-accion="periodo" data-periodo="${k}" aria-pressed="${state.periodo===k}">${PER_T[k]}</button>`).join('');
   return `<header class="cab-modulo entra">
-    <div><h1>Diario de trading</h1><p class="sub">Cada operación con su captura de ATAS, su setup y su resultado, con los comentarios de Alex.</p></div>
-    <button type="button" class="boton grande" data-accion="nueva" aria-keyshortcuts="N">${ICO.mas}Nueva operación<kbd class="kbd-b" aria-hidden="true">N</kbd></button>
+    ${REV?`<div><a class="volver" href="#alumnos">${ICO.izq}Todos los alumnos</a><div class="rev-cab">${avatarR({discord_id:REV.id,nombre:REV.nombre,avatar_url:REV.avatar})}<h1>Diario de ${esc(REV.nombre)}</h1></div><p class="sub">Abre una operación para ver su captura de ATAS y dejarle tu comentario. Lo verá en su diario.</p></div>`
+    :`<div><h1>Diario de trading</h1><p class="sub">Cada operación con su captura de ATAS, su setup y su resultado, con los comentarios de Alex.</p></div>
+    <button type="button" class="boton grande" data-accion="nueva" aria-keyshortcuts="N">${ICO.mas}Nueva operación<kbd class="kbd-b" aria-hidden="true">N</kbd></button>`}
   </header>
   <section class="hero hero-diario entra" aria-labelledby="hero-saludo">
     <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="hero-izq">
-      <div class="hero-top"><p class="hero-saludo" id="hero-saludo">${saludo()}, ${esc(nombreCorto())}</p><div class="seg-oscuro" role="group" aria-label="Periodo">${seg}</div></div>
+      <div class="hero-top"><p class="hero-saludo" id="hero-saludo">${REV?esc(REV.nombre):saludo()+', '+esc(nombreCorto())}</p><div class="seg-oscuro" role="group" aria-label="Periodo">${seg}</div></div>
       <p class="hero-etq" id="hero-etq"></p>
       <p class="hero-neto" id="hero-neto">0 $</p>
       <p class="hero-sub" id="hero-sub"></p>
@@ -2422,11 +2463,11 @@ function vistaDiario(){
   </div>
   <div class="fila b">
     <section class="panel entra" aria-labelledby="t-setups"><div class="panel-cab"><h2 id="t-setups">Rendimiento por setup</h2><span class="ayuda-click">Pulsa un setup para ver sus operaciones</span></div><div id="setups"></div></section>
-    <section class="panel entra" aria-labelledby="t-com"><div class="panel-cab"><h2 id="t-com">Comentarios de Alex</h2><span class="panel-meta">Sobre tus operaciones</span></div><div id="comentarios"></div></section>
+    <section class="panel entra" aria-labelledby="t-com"><div class="panel-cab"><h2 id="t-com">${REV?'Tus comentarios':'Comentarios de Alex'}</h2><span class="panel-meta">${REV?'Los últimos que le has dejado':'Sobre tus operaciones'}</span></div><div id="comentarios"></div></section>
   </div>
   <section class="panel entra" id="panel-ops" aria-labelledby="t-ops"><div class="panel-cab"><h2 id="t-ops">Operaciones</h2><span class="panel-meta" id="ops-meta"></span></div>
     <div id="filtros"></div><div id="aviso-ejemplo"></div><div class="tabla-wrap"><div id="tabla"></div></div></section>
-  <button type="button" class="fab" data-accion="nueva" aria-label="Nueva operación">${ICO.mas}</button>`;
+  ${REV?'':`<button type="button" class="fab" data-accion="nueva" aria-label="Nueva operación">${ICO.mas}</button>`}`;
 }
 function pintarDatos(){
   const ts=filtradas();
@@ -2626,9 +2667,9 @@ function pintarSetups(ts){
 function pintarComentarios(){
   const el=$('#comentarios'); if(!el) return;
   const cs=state.trades.filter(t=>t.comentario).sort((a,b)=>b.fecha.localeCompare(a.fecha)).slice(0,4);
-  if(!cs.length){ el.innerHTML='<div class="panel-cuerpo"><p class="vacio">Cuando Alex revise tus operaciones, sus comentarios aparecen aquí.</p></div>'; return; }
+  if(!cs.length){ el.innerHTML='<div class="panel-cuerpo"><p class="vacio">'+(REV?'Todavía no le has comentado ninguna operación.':'Cuando Alex revise tus operaciones, sus comentarios aparecen aquí.')+'</p></div>'; return; }
   el.innerHTML='<ul class="coments">'+cs.map(t=>`<li><span class="avatar peq" aria-hidden="true">AG</span><div>
-    <p class="coment-meta"><b>Alex</b> en tu operación del ${fechaCorta(t.fecha)}, ${esc(t.setup)}</p><p class="txt">${esc(t.comentario)}</p>
+    <p class="coment-meta"><b>${REV?'Tú':'Alex'}</b> en ${REV?'su':'tu'} operación del ${fechaCorta(t.fecha)}, ${esc(t.setup)}</p><p class="txt">${esc(t.comentario)}</p>
     <button type="button" class="enlace" data-accion="ir-op" data-id="${t.id}">Ver operación</button></div></li>`).join('')+'</ul>';
 }
 function pintarAviso(){
@@ -2677,9 +2718,10 @@ function pintarTabla(){
         <button type="button" class="det-cap" data-accion="ver-captura" data-id="${t.id}" aria-label="Ampliar captura de ATAS"><img data-cap="${t.id}" alt="Captura de ATAS de la entrada"></button>
         <div class="det-info">
           <div><h3>Resultado</h3><p><b class="${clase(c.usd)}">${fmtUSD(c.usd)}</b> con ${t.ct} ${t.ct===1?'contrato':'contratos'} de ${esc(t.inst)} (${esc(ins.nombre)}), sesión de ${esc(t.sesion)}.</p></div>
-          <div><h3>Tu nota</h3><p>${t.nota?esc(t.nota):'Sin nota.'}</p></div>
-          <div class="det-alex"><span class="avatar peq" aria-hidden="true">AG</span><div><h3>Comentario de Alex</h3><p>${t.comentario?esc(t.comentario):'Todavía sin revisar.'}</p></div></div>
-          <div class="detalle-acc">${acc}</div>
+          <div><h3>${REV?'Su nota':'Tu nota'}</h3><p>${t.nota?esc(t.nota):'Sin nota.'}</p></div>
+          ${REV?`<div class="det-alex rev"><span class="avatar peq" aria-hidden="true">AG</span><div class="rev-com"><h3><label for="com-${t.id}">Tu comentario</label></h3><textarea id="com-${t.id}" rows="3" maxlength="2000" placeholder="Qué ha hecho bien y qué puede mejorar en esta entrada">${esc(t.comentario||'')}</textarea><div class="rev-acc"><button type="button" class="boton peq" data-accion="guardar-com" data-id="${t.id}">Guardar comentario</button><span class="rev-estado" id="com-est-${t.id}" role="status"></span></div></div></div>`
+          :`<div class="det-alex"><span class="avatar peq" aria-hidden="true">AG</span><div><h3>Comentario de Alex</h3><p>${t.comentario?esc(t.comentario):'Todavía sin revisar.'}</p></div></div>
+          <div class="detalle-acc">${acc}</div>`}
         </div></div></td></tr>`;
     }
   });
@@ -3050,6 +3092,7 @@ function accionesPaleta(){
   TEMAS.forEach((t,i)=>a.push({g:'Formación',t:`Practicar tema ${i+1}: ${t.nombre}`,k:'test practica',f:()=>irRuta('formacion',()=>empezar('practica',t.id))}));
   a.push({g:'Ranking',t:'Ir al ranking de logros',k:'premio discord podio clasificacion logros',f:()=>irRuta('ranking')});
   a.push({g:'Ranking',t:'Ver ranking histórico',k:'todos campeones historico',f:()=>irRuta('ranking',()=>{ rank.periodo='historico'; render(); })});
+  if(YO && YO.admin) a.push({g:'Alumnos',t:'Ver las operaciones de los alumnos',k:'admin revisar comentarios alumnos diario',f:()=>irRuta('alumnos')});
   if(SERVIDOR && YO) a.push({g:'Ajustes',t:'Cerrar sesión',k:'salir logout desconectar cuenta discord',f:()=>{ location.href='/api/auth/salir'; }});
   a.push({g:'Ajustes',t:document.documentElement.dataset.modo==='oscuro'?'Cambiar a modo claro':'Cambiar a modo oscuro',k:'tema noche oscuro claro',f:()=>cambiarModo($('#bs-modo'))});
   return a;
@@ -3334,17 +3377,98 @@ function trasRanking(){
   tickRanking(); if(rankReloj) clearInterval(rankReloj); rankReloj=setInterval(tickRanking,1000);
 }
 
+
+/* ---------- Alumnos (solo Alex): revisar operaciones y comentar ---------- */
+function cargandoAdmin(txt){ return `<div class="admin-carga" role="status"><div class="entrada-carga"><span></span><span></span><span></span></div><p>${esc(txt)}</p></div>`; }
+async function cargarAlumnos(){
+  const r=await fetch('/api/admin/alumnos',{credentials:'same-origin',cache:'no-store'});
+  if(!r.ok) throw new Error(r.status);
+  adminLista=(await r.json()).alumnos||[]; adminCarga=Date.now();
+}
+function entrarRevision(a){
+  if(!estadoPropio) estadoPropio=state;
+  REV={id:a.id,nombre:a.nombre,avatar:a.avatar};
+  state=Object.assign(estadoVacio(),JSON.parse(JSON.stringify(a.datos||{})),{periodo:'todo',progresoEjemplo:false});
+  capturas.clear(); abiertas.clear(); borrando=null;
+  Object.keys(filtro).forEach(k=>{ filtro[k]=null; });
+}
+function salirRevision(){
+  if(estadoPropio){ state=estadoPropio; estadoPropio=null; capturas.clear(); abiertas.clear(); Object.keys(filtro).forEach(k=>{ filtro[k]=null; }); }
+  REV=null;
+}
+async function abrirRevision(id){
+  try{
+    if(!adminLista) await cargarAlumnos();
+    const a=adminLista.find(x=>x.id===id);
+    if(ruta!=='alumnos' || revId!==id) return;
+    if(!a){ vista.innerHTML=`<div class="admin-carga"><p>No encuentro a ese alumno.</p><a class="boton sec" href="#alumnos">Volver a la lista</a></div>`; return; }
+    entrarRevision(a); render();
+  }catch(e){ vista.innerHTML=`<div class="admin-carga"><p>No se ha podido cargar el diario. Revisa tu conexión.</p><a class="boton sec" href="#alumnos">Volver a la lista</a></div>`; }
+}
+function renderDiario(){
+  vista.innerHTML=vistaDiario(); pintarDatos();
+  const c=$('#curva');
+  if(c && window.ResizeObserver){ ro=new ResizeObserver(()=>{ const w=Math.round(c.clientWidth); if(w && Math.abs(w-anchoCurva)>2) pintarCurva(filtradas()); }); ro.observe(c); }
+  if(REV) $$('.rk-av img',vista).forEach(i=>i.addEventListener('error',()=>i.remove(),{once:true}));
+}
+async function guardarComentario(id,b){
+  if(!REV) return;
+  const ta=$('#com-'+id), est=$('#com-est-'+id); if(!ta) return;
+  const texto=ta.value.trim(); b.disabled=true; if(est) est.textContent='Guardando…';
+  try{
+    const r=await fetch('/api/admin/comentario',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({alumno:REV.id,trade:id,texto}),credentials:'same-origin'});
+    if(!r.ok) throw new Error(r.status);
+    const t=state.trades.find(x=>x.id===id); if(t) t.comentario=texto;
+    const a=(adminLista||[]).find(x=>x.id===REV.id); if(a && a.datos){ const tt=(a.datos.trades||[]).find(x=>x.id===id); if(tt) tt.comentario=texto; }
+    if(est) est.textContent=texto?'Guardado. Lo verá en su diario.':'Comentario borrado.';
+    pintarComentarios(); toast(texto?'Comentario guardado':'Comentario borrado');
+  }catch(e){ if(est) est.textContent='No se ha podido guardar. Vuelve a intentarlo.'; }
+  finally{ b.disabled=false; }
+}
+function resumenAlumno(a){
+  const ts=(a.datos && a.datos.trades)||[], hoy=new Date();
+  const mes=ts.filter(t=>{ const d=fechaObj(t.fecha); return d.getFullYear()===hoy.getFullYear() && d.getMonth()===hoy.getMonth(); });
+  const temas=(a.datos && a.datos.temas)||{}; let dom=0;
+  TEMAS.forEach(t=>{ const pr=temas[t.id]; if(pr) dom+=Math.min(pr.mejor,nTema(t.id)); });
+  return { n:ts.length, nMes:mes.length, usdMes:mes.reduce((s,t)=>s+calc(t).usd,0), semana:ts.filter(t=>enSemana(t.fecha)).length,
+    sinCom:ts.filter(t=>!t.comentario).length, ult:ts.reduce((m,t)=>t.fecha>m?t.fecha:m,''), form:dom/PREGUNTAS.length };
+}
+function vistaAlumnos(){
+  const cab=`<header class="cab-modulo entra"><div><h1>Alumnos</h1><p class="sub">Las operaciones de cada alumno con su captura de ATAS. Entra en uno para revisar su diario y dejarle comentarios.</p></div>${adminLista?'<input type="search" class="al-buscar" id="al-buscar" placeholder="Buscar alumno" aria-label="Buscar alumno">':''}</header>`;
+  if(!adminLista){
+    cargarAlumnos().then(()=>{ if(ruta==='alumnos' && !revId) render(); }).catch(()=>{ if(ruta==='alumnos' && !revId) vista.innerHTML=cab+'<div class="admin-carga"><p>No se ha podido cargar la lista de alumnos. Revisa tu conexión.</p></div>'; });
+    return cab+cargandoAdmin('Cargando alumnos…');
+  }
+  if(Date.now()-adminCarga>60e3) cargarAlumnos().then(()=>{ if(ruta==='alumnos' && !revId) render(); }).catch(()=>{});
+  const lista=adminLista.map(a=>({a,r:resumenAlumno(a)})).sort((x,y)=>(y.r.ult||'').localeCompare(x.r.ult||'') || String(y.a.ultimaVez||'').localeCompare(String(x.a.ultimaVez||'')));
+  if(!lista.length) return cab+'<div class="panel"><div class="panel-cuerpo"><p class="vacio">Todavía no ha entrado ningún alumno. Cuando entren con su Discord aparecerán aquí.</p></div></div>';
+  const tot=lista.reduce((s,x)=>({semana:s.semana+x.r.semana,sinCom:s.sinCom+x.r.sinCom,form:s.form+x.r.form}),{semana:0,sinCom:0,form:0});
+  const kc=(t,v,s,i,d)=>`<div class="kcard entra" style="animation-delay:${d}s"><div class="kcard-cab"><p class="kcard-t">${t}</p><span class="kicono">${i}</span></div><p class="kcard-v">${v}</p><p class="kcard-s">${s}</p></div>`;
+  const kpis=`<div class="kpis4">${kc('Alumnos',lista.length,'han entrado al área',ICO_K.barras,0)}${kc('Esta semana',tot.semana,tot.semana===1?'operación registrada':'operaciones registradas',ICO_K.rayo,.05)}${kc('Sin comentar',tot.sinCom,'operaciones esperando tu revisión',ICO_I.alerta,.1)}${kc('Formación media',Math.round(tot.form/lista.length*100)+' %','de las 336 preguntas',ICO_K.diana,.15)}</div>`;
+  const cards=lista.map(({a,r},k)=>`<a class="al-card entra" style="animation-delay:${Math.min(k,12)*0.03}s" href="#alumnos/${encodeURIComponent(a.id)}" data-nombre="${esc(a.nombre)}">
+      <span class="al-top">${avatarR({discord_id:a.id,nombre:a.nombre,avatar_url:a.avatar})}<span class="al-quien"><b class="al-nom">${esc(a.nombre)}</b><span class="al-sub">${r.ult?'Última operación: '+fechaCorta(r.ult):'Sin operaciones todavía'}</span></span></span>
+      <span class="al-stats"><span><b>${r.nMes}</b>ops. este mes</span><span class="${claseO(r.usdMes)}"><b>${r.nMes?fmtUSD(r.usdMes):MENOS}</b>resultado del mes</span><span><b>${Math.round(r.form*100)} %</b>formación</span></span>
+      ${r.sinCom?`<span class="al-pend">${r.sinCom} ${r.sinCom===1?'operación sin comentar':'operaciones sin comentar'}</span>`:(r.n?'<span class="al-ok">Todo revisado</span>':'')}
+    </a>`).join('');
+  return cab+kpis+`<div class="al-grid" id="al-grid">${cards}</div>`;
+}
+function trasAlumnos(){
+  $$('.rk-av img',vista).forEach(i=>i.addEventListener('error',()=>i.remove(),{once:true}));
+  const q=$('#al-buscar'); if(q) q.addEventListener('input',()=>{ const v=norm(q.value.trim()); $$('.al-card',vista).forEach(c=>{ c.hidden=!!v && !norm(c.dataset.nombre).includes(v); }); });
+}
+
 /* ---------- Render y eventos ---------- */
-function leerRuta(){ ruta=location.hash==='#formacion'?'formacion':(location.hash==='#ranking'?'ranking':'diario'); }
+function leerRuta(){ const hs=location.hash; if(/^#alumnos(\/|$)/.test(hs) && YO && YO.admin){ ruta='alumnos'; revId=hs.split('/')[1]||null; return; } revId=null; ruta=hs==='#formacion'?'formacion':(hs==='#ranking'?'ranking':'diario'); }
 function render(){
   $$('.nav a').forEach(a=>{ if(a.dataset.ruta===ruta) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
   if(ro){ ro.disconnect(); ro=null; }
+  if(!(ruta==='alumnos' && revId && REV && REV.id===revId)) salirRevision();
   if(ruta!=='ranking' && rankReloj){ clearInterval(rankReloj); rankReloj=null; }
   if(ruta==='ranking'){ vista.innerHTML=vistaRanking(); trasRanking(); }
-  else if(ruta==='diario'){
-    vista.innerHTML=vistaDiario(); pintarDatos();
-    const c=$('#curva');
-    if(c && window.ResizeObserver){ ro=new ResizeObserver(()=>{ const w=Math.round(c.clientWidth); if(w && Math.abs(w-anchoCurva)>2) pintarCurva(filtradas()); }); ro.observe(c); }
+  else if(ruta==='diario'){ renderDiario(); }
+  else if(ruta==='alumnos'){
+    if(revId){ if(REV && REV.id===revId) renderDiario(); else { vista.innerHTML=cargandoAdmin('Abriendo el diario del alumno…'); abrirRevision(revId); } }
+    else { vista.innerHTML=vistaAlumnos(); trasAlumnos(); }
   } else {
     vista.innerHTML=!quiz?vistaFormacion():(quiz.fin?vistaResultado():vistaPregunta());
     if(!quiz){ const pc=Math.round(progresoForm().pct*100); odometro($('#f-pct'),pc+' %','Completado: '+pc+' %'); }
@@ -3357,7 +3481,9 @@ document.addEventListener('click',e=>{
   if(e.target.id==='paleta'){ cerrarPaleta(); return; }
   const po=e.target.closest('.pal-op'); if(po){ ejecutarPaleta(Number(po.dataset.i)); return; }
   const b=e.target.closest('[data-accion]'); if(!b||b.disabled) return;
+  if(REV && ['nueva','editar-obj','borrar','borrar-si','borrar-no','borrar-ejemplos'].includes(b.dataset.accion)) return;
   switch(b.dataset.accion){
+    case 'guardar-com': guardarComentario(b.dataset.id,b); break;
     case 'paleta': abrirPaleta(); break;
     case 'modo': cambiarModo(b); break;
     case 'editar-obj': editandoObj=true; pintarChips(); { const i=$('#obj-in'); if(i){ i.focus(); i.select(); } } break;
@@ -3490,7 +3616,8 @@ function pintarAlumno(){
   const n=String(YO.nombre||'Alumno'), ini=n.trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase()||'A';
   const av=$('#alumno-av'); av.textContent=ini; if(YO.avatar){ const im=new Image(); im.alt=''; im.src=YO.avatar; im.addEventListener('error',()=>im.remove(),{once:true}); av.appendChild(im); }
   $('#alumno-nombre').textContent=n;
-  $('#alumno-sub').innerHTML='Alumno AGX · <a class="salir" href="/api/auth/salir">Salir</a>';
+  $('#alumno-sub').innerHTML=(YO.admin?'Administrador':'Alumno AGX')+' · <a class="salir" href="/api/auth/salir">Salir</a>';
+  if(YO.admin) $('#nav-alumnos').hidden=false;
 }
 async function arrancar(){
   if(!SERVIDOR){ iniciarApp(); return; }
