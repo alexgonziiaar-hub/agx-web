@@ -4,7 +4,8 @@ const VALOR_PUNTO={NQ:20,ES:50,YM:5,RTY:50,MNQ:2,MES:5,MYM:0.5,M2K:5};
 const PLAN_DIAS_L=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 const PLAN_REGLAS={
   perdida:'Pérdida máxima diaria',
-  riesgo:'Pérdida máxima por operación',
+  riesgo:'Riesgo máximo por operación',
+  stop:'Stop en cada operación',
   contratos:'Contratos máximos',
   ops:'Operaciones máximas al día',
   racha:'Parar tras pérdidas seguidas',
@@ -17,7 +18,7 @@ const PLAN_REGLAS={
 };
 function planVacio(){
   return {perdidaMaxDia:null,riesgoMaxOp:null,maxContratos:null,maxOps:null,maxPerdidasSeguidas:null,objetivoDia:null,
-    horaDesde:'',horaHasta:'',dias:[1,2,3,4,5],instrumentos:[],setups:[],registro:true,texto:'',zona:'',actualizado:null};
+    horaDesde:'',horaHasta:'',dias:[1,2,3,4,5],instrumentos:[],setups:[],registro:true,conStop:true,texto:'',zona:'',actualizado:null};
 }
 function planNormal(p){
   const b=planVacio(); if(!p || typeof p!=='object') return b;
@@ -29,7 +30,7 @@ function planNormal(p){
     maxPerdidasSeguidas:n(p.maxPerdidasSeguidas), objetivoDia:n(p.objetivoDia),
     horaDesde:h(p.horaDesde), horaHasta:h(p.horaHasta),
     dias:Array.isArray(p.dias) ? Array.from(new Set(p.dias.map(Number).filter(d=>d>=0 && d<=6))).sort() : b.dias,
-    instrumentos:l(p.instrumentos), setups:l(p.setups), registro:p.registro!==false,
+    instrumentos:l(p.instrumentos), setups:l(p.setups), registro:p.registro!==false, conStop:p.conStop!==false,
     texto:String(p.texto||'').slice(0,4000), zona:String(p.zona||'').slice(0,60), actualizado:p.actualizado||null
   };
 }
@@ -37,6 +38,10 @@ function planGuardado(p){ return !!(p && p.actualizado); }
 function plural(n,a,b){ return n+' '+(n===1?a:b); }
 function usdOp(t){ if(t.usd!=null && isFinite(t.usd)) return Number(t.usd); return (Number(t.pts)||0)*(VALOR_PUNTO[t.inst]||20)*(Number(t.ct)||1); }
 function dolares(u){ const v=Math.round(u); return (v>0?'+':v<0?'−':'')+String(Math.abs(v)).replace(/\B(?=(\d{3})+(?!\d))/g,'.')+' $'; }
+function importe(u){ return dolares(Math.abs(u)).replace(/^[+−]/,''); }
+function riesgoOp(t){ const r=Number(t.riesgo); return isFinite(r) && r>0 ? r : null; }
+function stopOp(t){ const s=Number(t.stop); return isFinite(s) && s>0 ? s : null; }
+function rOp(t){ const r=riesgoOp(t); return r ? usdOp(t)/r : null; }
 function minutosHora(s){ const m=/^(\d{1,2}):(\d{2})$/.exec(String(s||'')); return m ? Number(m[1])*60+Number(m[2]) : null; }
 function hhmm(m){ return String(Math.floor(m/60)%24).padStart(2,'0')+':'+String(m%60).padStart(2,'0'); }
 function horaEn(ts,zona){
@@ -49,7 +54,7 @@ function diaDeFecha(f){ const a=String(f).split('-').map(Number); return new Dat
 function sumarDias(f,n){ const a=String(f).split('-').map(Number); const d=new Date(Date.UTC(a[0],a[1]-1,a[2]+n)); return d.toISOString().slice(0,10); }
 function ordenarDia(ts){ return ts.every(t=>t.hEnt) ? ts.slice().sort((a,b)=>a.hEnt-b.hEnt) : ts.slice(); }
 function huellaOps(ts){
-  const s=JSON.stringify(ts.map(t=>[t.id,Math.round(usdOp(t)),t.setup||'',t.nota||'',t.ct,t.hEnt||0,t.inst]).sort((a,b)=>String(a[0]).localeCompare(String(b[0]))));
+  const s=JSON.stringify(ts.map(t=>[t.id,Math.round(usdOp(t)),t.setup||'',t.nota||'',t.ct,t.hEnt||0,t.inst,stopOp(t)||0,riesgoOp(t)||0]).sort((a,b)=>String(a[0]).localeCompare(String(b[0]))));
   let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return (h>>>0).toString(36);
 }
 
@@ -69,9 +74,22 @@ function evaluarDia(plan,ops,zona){
     else regla('perdida',true,Math.min(...acum)<0?`El peor momento del día fue ${dolares(Math.min(...acum))}, dentro de tu límite de ${dolares(-L)}.`:`El día no llegó a estar en negativo. Tu límite: ${dolares(-L)}.`);
   }
   if(p.riesgoMaxOp){
-    const L=p.riesgoMaxOp, malas=o.filter(t=>usdOp(t)<-L*1.1);
-    if(malas.length){ const peor=Math.min(...malas.map(usdOp)); regla('riesgo',false,`${malas.length===1?'Una operación perdió':plural(malas.length,'operación','operaciones')+' perdieron'} más de ${dolares(-L)} (${lista(malas)}). La peor: ${dolares(peor)}.`,malas); }
-    else regla('riesgo',true,`Ninguna operación perdió más de ${dolares(-L)}.`);
+    // Cuenta el riesgo que apuntó (stop × contratos) y, además, lo que perdió de verdad
+    const L=p.riesgoMaxOp, altas=o.filter(t=>riesgoOp(t)>L*1.001), perdidas=o.filter(t=>!altas.includes(t) && usdOp(t)<-L*1.1);
+    const txt=[];
+    if(altas.length) txt.push(`Arriesgaste más de ${importe(L)} en ${lista(altas)} (hasta ${importe(Math.max(...altas.map(riesgoOp)))}).`);
+    if(perdidas.length) txt.push(`${perdidas.length===1?'Una operación perdió':plural(perdidas.length,'operación','operaciones')+' perdieron'} más de ${importe(L)} (${lista(perdidas)}). La peor: ${dolares(Math.min(...perdidas.map(usdOp)))}.`);
+    if(txt.length) regla('riesgo',false,txt.join(' '),altas.concat(perdidas));
+    else regla('riesgo',true,o.some(riesgoOp)?`Todas las entradas con un riesgo de ${importe(L)} o menos.`:`Ninguna operación perdió más de ${importe(L)}.`);
+  }
+  if(p.conStop){
+    // Sin stop apuntado, o perdiendo bastante más de lo que arriesgaba (señal de que movió el stop)
+    const sin=o.filter(t=>!stopOp(t)), movido=o.filter(t=>stopOp(t) && riesgoOp(t) && usdOp(t)<-riesgoOp(t)*1.25-5);
+    const txt=[];
+    if(sin.length) txt.push(`${sin.length===1?'Una operación no tiene':plural(sin.length,'operación','operaciones')+' no tienen'} el stop apuntado (${lista(sin)}).`);
+    if(movido.length) txt.push(`En ${lista(movido)} perdiste más de lo que arriesgabas (${movido.map(t=>dolares(usdOp(t))+' con '+importe(riesgoOp(t))+' de riesgo').slice(0,2).join('; ')}): ¿moviste el stop?`);
+    if(txt.length) regla('stop',false,txt.join(' '),sin.concat(movido));
+    else regla('stop',true,'Todas las operaciones con su stop, y ninguna perdió más de lo arriesgado.');
   }
   if(p.maxContratos){
     const malas=o.filter(t=>Number(t.ct)>p.maxContratos);
@@ -140,7 +158,8 @@ function evaluarPeriodo(plan,trades,desde,hasta,zona){
 function planComoTexto(plan){
   const p=planNormal(plan), l=[];
   if(p.perdidaMaxDia) l.push(`Pérdida máxima diaria: ${p.perdidaMaxDia} $`);
-  if(p.riesgoMaxOp) l.push(`Pérdida máxima por operación: ${p.riesgoMaxOp} $`);
+  if(p.riesgoMaxOp) l.push(`Riesgo máximo por operación: ${p.riesgoMaxOp} $`);
+  if(p.conStop) l.push('Stop puesto y apuntado en cada operación, sin moverlo en contra');
   if(p.maxContratos) l.push(`Contratos máximos por operación: ${p.maxContratos}`);
   if(p.maxOps) l.push(`Operaciones máximas al día: ${p.maxOps}`);
   if(p.maxPerdidasSeguidas) l.push(`Parar tras ${p.maxPerdidasSeguidas} pérdidas seguidas`);
@@ -153,4 +172,4 @@ function planComoTexto(plan){
   return l;
 }
 
-export { VALOR_PUNTO, PLAN_REGLAS, PLAN_DIAS_L, planVacio, planNormal, planGuardado, usdOp, dolares, hhmm, horaEn, minutosHora, sumarDias, diaDeFecha, huellaOps, evaluarDia, evaluarPeriodo, planComoTexto };
+export { VALOR_PUNTO, PLAN_REGLAS, PLAN_DIAS_L, planVacio, planNormal, planGuardado, usdOp, dolares, importe, riesgoOp, stopOp, rOp, hhmm, horaEn, minutosHora, sumarDias, diaDeFecha, huellaOps, evaluarDia, evaluarPeriodo, planComoTexto };
