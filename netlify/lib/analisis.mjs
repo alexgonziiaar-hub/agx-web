@@ -1,8 +1,10 @@
 // Informes del plan: comprobación exacta de reglas + texto del agente de IA. Se guardan en u/{id}/informes.
-import { planNormal, planGuardado, evaluarPeriodo, huellaOps, sumarDias } from './plan.mjs';
+import { planNormal, planGuardado, evaluarPeriodo, huellaOps, sumarDias, hhmm, horaEn } from './plan.mjs';
 import { pedirIA, iaActiva, MODELO } from './ia.mjs';
 
 const MAX_INFORMES = 90;
+const MAX_CAPTURAS = 6; // capturas que se mandan a la IA por análisis
+const MAX_CAPTURA_BYTES = 1.6e6;
 
 export const fechaMadrid = (ts) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Madrid', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(ts));
 
@@ -26,6 +28,22 @@ export function huellaPeriodo(datos, tipo, fecha) {
   return huellaOps(opsDe(datos, desde, fecha)) + '.' + String(p.actualizado || '');
 }
 
+// Capturas de ATAS de las operaciones del periodo (las más recientes primero, hasta MAX_CAPTURAS)
+async function capturasDe(store, id, trades, zona) {
+  const out = [];
+  const lista = trades.slice(-MAX_CAPTURAS);
+  for (const t of lista) {
+    try {
+      const v = await store.get(`u/${id}/cap/${t.id}`);
+      if (!v || typeof v !== 'string' || v.length > MAX_CAPTURA_BYTES || !v.startsWith('data:image/')) continue;
+      const i = trades.indexOf(t) + 1;
+      const h = t.hEnt ? hhmm(horaEn(t.hEnt, zona)) : 'sin hora';
+      out.push({ etiqueta: `${i}ª operación, ${t.fecha} ${h}, ${t.inst} ${t.dir === 'L' ? 'largo' : 'corto'}${t.setup ? ', setup ' + t.setup : ''}`, dataUrl: v });
+    } catch (e) { /* sin captura */ }
+  }
+  return out;
+}
+
 export async function generarInforme({ store, id, nombre, datos, tipo, fecha, origen, timeoutMs }) {
   const plan = planNormal(datos.plan);
   if (!planGuardado(plan)) { const e = new Error('sin_plan'); e.codigo = 'sin_plan'; throw e; }
@@ -39,7 +57,10 @@ export async function generarInforme({ store, id, nombre, datos, tipo, fecha, or
   const previo = listaInformes(mapa).find((x) => x.ia && x.hasta < fecha) || null;
 
   let ia = null;
-  if (iaActiva()) ia = await pedirIA({ nombre, tipo, desde, hasta: fecha, plan, periodo, trades, contexto, previo }, { timeoutMs });
+  if (iaActiva()) {
+    const imagenes = await capturasDe(store, id, trades, zona);
+    ia = await pedirIA({ nombre, tipo, desde, hasta: fecha, plan, periodo, trades, contexto, previo, cuenta: datos.cuenta, rutinas: datos.rutinas, todas: datos.trades, imagenes }, { timeoutMs });
+  }
 
   const informe = {
     clave: `${tipo}:${fecha}`, tipo, origen, desde, hasta: fecha, creado: new Date().toISOString(),

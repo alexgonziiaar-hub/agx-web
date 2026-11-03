@@ -172,4 +172,107 @@ function planComoTexto(plan){
   return l;
 }
 
-export { VALOR_PUNTO, PLAN_REGLAS, PLAN_DIAS_L, planVacio, planNormal, planGuardado, usdOp, dolares, importe, riesgoOp, stopOp, rOp, hhmm, horaEn, minutosHora, sumarDias, diaDeFecha, huellaOps, evaluarDia, evaluarPeriodo, planComoTexto };
+/* ---------- Diario pro: cuenta de fondeo, errores con coste y rutina (mismo código en la web y en el servidor) ---------- */
+const ERRORES={
+  fomo:{n:'FOMO / perseguir el precio',d:'Entraste tarde por miedo a perderte el movimiento.'},
+  revancha:{n:'Revancha',d:'Entraste para recuperar una pérdida anterior.'},
+  fuera_plan:{n:'Fuera del plan',d:'Sin setup de tu plan o fuera de tu horario.'},
+  sin_stop:{n:'Sin stop',d:'Entraste sin stop o lo quitaste.'},
+  stop_movido:{n:'Stop movido en contra',d:'Alejaste el stop para no asumir la pérdida.'},
+  tamano:{n:'Tamaño excesivo',d:'Más contratos de los que marca tu plan.'},
+  pronto:{n:'Salida antes de tiempo',d:'Cerraste la ganadora antes de tu objetivo por miedo.'},
+  tarde:{n:'Aguantar la perdedora',d:'No cerraste cuando la idea ya estaba invalidada.'},
+  sobreoperar:{n:'Sobreoperar',d:'Entrada de más tras varias operaciones seguidas.'},
+  noticia:{n:'Operar en noticia',d:'Dentro del mercado en un dato importante.'}
+};
+const ERRORES_IDS=Object.keys(ERRORES);
+function erroresOp(t){ return Array.isArray(t.errores)?t.errores.filter(e=>ERRORES[e]):[]; }
+/* Coste de cada error: suma del resultado de las operaciones marcadas con él, y comparación limpias frente a con error */
+function costeErrores(ts){
+  const por={}; let limpias=[], sucias=[];
+  ts.forEach(t=>{ const u=usdOp(t), es=erroresOp(t); if(es.length) sucias.push(u); else limpias.push(u); es.forEach(e=>{ const o=por[e]||{id:e,n:0,u:0,perd:0}; o.n++; o.u+=u; if(u<0) o.perd+=u; por[e]=o; }); });
+  const media=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:null;
+  const lista=Object.values(por).sort((a,b)=>a.u-b.u);
+  return {lista,nCon:sucias.length,nSin:limpias.length,uCon:sucias.reduce((s,x)=>s+x,0),uSin:limpias.reduce((s,x)=>s+x,0),mediaCon:media(sucias),mediaSin:media(limpias)};
+}
+
+const CUENTA_TIPOS={eod:'Trailing de fin de día',intra:'Trailing intradía',estatico:'Estático'};
+function cuentaVacia(){ return {firma:'',tamano:null,ddMax:null,ddTipo:'eod',bloqueo:true,limiteDiario:null,objetivo:null,desde:'',fase:'evaluacion',actualizado:null}; }
+function cuentaNormal(c){
+  const b=cuentaVacia(); if(!c || typeof c!=='object') return b;
+  const n=v=>{ const x=Number(v); return isFinite(x) && x>0 ? Math.round(x*100)/100 : null; };
+  return {firma:String(c.firma||'').slice(0,60),tamano:n(c.tamano),ddMax:n(c.ddMax),ddTipo:CUENTA_TIPOS[c.ddTipo]?c.ddTipo:'eod',bloqueo:c.bloqueo!==false,
+    limiteDiario:n(c.limiteDiario),objetivo:n(c.objetivo),desde:/^\d{4}-\d{2}-\d{2}$/.test(c.desde||'')?c.desde:'',fase:c.fase==='fondeada'?'fondeada':'evaluacion',actualizado:c.actualizado||null};
+}
+function cuentaActiva(c){ return !!(c && c.actualizado && c.ddMax); }
+function ordenCuenta(ts){ return ts.slice().sort((a,b)=>a.fecha.localeCompare(b.fecha)||(a.hEnt||0)-(b.hEnt||0)); }
+/* Estado de la cuenta de fondeo a partir de las operaciones reales desde la fecha de inicio */
+function evaluarCuenta(cuenta,trades,hoy){
+  const c=cuentaNormal(cuenta); if(!cuentaActiva(c)) return null;
+  const ops=ordenCuenta((trades||[]).filter(t=>!t.ejemplo && (!c.desde || t.fecha>=c.desde)));
+  let pnl=0, picoIntra=0, picoEod=0, suelo=-c.ddMax, peorMargen=Infinity, ultimoDia=null, pnlDia=0;
+  const dias={};
+  ops.forEach(t=>{
+    if(t.fecha!==ultimoDia){
+      if(ultimoDia!=null) picoEod=Math.max(picoEod,pnl);
+      ultimoDia=t.fecha;
+    }
+    pnl+=usdOp(t); dias[t.fecha]=(dias[t.fecha]||0)+usdOp(t);
+    picoIntra=Math.max(picoIntra,pnl);
+    const pico=c.ddTipo==='intra'?picoIntra:(c.ddTipo==='eod'?picoEod:0);
+    suelo=pico-c.ddMax; if(c.bloqueo && suelo>0) suelo=0;
+    peorMargen=Math.min(peorMargen,pnl-suelo);
+  });
+  const pico=c.ddTipo==='intra'?picoIntra:(c.ddTipo==='eod'?picoEod:0);
+  suelo=pico-c.ddMax; if(c.bloqueo && suelo>0) suelo=0;
+  const margen=pnl-suelo, hoyI=hoy||null, hoyPnl=hoyI&&dias[hoyI]||0;
+  const pctMargen=Math.max(0,Math.min(1,margen/c.ddMax));
+  let estado='ok';
+  if(margen<=0) estado='quemada';
+  else if(c.objetivo && pnl>=c.objetivo) estado='objetivo';
+  else if(pctMargen<0.2) estado='peligro';
+  else if(pctMargen<0.4) estado='aviso';
+  const limiteHoy=c.limiteDiario?{limite:c.limiteDiario,usado:Math.max(0,-hoyPnl),queda:Math.max(0,c.limiteDiario+Math.min(0,hoyPnl)),roto:hoyPnl<=-c.limiteDiario}:null;
+  if(limiteHoy && limiteHoy.roto && estado!=='quemada') estado='limite';
+  const nDias=Object.keys(dias).length, saldo=(c.tamano||0)+pnl;
+  return {c,pnl,saldo,pico,suelo,margen,pctMargen,peorMargen:isFinite(peorMargen)?peorMargen:c.ddMax,estado,hoyPnl,limiteHoy,nDias,n:ops.length,
+    objetivo:c.objetivo?{total:c.objetivo,pct:Math.max(0,Math.min(1,pnl/c.objetivo)),falta:Math.max(0,c.objetivo-pnl)}:null,
+    riesgoSugerido:Math.round(Math.max(0,margen)*0.1)};
+}
+function textoCuenta(ev){
+  if(!ev) return [];
+  const l=[`Cuenta de fondeo${ev.c.firma?' ('+ev.c.firma+')':''}: ${ev.c.fase==='fondeada'?'fondeada':'en evaluación'}, tamaño ${ev.c.tamano||'?'} $, drawdown ${CUENTA_TIPOS[ev.c.ddTipo].toLowerCase()} de ${ev.c.ddMax} $${ev.c.bloqueo?' que se bloquea en el saldo inicial':''}.`];
+  l.push(`Resultado acumulado ${dolares(ev.pnl)}; margen hasta el drawdown ${Math.round(ev.margen)} $ (${Math.round(ev.pctMargen*100)} % del drawdown); el margen mínimo que ha tenido fue ${Math.round(ev.peorMargen)} $.`);
+  if(ev.objetivo) l.push(`Objetivo ${ev.objetivo.total} $: lleva un ${Math.round(ev.objetivo.pct*100)} %, le faltan ${Math.round(ev.objetivo.falta)} $.`);
+  if(ev.limiteHoy) l.push(`Límite de pérdida diaria ${ev.limiteHoy.limite} $: hoy ${dolares(ev.hoyPnl)}${ev.limiteHoy.roto?' (LÍMITE SUPERADO)':''}.`);
+  l.push(`Estado: ${ev.estado}. Riesgo por operación razonable con este margen: unos ${ev.riesgoSugerido} $ (10 % del margen).`);
+  return l;
+}
+
+/* Rutina: antes y después de la sesión, por fecha */
+const RUTINA_PRE=[['niveles','Niveles de ayer y de la noche marcados'],['noticias','Calendario de noticias revisado'],['plan','Plan releído: riesgo, parada y setups'],['descanso','Pantalla y plataforma listas, sin distracciones']];
+const ESCALA={1:'muy mal',2:'mal',3:'normal',4:'bien',5:'muy bien'};
+function rutinaDe(rutinas,f){ const r=rutinas&&rutinas[f]; return r&&typeof r==='object'?r:null; }
+function rutinaNormal(r){
+  if(!r || typeof r!=='object') return null;
+  const n=v=>{ const x=Number(v); return x>=1&&x<=5?Math.round(x):null; };
+  const out={};
+  if(r.pre){ const p=r.pre; out.pre={checks:(Array.isArray(p.checks)?p.checks:[]).filter(k=>RUTINA_PRE.some(x=>x[0]===k)),sueno:n(p.sueno),animo:n(p.animo),nota:String(p.nota||'').slice(0,500),hora:p.hora||null}; }
+  if(r.post){ const q=r.post; out.post={disciplina:n(q.disciplina),mejora:String(q.mejora||'').slice(0,300),nota:String(q.nota||'').slice(0,800),hora:q.hora||null}; }
+  return out.pre||out.post?out:null;
+}
+function textoRutina(r){
+  const x=rutinaNormal(r); if(!x) return null; const l=[];
+  if(x.pre){ const hechos=RUTINA_PRE.filter(k=>x.pre.checks.includes(k[0])).map(k=>k[1]); l.push(`Antes de la sesión: sueño ${x.pre.sueno?x.pre.sueno+'/5 ('+ESCALA[x.pre.sueno]+')':'sin apuntar'}, ánimo ${x.pre.animo?x.pre.animo+'/5 ('+ESCALA[x.pre.animo]+')':'sin apuntar'}. Preparación: ${hechos.length?hechos.join('; '):'nada marcado'} (${hechos.length} de ${RUTINA_PRE.length}).${x.pre.nota?' Nota: "'+x.pre.nota+'"':''}`); }
+  if(x.post){ l.push(`Al cerrar: se puntuó la disciplina con ${x.post.disciplina?x.post.disciplina+'/5':'sin nota'}.${x.post.mejora?' Mejora para mañana: "'+x.post.mejora+'".':''}${x.post.nota?' Revisión: "'+x.post.nota+'"':''}`); }
+  return l.join(' ');
+}
+/* Resultado del día según cómo llegó: para el panel de estadísticas */
+function rendimientoPorEstado(rutinas,trades,clave){
+  const porDia={}; (trades||[]).forEach(t=>{ porDia[t.fecha]=(porDia[t.fecha]||0)+usdOp(t); });
+  const grupos={bajo:{n:0,u:0,etq:'1-2'},medio:{n:0,u:0,etq:'3'},alto:{n:0,u:0,etq:'4-5'}};
+  Object.keys(porDia).forEach(f=>{ const r=rutinaNormal(rutinas&&rutinas[f]); const v=r&&r.pre&&r.pre[clave]; if(!v) return; const g=v<=2?'bajo':(v===3?'medio':'alto'); grupos[g].n++; grupos[g].u+=porDia[f]; });
+  return grupos;
+}
+
+export { VALOR_PUNTO, PLAN_REGLAS, PLAN_DIAS_L, planVacio, planNormal, planGuardado, usdOp, dolares, importe, riesgoOp, stopOp, rOp, hhmm, horaEn, minutosHora, sumarDias, diaDeFecha, huellaOps, evaluarDia, evaluarPeriodo, planComoTexto, ERRORES, erroresOp, costeErrores, CUENTA_TIPOS, cuentaNormal, cuentaActiva, evaluarCuenta, textoCuenta, RUTINA_PRE, rutinaNormal, textoRutina };
