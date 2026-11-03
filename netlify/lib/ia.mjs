@@ -3,7 +3,8 @@
 // o una clave propia de Anthropic en ANTHROPIC_API_KEY. MODELO_IA es opcional.
 import { planComoTexto, planNormal, usdOp, dolares, importe, riesgoOp, stopOp, rOp, hhmm, horaEn } from './plan.mjs';
 
-export const MODELO = () => process.env.MODELO_IA || 'claude-sonnet-5-5';
+// Haiku 5.5 por defecto: unas 20 veces más barato que Sonnet. Para usar Sonnet, pon MODELO_IA=claude-sonnet-5-5 en Netlify.
+export const MODELO = () => process.env.MODELO_IA || 'claude-haiku-5-5';
 export const iaActiva = () => !!process.env.ANTHROPIC_API_KEY;
 const urlIA = () => String(process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com').replace(/\/+$/, '');
 
