@@ -1402,6 +1402,92 @@ a.lec-fila:focus-visible,button.lec-fila:focus-visible{outline:2px solid var(--v
   .ruta-datos li{flex:1 1 140px}
 }
 .ruta-hero .f-acc .boton{max-width:100%;white-space:normal;text-align:center;line-height:1.25;padding-top:9px;padding-bottom:9px}
+
+/* ===================== Diario pro: cuenta, rutina y errores ===================== */
+.hoy-fila{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:14px;margin-bottom:20px}
+.hoy-card{display:flex;align-items:center;gap:14px;min-width:0;padding:14px 18px;border:1px solid var(--borde);border-radius:16px;background:var(--fondo);color:var(--tinta);text-decoration:none;transition:border-color .2s,box-shadow .25s}
+a.hoy-card:hover{border-color:var(--violeta);box-shadow:var(--sombra)}
+.hoy-ico{flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:var(--morado-suave);color:var(--morado)}
+.hoy-ico svg{width:20px;height:20px}
+.hoy-txt{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.hoy-txt b{font-size:15px;font-weight:720}
+.hoy-txt small{font-size:12.5px;color:var(--tinta-2);line-height:1.35}
+.hoy-dato{display:flex;flex-direction:column;gap:2px;min-width:120px}
+.hoy-dato b{font-size:18px;font-weight:780;font-variant-numeric:tabular-nums;line-height:1.1}
+.hoy-dato small{font-size:11.5px;color:var(--tinta-2);white-space:nowrap}
+.hoy-dato.mal b{color:var(--venta)}
+.hoy-barra{display:block;height:5px;margin-top:4px;border-radius:5px;background:var(--fondo-2);overflow:hidden}
+.hoy-barra span{display:block;height:100%;border-radius:5px;background:var(--compra)}
+.hoy-barra.obj span{background:var(--grad-marca)}
+.hoy-ir{display:inline-flex;align-items:center;gap:4px;color:var(--morado);font-size:13.5px;font-weight:650;white-space:nowrap}
+.hoy-ir svg{width:14px;height:14px}
+.hoy-acc{display:flex;flex-wrap:wrap;gap:8px}
+.hoy-acc .boton svg{width:14px;height:14px}
+.cta-aviso .hoy-ico,.cta-aviso .hoy-barra span{background:var(--ambar);color:var(--blanco)}
+.cta-peligro .hoy-ico,.cta-quemada .hoy-ico,.cta-limite .hoy-ico{background:var(--venta);color:var(--blanco)}
+.cta-peligro .hoy-barra span,.cta-quemada .hoy-barra span,.cta-limite .hoy-barra span{background:var(--venta)}
+.cta-objetivo .hoy-ico,.cta-ok .hoy-ico{background:var(--compra-suave);color:var(--compra)}
+.cta-vacia .hoy-ico{background:var(--grad-marca);color:var(--blanco)}
+/* resumen de cuenta en Plan e IA */
+.cta-res{display:flex;flex-direction:column;gap:12px;margin-bottom:18px;padding:16px;border:1px solid var(--borde);border-radius:14px;background:var(--fondo-2)}
+.cta-fila{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.cta-etq{padding:4px 11px;border-radius:999px;background:var(--compra-suave);color:var(--compra);font-size:12.5px;font-weight:750}
+.cta-aviso .cta-etq{background:#FFF1D6;color:#9A5B00}
+.cta-peligro .cta-etq,.cta-quemada .cta-etq,.cta-limite .cta-etq{background:var(--venta-suave);color:var(--venta)}
+.cta-objetivo .cta-etq{background:var(--morado-suave);color:var(--morado)}
+.cta-pnl{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.cta-gauge{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;font-size:11.5px;color:var(--tinta-2);white-space:nowrap}
+.cta-pista{display:block;height:10px;border-radius:10px;background:linear-gradient(90deg,var(--venta-suave),var(--compra-suave));overflow:hidden}
+.cta-pista span{display:block;height:100%;border-radius:10px;background:var(--compra)}
+.cta-peligro .cta-pista span,.cta-quemada .cta-pista span,.cta-limite .cta-pista span{background:var(--venta)}
+.cta-aviso .cta-pista span{background:var(--ambar)}
+.cta-datos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0}
+.cta-datos div{display:flex;flex-direction:column;gap:1px}
+.cta-datos dt{font-size:11.5px;color:var(--tinta-2)}
+.cta-datos dd{margin:0;font-size:15.5px;font-weight:750;font-variant-numeric:tabular-nums}
+.cta-form select{width:100%;min-height:42px;padding:8px 12px;border:1px solid var(--borde-2);border-radius:10px;background:var(--fondo);color:var(--tinta);font-size:15px}
+.cta-form .pl-check{margin:14px 0 4px}
+.panel-cab h2 svg{width:18px;height:18px;margin-right:8px;vertical-align:-3px;color:var(--morado)}
+/* errores */
+.err-lista{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+.err-top{display:flex;align-items:baseline;gap:10px}
+.err-top b{flex:1;min-width:0;font-size:14.5px;font-weight:680}
+.err-n{font-size:12.5px;color:var(--tinta-2);white-space:nowrap}
+.err-u{min-width:84px;text-align:right;font-weight:760;font-variant-numeric:tabular-nums}
+.err-barra{display:block;height:6px;margin-top:6px;border-radius:6px;background:var(--fondo-2);overflow:hidden}
+.err-barra span{display:block;height:100%;border-radius:6px}
+.err-barra .n{background:var(--venta)}
+.err-barra .p{background:var(--compra)}
+.err-comp{margin:0 0 16px;padding:12px 14px;border-left:4px solid var(--violeta);border-radius:0 10px 10px 0;background:var(--morado-suave);font-size:14px;line-height:1.5}
+/* rutina */
+.rut-checks{display:flex;flex-direction:column;gap:10px}
+.rut-esc{display:flex;flex-direction:column;gap:6px}
+.rut-etq{font-size:13.5px;font-weight:650;color:var(--tinta-2)}
+.rut-botones{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.rut-botones label{position:relative}
+.rut-botones input{position:absolute;opacity:0;width:1px;height:1px}
+.rut-botones span{display:grid;place-items:center;min-height:42px;border:1px solid var(--borde-2);border-radius:10px;font-size:16px;font-weight:750;cursor:pointer;transition:border-color .15s,background .15s}
+.rut-botones input:checked+span{border-color:var(--morado);background:var(--morado);color:var(--blanco)}
+.rut-botones input:focus-visible+span{outline:2px solid var(--morado);outline-offset:2px}
+.rut-ley{display:flex;justify-content:space-between;font-size:11.5px;color:var(--tinta-2)}
+.rut-cuenta{margin:0;padding:10px 14px;border-radius:10px;background:var(--fondo-2);font-size:13.5px;color:var(--tinta-2)}
+.rut-cuenta b{color:var(--tinta)}
+/* estadísticas: estado */
+.est-rut{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.est-rut-b ul{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.est-rut-b li{display:grid;grid-template-columns:44px auto minmax(0,1fr);align-items:baseline;gap:10px}
+.est-rut-etq{padding:3px 8px;border-radius:7px;background:var(--fondo-2);font-size:12.5px;font-weight:700;text-align:center}
+.est-rut-b b{font-size:16px;font-variant-numeric:tabular-nums}
+.est-rut-b small{font-size:12px;color:var(--tinta-2)}
+/* informe IA: capturas */
+.inf-caps li{display:flex;gap:8px;align-items:flex-start}
+.inf-caps li span{flex:none;margin-top:3px}
+.inf-caps .ok span{color:var(--compra)}
+.inf-caps .ko span{color:var(--venta)}
+.al-cta{display:block;font-size:12.5px;color:var(--tinta-2)}
+.al-cta b{font-weight:700;color:var(--tinta)}
+@media (max-width:900px){ .hoy-fila{grid-template-columns:minmax(0,1fr)} .cta-datos{grid-template-columns:repeat(2,minmax(0,1fr))} .est-rut{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:640px){ .hoy-card{flex-wrap:wrap} .hoy-dato{min-width:calc(50% - 7px)} .hoy-acc{width:100%} .hoy-acc .boton{flex:1} }
 </style>
 
 </head>
@@ -1482,6 +1568,7 @@ a.lec-fila:focus-visible,button.lec-fila:focus-visible{outline:2px solid var(--v
           <input type="file" id="f-cap" accept="image/*" hidden>
         </div>
         <div class="campo ancho-total"><label for="f-nota">Nota</label><textarea id="f-nota" rows="3" placeholder="Qué viste en el footprint y por qué entraste"></textarea></div>
+        <fieldset class="campo ancho-total" id="c-errores"><legend>¿Qué fallaste? <small>Opcional. Sé honesto: el diario te dirá cuánto te cuesta cada error.</small></legend><div class="chips-sel" id="f-errores"></div></fieldset>
       </div>
       <p class="error" id="form-error" role="alert" hidden></p>
     </form>
@@ -1515,6 +1602,14 @@ a.lec-fila:focus-visible,button.lec-fila:focus-visible{outline:2px solid var(--v
   </div>
 </div>
 <input type="file" id="imp-file" accept=".xlsx,.xls,.csv,.txt" hidden>
+<div class="imp-capa" id="rut" hidden>
+  <div class="imp" role="dialog" aria-modal="true" aria-labelledby="rut-t">
+    <div class="imp-cab"><div><h2 id="rut-t">Preparar la sesión</h2><p id="rut-sub"></p></div>
+      <button type="button" class="icono-btn" data-accion="cerrar-rut" aria-label="Cerrar"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+    <div class="imp-cuerpo" id="rut-cuerpo"></div>
+    <div class="imp-pie"><button type="button" class="boton sec" data-accion="cerrar-rut">Cancelar</button><button type="button" class="boton" data-accion="guardar-rut">Guardar</button></div>
+  </div>
+</div>
 <div id="toast" class="toast" role="status" hidden></div>
 
 <script>
@@ -1602,7 +1697,7 @@ const EJEMPLOS=[
  ['2026-10-28','NY','MES','L',3,-4,'Giro por perfil','','El perfil no estaba formado todavía. Espera a que el valor se defina.'],
  ['2026-10-29','NY','NQ','L',1,25,'Patrón Gonzi','Esperé la confirmación del patrón. Paciencia.','']
 ];
-function estadoVacio(){ return {periodo:'mes',trades:[],temas:{},examen:null,fallos:[],bloque:'base',progresoEjemplo:false,objetivo:3000,plan:null,ruta:{lec:{},niv:{}}}; }
+function estadoVacio(){ return {periodo:'mes',trades:[],temas:{},examen:null,fallos:[],bloque:'base',progresoEjemplo:false,objetivo:3000,plan:null,ruta:{lec:{},niv:{}},cuenta:null,rutinas:{}}; }
 function normalizarEstado(d){ if(!d || !Array.isArray(d.trades)) return null; return Object.assign(estadoVacio(),d,{progresoEjemplo:false}); }
 function estadoInicial(){
   return {
@@ -3887,6 +3982,227 @@ preg:[
 ['¿Cuál es el gráfico de contexto en tu espacio de trabajo?',['Un gráfico de tiempo con los niveles de ayer y de la noche','El Smart DOM con las columnas de cambios de órdenes','La cinta con el filtro de volumen mínimo activado'],'El contexto se marca sobre tiempo; la ejecución va en el footprint y el libro.']
 ]}
 ]});
+/* ---------- Diario pro: cuenta de fondeo, errores con coste y rutina (mismo código en la web y en el servidor) ---------- */
+const ERRORES={
+  fomo:{n:'FOMO / perseguir el precio',d:'Entraste tarde por miedo a perderte el movimiento.'},
+  revancha:{n:'Revancha',d:'Entraste para recuperar una pérdida anterior.'},
+  fuera_plan:{n:'Fuera del plan',d:'Sin setup de tu plan o fuera de tu horario.'},
+  sin_stop:{n:'Sin stop',d:'Entraste sin stop o lo quitaste.'},
+  stop_movido:{n:'Stop movido en contra',d:'Alejaste el stop para no asumir la pérdida.'},
+  tamano:{n:'Tamaño excesivo',d:'Más contratos de los que marca tu plan.'},
+  pronto:{n:'Salida antes de tiempo',d:'Cerraste la ganadora antes de tu objetivo por miedo.'},
+  tarde:{n:'Aguantar la perdedora',d:'No cerraste cuando la idea ya estaba invalidada.'},
+  sobreoperar:{n:'Sobreoperar',d:'Entrada de más tras varias operaciones seguidas.'},
+  noticia:{n:'Operar en noticia',d:'Dentro del mercado en un dato importante.'}
+};
+const ERRORES_IDS=Object.keys(ERRORES);
+function erroresOp(t){ return Array.isArray(t.errores)?t.errores.filter(e=>ERRORES[e]):[]; }
+/* Coste de cada error: suma del resultado de las operaciones marcadas con él, y comparación limpias frente a con error */
+function costeErrores(ts){
+  const por={}; let limpias=[], sucias=[];
+  ts.forEach(t=>{ const u=usdOp(t), es=erroresOp(t); if(es.length) sucias.push(u); else limpias.push(u); es.forEach(e=>{ const o=por[e]||{id:e,n:0,u:0,perd:0}; o.n++; o.u+=u; if(u<0) o.perd+=u; por[e]=o; }); });
+  const media=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:null;
+  const lista=Object.values(por).sort((a,b)=>a.u-b.u);
+  return {lista,nCon:sucias.length,nSin:limpias.length,uCon:sucias.reduce((s,x)=>s+x,0),uSin:limpias.reduce((s,x)=>s+x,0),mediaCon:media(sucias),mediaSin:media(limpias)};
+}
+
+const CUENTA_TIPOS={eod:'Trailing de fin de día',intra:'Trailing intradía',estatico:'Estático'};
+function cuentaVacia(){ return {firma:'',tamano:null,ddMax:null,ddTipo:'eod',bloqueo:true,limiteDiario:null,objetivo:null,desde:'',fase:'evaluacion',actualizado:null}; }
+function cuentaNormal(c){
+  const b=cuentaVacia(); if(!c || typeof c!=='object') return b;
+  const n=v=>{ const x=Number(v); return isFinite(x) && x>0 ? Math.round(x*100)/100 : null; };
+  return {firma:String(c.firma||'').slice(0,60),tamano:n(c.tamano),ddMax:n(c.ddMax),ddTipo:CUENTA_TIPOS[c.ddTipo]?c.ddTipo:'eod',bloqueo:c.bloqueo!==false,
+    limiteDiario:n(c.limiteDiario),objetivo:n(c.objetivo),desde:/^\d{4}-\d{2}-\d{2}$/.test(c.desde||'')?c.desde:'',fase:c.fase==='fondeada'?'fondeada':'evaluacion',actualizado:c.actualizado||null};
+}
+function cuentaActiva(c){ return !!(c && c.actualizado && c.ddMax); }
+function ordenCuenta(ts){ return ts.slice().sort((a,b)=>a.fecha.localeCompare(b.fecha)||(a.hEnt||0)-(b.hEnt||0)); }
+/* Estado de la cuenta de fondeo a partir de las operaciones reales desde la fecha de inicio */
+function evaluarCuenta(cuenta,trades,hoy){
+  const c=cuentaNormal(cuenta); if(!cuentaActiva(c)) return null;
+  const ops=ordenCuenta((trades||[]).filter(t=>!t.ejemplo && (!c.desde || t.fecha>=c.desde)));
+  let pnl=0, picoIntra=0, picoEod=0, suelo=-c.ddMax, peorMargen=Infinity, ultimoDia=null, pnlDia=0;
+  const dias={};
+  ops.forEach(t=>{
+    if(t.fecha!==ultimoDia){
+      if(ultimoDia!=null) picoEod=Math.max(picoEod,pnl);
+      ultimoDia=t.fecha;
+    }
+    pnl+=usdOp(t); dias[t.fecha]=(dias[t.fecha]||0)+usdOp(t);
+    picoIntra=Math.max(picoIntra,pnl);
+    const pico=c.ddTipo==='intra'?picoIntra:(c.ddTipo==='eod'?picoEod:0);
+    suelo=pico-c.ddMax; if(c.bloqueo && suelo>0) suelo=0;
+    peorMargen=Math.min(peorMargen,pnl-suelo);
+  });
+  const pico=c.ddTipo==='intra'?picoIntra:(c.ddTipo==='eod'?picoEod:0);
+  suelo=pico-c.ddMax; if(c.bloqueo && suelo>0) suelo=0;
+  const margen=pnl-suelo, hoyI=hoy||null, hoyPnl=hoyI&&dias[hoyI]||0;
+  const pctMargen=Math.max(0,Math.min(1,margen/c.ddMax));
+  let estado='ok';
+  if(margen<=0) estado='quemada';
+  else if(c.objetivo && pnl>=c.objetivo) estado='objetivo';
+  else if(pctMargen<0.2) estado='peligro';
+  else if(pctMargen<0.4) estado='aviso';
+  const limiteHoy=c.limiteDiario?{limite:c.limiteDiario,usado:Math.max(0,-hoyPnl),queda:Math.max(0,c.limiteDiario+Math.min(0,hoyPnl)),roto:hoyPnl<=-c.limiteDiario}:null;
+  if(limiteHoy && limiteHoy.roto && estado!=='quemada') estado='limite';
+  const nDias=Object.keys(dias).length, saldo=(c.tamano||0)+pnl;
+  return {c,pnl,saldo,pico,suelo,margen,pctMargen,peorMargen:isFinite(peorMargen)?peorMargen:c.ddMax,estado,hoyPnl,limiteHoy,nDias,n:ops.length,
+    objetivo:c.objetivo?{total:c.objetivo,pct:Math.max(0,Math.min(1,pnl/c.objetivo)),falta:Math.max(0,c.objetivo-pnl)}:null,
+    riesgoSugerido:Math.round(Math.max(0,margen)*0.1)};
+}
+function textoCuenta(ev){
+  if(!ev) return [];
+  const l=[`Cuenta de fondeo${ev.c.firma?' ('+ev.c.firma+')':''}: ${ev.c.fase==='fondeada'?'fondeada':'en evaluación'}, tamaño ${ev.c.tamano||'?'} $, drawdown ${CUENTA_TIPOS[ev.c.ddTipo].toLowerCase()} de ${ev.c.ddMax} $${ev.c.bloqueo?' que se bloquea en el saldo inicial':''}.`];
+  l.push(`Resultado acumulado ${dolares(ev.pnl)}; margen hasta el drawdown ${Math.round(ev.margen)} $ (${Math.round(ev.pctMargen*100)} % del drawdown); el margen mínimo que ha tenido fue ${Math.round(ev.peorMargen)} $.`);
+  if(ev.objetivo) l.push(`Objetivo ${ev.objetivo.total} $: lleva un ${Math.round(ev.objetivo.pct*100)} %, le faltan ${Math.round(ev.objetivo.falta)} $.`);
+  if(ev.limiteHoy) l.push(`Límite de pérdida diaria ${ev.limiteHoy.limite} $: hoy ${dolares(ev.hoyPnl)}${ev.limiteHoy.roto?' (LÍMITE SUPERADO)':''}.`);
+  l.push(`Estado: ${ev.estado}. Riesgo por operación razonable con este margen: unos ${ev.riesgoSugerido} $ (10 % del margen).`);
+  return l;
+}
+
+/* Rutina: antes y después de la sesión, por fecha */
+const RUTINA_PRE=[['niveles','Niveles de ayer y de la noche marcados'],['noticias','Calendario de noticias revisado'],['plan','Plan releído: riesgo, parada y setups'],['descanso','Pantalla y plataforma listas, sin distracciones']];
+const ESCALA={1:'muy mal',2:'mal',3:'normal',4:'bien',5:'muy bien'};
+function rutinaDe(rutinas,f){ const r=rutinas&&rutinas[f]; return r&&typeof r==='object'?r:null; }
+function rutinaNormal(r){
+  if(!r || typeof r!=='object') return null;
+  const n=v=>{ const x=Number(v); return x>=1&&x<=5?Math.round(x):null; };
+  const out={};
+  if(r.pre){ const p=r.pre; out.pre={checks:(Array.isArray(p.checks)?p.checks:[]).filter(k=>RUTINA_PRE.some(x=>x[0]===k)),sueno:n(p.sueno),animo:n(p.animo),nota:String(p.nota||'').slice(0,500),hora:p.hora||null}; }
+  if(r.post){ const q=r.post; out.post={disciplina:n(q.disciplina),mejora:String(q.mejora||'').slice(0,300),nota:String(q.nota||'').slice(0,800),hora:q.hora||null}; }
+  return out.pre||out.post?out:null;
+}
+function textoRutina(r){
+  const x=rutinaNormal(r); if(!x) return null; const l=[];
+  if(x.pre){ const hechos=RUTINA_PRE.filter(k=>x.pre.checks.includes(k[0])).map(k=>k[1]); l.push(`Antes de la sesión: sueño ${x.pre.sueno?x.pre.sueno+'/5 ('+ESCALA[x.pre.sueno]+')':'sin apuntar'}, ánimo ${x.pre.animo?x.pre.animo+'/5 ('+ESCALA[x.pre.animo]+')':'sin apuntar'}. Preparación: ${hechos.length?hechos.join('; '):'nada marcado'} (${hechos.length} de ${RUTINA_PRE.length}).${x.pre.nota?' Nota: "'+x.pre.nota+'"':''}`); }
+  if(x.post){ l.push(`Al cerrar: se puntuó la disciplina con ${x.post.disciplina?x.post.disciplina+'/5':'sin nota'}.${x.post.mejora?' Mejora para mañana: "'+x.post.mejora+'".':''}${x.post.nota?' Revisión: "'+x.post.nota+'"':''}`); }
+  return l.join(' ');
+}
+/* Resultado del día según cómo llegó: para el panel de estadísticas */
+function rendimientoPorEstado(rutinas,trades,clave){
+  const porDia={}; (trades||[]).forEach(t=>{ porDia[t.fecha]=(porDia[t.fecha]||0)+usdOp(t); });
+  const grupos={bajo:{n:0,u:0,etq:'1-2'},medio:{n:0,u:0,etq:'3'},alto:{n:0,u:0,etq:'4-5'}};
+  Object.keys(porDia).forEach(f=>{ const r=rutinaNormal(rutinas&&rutinas[f]); const v=r&&r.pre&&r.pre[clave]; if(!v) return; const g=v<=2?'bajo':(v===3?'medio':'alto'); grupos[g].n++; grupos[g].u+=porDia[f]; });
+  return grupos;
+}
+
+/* ---------- Diario pro: UI de cuenta de fondeo, errores y rutina ---------- */
+let rutModo=null;
+ICO.escudo='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M10 2.5l6 2.5v4.5c0 3.8-2.6 6.5-6 8-3.4-1.5-6-4.2-6-8V5z"/><path d="M7.3 10l1.8 1.8L12.8 8" stroke-linecap="round"/></svg>';
+ICO.sol='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10" cy="10" r="3.5"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M4.7 15.3l1.4-1.4M13.9 6.1l1.4-1.4"/></svg>';
+ICO.luna='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M16 12.5A7 7 0 017.5 4a7 7 0 108.5 8.5z"/></svg>';
+function cuentaEstado(st){ return evaluarCuenta((st||state).cuenta,(st||state).trades,iso(new Date())); }
+function estRutinas(){ if(!state.rutinas || typeof state.rutinas!=='object') state.rutinas={}; return state.rutinas; }
+const ESTADO_TXT={ok:'Cuenta sana',aviso:'Margen justo',peligro:'Margen crítico',quemada:'Drawdown superado',objetivo:'Objetivo conseguido',limite:'Límite diario superado'};
+
+/* --- Franja de hoy: cuenta y rutina en el resumen --- */
+function pintarHoy(){
+  const el=$('#hoy-fila'); if(!el) return;
+  const ev=cuentaEstado(), hoyI=iso(new Date()), r=rutinaNormal(estRutinas()[hoyI]);
+  let cuenta='';
+  if(ev){
+    const pct=Math.round(ev.pctMargen*100);
+    cuenta=`<a class="hoy-card cta-${ev.estado}" href="${hrefSub('plan')}" aria-label="Cuenta de fondeo: ${ESTADO_TXT[ev.estado]}, margen ${fmtValor(Math.round(ev.margen))}">
+      <span class="hoy-ico">${ICO.escudo}</span>
+      <span class="hoy-txt"><b>${ESTADO_TXT[ev.estado]}</b><small>${ev.c.firma?esc(ev.c.firma)+' · ':''}${ev.c.fase==='fondeada'?'fondeada':'evaluación'} · ${fmtUSD(ev.pnl)} acumulado</small></span>
+      <span class="hoy-dato"><b>${fmtValor(Math.round(ev.margen))}</b><small>margen hasta el drawdown</small><span class="hoy-barra"><span style="width:${pct}%"></span></span></span>
+      ${ev.objetivo?`<span class="hoy-dato"><b>${Math.round(ev.objetivo.pct*100)} %</b><small>del objetivo${ev.objetivo.falta?' · faltan '+fmtValor(Math.round(ev.objetivo.falta)):''}</small><span class="hoy-barra obj"><span style="width:${Math.round(ev.objetivo.pct*100)}%"></span></span></span>`:''}
+      ${ev.limiteHoy?`<span class="hoy-dato${ev.limiteHoy.roto?' mal':''}"><b>${fmtUSD(ev.hoyPnl)}</b><small>hoy · límite ${fmtValor(ev.limiteHoy.limite)}</small></span>`:''}</a>`;
+  } else if(!REV) cuenta=`<a class="hoy-card cta-vacia" href="${hrefSub('plan')}"><span class="hoy-ico">${ICO.escudo}</span><span class="hoy-txt"><b>Configura tu cuenta de fondeo</b><small>Drawdown, límite diario y objetivo. El diario te dirá cuánto margen te queda cada día.</small></span><span class="hoy-ir">Configurar${ICO.chev}</span></a>`;
+  const pre=r&&r.pre, post=r&&r.post;
+  const rutina=REV?'':`<div class="hoy-card rut">
+      <span class="hoy-ico">${ICO.sol}</span>
+      <span class="hoy-txt"><b>Tu sesión de hoy</b><small>${pre?`Preparada: sueño ${pre.sueno||'–'}/5, ánimo ${pre.animo||'–'}/5, ${pre.checks.length} de ${RUTINA_PRE.length} comprobaciones.`:'Antes de operar, prepara la sesión. Son treinta segundos.'}${post?` Cerrada con disciplina ${post.disciplina||'–'}/5.`:''}</small></span>
+      <span class="hoy-acc"><button type="button" class="boton ${pre?'sec':''} peq" data-accion="rutina" data-modo="pre">${pre?ICO.check+'Preparada':'Preparar sesión'}</button><button type="button" class="boton ${post?'sec':''} peq" data-accion="rutina" data-modo="post">${post?ICO.check+'Cerrada':'Cerrar sesión'}</button></span></div>`;
+  el.innerHTML=cuenta+rutina; el.hidden=!(cuenta||rutina);
+}
+
+/* --- Errores con su coste --- */
+function pintarErrores(ts,sel){
+  const el=$(sel||'#errores'); if(!el) return;
+  const ce=costeErrores(ts);
+  if(!ce.lista.length){ el.innerHTML=`<div class="panel-cuerpo"><p class="vacio">${ts.some(t=>!t.ejemplo)||!ts.length?'Sin errores marcados en el periodo. Al guardar una operación puedes marcar qué fallaste (FOMO, revancha, stop movido…) y aquí verás lo que te cuesta cada uno.':'Marca los errores en tus operaciones y aquí verás cuánto te cuesta cada uno.'}</p></div>`; return; }
+  const maxAbs=Math.max(...ce.lista.map(x=>Math.abs(x.u)),1);
+  const filas=ce.lista.map(x=>`<li><div class="err-top"><b>${esc(ERRORES[x.id].n)}</b><span class="err-n">${x.n} ${x.n===1?'operación':'operaciones'}</span><span class="err-u ${clase(x.u)}">${fmtUSD(x.u)}</span></div><span class="err-barra"><span class="${x.u<0?'n':'p'}" style="width:${Math.round(Math.abs(x.u)/maxAbs*100)}%"></span></span></li>`).join('');
+  const comp=ce.nSin&&ce.nCon?`<p class="err-comp">Tus operaciones limpias dan de media <b class="${clase(ce.mediaSin)}">${fmtUSD(ce.mediaSin)}</b>; las que llevan algún error, <b class="${clase(ce.mediaCon)}">${fmtUSD(ce.mediaCon)}</b>. ${ce.uCon<0?`Sin esos errores el periodo habría cerrado en <b class="${clase(ce.uSin)}">${fmtUSD(ce.uSin)}</b>.`:''}</p>`:'';
+  el.innerHTML=`<div class="panel-cuerpo">${comp}<ul class="err-lista">${filas}</ul></div>`;
+}
+
+/* --- Rutina: ventana --- */
+function abrirRutina(modo){
+  if(REV) return;
+  rutModo=modo; const hoyI=iso(new Date()), r=rutinaNormal(estRutinas()[hoyI])||{}, p=r.pre||{checks:[]}, q=r.post||{};
+  const esc5=(nombre,val,etq)=>`<div class="rut-esc" role="group" aria-label="${etq}"><span class="rut-etq">${etq}</span><div class="rut-botones">${[1,2,3,4,5].map(v=>`<label><input type="radio" name="${nombre}" value="${v}"${val===v?' checked':''}><span>${v}</span></label>`).join('')}</div><span class="rut-ley"><span>${ESCALA[1]}</span><span>${ESCALA[5]}</span></span></div>`;
+  const ev=cuentaEstado();
+  const cuerpo=modo==='pre'
+    ?`<div class="rut-checks">${RUTINA_PRE.map(([k,t])=>`<label class="pl-check"><input type="checkbox" name="rut-check" value="${k}"${p.checks.includes(k)?' checked':''}><span>${t}</span></label>`).join('')}</div>
+      ${esc5('rut-sueno',p.sueno,'¿Cómo has dormido?')}${esc5('rut-animo',p.animo,'¿Cómo llegas de ánimo?')}
+      <div class="campo"><label for="rut-nota">Qué espero hoy (opcional)</label><textarea id="rut-nota" rows="2" maxlength="500" placeholder="Niveles que vigilo, escenario que espero, qué no voy a hacer">${esc(p.nota||'')}</textarea></div>
+      ${ev?`<p class="rut-cuenta">Margen hasta el drawdown: <b>${fmtValor(Math.round(ev.margen))}</b>.${ev.limiteHoy?' Límite de hoy: '+fmtValor(ev.limiteHoy.limite)+'.':''} Riesgo razonable por operación: unos <b>${fmtValor(ev.riesgoSugerido)}</b>.</p>`:''}`
+    :`${esc5('rut-disc',q.disciplina,'¿Cómo has cumplido tu plan hoy?')}
+      <div class="campo"><label for="rut-mejora">Una mejora concreta para mañana</label><input type="text" id="rut-mejora" maxlength="300" value="${esc(q.mejora||'')}" placeholder="Por ejemplo: no entrar hasta ver la absorción confirmada" autocomplete="off"></div>
+      <div class="campo"><label for="rut-nota2">Revisión del día (opcional)</label><textarea id="rut-nota2" rows="3" maxlength="800" placeholder="Qué pasó, qué sentiste, qué repetirías">${esc(q.nota||'')}</textarea></div>
+      <p class="ayuda">La IA leerá esto en el parte de hoy junto a tus operaciones.</p>`;
+  $('#rut-t').textContent=modo==='pre'?'Preparar la sesión':'Cerrar la sesión';
+  $('#rut-sub').textContent=modo==='pre'?'Treinta segundos antes de operar. Tu estado también es parte de tu riesgo.':'Un minuto al terminar. Se juzga el proceso, no el dinero.';
+  $('#rut-cuerpo').innerHTML=cuerpo;
+  $('#rut').hidden=false; document.body.style.overflow='hidden';
+  const f=$('#rut input, #rut textarea'); if(f) f.focus();
+}
+function cerrarRutina(){ $('#rut').hidden=true; document.body.style.overflow=''; rutModo=null; }
+function guardarRutina(){
+  const hoyI=iso(new Date()), R=estRutinas(), r=R[hoyI]||{}, v=n=>{ const x=$(`input[name="${n}"]:checked`); return x?Number(x.value):null; };
+  if(rutModo==='pre') r.pre={checks:$$('input[name="rut-check"]:checked').map(i=>i.value),sueno:v('rut-sueno'),animo:v('rut-animo'),nota:$('#rut-nota').value.trim(),hora:new Date().toISOString()};
+  else r.post={disciplina:v('rut-disc'),mejora:$('#rut-mejora').value.trim(),nota:$('#rut-nota2').value.trim(),hora:new Date().toISOString()};
+  R[hoyI]=r; guardar(); cerrarRutina(); pintarHoy();
+  toast(rutModo==='pre'?'Sesión preparada. Buen trading.':'Sesión cerrada. Mañana, una cosa mejor.');
+  if(rutModo==='post' && SERVIDOR && planGuardado(planNormal(state.plan)) && diasOperados().includes(hoyI)) cargarInformes().then(()=>{ if(iaInfo.ia) pedirAnalisis('dia',hoyI,{auto:true}); }).catch(()=>{});
+}
+
+/* --- Cuenta de fondeo: formulario en Plan e IA --- */
+function panelCuenta(){
+  const c=cuentaNormal(state.cuenta), ro=!!REV, dis=ro?' disabled':'', ev=cuentaEstado();
+  const num=(id,lab,val,suf,ph)=>`<div class="campo pl-num"><label for="${id}">${lab}</label><div class="dinero"><input type="text" inputmode="decimal" id="${id}" value="${val==null?'':String(val).replace('.',',')}" autocomplete="off" placeholder="${ph||''}"${dis}><span aria-hidden="true">${suf}</span></div></div>`;
+  const resumen=ev?`<div class="cta-res cta-${ev.estado}">
+      <div class="cta-fila"><span class="cta-etq">${ESTADO_TXT[ev.estado]}</span><span class="cta-pnl ${clase(ev.pnl)}">${fmtUSD(ev.pnl)}</span></div>
+      <div class="cta-gauge" role="img" aria-label="Margen ${Math.round(ev.pctMargen*100)} % del drawdown"><span class="cta-suelo">Drawdown ${fmtUSD(ev.suelo)}</span><span class="cta-pista"><span style="width:${Math.round(ev.pctMargen*100)}%"></span></span><span class="cta-pico">${ev.c.ddTipo==='estatico'?'Inicio':'Pico '+fmtUSD(ev.pico)}</span></div>
+      <dl class="cta-datos"><div><dt>Margen</dt><dd>${fmtValor(Math.round(ev.margen))}</dd></div><div><dt>Peor margen</dt><dd>${fmtValor(Math.round(ev.peorMargen))}</dd></div>${ev.objetivo?`<div><dt>Objetivo</dt><dd>${Math.round(ev.objetivo.pct*100)} %</dd></div>`:''}${ev.limiteHoy?`<div><dt>Hoy</dt><dd class="${clase(ev.hoyPnl)}">${fmtUSD(ev.hoyPnl)}</dd></div>`:''}<div><dt>Riesgo razonable</dt><dd>${fmtValor(ev.riesgoSugerido)}</dd></div><div><dt>Días operados</dt><dd>${ev.nDias}</dd></div></dl>
+      <p class="ayuda">Calculado con tus operaciones desde ${c.desde?fechaCorta(c.desde):'el principio'}. Las reglas exactas son las de tu firma: esto es tu copiloto, no su panel.</p></div>`:'';
+  return `<section class="panel entra" aria-labelledby="t-cta"><div class="panel-cab"><h2 id="t-cta">${ICO.escudo}${ro?'Su cuenta de fondeo':'Tu cuenta de fondeo'}</h2><span class="panel-meta">${c.actualizado?'Actualizada el '+fechaLarga(c.actualizado):'Sin configurar'}</span></div>
+    <div class="panel-cuerpo">${resumen}
+      ${ro&&!ev?'<p class="vacio">No ha configurado su cuenta.</p>':''}
+      ${ro?'':`<form id="form-cuenta" class="cta-form" novalidate>
+        <div class="pl-campos">
+          <div class="campo"><label for="ct-firma">Firma</label><input type="text" id="ct-firma" maxlength="60" value="${esc(c.firma)}" placeholder="Apex, Topstep, MFF…" autocomplete="off"></div>
+          ${num('ct-tamano','Tamaño de la cuenta',c.tamano,'$','50000')}
+          ${num('ct-dd','Drawdown máximo',c.ddMax,'$','2500')}
+          <div class="campo"><label for="ct-tipo">Tipo de drawdown</label><select id="ct-tipo">${Object.keys(CUENTA_TIPOS).map(k=>`<option value="${k}"${c.ddTipo===k?' selected':''}>${CUENTA_TIPOS[k]}</option>`).join('')}</select></div>
+          ${num('ct-limite','Límite de pérdida diaria',c.limiteDiario,'$','Sin límite')}
+          ${num('ct-obj','Objetivo de beneficio',c.objetivo,'$','3000')}
+          <div class="campo"><label for="ct-desde">Operando desde</label><input type="date" id="ct-desde" value="${c.desde}"></div>
+          <div class="campo"><label for="ct-fase">Fase</label><select id="ct-fase"><option value="evaluacion"${c.fase==='evaluacion'?' selected':''}>Evaluación</option><option value="fondeada"${c.fase==='fondeada'?' selected':''}>Cuenta fondeada</option></select></div>
+        </div>
+        <label class="pl-check"><input type="checkbox" id="ct-bloqueo"${c.bloqueo?' checked':''}><span>El drawdown se bloquea al llegar al saldo inicial</span></label>
+        <div class="pl-pie"><span class="pl-estado" id="ct-estado" role="status"></span><button type="submit" class="boton">Guardar cuenta</button></div>
+      </form>`}
+    </div></section>`;
+}
+function guardarCuenta(){
+  const v=id=>{ const x=$('#'+id); return x?x.value:''; }, n=id=>{ const x=num(v(id)); return isFinite(x)&&x>0?x:null; };
+  if(!n('ct-dd')){ const e=$('#ct-estado'); if(e) e.textContent='Pon al menos el drawdown máximo.'; return; }
+  state.cuenta=cuentaNormal({firma:v('ct-firma').trim(),tamano:n('ct-tamano'),ddMax:n('ct-dd'),ddTipo:v('ct-tipo'),limiteDiario:n('ct-limite'),objetivo:n('ct-obj'),desde:v('ct-desde'),fase:v('ct-fase'),bloqueo:$('#ct-bloqueo').checked,actualizado:new Date().toISOString()});
+  guardar(); toast('Cuenta guardada'); renderDiario();
+}
+
+/* --- Estadísticas: cómo llegas y cómo te va --- */
+function panelEstado(ts){
+  const R=estRutinas(), conR=Object.keys(R).length;
+  if(!conR) return `<section class="panel entra" aria-labelledby="t-est-rut"><div class="panel-cab"><h2 id="t-est-rut">Cómo llegas y cómo te va</h2></div><div class="panel-cuerpo"><p class="vacio">Cuando prepares tus sesiones (sueño y ánimo de 1 a 5) verás aquí si tu resultado cambia según cómo llegas.</p></div></section>`;
+  const bloque=(titulo,g)=>{ const ks=['bajo','medio','alto']; const tot=ks.reduce((s,k)=>s+g[k].n,0); if(!tot) return `<div class="est-rut-b"><p class="pl-sub">${titulo}</p><p class="vacio">Sin días con esta puntuación en el periodo.</p></div>`;
+    return `<div class="est-rut-b"><p class="pl-sub">${titulo}</p><ul>${ks.map(k=>{ const x=g[k], m=x.n?x.u/x.n:null; return `<li><span class="est-rut-etq">${x.etq}</span><b class="${m==null?'':clase(m)}">${m==null?MENOS:fmtUSD(m)}</b><small>${x.n?x.n+(x.n===1?' día':' días')+' · media por día':'sin días'}</small></li>`; }).join('')}</ul></div>`; };
+  const d=ts.filter(t=>!t.ejemplo);
+  return `<section class="panel entra" aria-labelledby="t-est-rut"><div class="panel-cab"><h2 id="t-est-rut">Cómo llegas y cómo te va</h2><span class="panel-meta">Resultado medio por día según tu puntuación al preparar la sesión</span></div><div class="panel-cuerpo est-rut">${bloque('Sueño',rendimientoPorEstado(R,d,'sueno'))}${bloque('Ánimo',rendimientoPorEstado(R,d,'animo'))}</div></section>`;
+}
+
 /* ---------- Ruta de formación: índice, desbloqueo y vistas ---------- */
 const RUTA_APROBADO=0.9, RUTA_N_TEST=10, RUTA_N_NIVEL=20;
 TEMAS.push(
@@ -4661,7 +4977,12 @@ function pintarEstadisticas(){
       <section class="panel entra" aria-labelledby="t-hora"><div class="panel-cab"><h2 id="t-hora">Resultado por hora de entrada</h2><span class="panel-meta">Tu hora</span></div><div class="panel-cuerpo">${horas}</div></section>
       <section class="panel entra" aria-labelledby="t-dsem"><div class="panel-cab"><h2 id="t-dsem">Resultado por día de la semana</h2></div><div class="panel-cuerpo">${dias}</div></section>
     </div>
-    <section class="panel entra" aria-labelledby="t-dist"><div class="panel-cab"><h2 id="t-dist">Cómo se reparten tus resultados</h2><span class="panel-meta">Operaciones por tramo de resultado</span></div><div class="panel-cuerpo">${dist}</div></section>`;
+    <section class="panel entra" aria-labelledby="t-dist"><div class="panel-cab"><h2 id="t-dist">Cómo se reparten tus resultados</h2><span class="panel-meta">Operaciones por tramo de resultado</span></div><div class="panel-cuerpo">${dist}</div></section>
+    <div class="fila b">
+      <section class="panel entra" aria-labelledby="t-est-err"><div class="panel-cab"><h2 id="t-est-err">Lo que cuestan los errores</h2><span class="panel-meta">${PER_T[state.periodo]}</span></div><div id="est-errores"></div></section>
+      ${panelEstado(ts)}
+    </div>`;
+  pintarErrores(ts,'#est-errores');
   const tip=$('#tip-g');
   const mostrar=c=>{ if(!tip) return; tip.textContent=''; c.dataset.tip.split('\n').forEach((l,i)=>{ const s2=document.createElement(i?'span':'b'); s2.textContent=l; tip.appendChild(s2); }); tip.hidden=false; ponerTip(c); };
   el.addEventListener('pointerover',e=>{ const c=e.target.closest('.bv-col'); if(c) mostrar(c); });
@@ -4713,6 +5034,7 @@ function vistaPlan(){
       ${ro?'':`<div class="pl-pie"><span class="pl-estado" id="pl-estado" role="status"></span><button type="submit" class="boton">Guardar plan</button></div>`}
     </form>
     <div class="plan-col">
+      ${panelCuenta()}
       <section class="panel entra" aria-labelledby="t-cumple"><div class="panel-cab"><h2 id="t-cumple">Cumplimiento</h2><span class="panel-meta">Últimos 30 días</span></div><div id="cumple"></div></section>
       <section class="panel entra panel-ia" aria-labelledby="t-ia"><div class="panel-cab"><h2 id="t-ia"><span class="ia-chip">IA</span>Agente del plan</h2><span class="panel-meta">Revisa ${ro?'sus':'tus'} días contra ${ro?'su':'tu'} plan</span></div><div id="ia-cuerpo" aria-live="polite"></div></section>
     </div>
@@ -4725,6 +5047,7 @@ function trasPlan(){
   const f=$('#form-plan');
   if(f && !REV) f.addEventListener('submit',e=>{ e.preventDefault(); guardarPlan(); });
   if(f && !REV) f.addEventListener('input',()=>{ const s=$('#pl-estado'); if(s) s.textContent='Cambios sin guardar'; });
+  const fc=$('#form-cuenta'); if(fc) fc.addEventListener('submit',e=>{ e.preventDefault(); guardarCuenta(); });
 }
 function guardarPlan(){
   const v=id=>{ const x=$('#'+id); return x?x.value:''; }, n=id=>{ const x=num(v(id)); return isFinite(x)&&x>0?x:null; };
@@ -4792,6 +5115,7 @@ function tarjetaInforme(inf,abierto){
       ${lista('Lo que hiciste bien',ia.bien,'bien',x=>`<li><span aria-hidden="true">${ICO.check}</span>${esc(x)}</li>`)}
       ${lista('Lo que tienes que corregir',ia.mal,'mal',x=>`<li><span aria-hidden="true">${ICO.cruz}</span><div><b>${esc(x.regla)}</b> ${esc(x.detalle)}</div></li>`)}
       ${lista('Patrones',ia.patrones,'pat',x=>`<li>${esc(x)}</li>`)}
+      ${ia.capturas&&ia.capturas.length?`<div class="inf-bloque inf-caps"><p class="inf-sub">Capturas revisadas</p><ul>${ia.capturas.map(x=>`<li class="${x.coherente?'ok':'ko'}"><span aria-hidden="true">${x.coherente?ICO.check:ICO.cruz}</span><div><b>${esc(x.operacion)}</b> ${esc(x.detalle)}</div></li>`).join('')}</ul></div>`:''}
       ${ia.acciones&&ia.acciones.length?`<div class="inf-acciones"><p class="inf-sub">Para tu próxima sesión</p><ol>${ia.acciones.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`:''}`
     :`<p class="inf-resumen">${inf.dias===inf.diasOk?'Plan cumplido todos los días analizados.':`Plan cumplido ${inf.diasOk} de ${inf.dias} ${inf.dias===1?'día':'días'}.`}</p>
       ${rotas.length?`<div class="inf-bloque mal"><p class="inf-sub">Reglas rotas</p><ul>${rotas.slice(0,8).map(x=>`<li><span aria-hidden="true">${ICO.cruz}</span><div><b>${x.r.nombre}</b> ${esc(x.r.detalle)}</div></li>`).join('')}</ul></div>`:''}
@@ -4857,6 +5181,7 @@ function prepararCajon(){
     if(!marcar('f-setup',t.setup||'')) $$('input[name="f-setup"]').forEach(x=>{ x.checked=false; });
     const u=calc(t).usd; marcar('f-res',u<0?'P':'G'); $('#f-imp').value=String(Math.abs(Math.round(u*100)/100)).replace('.',',');
     $('#f-nota').value=t.nota||''; $('#f-hora').value=t.hEnt?horaOp(t):'';
+    { const es=erroresOp(t); $$('input[name="f-err"]').forEach(i=>{ i.checked=es.includes(i.value); }); }
     $('#f-stop').value=stopOp(t)?String(stopOp(t)).replace('.',','):'';
     $('#f-riesgo').value=riesgoOp(t)?String(riesgoOp(t)).replace('.',','):'';
     { const a=riesgoAuto(); riesgoManual=!!riesgoOp(t) && !(a!=null && Math.abs(a-riesgoOp(t))<0.5); }
@@ -4870,7 +5195,7 @@ function prepararCajon(){
     $('#atas-res').hidden=true;
     if(cajonModo==='editar'){
       $('#f-fecha').value=iso(new Date()); $('#f-ct').value=1; $('#f-imp').value=''; $('#f-nota').value=''; marcar('f-sesion','NY'); marcar('f-inst','NQ'); marcar('f-dir','L'); marcar('f-res','G');
-      $('#f-hora').value=''; $('#f-stop').value=''; $('#f-riesgo').value=''; riesgoManual=false;
+      $('#f-hora').value=''; $('#f-stop').value=''; $('#f-riesgo').value=''; riesgoManual=false; $$('input[name="f-err"]').forEach(i=>{ i.checked=false; });
       $$('input[name="f-setup"]').forEach(x=>{ x.checked=false; }); capturaForm=null; capturaOriginal=null; pintarZona();
     }
     cajonModo='nueva';
@@ -4878,7 +5203,7 @@ function prepararCajon(){
 }
 function guardarEdicion(t){
   const o=state.trades.find(x=>x.id===editandoId); if(!o) return false;
-  Object.assign(o,o.origen==='atas'?{sesion:t.sesion,setup:t.setup,nota:t.nota,stop:t.stop,riesgo:t.riesgo}:t);
+  Object.assign(o,o.origen==='atas'?{sesion:t.sesion,setup:t.setup,nota:t.nota,stop:t.stop,riesgo:t.riesgo,errores:t.errores}:t);
   if(capturaForm!==capturaOriginal){
     if(capturaForm){ capturas.set(o.id,capturaForm); IDB.set(o.id,capturaForm).catch(()=>{ if(SERVIDOR) toast('No se ha podido subir la captura. Vuelve a guardarla.'); }); }
     else { capturas.delete(o.id); IDB.del(o.id).catch(()=>{}); }
@@ -5151,6 +5476,7 @@ function vistaDiario(){
     <div class="ticker" id="ticker-caja" hidden></div>
   </section>
   <div class="avisos-d" id="avisos-diario" hidden></div>
+  <div class="hoy-fila" id="hoy-fila" hidden></div>
   <div class="kpis4" id="kpis"></div>
   <section class="ins-sec" aria-labelledby="t-ins"><div class="ins-cab"><h2 id="t-ins">Lo que dicen tus datos</h2><span class="panel-meta">Pulsa una tarjeta para ver esas operaciones</span></div><div class="insights" id="insights"></div></section>
   <div class="fila a">
@@ -5165,13 +5491,14 @@ function vistaDiario(){
     <section class="panel entra" aria-labelledby="t-setups"><div class="panel-cab"><h2 id="t-setups">Rendimiento por setup</h2><span class="ayuda-click">Pulsa un setup para ver sus operaciones</span></div><div id="setups"></div></section>
     <section class="panel entra" aria-labelledby="t-com"><div class="panel-cab"><h2 id="t-com">${REV?'Tus comentarios':'Comentarios de Alex'}</h2><span class="panel-meta">${REV?'Los últimos que le has dejado':'Sobre tus operaciones'}</span></div><div id="comentarios"></div></section>
   </div>
+  <section class="panel entra" aria-labelledby="t-err"><div class="panel-cab"><h2 id="t-err">${REV?'Lo que le cuestan sus errores':'Lo que te cuestan tus errores'}</h2><span class="panel-meta">Resultado de las operaciones marcadas con cada error</span></div><div id="errores"></div></section>
   <section class="panel entra" id="panel-ops" aria-labelledby="t-ops"><div class="panel-cab"><h2 id="t-ops">Operaciones</h2><span class="panel-meta" id="ops-meta"></span></div>
     <div id="filtros"></div><div id="aviso-ejemplo"></div><div class="tabla-wrap"><div id="tabla"></div></div></section>
   ${REV?'':`<button type="button" class="fab" data-accion="nueva" aria-label="Nueva operación">${ICO.mas}</button>`}`;
 }
 function pintarDatos(){
   const ts=filtradas();
-  pintarHero(ts); pintarTicker(); pintarCurva(ts); pintarKpis(ts); pintarInsights(ts); pintarCalendario(); pintarMapa(ts); pintarSetups(ts); pintarComentarios(); pintarAviso(); pintarAvisos(); pintarFiltros(); pintarTabla();
+  pintarHero(ts); pintarTicker(); pintarCurva(ts); pintarKpis(ts); pintarInsights(ts); pintarCalendario(); pintarMapa(ts); pintarSetups(ts); pintarComentarios(); pintarAviso(); pintarAvisos(); pintarHoy(); pintarErrores(ts); pintarFiltros(); pintarTabla();
   $$('.seg-oscuro button',vista).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.periodo===state.periodo)));
   pintarLateral();
 }
@@ -5417,7 +5744,7 @@ function pintarTabla(){
       filas+=`<tr class="detalle" id="det-${t.id}"><td colspan="9"><div class="det-grid">
         <button type="button" class="det-cap" data-accion="ver-captura" data-id="${t.id}" aria-label="Ampliar captura de ATAS"><img data-cap="${t.id}" alt="Captura de ATAS de la entrada"></button>
         <div class="det-info">
-          <div><h3>Resultado</h3><p><b class="${clase(c.usd)}">${fmtUSD(c.usd)}</b> con ${t.ct} ${t.ct===1?'contrato':'contratos'} de ${esc(t.inst)}${INSTR[t.inst]?' ('+esc(ins.nombre)+')':''}, sesión de ${esc(t.sesion)}.</p>${t.pEnt!=null?`<p class="det-atas">Entrada ${precio(t.pEnt)}${t.hEnt?' a las '+horaOp(t):''} · salida ${precio(t.pSal)}${t.hSal?' a las '+hhmm(horaEn(t.hSal,zonaAlumno())):''}${t.hSal&&t.hEnt?' ('+dur((t.hSal-t.hEnt)/60000)+')':''}${t.pts!=null?' · '+fmtPts(t.pts)+' puntos':''}${t.com?' · comisión '+fmtValor(t.com):''}</p>`:''}<p class="det-riesgo${stopOp(t)?'':' falta'}">${t.hEnt && t.pEnt==null?'Entrada a las '+horaOp(t)+' · ':''}${stopOp(t)?'Stop de '+nf(stopOp(t),0,2)+' puntos':'Sin stop apuntado'}${riesgoOp(t)?' · riesgo '+fmtValor(riesgoOp(t))+' · <b class="'+clase(c.usd)+'">'+fmtR(c.usd/riesgoOp(t))+'</b>':''}</p></div>
+          <div><h3>Resultado</h3><p><b class="${clase(c.usd)}">${fmtUSD(c.usd)}</b> con ${t.ct} ${t.ct===1?'contrato':'contratos'} de ${esc(t.inst)}${INSTR[t.inst]?' ('+esc(ins.nombre)+')':''}, sesión de ${esc(t.sesion)}.</p>${t.pEnt!=null?`<p class="det-atas">Entrada ${precio(t.pEnt)}${t.hEnt?' a las '+horaOp(t):''} · salida ${precio(t.pSal)}${t.hSal?' a las '+hhmm(horaEn(t.hSal,zonaAlumno())):''}${t.hSal&&t.hEnt?' ('+dur((t.hSal-t.hEnt)/60000)+')':''}${t.pts!=null?' · '+fmtPts(t.pts)+' puntos':''}${t.com?' · comisión '+fmtValor(t.com):''}</p>`:''}${erroresOp(t).length?`<p class="det-err">${erroresOp(t).map(e=>`<span class="etq etq-falta">${esc(ERRORES[e].n)}</span>`).join(' ')}</p>`:''}<p class="det-riesgo${stopOp(t)?'':' falta'}">${t.hEnt && t.pEnt==null?'Entrada a las '+horaOp(t)+' · ':''}${stopOp(t)?'Stop de '+nf(stopOp(t),0,2)+' puntos':'Sin stop apuntado'}${riesgoOp(t)?' · riesgo '+fmtValor(riesgoOp(t))+' · <b class="'+clase(c.usd)+'">'+fmtR(c.usd/riesgoOp(t))+'</b>':''}</p></div>
           <div><h3>${REV?'Su nota':'Tu nota'}</h3><p>${t.nota?esc(t.nota):'Sin nota.'}</p></div>
           ${REV?`<div class="det-alex rev"><span class="avatar peq" aria-hidden="true">AG</span><div class="rev-com"><h3><label for="com-${t.id}">Tu comentario</label></h3><textarea id="com-${t.id}" rows="3" maxlength="2000" placeholder="Qué ha hecho bien y qué puede mejorar en esta entrada">${esc(t.comentario||'')}</textarea><div class="rev-acc"><button type="button" class="boton peq" data-accion="guardar-com" data-id="${t.id}">Guardar comentario</button><span class="rev-estado" id="com-est-${t.id}" role="status"></span></div></div></div>`
           :`<div class="det-alex"><span class="avatar peq" aria-hidden="true">AG</span><div><h3>Comentario de Alex</h3><p>${t.comentario?esc(t.comentario):'Todavía sin revisar.'}</p></div></div>
@@ -5448,6 +5775,7 @@ function prepararForm(){
   Object.keys(INSTR).forEach(k=>{ const i=INSTR[k]; (grupos[i.grupo]=grupos[i.grupo]||[]).push(`<label title="${i.nombre}"><input type="radio" name="f-inst" value="${k}"${k==='NQ'?' checked':''}><span>${k} <small>${fmtValor(i.v)}/pt</small></span></label>`); });
   $('#f-inst').innerHTML=Object.keys(grupos).map(gr=>`<div class="chips-grupo"><small>${gr}</small><div class="chips-sel">${grupos[gr].join('')}</div></div>`).join('');
   $('#f-setup').innerHTML=SETUPS.map((s,i)=>`<label><input type="radio" name="f-setup" value="${esc(s)}" id="f-setup-${i}"><span>${esc(s)}</span></label>`).join('');
+  $('#f-errores').innerHTML=ERRORES_IDS.map(k=>`<label title="${esc(ERRORES[k].d)}"><input type="checkbox" name="f-err" value="${k}"><span>${esc(ERRORES[k].n)}</span></label>`).join('');
   pintarZona(); pintarCalculo();
 }
 function leerForm(){
@@ -5456,7 +5784,8 @@ function leerForm(){
   const st=num($('#f-stop').value), rs=num($('#f-riesgo').value), hh=$('#f-hora').value;
   return {fecha:$('#f-fecha').value,sesion:v('f-sesion')||'NY',inst:v('f-inst')||'NQ',ct:parseInt($('#f-ct').value,10),dir:v('f-dir')||'L',
     usd:isFinite(p)?(v('f-res')==='P'?-p:p):NaN,setup:v('f-setup'),nota:$('#f-nota').value.trim(),
-    hEnt:hh?tsLocal($('#f-fecha').value,hh):null,stop:st>0?Math.round(st*100)/100:null,riesgo:rs>0?Math.round(rs*100)/100:null};
+    hEnt:hh?tsLocal($('#f-fecha').value,hh):null,stop:st>0?Math.round(st*100)/100:null,riesgo:rs>0?Math.round(rs*100)/100:null,
+    errores:$$('input[name="f-err"]:checked').map(i=>i.value)};
 }
 function validar(t){
   if(!t.fecha) return ['Falta la fecha.',null];
@@ -5812,6 +6141,9 @@ function accionesPaleta(){
   a.push({g:'Diario',t:'Importar operaciones de ATAS',k:'excel csv export subir journal tradovate ninjatrader',f:()=>irRuta('diario',()=>abrirImp(null))});
   a.push({g:'Diario',t:'Ver mis estadísticas',k:'profit factor drawdown expectativa hora numeros',f:()=>irRuta('diario/estadisticas')});
   a.push({g:'Plan e IA',t:'Mi plan de trading',k:'reglas agente ia cumplimiento disciplina',f:()=>irRuta('diario/plan')});
+  a.push({g:'Plan e IA',t:'Mi cuenta de fondeo',k:'drawdown prop firm margen objetivo',f:()=>irRuta('diario/plan')});
+  a.push({g:'Diario',t:'Preparar la sesión de hoy',k:'rutina checklist sueño animo',f:()=>irRuta('diario',()=>abrirRutina('pre'))});
+  a.push({g:'Diario',t:'Cerrar la sesión de hoy',k:'rutina revision mejora',f:()=>irRuta('diario',()=>abrirRutina('post'))});
   a.push({g:'Plan e IA',t:'Analizar mi último día con la IA',k:'agente informe parte revisar',f:()=>irRuta('diario/plan',()=>pedirAnalisis('dia',diasOperados().slice(-1)[0]))});
   ['semana','mes','todo'].forEach(p=>a.push({g:'Diario',t:'Ver resultados: '+PER_T[p].toLowerCase(),k:'periodo filtro',f:()=>irRuta('diario',()=>{ state.periodo=p; guardar(); pintarDatos(); })}));
   SETUPS.forEach(st=>a.push({g:'Setups',t:'Ver operaciones de '+st,k:'filtrar setup',f:()=>irRuta('diario',()=>{ filtro.setup=st; refrescarFiltros(); alPanelOps(); })}));
@@ -6163,7 +6495,7 @@ function resumenAlumno(a){
   const temas=(a.datos && a.datos.temas)||{}; let dom=0;
   TEMAS.forEach(t=>{ const pr=temas[t.id]; if(pr) dom+=Math.min(pr.mejor,nTema(t.id)); });
   return { n:ts.length, nMes:mes.length, usdMes:mes.reduce((s,t)=>s+calc(t).usd,0), semana:ts.filter(t=>enSemana(t.fecha)).length,
-    sinCom:ts.filter(t=>!t.comentario).length, ult:ts.reduce((m,t)=>t.fecha>m?t.fecha:m,''), form:progresoRuta(a.datos||{}).pct, plan:resumenPlan(a) };
+    sinCom:ts.filter(t=>!t.comentario).length, ult:ts.reduce((m,t)=>t.fecha>m?t.fecha:m,''), form:progresoRuta(a.datos||{}).pct, plan:resumenPlan(a), cuenta:evaluarCuenta(a.datos&&a.datos.cuenta,(a.datos&&a.datos.trades)||[],iso(new Date())) };
 }
 function vistaAlumnos(){
   const cab=`<header class="cab-modulo entra"><div><h1>Alumnos</h1><p class="sub">Las operaciones de cada alumno con su captura de ATAS. Entra en uno para revisar su diario y dejarle comentarios.</p></div>${adminLista?'<input type="search" class="al-buscar" id="al-buscar" placeholder="Buscar alumno" aria-label="Buscar alumno">':''}</header>`;
@@ -6180,6 +6512,7 @@ function vistaAlumnos(){
   const cards=lista.map(({a,r},k)=>`<a class="al-card entra" style="animation-delay:${Math.min(k,12)*0.03}s" href="#alumnos/${encodeURIComponent(a.id)}" data-nombre="${esc(a.nombre)}">
       <span class="al-top">${avatarR({discord_id:a.id,nombre:a.nombre,avatar_url:a.avatar})}<span class="al-quien"><b class="al-nom">${esc(a.nombre)}</b><span class="al-sub">${r.ult?'Última operación: '+fechaCorta(r.ult):'Sin operaciones todavía'}</span></span></span>
       <span class="al-stats"><span><b>${r.nMes}</b>ops. este mes</span><span class="${claseO(r.usdMes)}"><b>${r.nMes?fmtUSD(r.usdMes):MENOS}</b>resultado del mes</span><span><b>${Math.round(r.form*100)} %</b>formación</span></span>
+      ${r.cuenta?`<span class="al-cta">${ESTADO_TXT[r.cuenta.estado]} · margen <b>${fmtValor(Math.round(r.cuenta.margen))}</b>${r.cuenta.objetivo?' · objetivo <b>'+Math.round(r.cuenta.objetivo.pct*100)+' %</b>':''}</span>`:''}
       <span class="al-plan">${r.plan?(r.plan.dias?`Plan cumplido <b>${r.plan.ok} de ${r.plan.dias}</b> días`:'Plan creado, sin días operados'):'Sin plan de trading'}${a.ultimoInforme&&a.ultimoInforme.puntuacion!=null?` · IA <b>${a.ultimoInforme.puntuacion}/10</b>`:''}</span>
       ${r.sinCom?`<span class="al-pend">${r.sinCom} ${r.sinCom===1?'operación sin comentar':'operaciones sin comentar'}</span>`:(r.n?'<span class="al-ok">Todo revisado</span>':'')}
     </a>`).join('');
@@ -6212,9 +6545,10 @@ document.addEventListener('click',e=>{
   if(e.target.id==='visor'){ cerrarVisor(); return; }
   if(e.target.id==='paleta'){ cerrarPaleta(); return; }
   if(e.target.id==='imp'){ cerrarImp(); return; }
+  if(e.target.id==='rut'){ cerrarRutina(); return; }
   const po=e.target.closest('.pal-op'); if(po){ ejecutarPaleta(Number(po.dataset.i)); return; }
   const b=e.target.closest('[data-accion]'); if(!b||b.disabled) return;
-  if(REV && ['nueva','editar-obj','borrar','borrar-si','borrar-no','borrar-ejemplos','importar','editar-op','completar-sig','analizar'].includes(b.dataset.accion)) return;
+  if(REV && ['nueva','editar-obj','borrar','borrar-si','borrar-no','borrar-ejemplos','importar','editar-op','completar-sig','analizar','rutina'].includes(b.dataset.accion)) return;
   switch(b.dataset.accion){
     case 'guardar-com': guardarComentario(b.dataset.id,b); break;
     case 'importar': abrirImp(b); break;
@@ -6222,6 +6556,9 @@ document.addEventListener('click',e=>{
     case 'imp-elegir': $('#imp-file').click(); break;
     case 'imp-otro': impEstado={paso:'inicio',zona:impEstado?impEstado.zona:'local'}; pintarImp(); { const s=$('#imp .subida'); if(s) s.focus(); } break;
     case 'imp-ok': confirmarImp(); break;
+    case 'rutina': abrirRutina(b.dataset.modo==='post'?'post':'pre'); break;
+    case 'cerrar-rut': cerrarRutina(); break;
+    case 'guardar-rut': guardarRutina(); break;
     case 'editar-op': abrirCajon(b,b.dataset.id); break;
     case 'completar-sig': { const t=incompletas()[0]; if(t) abrirCajon(b,t.id); } break;
     case 'plan-dia': diaPlanSel=b.dataset.fecha; pintarCumple(); pintarIA(); { const s=$(`[data-accion="plan-dia"][data-fecha="${diaPlanSel}"]`); if(s) s.focus(); } break;
@@ -6276,6 +6613,7 @@ document.addEventListener('keydown',e=>{
   if((e.ctrlKey||e.metaKey) && !e.altKey && e.key.toLowerCase()==='k'){ e.preventDefault(); if($('#paleta').hidden) abrirPaleta(); else cerrarPaleta(); return; }
   if(!$('#paleta').hidden){ if(e.key==='Tab') e.preventDefault(); return; }
   if(!$('#imp').hidden){ if(e.key==='Escape'){ e.preventDefault(); cerrarImp(); } return; }
+  if(!$('#rut').hidden){ if(e.key==='Escape'){ e.preventDefault(); cerrarRutina(); } return; }
   if(e.key==='Escape' && e.target && e.target.id==='obj-in'){ editandoObj=false; pintarChips(); const b=$('[data-accion="editar-obj"]'); if(b) b.focus(); return; }
   if(!$('#visor').hidden){ if(e.key==='Escape'||e.key==='Tab'){ e.preventDefault(); if(e.key==='Escape') cerrarVisor(); } return; }
   if(!$('#cajon').hidden){
@@ -6336,7 +6674,7 @@ form.addEventListener('submit',e=>{
   state.trades.push(Object.assign({id,comentario:'',ejemplo:false},t));
   guardar();
   capturaForm=null; pintarZona();
-  $('#f-imp').value=''; $('#f-nota').value=''; $('#f-hora').value=''; $('#f-stop').value=''; $('#f-riesgo').value=''; riesgoManual=false; $$('input[name="f-setup"]').forEach(r=>{ r.checked=false; });
+  $('#f-imp').value=''; $('#f-nota').value=''; $('#f-hora').value=''; $('#f-stop').value=''; $('#f-riesgo').value=''; riesgoManual=false; $$('input[name="f-setup"],input[name="f-err"]').forEach(r=>{ r.checked=false; });
   pintarCalculo(); cerrarCajon();
   if(ruta==='diario'){ refrescarDiario(); if(enPeriodo(t.fecha) && subDiario==='resumen') setTimeout(()=>irAOperacion(id),300); }
   toast(enPeriodo(t.fecha)?'Operación guardada':'Operación guardada. Cambia el periodo para verla.');
