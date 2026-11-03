@@ -5,10 +5,13 @@
 //   /api/yo             -> quién eres y si tienes acceso
 //   /api/datos          -> GET / PUT del diario y el progreso del alumno
 //   /api/captura?id=    -> GET / PUT / DELETE de las capturas de ATAS
-//   /api/admin/...      -> solo Alex: lista de alumnos, sus capturas y sus comentarios
+//   /api/analisis       -> GET informes del plan / POST pedir un análisis al agente de IA
+//   /api/admin/...      -> solo Alex: lista de alumnos, sus capturas, sus comentarios y sus informes
 // Solo entra quien está en el servidor de Discord (y, si DISCORD_ROLES_ACCESO tiene IDs, quien tenga uno de esos roles).
 import { getStore } from '@netlify/blobs';
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
+import { idsAlumnos, leerInformes, listaInformes, generarInforme, fechaMadrid } from '../lib/analisis.mjs';
+import { iaActiva } from '../lib/ia.mjs';
 
 const API = 'https://discord.com/api/v10';
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID || '1566860329240105080';
@@ -21,6 +24,8 @@ const MAX_CAPTURA = 4.5e6;
 const ADMINS = () => String(process.env.ADMIN_IDS || '941007449681436752').split(',').map((x) => x.trim()).filter(Boolean);
 const esAdmin = (id) => ADMINS().includes(id);
 const idAlumno = (v) => (/^\d{5,25}$/.test(v || '') ? v : null);
+const LIMITE_IA = Number(process.env.LIMITE_IA_DIA || 10); // análisis bajo demanda por alumno y día
+const esFecha = (v) => /^\d{4}-\d{2}-\d{2}$/.test(v || '');
 
 const env = (k) => {
   const v = process.env[k];
@@ -172,12 +177,34 @@ async function datosConComentarios(store, id) {
   return d;
 }
 
-async function idsAlumnos(store) {
-  const ids = new Set();
-  const { blobs, directories } = await store.list({ prefix: 'u/', directories: true });
-  (directories || []).forEach((d) => { const m = String(d).match(/u\/(\d+)/); if (m) ids.add(m[1]); });
-  (blobs || []).forEach((b) => { const m = String(b.key).match(/^u\/(\d+)\//); if (m) ids.add(m[1]); });
-  return [...ids];
+// Análisis del plan bajo demanda (botón "Analizar" del alumno)
+async function analisis(req, store, s, extra) {
+  const kUso = `u/${s.id}/uso`;
+  const hoy = fechaMadrid(Date.now());
+  const uso = (await store.get(kUso, { type: 'json' })) || {};
+  const usados = uso.fecha === hoy ? uso.n || 0 : 0;
+  const limite = esAdmin(s.id) ? 1000 : LIMITE_IA;
+  if (req.method === 'GET') {
+    const informes = listaInformes(await leerInformes(store, s.id)).slice(0, 40);
+    return json({ informes, ia: iaActiva(), restantes: Math.max(0, limite - usados) }, 200, extra);
+  }
+  if (req.method !== 'POST') return json({ error: 'no_encontrado' }, 404);
+  let b;
+  try { b = JSON.parse(await req.text()); } catch { return json({ error: 'datos_no_validos' }, 400); }
+  const tipo = b.tipo === 'semana' ? 'semana' : 'dia';
+  if (!esFecha(b.fecha)) return json({ error: 'fecha_no_valida' }, 400);
+  if (iaActiva() && usados >= limite) return json({ error: 'limite', restantes: 0 }, 429, extra);
+  const datos = await datosConComentarios(store, s.id);
+  if (!datos) return json({ error: 'sin_operaciones' }, 400, extra);
+  try {
+    const informe = await generarInforme({ store, id: s.id, nombre: s.nombre, datos, tipo, fecha: b.fecha, origen: 'manual', timeoutMs: 50000 });
+    if (informe.ia) await store.setJSON(kUso, { fecha: hoy, n: usados + 1 });
+    return json({ informe, restantes: Math.max(0, limite - usados - (informe.ia ? 1 : 0)) }, 200, extra);
+  } catch (e) {
+    if (e.codigo) return json({ error: e.codigo }, 400, extra);
+    console.error('Fallo del agente de IA:', e.message);
+    return json({ error: 'ia_error' }, 502, extra);
+  }
 }
 
 async function admin(ruta, req, store, extra) {
@@ -185,8 +212,10 @@ async function admin(ruta, req, store, extra) {
   if (ruta === '/api/admin/alumnos' && req.method === 'GET') {
     const ids = await idsAlumnos(store);
     const alumnos = await Promise.all(ids.map(async (id) => {
-      const [perfil, datos] = await Promise.all([store.get(`u/${id}/perfil`, { type: 'json' }), datosConComentarios(store, id)]);
-      return { id, nombre: perfil?.nombre || 'Alumno', avatar: perfil?.avatar || null, ultimaVez: perfil?.ultimaVez || null, datos };
+      const [perfil, datos, inf] = await Promise.all([store.get(`u/${id}/perfil`, { type: 'json' }), datosConComentarios(store, id), leerInformes(store, id)]);
+      const u = listaInformes(inf).find((x) => x.ia);
+      const ultimoInforme = u ? { hasta: u.hasta, tipo: u.tipo, puntuacion: u.ia.puntuacion, titular: u.ia.titular } : null;
+      return { id, nombre: perfil?.nombre || 'Alumno', avatar: perfil?.avatar || null, ultimaVez: perfil?.ultimaVez || null, datos, ultimoInforme };
     }));
     return json({ alumnos }, 200, extra);
   }
@@ -196,6 +225,11 @@ async function admin(ruta, req, store, extra) {
     if (!al || !id) return json({ error: 'id_no_valido' }, 400);
     const v = await store.get(`u/${al}/cap/${id}`);
     return v ? new Response(v, { headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'private, max-age=86400' } }) : json({ error: 'no_existe' }, 404);
+  }
+  if (ruta === '/api/admin/informes' && req.method === 'GET') {
+    const al = idAlumno(u.searchParams.get('alumno'));
+    if (!al) return json({ error: 'id_no_valido' }, 400);
+    return json({ informes: listaInformes(await leerInformes(store, al)).slice(0, 40), ia: iaActiva() }, 200, extra);
   }
   if (ruta === '/api/admin/comentario' && req.method === 'PUT') {
     const b = JSON.parse(await req.text());
@@ -240,6 +274,8 @@ export const crearManejador = (obtenerStore) => async (req) => {
       return await admin(ruta, req, store, extra);
     }
 
+    if (ruta === '/api/analisis') return await analisis(req, store, s, extra);
+
     if (ruta === '/api/datos') {
       const k = `u/${s.id}/datos`;
       if (req.method === 'GET') return json({ datos: await datosConComentarios(store, s.id) }, 200, extra);
@@ -283,4 +319,4 @@ export const crearManejador = (obtenerStore) => async (req) => {
 
 export default crearManejador(() => getStore('alumnos-agx'));
 
-export const config = { path: ['/api/auth/*', '/api/yo', '/api/datos', '/api/captura', '/api/admin/*'] };
+export const config = { path: ['/api/auth/*', '/api/yo', '/api/datos', '/api/captura', '/api/analisis', '/api/admin/*'] };
