@@ -20,7 +20,7 @@ async function datosAlumno(store, id) {
   return { datos: d, nombre: perfil?.nombre || 'Alumno' };
 }
 
-export async function ejecutar(ahora = Date.now(), store = getStore('alumnos-agx')) {
+export async function ejecutar(ahora = Date.now(), store = getStore({ name: 'alumnos-agx', consistency: 'strong' })) {
   const t0 = Date.now();
   const dia = fechaMadrid(ahora - 4 * 3600e3); // de 23:00 a 03:00 sigue siendo "hoy" (el día de trading)
   if (!iaActiva()) return { dia, procesados: 0, pendientes: 0, sinIA: true }; // sin clave de Claude no hay parte que escribir

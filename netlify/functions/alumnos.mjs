@@ -317,6 +317,7 @@ export const crearManejador = (obtenerStore) => async (req) => {
   }
 };
 
-export default crearManejador(() => getStore('alumnos-agx'));
+// Consistencia fuerte: lo que guarda el alumno se lee al momento (la eventual tarda hasta 60 s y podía devolver datos viejos)
+export default crearManejador(() => getStore({ name: 'alumnos-agx', consistency: 'strong' }));
 
 export const config = { path: ['/api/auth/*', '/api/yo', '/api/datos', '/api/captura', '/api/analisis', '/api/admin/*'] };
