@@ -1304,6 +1304,104 @@ button.etq-falta:hover{background:var(--morado-suave)}
 .det-riesgo{margin:6px 0 0;font-size:13.5px;color:var(--tinta-2);font-variant-numeric:tabular-nums}
 .det-riesgo.falta{color:var(--venta)}
 .pl-checks{display:flex;flex-direction:column;gap:12px}
+
+/* ===================== Ruta de formación por niveles ===================== */
+.ruta-datos{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.ruta-datos li{display:flex;align-items:baseline;gap:10px;padding:12px 16px;border:1px solid var(--hero-borde);border-radius:14px;background:var(--hero-chip)}
+.ruta-datos b{min-width:44px;font-size:24px;font-weight:800;font-stretch:112%;color:var(--blanco);font-variant-numeric:tabular-nums}
+.ruta-datos span{font-size:13.5px;color:var(--hero-tenue)}
+.niveles{display:flex;flex-direction:column;gap:12px;margin-top:24px}
+.niv{border:1px solid var(--borde);border-radius:18px;background:var(--fondo);overflow:hidden;transition:border-color .2s,box-shadow .25s}
+.niv[open]{box-shadow:var(--sombra)}
+.niv.actual{border-color:var(--violeta)}
+.niv>summary{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:6px 16px;padding:16px 18px 18px;cursor:pointer;list-style:none}
+.niv>summary::-webkit-details-marker{display:none}
+.niv>summary:focus-visible{outline:2px solid var(--violeta);outline-offset:-2px;border-radius:18px}
+.niv-num{width:44px;height:44px;display:grid;place-items:center;border-radius:13px;background:var(--morado-suave);color:var(--morado);font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.niv.actual .niv-num{background:var(--grad-marca);color:var(--blanco)}
+.niv.prep .niv-num{background:var(--fondo-2);color:var(--tinta-2)}
+.niv-tit{display:flex;flex-direction:column;gap:2px;min-width:0}
+.niv-tit b{font-size:16.5px;font-weight:740}
+.niv-tit small{font-size:13px;color:var(--tinta-2)}
+.niv-est{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:999px;background:var(--fondo-2);color:var(--tinta-2);font-size:12.5px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.niv-est svg,.lec-chip svg{width:13px;height:13px}
+.niv-est.ok{background:var(--compra-suave);color:var(--compra)}
+.niv-est.prep{background:var(--morado-suave);color:var(--morado)}
+.niv-chev{display:grid;place-items:center;width:28px;height:28px;color:var(--tinta-2);transition:transform .25s}
+.niv-chev svg{width:16px;height:16px;transform:rotate(90deg)}
+.niv[open] .niv-chev{transform:rotate(180deg)}
+.niv-barra{position:absolute;left:18px;right:18px;bottom:8px;height:3px;border-radius:3px;background:var(--fondo-2);overflow:hidden}
+.niv-barra span{display:block;height:100%;border-radius:3px;background:var(--grad-marca)}
+.niv-nota{margin:0 18px 6px;font-size:13.5px;color:var(--tinta-2)}
+.lec-lista{margin:0;padding:4px 10px 12px;list-style:none;border-top:1px solid var(--borde)}
+.lec-fila{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;width:100%;padding:10px 10px;border:0;border-radius:12px;background:none;color:var(--tinta);font:inherit;text-align:left;text-decoration:none;cursor:pointer;transition:background .15s}
+a.lec-fila:hover,button.lec-fila:hover{background:var(--fondo-2)}
+a.lec-fila:focus-visible,button.lec-fila:focus-visible{outline:2px solid var(--violeta);outline-offset:-2px}
+.lec-fila.sig{background:var(--morado-suave)}
+.lec-fila.cerrada{cursor:default;opacity:.62}
+.lec-n{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--borde-2);border-radius:50%;color:var(--tinta-2);font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.lec-n.ex{border-color:transparent;background:var(--morado-suave);color:var(--morado)}
+.lec-n.ex svg{width:17px;height:17px}
+.lec-t{display:flex;flex-direction:column;gap:1px;min-width:0}
+.lec-t b{font-size:15px;font-weight:650}
+.lec-t small{font-size:12.5px;color:var(--tinta-2)}
+.lec-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.lec-chip.ok{background:var(--compra-suave);color:var(--compra)}
+.lec-chip.ko{background:var(--venta-suave);color:var(--venta)}
+.lec-chip.dis{background:var(--morado-suave);color:var(--morado)}
+.lec-chip.cerr{padding:3px 6px;color:var(--tinta-2)}
+.lec-chip.prep{background:var(--fondo-2);color:var(--tinta-2)}
+/* Lección */
+.lec-migas{margin:10px 0 2px;font-size:13px;font-weight:650;color:var(--morado)}
+.lec-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;align-items:start;gap:20px}
+.lec-art{padding:clamp(18px,3vw,34px)}
+.lec-teoria{max-width:72ch;font-size:16px;line-height:1.65;color:var(--tinta)}
+.lec-teoria>p:first-child{font-size:17.5px;line-height:1.6}
+.lec-teoria h3{margin:26px 0 8px;font-size:18px;font-weight:760;letter-spacing:-0.01em}
+.lec-teoria p{margin:0 0 12px}
+.lec-teoria ul{margin:0 0 14px;padding-left:20px}
+.lec-teoria li{margin:0 0 7px}
+.lec-teoria li::marker{color:var(--violeta)}
+.lec-teoria b{font-weight:700}
+.lec-clave{margin:22px 0 4px;padding:16px 18px;border-left:4px solid var(--violeta);border-radius:0 12px 12px 0;background:var(--morado-suave)}
+.lec-clave b{display:block;margin-bottom:4px;color:var(--morado);font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.lec-clave p{margin:0;font-size:16.5px;font-weight:620}
+.lec-fig{display:block;width:max-content;max-width:100%}
+.lec-lado{position:sticky;top:16px;display:flex;flex-direction:column;gap:14px}
+.lec-test h2{margin:0 0 6px;font-size:17px}
+.lec-test p{margin:0 0 10px;font-size:14px;color:var(--tinta-2)}
+.lec-test .lec-ok{display:flex;align-items:center;gap:6px;color:var(--compra);font-weight:650}
+.lec-test .lec-ok svg{width:15px;height:15px}
+.lec-test .lec-ko{color:var(--tinta);font-weight:600}
+.lec-acc{display:flex;flex-wrap:wrap;gap:8px}
+.lec-whop{display:flex;align-items:center;gap:12px;padding:14px 16px;color:var(--tinta);text-decoration:none;transition:border-color .2s,box-shadow .25s}
+.lec-whop:hover{border-color:var(--violeta);box-shadow:var(--sombra)}
+.lec-whop span:last-child{display:flex;flex-direction:column;min-width:0}
+.lec-whop b{font-size:14.5px}
+.lec-whop small{font-size:12.5px;color:var(--tinta-2)}
+.lec-whop-ico{flex:none;width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:var(--grad-marca);color:var(--blanco)}
+.lec-whop-ico svg{width:18px;height:18px}
+.lec-nav{display:flex;justify-content:space-between;gap:10px;font-size:13.5px}
+.lec-nav a{display:inline-flex;align-items:center;gap:4px;max-width:48%;color:var(--morado);font-weight:650;text-decoration:none}
+.lec-nav a:hover{text-decoration:underline}
+.lec-nav a.dcha{margin-left:auto;text-align:right}
+.lec-nav svg{flex:none;width:14px;height:14px}
+.lec-bloq{display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 18px;text-align:center}
+.lec-bloq p{margin:0;color:var(--tinta-2)}
+.lec-bloq-ico{width:52px;height:52px;display:grid;place-items:center;border-radius:50%;background:var(--fondo-2);color:var(--tinta-2)}
+.lec-bloq-ico svg{width:24px;height:24px}
+.lw.lw-rk .lw-barra{margin-top:8px}
+@media (max-width:1060px){ .lec-grid{grid-template-columns:minmax(0,1fr)} .lec-lado{position:static} }
+@media (max-width:640px){
+  .niv>summary{grid-template-columns:auto minmax(0,1fr) auto;padding:14px 14px 18px}
+  .niv-est{grid-column:2;justify-self:start}
+  .niv-chev{grid-row:1;grid-column:3}
+  .lec-fila{gap:10px;padding:10px 6px}
+  .lec-teoria{font-size:15.5px}
+  .ruta-datos{flex-direction:row;flex-wrap:wrap}
+  .ruta-datos li{flex:1 1 140px}
+}
+.ruta-hero .f-acc .boton{max-width:100%;white-space:normal;text-align:center;line-height:1.25;padding-top:9px;padding-bottom:9px}
 </style>
 
 </head>
@@ -1504,7 +1602,7 @@ const EJEMPLOS=[
  ['2026-10-28','NY','MES','L',3,-4,'Giro por perfil','','El perfil no estaba formado todavía. Espera a que el valor se defina.'],
  ['2026-10-29','NY','NQ','L',1,25,'Patrón Gonzi','Esperé la confirmación del patrón. Paciencia.','']
 ];
-function estadoVacio(){ return {periodo:'mes',trades:[],temas:{},examen:null,fallos:[],bloque:'base',progresoEjemplo:false,objetivo:3000,plan:null}; }
+function estadoVacio(){ return {periodo:'mes',trades:[],temas:{},examen:null,fallos:[],bloque:'base',progresoEjemplo:false,objetivo:3000,plan:null,ruta:{lec:{},niv:{}}}; }
 function normalizarEstado(d){ if(!d || !Array.isArray(d.trades)) return null; return Object.assign(estadoVacio(),d,{progresoEjemplo:false}); }
 function estadoInicial(){
   return {
@@ -2459,6 +2557,1094 @@ const ALARGA={
 };
 Object.keys(ALARGA).forEach(id=>{ if(DISTR[id]) DISTR[id][ALARGA[id][0]]+=ALARGA[id][1]; });
 PREGUNTAS.forEach(p=>{ const d=DISTR[p.id]; if(d) p.opciones=[p.opciones[0],d[0],d[1]]; });
+const RUTA=[];
+/* ---------- Ruta de formación: niveles 1 a 3 ---------- */
+RUTA.push({id:'n1',titulo:'Mentalidad y punto de partida',desc:'Por qué pierde la mayoría, qué es ser rentable y cómo vas a estudiar.',lecciones:[
+{id:'n1-1',titulo:'Por qué el 90 % pierde dinero',min:7,tema:'mentalidad',whop:'Por qué el 90% pierde dinero',
+teoria:`<p>La mayoría de traders que empiezan pierden dinero, y casi nunca es por falta de indicadores. Pierden porque entran sin ventaja, arriesgan demasiado y no tienen un proceso que puedan repetir.</p>
+<h3>Las tres causas de siempre</h3>
+<ul><li><b>Sin ventaja:</b> entran por intuición o porque «parece que va a subir». Si no sabes por qué entras, no sabes cuándo has fallado.</li>
+<li><b>Riesgo descontrolado:</b> una mala operación con el doble de contratos borra una semana entera. Sin un límite por operación y por día, la cuenta depende de la suerte.</li>
+<li><b>Sin proceso:</b> no apuntan, no revisan y repiten los mismos errores. El mercado cobra la matrícula cada vez.</li></ul>
+<h3>El trading es un juego de probabilidades</h3>
+<p>Ninguna entrada es segura. Lo que te da dinero es repetir muchas veces una situación con ventaja, perdiendo poco cuando falla y ganando más cuando sale. Por eso una operación aislada no dice nada: lo que importa es la serie.</p>
+<div class="lec-clave"><b>Idea clave</b><p>No pierdes por no saber dónde va el precio. Pierdes por no controlar cuánto te cuesta equivocarte.</p></div>`,
+usar:['psico-4'],
+preg:[
+['¿Cuál es una de las causas más comunes por las que pierde la mayoría de traders?',['Arriesgar sin límites fijos por operación y por día','Usar pocos indicadores en el gráfico','Operar solo un instrumento durante meses'],'Sin límites, una mala racha o una mala operación se lleva la cuenta. El número de indicadores no decide nada.'],
+['¿Qué significa que el trading sea un juego de probabilidades?',['Que una entrada aislada no dice nada y cuenta la serie','Que con práctica se aciertan casi todas las entradas','Que el resultado depende sobre todo de la suerte del día'],'Ninguna entrada es segura. La ventaja aparece al repetir muchas veces la misma situación.'],
+['Entras «porque parece que va a subir». ¿Qué problema tiene?',['No sabes por qué entras, así que no sabes cuándo has fallado','Es una entrada correcta si la tendencia del día es alcista','Solo es un problema si operas con más de un contrato'],'Sin un motivo concreto no hay invalidación. Y sin invalidación no hay stop lógico.'],
+['Un trader gana 8 días seguidos y en el noveno pierde todo lo ganado. ¿Qué le ha fallado?',['La gestión del riesgo: un solo día sin límite lo borra todo','El análisis: tenía que haber acertado también el noveno día','La suerte: son cosas que pasan y no se pueden evitar'],'Lo que destruye cuentas son los días sin límite. Un buen sistema pierde poco los días malos.'],
+['¿Por qué apuntar y revisar las operaciones evita repetir errores?',['Porque convierte las sensaciones en datos que puedes corregir','Porque obliga a operar menos días cada semana del mes','Porque la plataforma bloquea las entradas repetidas'],'Sin registro, cada error parece nuevo. Con datos ves el patrón y lo cortas.'],
+['¿Qué tiene más peso en el resultado a largo plazo?',['Cuánto pierdes cuando fallas frente a cuánto ganas cuando aciertas','El porcentaje de operaciones ganadoras de cada semana','Tener razón sobre la dirección del mercado cada mañana'],'Puedes acertar el 40 % y ganar, o el 70 % y perder. Manda la relación entre lo que ganas y lo que pierdes.'],
+['Un alumno cambia de estrategia cada semana porque «no funciona». ¿Qué le pasa?',['No deja que la ventaja se vea en suficientes operaciones','Elige estrategias malas que no tienen ninguna ventaja real','Opera en un mercado que no es adecuado para estrategias'],'Toda ventaja tiene rachas malas. Si cambias a la primera, nunca llegas a ver la serie.'],
+['¿Qué es lo primero que tiene que tener un trader antes de buscar entradas?',['Un riesgo máximo por operación y por día que cumpla siempre','Una lista de indicadores probados en otros mercados','Una cuenta grande para aguantar las rachas de pérdidas'],'Primero proteges la cuenta. Las entradas vienen después.'],
+['Pierdes tres operaciones seguidas siguiendo tu plan. ¿Qué indica?',['Nada por sí solo: las rachas son normales en cualquier ventaja','Que el método ha dejado de funcionar y hay que cambiarlo','Que el mercado está manipulado contra los minoristas'],'Una racha corta no demuestra nada. Lo que cuenta es la serie larga y el riesgo controlado.']
+]},
+{id:'n1-2',titulo:'El error del análisis técnico clásico',min:6,tema:'mentalidad',whop:'error del análisis técnico',
+teoria:`<p>El análisis técnico clásico mira dibujos: figuras, líneas y cruces de medias. El problema es que esos dibujos se ven claros a toro pasado y en directo fallan mucho, porque no explican qué está pasando por dentro.</p>
+<h3>Indicadores que llegan tarde</h3>
+<p>Medias, osciladores y la mayoría de indicadores se calculan con el precio ya pasado. Te dicen lo que ocurrió, no quién está empujando ahora. Cuando el cruce aparece, el movimiento suele estar hecho.</p>
+<h3>Lo que falta: quién compra y quién vende</h3>
+<p>Una vela verde solo dice que el precio cerró más arriba. No dice si subió porque entraron compradores agresivos o porque desaparecieron los vendedores. El Order Flow mira justo eso: el volumen que se negocia en cada precio y qué lado lo inició.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El precio es la consecuencia. El Order Flow te enseña la causa: las órdenes que lo mueven.</p></div>`,
+preg:[
+['¿Cuál es el principal problema de los indicadores clásicos como las medias móviles?',['Se calculan con precio pasado y llegan tarde al movimiento','Solo funcionan en gráficos de un minuto o menos','Necesitan datos de opciones para calcularse bien'],'Resumen lo que ya pasó. Cuando dan la señal, buena parte del movimiento está hecho.'],
+['¿Qué no te dice una vela verde por sí sola?',['Si subió por compras agresivas o porque no había vendedores','A qué precio abrió y a qué precio cerró la vela','Cuál fue el precio más alto que tocó en ese tiempo'],'La vela resume precio. El quién y el cómo están en el volumen por precio.'],
+['¿Por qué las figuras chartistas parecen tan claras cuando miras el pasado?',['Porque ya sabes cómo terminaron y eliges las que salieron','Porque el mercado siempre respeta las figuras clásicas','Porque los algoritmos las dibujan a propósito cada día'],'Es sesgo retrospectivo. En directo la misma figura falla muchas veces.'],
+['¿Qué aporta el Order Flow que no aporta el análisis técnico clásico?',['El volumen negociado en cada precio y qué lado lo inició','Una predicción de dónde cerrará el precio al final del día','Las noticias que van a salir durante la sesión de hoy'],'Ves la causa del movimiento: quién agrede y quién aguanta en cada nivel.'],
+['Un cruce de medias da señal de compra justo en el máximo del movimiento. ¿Por qué pasa?',['Porque el indicador confirma tarde lo que el precio ya hizo','Porque el cruce estaba mal configurado en la plataforma','Porque las medias solo sirven en marcos de tiempo diarios'],'Es retraso puro. El indicador necesita que el precio se mueva para cambiar.'],
+['¿Significa esto que el análisis técnico no sirve para nada?',['No: los niveles y el contexto ayudan, pero hay que confirmarlos con el flujo','Sí: hay que borrar todos los niveles y operar solo el footprint','Sí: los niveles de precio no tienen ningún valor en futuros'],'Los niveles importan porque ahí hay órdenes. El Order Flow te dice si de verdad reaccionan.'],
+['El precio llega a un soporte clásico. ¿Qué te falta saber para entrar?',['Si aparecen compradores defendiendo el nivel en el flujo','Cuántas veces se ha tocado ese soporte en el último año','Qué indicador marca sobreventa en ese mismo momento'],'Un soporte es una zona donde podría haber compras. Hay que verlas en el footprint.'],
+['¿Qué frase describe mejor la relación entre precio y órdenes?',['El precio es la consecuencia de las órdenes que se ejecutan','Las órdenes siguen al precio cuando el gráfico rompe niveles','El precio se mueve solo y las órdenes se adaptan después'],'Sin órdenes no hay movimiento. Por eso mirar las órdenes es mirar la causa.'],
+['Dos velas idénticas en el gráfico de precio pueden tener por dentro…',['Un volumen y un reparto entre compras y ventas muy distinto','Exactamente el mismo volumen negociado en cada precio','Siempre el mismo delta porque tienen la misma forma'],'La forma de la vela no te dice el volumen ni quién lo hizo. Por eso existe el footprint.'],
+['Un oscilador marca sobrecompra y aun así el precio sigue subiendo durante horas. ¿Por qué?',['Porque el oscilador mide precio pasado, no si siguen entrando compradores','Porque el oscilador estaba mal configurado en la plataforma','Porque la sobrecompra solo funciona en el mercado de divisas'],'Sobrecompra no significa que se hayan acabado los compradores. Eso solo lo ves en el flujo.']
+]},
+{id:'n1-3',titulo:'Las etapas del trader',min:5,tema:'mentalidad',whop:'etapas del trader',
+teoria:`<p>Casi todos los traders pasan por las mismas etapas. Saber en cuál estás te ahorra frustración y te dice qué tienes que trabajar ahora.</p>
+<ul><li><b>1. Ilusión:</b> todo parece fácil, se gana algo por suerte y se sube el tamaño.</li>
+<li><b>2. Golpe:</b> llegan las pérdidas grandes. Aparecen la revancha y el cambio constante de estrategia.</li>
+<li><b>3. Búsqueda:</b> se prueban cursos, indicadores y sistemas. Mucho ruido, poca constancia.</li>
+<li><b>4. Disciplina:</b> se fija un método, un riesgo y un registro. Los resultados se estabilizan aunque no sean espectaculares.</li>
+<li><b>5. Consistencia:</b> se ejecuta el plan casi sin pensar. Se sube el tamaño poco a poco y con datos.</li></ul>
+<h3>Cómo se pasa de etapa</h3>
+<p>No se pasa ganando más, sino perdiendo mejor. El salto real es de la etapa 3 a la 4: dejar de buscar la estrategia perfecta y empezar a medir la que tienes.</p>
+<div class="lec-clave"><b>Idea clave</b><p>La consistencia llega antes en el riesgo que en el beneficio.</p></div>`,
+usar:['psico-3'],
+preg:[
+['¿Qué caracteriza la primera etapa del trader?',['Gana algo por suerte, todo parece fácil y sube el tamaño','Opera con un plan escrito y un riesgo fijo cada día','Revisa sus estadísticas cada semana antes de operar'],'La suerte inicial es peligrosa: da confianza sin método.'],
+['Un trader cambia de indicadores y de curso cada pocas semanas. ¿En qué etapa está?',['En la de búsqueda: mucho ruido y poca constancia','En la de consistencia: está optimizando su método','En la de ilusión: todavía no ha perdido nada'],'Probar cosas es normal, pero sin medir ninguna no se avanza.'],
+['¿Cuál es el salto más importante para empezar a ser rentable?',['Dejar de buscar la estrategia perfecta y medir la que tienes','Encontrar el indicador que acierte más del 80 % de las veces','Subir el tamaño para recuperar más rápido las pérdidas'],'Sin datos de tu propio método no sabes si funciona ni qué corregir.'],
+['¿Cómo se suele pasar de una etapa a la siguiente?',['Perdiendo mejor: controlando el riesgo antes que el beneficio','Ganando más cada mes aunque se arriesgue algo más','Operando más horas para tener más experiencia'],'La estabilidad empieza cuando los días malos dejan de ser desastres.'],
+['En la etapa de disciplina los resultados suelen ser…',['Estables aunque no sean espectaculares','Muy altos porque ya se domina el mercado','Peores que al principio porque se opera menos'],'Lo importante es que la curva deja de tener caídas enormes.'],
+['¿Qué emoción domina en la etapa del golpe?',['La revancha tras pérdidas grandes y el cambio de rumbo','La calma de quien ya sabe lo que tiene que hacer','La indiferencia ante el resultado de cada operación'],'Es la etapa donde más cuentas se pierden, por querer recuperar rápido.'],
+['¿Cuándo tiene sentido subir el tamaño en la etapa de consistencia?',['Poco a poco y cuando los datos lo justifican','Después de una semana buena para aprovechar la racha','Cuando se tiene una corazonada fuerte sobre el mercado'],'Subir con datos, no con emociones. Y de forma gradual.'],
+['¿Por qué ayuda saber en qué etapa estás?',['Te dice qué tienes que trabajar ahora y reduce la frustración','Te permite saltarte las etapas más difíciles del proceso','Te garantiza que vas a ser rentable en pocos meses'],'Cada etapa tiene su trabajo. Saberlo evita exigirte lo que todavía no toca.'],
+['¿Qué suele hacer un trader en la etapa de ilusión tras unas ganancias rápidas?',['Subir el tamaño sin tener todavía un método probado','Bajar el tamaño y revisar sus estadísticas con calma','Dejar de operar hasta tener un plan por escrito'],'La confianza sin método lleva a subir tamaño justo antes del golpe.']
+]},
+{id:'n1-4',titulo:'Qué es de verdad un trader rentable',min:5,tema:'mentalidad',whop:'Qué es realmente un trader rentable',
+teoria:`<p>Un trader rentable no es el que acierta más. Es el que, sumando muchas operaciones, gana más de lo que pierde y lo hace de forma repetible.</p>
+<h3>Acierto y relación beneficio/riesgo</h3>
+<p>Hay dos números que mandan: el porcentaje de acierto y cuánto ganas de media frente a cuánto pierdes. Con un 40 % de acierto puedes ser rentable si ganas el doble de lo que pierdes. Con un 70 % puedes perder dinero si tus pérdidas son enormes.</p>
+<h3>La R</h3>
+<p>La R es lo que arriesgas en una operación: la distancia al stop por el valor del punto y los contratos. Medir en R te permite comparar operaciones con distinto tamaño. Una operación de +2R ganó el doble de lo que arriesgaba.</p>
+<h3>Esperanza</h3>
+<p>Esperanza = (acierto × ganancia media) − (fallo × pérdida media). Si sale positiva, cada operación suma de media. Si es negativa, operar más solo acelera la pérdida.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Rentable es tener esperanza positiva y un riesgo que te deje seguir jugando.</p></div>`,
+usar:['riesgo-6','riesgo-7','riesgo-10'],
+preg:[
+['Un trader acierta el 40 % y gana de media el doble de lo que pierde. ¿Es rentable?',['Sí: la esperanza es positiva aunque acierte menos de la mitad','No: con menos del 50 % de acierto siempre se pierde dinero','Depende solo del instrumento que opere ese trader'],'0,4 × 2 − 0,6 × 1 = +0,2 R por operación.'],
+['Otro acierta el 70 %, pero sus pérdidas medias triplican sus ganancias. ¿Qué pasa?',['Pierde dinero a la larga aunque acierte casi siempre','Gana dinero porque acierta más de la mitad de las veces','Queda en tablas porque acierto y pérdidas se compensan'],'0,7 × 1 − 0,3 × 3 = −0,2 R. Acertar mucho no basta.'],
+['Arriesgas 200 $ y ganas 500 $. ¿Cuántas R son?',['+2,5 R','+5 R','+0,4 R'],'500 entre 200 = 2,5. La R es lo que arriesgabas.'],
+['¿Para qué sirve medir las operaciones en R?',['Para comparar operaciones de distinto tamaño en la misma escala','Para saber cuántos contratos tiene que usar el broker','Para calcular las comisiones exactas de cada operación'],'Una operación de 1 contrato y otra de 3 se comparan bien en R.'],
+['Si la esperanza de tu método es negativa, ¿qué consigue operar más?',['Perder dinero más rápido','Compensar la esperanza con volumen','Acercar la esperanza a cero con el tiempo'],'Más operaciones con esperanza negativa son más pérdida, no menos.'],
+['¿Qué define mejor a un trader rentable?',['Gana más de lo que pierde de forma repetible y con riesgo controlado','Acierta la dirección del mercado la mayoría de los días','Tiene una racha de varios meses sin ningún día en negativo'],'Repetible y con riesgo controlado. No hace falta acertar siempre.'],
+['Acierto del 50 %, ganancia media de 300 $ y pérdida media de 150 $. ¿Esperanza por operación?',['+75 $','+150 $','+225 $'],'0,5 × 300 − 0,5 × 150 = 150 − 75 = +75 $.']
+]},
+{id:'n1-5',titulo:'Tu plan de estudio y la mentalidad profesional',min:6,tema:'mentalidad',whop:'Tu plan de estudio: cómo avanzar paso a paso',
+teoria:`<p>Esta ruta va por niveles. Cada lección tiene su teoría y un test; apruebas con un 90 % y se desbloquea la siguiente. Al final de cada nivel hay un examen, como en la autoescuela.</p>
+<h3>Cómo estudiar para que se quede</h3>
+<ul><li><b>Poco y a diario:</b> 20 o 30 minutos al día rinden más que una tarde entera a la semana.</li>
+<li><b>Teoría, test y gráfico:</b> lee, haz el test y luego busca el concepto en tu gráfico de ATAS.</li>
+<li><b>Tus fallos son tu temario:</b> las preguntas que fallas van a tu lista de repaso.</li>
+<li><b>Diario siempre:</b> apunta cada operación con su captura, stop y nota. Lo que no se mide no mejora.</li></ul>
+<h3>Mentalidad profesional</h3>
+<p>Un profesional no opera para sentir algo. Opera su plan, acepta la pérdida pequeña como coste del negocio y revisa los números. No busca tener razón: busca ejecutar bien.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Juzga tu día por si cumpliste el plan, no por si ganaste dinero.</p></div>`,
+usar:['psico-5','psico-9','psico-12'],
+preg:[
+['¿Qué hace falta para desbloquear la siguiente lección de esta ruta?',['Aprobar el test con un 90 % o más','Leer la teoría hasta el final una vez','Hacer el examen final de toda la formación'],'Cada lección se desbloquea al aprobar la anterior con un 90 %.'],
+['¿Qué forma de estudiar suele dar mejores resultados?',['Poco y a diario, aplicándolo en el gráfico','Una sesión larga a la semana sin practicar','Ver vídeos seguidos sin hacer los tests'],'La repetición diaria y aplicada fija los conceptos.'],
+['¿Cómo juzga un profesional su día de trading?',['Por si ha cumplido su plan, gane o pierda','Por el dinero ganado al cierre de la sesión','Por cuántas veces acertó la dirección del día'],'El resultado de un día tiene mucho ruido. El proceso es lo que controlas.'],
+['¿Qué papel tiene la pérdida pequeña para un profesional?',['Es el coste normal del negocio cuando la entrada falla','Es una señal de que el método ya no funciona','Es algo a recuperar en la siguiente operación'],'Perder poco cuando fallas es parte del plan, no un fracaso.'],
+['¿Qué haces con las preguntas que fallas en los tests?',['Repasarlas: van a tu lista de fallos','Ignorarlas y pasar a la lección siguiente','Repetir el test hasta acertar por memoria'],'Tus fallos te dicen exactamente qué te falta por entender.'],
+['Terminas una lección sobre imbalances. ¿Qué es lo más útil después?',['Buscar imbalances en tu propio gráfico de ATAS','Pasar a la siguiente lección sin mirar el gráfico','Configurar diez indicadores nuevos en la plataforma'],'Llevar el concepto a tu gráfico es lo que lo convierte en habilidad.'],
+['¿Para qué opera un profesional?',['Para ejecutar su plan con ventaja, no para sentir emoción','Para demostrar que tenía razón sobre el mercado','Para recuperar lo que perdió en días anteriores'],'Operar por emoción o por tener razón es la vía rápida a romper reglas.']
+]}
+]});
+
+RUTA.push({id:'n2',titulo:'Cómo se mueve el precio',desc:'Órdenes, agresores, liquidez y lo que la vela no te cuenta.',lecciones:[
+{id:'n2-1',titulo:'Órdenes a mercado y órdenes límite',min:6,tema:'subasta',whop:'Qué mueve el precio (órdenes, no velas)',
+teoria:`<p>Todo lo que pasa en el gráfico sale de dos tipos de órdenes.</p>
+<ul><li><b>Orden límite:</b> espera en un precio concreto. Pone liquidez en el libro. Es pasiva.</li>
+<li><b>Orden a mercado:</b> se ejecuta ya, contra las órdenes límite que haya. Quita liquidez. Es agresiva.</li></ul>
+<h3>Bid, ask y spread</h3>
+<p>El bid es el mejor precio al que alguien quiere comprar con límite; el ask, el mejor precio al que alguien quiere vender. Entre los dos está el spread. En NQ y ES suele ser de un tick.</p>
+<p>Una compra a mercado se ejecuta en el ask; una venta a mercado, en el bid. El que manda la orden a mercado es el agresor.</p>
+<h3>Slippage</h3>
+<p>Si mandas una orden a mercado grande o en un momento rápido, puede que no haya liquidez suficiente en el mejor precio y te llenen peor: eso es el slippage.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Las límite esperan, las de mercado empujan. El precio se mueve cuando los agresores consumen la liquidez de un nivel.</p></div>`,
+usar:['subasta-1','subasta-2','subasta-4','subasta-5','subasta-6','subasta-12'],
+preg:[
+['¿Qué tipo de orden pone liquidez en el libro?',['La orden límite que espera en un precio','La orden a mercado que se ejecuta al instante','El stop que salta cuando el precio lo toca'],'La límite espera y aporta liquidez. La de mercado la consume.'],
+['¿Dónde se ejecuta una venta a mercado?',['En el bid, contra las órdenes límite de compra','En el ask, contra las órdenes límite de venta','En el último precio negociado de la sesión'],'El vendedor agresivo golpea a quien espera comprando: el bid.'],
+['¿Quién es pasivo en una operación?',['Quien tenía la orden límite esperando en el libro','Quien envió la orden a mercado en ese momento','El broker que conecta la orden con el mercado'],'Pasivo es quien estaba esperando. Agresor, quien llega y ejecuta.'],
+['¿Por qué una orden a mercado grande en la apertura puede sufrir slippage?',['Porque puede no haber liquidez suficiente en el mejor precio','Porque el broker añade una comisión extra en la apertura','Porque las órdenes a mercado se ejecutan con retraso fijo'],'Si el mejor nivel no tiene tamaño, la orden sigue llenándose en precios peores.']
+]},
+{id:'n2-2',titulo:'Qué hace subir o bajar el precio',min:6,tema:'subasta',whop:'quien mueve realmente el mercado',
+teoria:`<p>El precio sube un tick cuando las compras a mercado se comen todas las órdenes límite de venta del ask y no aparecen nuevas. Baja cuando las ventas a mercado agotan el bid.</p>
+<h3>Agresión contra liquidez</h3>
+<p>No basta con que haya muchas compras: tienen que superar a la liquidez que espera. Si en el ask aparecen vendedores pasivos que reponen sin parar, el precio no sube aunque compren mucho. Eso es absorción, y la verás más adelante.</p>
+<h3>Los stops también empujan</h3>
+<p>Un stop de venta, al saltar, se convierte en una orden de venta a mercado. Por eso, cuando el precio barre una zona llena de stops, se acelera: los stops añaden agresión.</p>
+<h3>Mercados finos y gruesos</h3>
+<p>En un mercado con poca liquidez en cada precio, como NQ, hace falta menos agresión para mover el precio varios ticks. Por eso se mueve más brusco que un mercado con libros muy cargados.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El precio se mueve cuando la agresión de un lado agota la liquidez del otro.</p></div>`,
+usar:['subasta-3','subasta-7','subasta-10','subasta-11'],
+preg:[
+['Entran muchas compras a mercado, pero el ask se repone una y otra vez. ¿Qué pasa con el precio?',['No sube: la liquidez pasiva absorbe esas compras','Sube igual porque hay más compras que ventas','Baja de inmediato porque las compras se cancelan'],'Si la oferta pasiva se repone, la agresión no consigue mover el precio.'],
+['¿Por qué el precio se acelera cuando barre una zona llena de stops?',['Porque los stops se convierten en órdenes a mercado','Porque los stops cancelan las órdenes límite cercanas','Porque el exchange para el mercado unos segundos'],'Cada stop que salta es agresión nueva en la misma dirección.'],
+['¿Qué necesita el precio para bajar un tick?',['Que las ventas a mercado agoten las compras límite del bid','Que aparezcan más órdenes límite de venta en el ask','Que el volumen total de la vela sea muy alto'],'Cuando el bid se vacía y no se repone, el siguiente precio de compra está más abajo.'],
+['¿Por qué NQ se mueve varios ticks con menos esfuerzo que un mercado muy líquido?',['Porque tiene menos liquidez esperando en cada precio','Porque sus operadores usan siempre órdenes a mercado','Porque el valor del punto de NQ es más bajo'],'Libro fino, menos órdenes que comerse en cada nivel.'],
+['Hay mucha compra agresiva y el precio sube con facilidad. ¿Qué te dice?',['Que hay poca oferta pasiva frenando la subida','Que los vendedores están absorbiendo todo','Que el movimiento está a punto de girarse'],'Agresión que avanza sin esfuerzo significa poca resistencia enfrente.'],
+['¿Qué dos fuerzas hay que comparar para entender un movimiento?',['La agresión de un lado y la liquidez pasiva del otro','El volumen de hoy y el volumen medio de ayer','El precio de apertura y el precio de cierre'],'El precio es el resultado de esa pelea.'],
+['El precio cae, compran mucho en el bid y aun así sigue cayendo. ¿Qué es más probable?',['Que la venta agresiva sea mayor que la compra pasiva','Que los compradores estén ganando la pelea','Que el mercado vaya a subir en la siguiente vela'],'Si el bid no aguanta, la agresión vendedora manda.'],
+['¿Qué es un barrido de stops en términos de órdenes?',['Una cadena de órdenes a mercado que dispara más órdenes a mercado','Una serie de órdenes límite que se colocan juntas','Un hueco del precio sin ninguna operación ejecutada'],'Los primeros stops empujan el precio y disparan los siguientes.'],
+['¿Qué observación sugiere absorción en un máximo?',['Mucha compra agresiva y el precio no avanza','Poca compra agresiva y el precio sube rápido','Muchas ventas agresivas y el precio cae fuerte'],'Esfuerzo sin resultado: alguien pasivo está vendiendo contra esas compras.'],
+['En una subida limpia, ¿qué suele pasar en el ask?',['Se consume sin que la oferta se reponga del todo','Se llena de órdenes nuevas que frenan el precio','Desaparece porque todos dejan de vender a la vez'],'La oferta se agota nivel a nivel y el precio sube.']
+]},
+{id:'n2-3',titulo:'Quién mueve el mercado',min:6,tema:'subasta',whop:'quien mueve realmente el mercado',
+teoria:`<p>En los futuros de índices conviven participantes muy distintos. Saber quién hay detrás te ayuda a leer el flujo.</p>
+<ul><li><b>Institucionales:</b> fondos y bancos con posiciones grandes. Entran y salen por partes para no mover el precio en su contra.</li>
+<li><b>Creadores de mercado y algoritmos:</b> ponen liquidez a los dos lados y ganan con el spread y la gestión del inventario.</li>
+<li><b>Coberturas:</b> quien protege una cartera o una posición en opciones. No busca ganar en el futuro, busca reducir riesgo.</li>
+<li><b>Traders minoristas:</b> la mayoría de cuentas, pero una parte pequeña del volumen.</li></ul>
+<h3>Las huellas del dinero grande</h3>
+<p>El dinero grande no puede esconderse del todo. Deja huellas: volumen anormal en un nivel, absorción, órdenes que se repiten (icebergs) o barridos agresivos de varios precios.</p>
+<div class="lec-clave"><b>Idea clave</b><p>No necesitas saber quién es. Te basta ver dónde aparece el volumen grande y qué hace el precio después.</p></div>`,
+preg:[
+['¿Por qué un institucional suele entrar por partes y no de golpe?',['Para no mover el precio en su contra al ejecutar','Porque el exchange le prohíbe órdenes grandes','Porque así paga menos comisiones de broker'],'Una orden enorme de golpe empujaría el precio y le saldría más cara.'],
+['¿Cómo gana dinero sobre todo un creador de mercado?',['Con el spread y gestionando su inventario','Acertando la dirección del mercado cada día','Con las comisiones que pagan los minoristas'],'Pone liquidez a los dos lados y cobra la diferencia.'],
+['¿Qué busca quien usa el futuro como cobertura?',['Reducir el riesgo de otra posición, no ganar con el futuro','Ganar con el futuro aprovechando los movimientos cortos','Mover el precio para cerrar sus opciones con beneficio'],'La cobertura protege. Por eso puede vender aunque el mercado suba.'],
+['¿Qué parte del volumen suele representar el trader minorista?',['Una parte pequeña aunque sea la mayoría de cuentas','Casi todo el volumen negociado en los futuros','Exactamente la mitad del volumen de cada sesión'],'Muchas cuentas pequeñas suman poco volumen frente a los grandes.'],
+['¿Cuál de estas es una huella típica del dinero grande?',['Volumen anormal en un nivel sin que el precio avance','Velas pequeñas con poco volumen durante horas','Un indicador de sobrecompra en zona alta'],'Volumen grande con poco desplazamiento suele ser alguien grande absorbiendo.'],
+['¿Qué es una orden iceberg?',['Una orden grande que solo muestra una parte en el libro','Una orden que se cancela justo antes de ejecutarse','Una orden que solo se ejecuta en la apertura'],'Enseña poco tamaño y se va reponiendo según se ejecuta.'],
+['¿Necesitas saber qué fondo concreto está comprando para operar?',['No: basta con ver dónde aparece el volumen y cómo reacciona el precio','Sí: sin saber quién compra no se puede operar Order Flow','Sí: hay que seguir las noticias de cada fondo cada día'],'El flujo te enseña la huella. El nombre no cambia la lectura.'],
+['Un barrido agresivo de varios precios con mucho volumen suele indicar…',['Alguien con urgencia por entrar o salir del mercado','Un error de la plataforma al dibujar el gráfico','Que el mercado está cerrado en ese momento'],'Quien barre varios niveles acepta pagar peor: tiene prisa.'],
+['¿Por qué los algoritmos ponen liquidez a los dos lados del libro?',['Para ganar el spread mientras gestionan su riesgo','Para empujar el precio en una dirección concreta','Para impedir que los minoristas puedan operar'],'Su negocio es dar liquidez y cobrar por ello.'],
+['¿Qué deberías hacer cuando ves la huella del dinero grande en un nivel?',['Ver qué hace el precio después antes de decidir','Entrar a favor de inmediato sin esperar más','Ignorarla porque los grandes siempre engañan'],'La huella es información; la confirmación es la reacción del precio.']
+]},
+{id:'n2-4',titulo:'Lo que la vela no te cuenta',min:6,tema:'subasta',whop:'porque las velas no muestran la historia completa',
+teoria:`<p>Una vela japonesa resume cuatro precios: apertura, máximo, mínimo y cierre. Todo lo demás queda escondido.</p>
+<h3>Lo que falta</h3>
+<ul><li><b>Dónde se negoció el volumen:</b> una vela puede subir con casi todo el volumen abajo. La subida final tuvo poca gente.</li>
+<li><b>Quién agredió:</b> una vela verde puede tener delta negativo si los vendedores agresivos chocaron contra compradores pasivos.</li>
+<li><b>Cómo terminó cada extremo:</b> si el máximo se cerró con interés o quedó una subasta sin terminar.</li></ul>
+<h3>El footprint abre la vela</h3>
+<p>El footprint enseña, en cada precio de la vela, el volumen negociado en el bid y en el ask. Es como hacer una radiografía de la vela.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Dos velas iguales por fuera pueden contar historias opuestas por dentro.</p></div>`,
+usar:['footprint-3','subastas-10','subastas-11','delta-3'],
+preg:[
+['¿Qué cuatro datos resume una vela japonesa?',['Apertura, máximo, mínimo y cierre','Volumen, delta, POC y cierre','Bid, ask, spread y volumen'],'Precio y nada más. El volumen y quién agredió no están.'],
+['¿Qué hace el footprint con la vela?',['Muestra el volumen en el bid y en el ask de cada precio','Cambia el color de la vela según el volumen total','Dibuja una media del precio de los últimos días'],'Es la radiografía de la vela: volumen por precio y por lado.'],
+['Vela verde con casi todo su volumen en la parte baja. ¿Qué sugiere?',['Que la subida final se hizo con poca participación','Que los compradores entraron con fuerza arriba','Que el cierre en máximos está muy respaldado'],'Precio arriba, volumen abajo: la parte alta está poco defendida.'],
+['¿Puede una vela roja tener delta positivo?',['Sí: compradores agresivos chocaron con vendedores pasivos','No: una vela roja siempre tiene delta negativo','Solo si el volumen total de la vela es muy bajo'],'El color es precio. El delta es agresión. Pueden ir en contra.'],
+['¿Por qué dos velas idénticas pueden pedir decisiones distintas?',['Porque su volumen y su agresión por dentro pueden ser opuestos','Porque una se formó por la mañana y otra por la tarde','Porque el color depende de la plataforma que uses'],'La forma no basta. Lo que hay dentro decide.'],
+['¿Qué información del extremo de una vela no ves en el gráfico de velas?',['Si el máximo terminó con interés o quedó una subasta sin terminar','A qué precio exacto llegó el máximo de la vela','Si la vela cerró por encima o por debajo de la apertura'],'Cómo se cerró la subasta en el extremo solo se ve en el footprint.']
+]},
+{id:'n2-5',titulo:'La subasta: el mercado busca liquidez',min:6,tema:'subasta',whop:'Qué mueve el precio (órdenes, no velas)',
+teoria:`<p>El mercado funciona como una subasta continua. El precio sube para buscar vendedores y baja para buscar compradores. Cuando encuentra un precio donde los dos lados negocian a gusto, se queda ahí: eso es el equilibrio.</p>
+<h3>Equilibrio y desequilibrio</h3>
+<ul><li><b>Equilibrio (balance):</b> el precio rota en un rango y el volumen se acumula en el centro.</li>
+<li><b>Desequilibrio:</b> un lado toma el control y el precio sale a buscar un valor nuevo.</li></ul>
+<h3>Subasta que se termina y subasta que no</h3>
+<p>Un extremo bien terminado tiene poco volumen al final: ya no quedaba nadie dispuesto a pagar más. Si el máximo deja volumen en los dos lados, la subasta quedó sin terminar y el precio suele volver a visitarlo.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El precio viaja de zona de liquidez a zona de liquidez. Rangos para negociar, rupturas para buscar valor nuevo.</p></div>`,
+usar:['subasta-8','subasta-9','subastas-2'],
+preg:[
+['Según la teoría de subasta, ¿por qué sube el precio?',['Para buscar vendedores dispuestos a negociar','Porque los compradores siempre tienen más dinero','Porque el mercado tiende a subir con el tiempo'],'Sube hasta encontrar a quien quiera vender. Ahí se frena o gira.'],
+['¿Cómo se ve un mercado en equilibrio?',['El precio rota en un rango y el volumen se concentra en el centro','El precio sube sin pausa y el volumen crece en cada nuevo máximo','El precio queda quieto y casi no se negocia volumen en ningún precio'],'Los dos lados están a gusto en ese rango.'],
+['¿Qué pasa cuando un lado toma el control?',['El precio sale del equilibrio a buscar un valor nuevo','El precio se queda dentro del rango anterior','El volumen desaparece hasta el día siguiente'],'Desequilibrio: hay que encontrar un precio donde vuelva a haber negocio.'],
+['¿Qué caracteriza un máximo con la subasta bien terminada?',['Poco volumen al final: ya nadie pagaba más','Mucho volumen en los dos lados del último precio','Un hueco sin operaciones justo debajo del máximo'],'Cuando se acaban los compradores, el máximo queda limpio.'],
+['¿Qué suele pasar con un máximo que deja la subasta sin terminar?',['El precio tiende a volver a visitarlo','El precio ya nunca vuelve a ese nivel','El máximo se convierte en un soporte fuerte'],'Queda negocio pendiente. Actúa como imán.'],
+['¿Dónde se acumula el volumen en un rango?',['Sobre todo en el centro, donde los dos lados negocian a gusto','Sobre todo en los extremos del rango','Repartido igual en todos los precios del rango'],'El centro del rango es el precio justo para ambos lados.'],
+['¿Qué frase resume cómo viaja el precio?',['De una zona de liquidez a otra','De un indicador a otro indicador','De un número redondo al siguiente'],'Busca donde haya órdenes para negociar.'],
+['El precio rompe un rango y se queda fuera negociando con volumen. ¿Qué indica?',['Que acepta precios nuevos y busca otro equilibrio','Que la ruptura es falsa y volverá al rango','Que el mercado no tiene ninguna dirección clara'],'Aceptación fuera del rango: hay negocio a esos precios.']
+]}
+]});
+
+RUTA.push({id:'n3',titulo:'Estructura de mercado',desc:'Soportes y resistencias que importan, tendencias, giros y AMD.',lecciones:[
+{id:'n3-1',titulo:'Soportes y resistencias que importan',min:6,tema:'estructura',whop:'soportes y resistencias',
+teoria:`<p>Un soporte o una resistencia no es una línea mágica. Es una zona donde, por lo que pasó antes, es probable que haya órdenes esperando o que el mercado reaccione.</p>
+<h3>Qué niveles valen más</h3>
+<ul><li><b>Extremos del día anterior:</b> máximo, mínimo y cierre de la sesión regular.</li>
+<li><b>Niveles de volumen:</b> POC, VAH y VAL, zonas de mucho volumen negociado.</li>
+<li><b>Máximos y mínimos de la sesión nocturna</b> (ONH y ONL).</li>
+<li><b>Números redondos</b>, donde se amontonan órdenes.</li></ul>
+<h3>Zona, no línea</h3>
+<p>Marca zonas de unos pocos puntos, no una línea exacta. El precio rara vez gira en el tick exacto. Y cuanto más se toca una zona sin romper, más órdenes se consumen y más débil queda.</p>
+<h3>El nivel es dónde mirar, no cuándo entrar</h3>
+<p>El nivel te dice dónde prestar atención. La entrada la da el flujo: absorción, agotamiento o falta de continuación en el footprint.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Nivel + reacción en el flujo = entrada. Nivel solo = esperanza.</p></div>`,
+preg:[
+['¿Qué es en realidad un soporte?',['Una zona donde es probable que haya compras esperando','Una línea exacta donde el precio siempre rebota','Un precio que el mercado no puede atravesar'],'Es probabilidad de órdenes, no una garantía.'],
+['¿Por qué conviene marcar zonas en lugar de líneas exactas?',['Porque el precio rara vez gira en el tick exacto','Porque las líneas no se pueden dibujar en ATAS','Porque las zonas son más fáciles de borrar'],'Una zona de pocos puntos refleja mejor dónde están las órdenes.'],
+['Una resistencia se toca cinco veces sin romperse. ¿Qué suele pasar con ella?',['Se debilita: cada toque consume órdenes del nivel','Se hace más fuerte con cada toque nuevo','No cambia: el número de toques no importa'],'Cada visita gasta liquidez. Al final suele ceder.'],
+['¿Cuál de estos niveles suele ser más relevante para el día?',['El máximo y el mínimo de la sesión anterior','Un máximo de hace dos años en gráfico semanal','El cruce de dos medias en un minuto'],'Los extremos recientes los mira todo el mercado.'],
+['¿Qué son el ONH y el ONL?',['El máximo y el mínimo de la sesión nocturna','El precio de apertura y de cierre de Nueva York','Los niveles del VWAP con sus bandas'],'Overnight high y overnight low: referencias para la apertura.'],
+['El precio llega a tu soporte. ¿Qué necesitas antes de comprar?',['Una reacción en el flujo: absorción o agotamiento vendedor','Que el soporte haya funcionado más de tres veces','Que un indicador de momento marque sobreventa'],'El nivel te dice dónde mirar. El flujo te dice si hay compradores.'],
+['¿Por qué los números redondos actúan como niveles?',['Porque se amontonan órdenes y stops en ellos','Porque el exchange para el mercado en esos precios','Porque los algoritmos no pueden operar en ellos'],'Mucha gente pone órdenes en precios redondos.'],
+['¿Qué niveles de volumen conviene marcar?',['El POC, el VAH y el VAL','Los máximos de cada vela','La apertura de cada hora'],'Son zonas donde se negoció mucho y el precio reacciona.'],
+['Un soporte se rompe con fuerza y luego el precio vuelve a él desde abajo. ¿Qué puede pasar?',['Que actúe como resistencia en el retest','Que deje de existir para siempre','Que vuelva a ser soporte de inmediato'],'Los niveles rotos suelen cambiar de papel.'],
+['¿Qué frase resume el uso de soportes y resistencias en Order Flow?',['El nivel dice dónde mirar; el flujo dice cuándo entrar','El nivel dice cuándo entrar; el flujo dice dónde','Los niveles no sirven si usas Order Flow'],'Se complementan: contexto y confirmación.']
+]},
+{id:'n3-2',titulo:'Tendencias y subtendencias',min:7,tema:'estructura',whop:'tendencias y subtendencias',
+teoria:`<p>Una tendencia alcista hace máximos y mínimos cada vez más altos. Una bajista, máximos y mínimos cada vez más bajos. Si no hace ninguna de las dos cosas, el mercado está en rango.</p>
+<h3>Tendencia y subtendencia</h3>
+<p>Dentro de una tendencia hay retrocesos: pequeñas tendencias en contra. Una subtendencia bajista dentro de una tendencia alcista grande es un retroceso, no un cambio de tendencia, mientras no rompa el último mínimo relevante.</p>
+<h3>Cómo usarlo</h3>
+<ul><li>Opera a favor de la tendencia del marco mayor y busca entradas al final de los retrocesos.</li>
+<li>El último mínimo relevante en tendencia alcista es tu referencia de invalidación.</li>
+<li>Una tendencia sana avanza con volumen y retrocede sin él.</li></ul>
+<div class="lec-clave"><b>Idea clave</b><p>El marco mayor te da la dirección; el menor, el momento de entrar.</p></div>`,
+preg:[
+['¿Qué define una tendencia alcista?',['Máximos y mínimos cada vez más altos','Velas verdes más grandes que las rojas','Precio por encima de una media cualquiera'],'La estructura de máximos y mínimos es la definición.'],
+['En tendencia alcista aparece una pequeña bajada que no rompe el último mínimo. ¿Qué es?',['Un retroceso o subtendencia dentro de la tendencia','Un cambio de tendencia confirmado','Una señal de vender todo lo que tengas'],'Mientras respete el mínimo relevante, la tendencia sigue.'],
+['¿Dónde suele tener sentido buscar compras en una tendencia alcista?',['Al final de los retrocesos, con confirmación en el flujo','En cada nuevo máximo, a mercado y sin esperar','Cuando el precio está lejos de cualquier nivel'],'Comprar retrocesos ofrece mejor riesgo que perseguir máximos.'],
+['¿Qué rompe la estructura de una tendencia alcista?',['Perder el último mínimo relevante','Hacer una vela roja grande','Tocar una resistencia antigua'],'Si cae por debajo del último mínimo, la secuencia se rompe.'],
+['¿Cómo avanza una tendencia sana en términos de volumen?',['Avanza con volumen y retrocede con poco volumen','Avanza con poco volumen y retrocede con mucho','El volumen no cambia entre avance y retroceso'],'Retrocesos con mucho volumen en contra son señal de alarma.'],
+['¿Qué papel tiene el marco temporal mayor?',['Dar la dirección principal del mercado','Dar el momento exacto de entrada','Ninguno si operas intradía'],'Arriba la dirección, abajo el momento.'],
+['El mercado no hace ni máximos más altos ni mínimos más bajos. ¿Qué es?',['Un rango o mercado en equilibrio','Una tendencia alcista débil','Una tendencia bajista débil'],'Sin secuencia clara, el mercado rota.'],
+['¿Qué es más arriesgado en tendencia alcista?',['Vender cada máximo creyendo que es el techo','Comprar retrocesos con stop bajo el mínimo','Esperar confirmación en un nivel de valor'],'Ir contra la tendencia sin señal suele salir caro.'],
+['En una subtendencia bajista el volumen vendedor crece mucho y rompe el mínimo relevante. ¿Qué indica?',['Posible cambio de tendencia','Un retroceso normal sin importancia','Que hay que comprar más fuerte'],'Ruptura de estructura con volumen: la tendencia puede haber terminado.'],
+['¿Cuál es la referencia de invalidación natural en una compra a favor de tendencia?',['El último mínimo relevante','El máximo del día anterior','El precio de apertura de la sesión'],'Si el precio lo pierde, la idea de tendencia ya no vale.']
+]},
+{id:'n3-3',titulo:'Giros de mercado',min:6,tema:'estructura',whop:'giros de mercado',
+teoria:`<p>Un giro empieza casi siempre igual: la tendencia hace un último empuje que no consigue continuidad, y los que entraron tarde se quedan atrapados.</p>
+<h3>Señales de que el empuje se agota</h3>
+<ul><li>Mucho esfuerzo y poco avance: volumen alto en el extremo sin que el precio siga.</li>
+<li>Delta que no acompaña: el precio hace nuevo máximo con menos compra agresiva.</li>
+<li>Subasta terminada en el extremo: ya nadie paga más.</li></ul>
+<h3>Confirmación</h3>
+<p>Un giro no se confirma en el primer tick. Se confirma cuando el precio pierde la zona del último empuje y los atrapados empiezan a salir: sus cierres empujan en contra.</p>
+<div class="lec-clave"><b>Idea clave</b><p>No intentes adivinar el techo. Espera a que el último empuje falle y entra cuando el precio deje atrás a los atrapados.</p></div>`,
+usar:['atrapados-1','atrapados-2','atrapados-3','atrapados-12'],
+preg:[
+['¿Cómo suele empezar un giro de mercado?',['Con un último empuje que no consigue continuidad','Con un cruce de medias en contra de la tendencia','Con una vela muy pequeña en mitad del rango'],'El fallo del último empuje es la primera pista.'],
+['En un máximo hay mucho volumen y el precio no avanza. ¿Qué sugiere?',['Esfuerzo sin resultado: posible agotamiento','Fuerza compradora que va a seguir subiendo','Falta de interés de cualquiera de los lados'],'Mucho volumen sin avance suele ser absorción o agotamiento.'],
+['El precio hace nuevo máximo con menos compra agresiva que el anterior. ¿Qué es?',['Una pérdida de fuerza del empuje comprador','Una confirmación de que la tendencia sigue','Un error del indicador de delta'],'Menos agresión en máximos más altos: el combustible se acaba.'],
+['¿Cuándo se confirma un giro?',['Cuando el precio pierde la zona del último empuje','En cuanto aparece la primera vela roja','Cuando un oscilador marca sobrecompra'],'Perder esa zona deja atrapados a los últimos compradores.'],
+['¿Por qué los atrapados aceleran el giro?',['Porque al cerrar sus posiciones empujan en contra','Porque dejan de operar y el volumen desaparece','Porque añaden más posiciones a favor del giro'],'Los largos atrapados cierran vendiendo.'],
+['¿Qué es mejor que intentar adivinar el techo exacto?',['Esperar a que el último empuje falle y entrar con confirmación','Vender en cada máximo nuevo con stop muy ajustado','Comprar el máximo porque la tendencia es tu amiga'],'Entrar tras el fallo mejora la probabilidad y el sitio del stop.']
+]},
+{id:'n3-4',titulo:'AMD: acumulación, manipulación y distribución',min:5,tema:'estructura',whop:'AMD',
+teoria:`<p>AMD describe un ciclo que se ve mucho en intradía:</p>
+<ul><li><b>Acumulación:</b> el precio rota en un rango estrecho. Se construyen posiciones sin mover mucho el precio.</li>
+<li><b>Manipulación:</b> un barrido rápido de uno de los extremos del rango. Salta stops y engancha a los que persiguen la ruptura.</li>
+<li><b>Distribución:</b> el movimiento real, en la dirección contraria al barrido.</li></ul>
+<h3>Cómo leerlo con Order Flow</h3>
+<p>En el barrido busca agresión que no tiene continuidad: mucho volumen en el extremo, absorción o un big trade que no consigue mover el precio. Cuando el precio vuelve dentro del rango, los que rompieron quedan atrapados.</p>
+<h3>Cuidado</h3>
+<p>No todo barrido es manipulación. A veces la ruptura es real. La diferencia está en la aceptación: si el precio se queda fuera negociando con volumen, no es un barrido.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El barrido es la trampa; la vuelta al rango es la confirmación.</p></div>`,
+usar:['atrapados-4','atrapados-5','atrapados-6','atrapados-7','rupturas-12'],
+preg:[
+['¿Qué ocurre en la fase de acumulación?',['El precio rota en un rango estrecho mientras se construyen posiciones','El precio sube con fuerza y con mucho volumen en cada empuje','El precio barre los stops de un extremo y se aleja del rango'],'Rango estrecho, posiciones construyéndose sin mover el precio.'],
+['¿Qué es la fase de manipulación en AMD?',['Un barrido rápido de un extremo que salta stops','Una tendencia larga con volumen creciente','Una pausa sin volumen antes del cierre'],'El barrido engancha a los que persiguen la ruptura.'],
+['¿Hacia dónde suele ir la distribución tras el barrido?',['En dirección contraria al barrido','En la misma dirección del barrido','Hacia el centro del rango y se queda allí'],'El barrido fue la trampa; el movimiento real va al otro lado.'],
+['¿Qué confirma que el barrido fue una trampa?',['Que el precio vuelve dentro del rango','Que el precio se queda fuera con volumen','Que el delta del barrido sea muy alto'],'La vuelta al rango deja atrapados a los que rompieron.'],
+['El precio rompe el rango y se queda fuera negociando con volumen. ¿Qué es?',['Una ruptura aceptada, no un barrido','Una manipulación clásica de AMD','Una fase de acumulación nueva'],'Aceptación fuera del rango: probablemente es real.']
+]}
+]});
+/* ---------- Ruta de formación: niveles 4 a 6 ---------- */
+RUTA.push({id:'n4',titulo:'Futuros y ATAS',desc:'Contratos, valor del punto, la plataforma y la conexión de datos.',lecciones:[
+{id:'n4-1',titulo:'Futuros: contratos, tick y valor del punto',min:7,tema:'atas',whop:'precio por contrato',
+teoria:`<p>Un futuro es un contrato estandarizado sobre un activo, en nuestro caso índices como el Nasdaq 100 (NQ) o el S&amp;P 500 (ES). Cada contrato tiene un tamaño fijo, así que cada punto que se mueve vale una cantidad fija de dólares.</p>
+<h3>Lo que tienes que saberte de memoria</h3>
+<ul><li><b>NQ:</b> 20 $ por punto. Tick de 0,25 puntos = 5 $.</li>
+<li><b>MNQ:</b> 2 $ por punto. Tick de 0,25 = 0,50 $. Es la décima parte de NQ.</li>
+<li><b>ES:</b> 50 $ por punto. Tick de 0,25 = 12,50 $.</li>
+<li><b>MES:</b> 5 $ por punto. Tick de 0,25 = 1,25 $.</li></ul>
+<h3>Vencimientos</h3>
+<p>Los índices vencen cada trimestre: marzo, junio, septiembre y diciembre. Unos días antes del vencimiento el volumen pasa al contrato siguiente (el rollover) y conviene cambiar de contrato en la plataforma.</p>
+<h3>Horario</h3>
+<p>Los futuros de índices cotizan casi 24 horas de domingo a viernes, con una pausa diaria de una hora. La sesión regular de Nueva York, la de más volumen, va de 9:30 a 16:00 hora de Nueva York (normalmente de 15:30 a 22:00 en España).</p>
+<div class="lec-clave"><b>Idea clave</b><p>Antes de operar un contrato, sabe cuánto vale un punto. Tu riesgo en dólares es distancia al stop × valor del punto × contratos.</p></div>`,
+preg:[
+['¿Cuánto vale un punto de NQ?',['20 $','2 $','50 $'],'NQ: 20 $ por punto. El micro, MNQ, vale 2 $.'],
+['¿Cuánto vale un tick de ES?',['12,50 $','5 $','1,25 $'],'ES vale 50 $ por punto y el tick es 0,25: 12,50 $.'],
+['¿Qué relación hay entre MNQ y NQ?',['MNQ es la décima parte de NQ','MNQ es la mitad de NQ','MNQ vale lo mismo que NQ con menos comisión'],'2 $ por punto frente a 20 $: una décima parte.'],
+['Arriesgas 12 puntos con 3 contratos de MNQ. ¿Cuánto arriesgas?',['72 $','36 $','720 $'],'12 × 2 $ × 3 = 72 $.'],
+['Arriesgas 4 puntos con 1 contrato de ES. ¿Cuánto es?',['200 $','80 $','50 $'],'4 × 50 $ = 200 $.'],
+['¿Cada cuánto vencen los futuros de NQ y ES?',['Cada trimestre: marzo, junio, septiembre y diciembre','Cada mes, siempre el tercer viernes del mes','Una vez al año, la tercera semana de diciembre'],'Son contratos trimestrales.'],
+['¿Qué es el rollover?',['El paso del volumen al siguiente contrato antes del vencimiento','El cierre automático de todas las posiciones a final de día','La pausa diaria de una hora del mercado de futuros'],'Antes del vencimiento, el mercado se muda al contrato siguiente.'],
+['¿Cuándo es la sesión regular de Nueva York en hora de España, normalmente?',['De 15:30 a 22:00','De 9:00 a 17:30','De 14:00 a 20:00'],'9:30 a 16:00 en Nueva York. Ojo con los cambios de hora, que no coinciden en las mismas fechas.'],
+['¿Cuánto vale un tick de MNQ?',['0,50 $','2 $','5 $'],'Tick de 0,25 puntos × 2 $ por punto = 0,50 $.'],
+['¿Cómo calculas tu riesgo en dólares en un futuro?',['Distancia al stop × valor del punto × contratos','Precio de entrada × contratos ÷ 100','Margen del broker × número de contratos'],'Esa es la fórmula que usa también tu diario para el riesgo.']
+]},
+{id:'n4-2',titulo:'ATAS y la conexión de datos',min:7,tema:'atas',whop:'Cómo funciona ATAS',
+teoria:`<p>ATAS es una plataforma especializada en análisis de volumen y Order Flow. Su fuerte son los gráficos de clusters (footprint), el DOM, la cinta y los indicadores de volumen.</p>
+<h3>Datos: lo más importante</h3>
+<p>ATAS no es un broker. Necesita una conexión de datos que le mande cada operación ejecutada. Para Order Flow hace falta un feed con datos tick a tick y el lado del agresor. Las firmas de fondeo suelen dar acceso por <b>Rithmic</b>: te dan usuario, contraseña y el sistema al que conectar, y en ATAS añades esa conexión.</p>
+<h3>Cómo se organiza</h3>
+<ul><li><b>Espacio de trabajo:</b> las ventanas que tienes abiertas (gráficos, DOM, cinta) y cómo están colocadas.</li>
+<li><b>Plantillas:</b> la configuración guardada de un gráfico o indicador. Guarda una por instrumento.</li>
+<li><b>Instrumento y contrato:</b> asegúrate de tener el contrato activo, sobre todo cerca del rollover.</li></ul>
+<h3>Historial</h3>
+<p>El footprint necesita datos tick a tick del pasado. Si cargas demasiados días la plataforma va lenta; carga solo lo que vas a analizar.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Sin buenos datos no hay Order Flow. Primero la conexión correcta; después, los gráficos.</p></div>`,
+preg:[
+['¿Qué es ATAS?',['Una plataforma de análisis de volumen y Order Flow','Un broker que ejecuta tus órdenes en el mercado','Una firma de fondeo que te presta capital'],'ATAS analiza y muestra el flujo. La ejecución va por tu conexión.'],
+['¿Por qué ATAS necesita una conexión de datos como Rithmic?',['Porque necesita recibir cada operación ejecutada en el mercado','Porque sin ella no se pueden dibujar líneas en el gráfico','Porque así se activan las plantillas de colores'],'El footprint se construye con cada operación y su agresor.'],
+['¿Qué datos necesita un footprint para ser fiable?',['Datos tick a tick con el lado del agresor','Datos de cierre de cada vela de un minuto','Datos diarios de apertura y cierre'],'Sin cada operación y su lado no se puede repartir el volumen en bid y ask.'],
+['Tu firma de fondeo te da usuario, contraseña y sistema de Rithmic. ¿Qué haces en ATAS?',['Añadir esa conexión de Rithmic con esos datos','Instalar otra plataforma para poder conectarte','Pedir a ATAS que te asigne una cuenta nueva'],'Se configura una conexión nueva con las credenciales de la firma.'],
+['¿Qué es una plantilla en ATAS?',['La configuración guardada de un gráfico o indicador','Una estrategia automática que opera por ti','Un tipo especial de orden con stop incluido'],'Así no reconfiguras el footprint cada día.'],
+['¿Por qué conviene una plantilla distinta para NQ y para ES?',['Porque lo que es volumen grande cambia mucho entre instrumentos','Porque ATAS no deja usar la misma plantilla dos veces','Porque cada instrumento abre a una hora diferente'],'Filtros y umbrales tienen que adaptarse a cada mercado.'],
+['La plataforma va muy lenta al abrir el footprint. ¿Qué suele ayudar?',['Cargar menos días de historial','Abrir más gráficos a la vez','Bajar el tamaño de la letra'],'El tick a tick pesa mucho. Carga solo lo que vas a analizar.'],
+['Estás cerca del vencimiento y el volumen de tu gráfico baja de golpe. ¿Qué compruebas?',['Que estás en el contrato activo y no en el que vence','Que la conexión a internet funciona bien','Que la plantilla tiene los colores correctos'],'Tras el rollover el volumen está en el contrato siguiente.'],
+['¿Qué es el espacio de trabajo en ATAS?',['El conjunto de ventanas abiertas y cómo están colocadas','El tamaño de la cuenta que puedes operar','La lista de instrumentos que tienes en favoritos'],'Guárdalo para tener siempre la misma pantalla de trabajo.'],
+['¿Qué viene primero para operar Order Flow con garantías?',['Una conexión de datos correcta','Tener muchos indicadores configurados','Tener una cuenta de fondeo grande'],'Si los datos fallan, todo lo demás falla.']
+]},
+{id:'n4-3',titulo:'Gráficos de clusters y plantillas',min:7,tema:'atas',whop:'footprint grafico',
+teoria:`<p>En ATAS el footprint se llama gráfico de clusters. Cada vela se abre en filas de precio y en cada fila ves el volumen negociado.</p>
+<h3>Modos más usados</h3>
+<ul><li><b>Bid x Ask:</b> dos números por precio: ventas agresivas en el bid a la izquierda y compras agresivas en el ask a la derecha.</li>
+<li><b>Volumen:</b> el volumen total de cada precio.</li>
+<li><b>Delta:</b> compras agresivas menos ventas agresivas en cada precio.</li></ul>
+<h3>Ajustes que importan</h3>
+<ul><li><b>Ticks por fila:</b> agrupar varios ticks en una fila hace el gráfico más legible en mercados rápidos como NQ.</li>
+<li><b>Filtro de volumen:</b> resalta solo las celdas con volumen relevante para tu instrumento.</li>
+<li><b>Imbalances:</b> marca los desequilibrios diagonales con un umbral (por ejemplo, 300 %).</li>
+<li><b>POC de la vela:</b> marca el precio con más volumen dentro de cada vela.</li></ul>
+<h3>Tiempo o ticks</h3>
+<p>Puedes construir velas por tiempo (1 minuto, 5 minutos) o por número de operaciones. Lo importante es usar siempre la misma configuración para que tus ojos aprendan qué es normal.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Configura una vez, guarda la plantilla y no la toques cada día. La lectura se entrena con un gráfico estable.</p></div>`,
+usar:['footprint-8'],
+preg:[
+['¿Cómo se llama el footprint en ATAS?',['Gráfico de clusters','Gráfico de líneas','Perfil de mercado'],'En ATAS es el gráfico de clusters.'],
+['En modo Bid x Ask, ¿qué hay en la columna derecha de cada precio?',['Las compras agresivas ejecutadas en el ask','Las órdenes límite de venta pendientes','Las ventas agresivas ejecutadas en el bid'],'Derecha ask, compras a mercado.'],
+['¿Para qué sirve agrupar varios ticks por fila?',['Para que el gráfico sea legible en mercados rápidos','Para que el volumen negociado sea más alto','Para que las velas se formen más deprisa'],'En NQ, con tantos ticks por vela, agrupar ayuda a leer.'],
+['¿Qué muestra el modo Delta del footprint en cada precio?',['Compras agresivas menos ventas agresivas','Volumen total de compras y ventas','Diferencia entre el máximo y el mínimo'],'Delta por precio: agresión neta en ese nivel.'],
+['¿Para qué sirve marcar el POC de cada vela?',['Para ver dónde se negoció más volumen dentro de la vela','Para saber el precio de cierre de la vela anterior','Para calcular automáticamente el stop de la entrada'],'El POC de la vela te dice dónde estuvo el interés.'],
+['¿Qué umbral se usa a menudo como referencia para marcar un imbalance?',['300 % en diagonal','30 % en horizontal','3 % del volumen de la vela'],'Ask de un nivel tres veces el bid del nivel de abajo, por ejemplo.'],
+['¿Qué ventaja tiene una vela construida por número de operaciones frente a una por tiempo?',['Se adapta a la actividad: más velas cuando hay más negocio','Siempre muestra más volumen dentro de cada vela','Elimina por completo el ruido y las falsas señales'],'Con mucha actividad salen más velas; con poca, menos.'],
+['¿Por qué no conviene cambiar la configuración del footprint cada día?',['Porque tus ojos necesitan una referencia estable de lo que es normal','Porque ATAS borra las plantillas si se cambian a menudo','Porque los datos dejan de cargarse al cambiar ajustes'],'La lectura se entrena con el mismo gráfico.'],
+['¿Qué modo de footprint enseña ventas y compras agresivas por separado en cada precio?',['Bid x Ask','Volumen','Delta'],'Es el modo base para leer quién agrede en cada nivel.']
+]}
+]});
+
+RUTA.push({id:'n5',titulo:'Libro, cinta y órdenes grandes',desc:'DOM, heatmap, Smart Tape, Speed of Tape, Big Trades y Cluster Search.',lecciones:[
+{id:'n5-1',titulo:'El libro de órdenes y el DOM',min:6,tema:'dom',whop:'Cómo funciona ATAS',
+teoria:`<p>El DOM (profundidad de mercado) enseña las órdenes límite que esperan a cada precio: compras por debajo del precio y ventas por encima. Es la liquidez disponible ahora mismo.</p>
+<h3>El Smart DOM de ATAS</h3>
+<p>Además del libro, el Smart DOM puede mostrar el volumen ya negociado en cada precio y las compras y ventas agresivas recientes. Así comparas lo que espera con lo que se ejecuta.</p>
+<h3>Lo que el DOM no te asegura</h3>
+<p>Una orden límite se puede cancelar en cualquier momento. Un tamaño grande en el libro es una intención, no un hecho. Lo que de verdad pasó está en la cinta y en el footprint.</p>
+<h3>Cómo usarlo</h3>
+<p>Úsalo como contexto: dónde hay liquidez, si se repone o desaparece, y cómo reacciona el precio al llegar. No como señal aislada.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El DOM enseña lo que alguien dice que hará. El footprint enseña lo que se hizo.</p></div>`,
+usar:['dom-1','dom-2','dom-4','dom-9','dom-10','dom-12'],
+preg:[
+['¿Qué muestra el DOM?',['Las órdenes límite que esperan en cada precio','Las operaciones ya ejecutadas en cada precio','El volumen total de la sesión anterior'],'Es la liquidez pasiva disponible ahora.'],
+['¿Dónde aparecen las órdenes límite de compra en el DOM?',['Por debajo del precio actual','Por encima del precio actual','Solo en el precio actual'],'Quien compra con límite espera más abajo.'],
+['¿Por qué un tamaño grande en el libro es una intención y no un hecho?',['Porque la orden límite se puede cancelar antes de ejecutarse','Porque el DOM muestra datos con un día de retraso','Porque las órdenes grandes no se pueden ejecutar'],'Hasta que no se ejecuta, puede desaparecer.'],
+['¿Dónde ves lo que de verdad se ejecutó?',['En la cinta y en el footprint','En el DOM y en el heatmap','En las plantillas de la plataforma'],'Ejecución real: cinta y footprint.']
+]},
+{id:'n5-2',titulo:'Spoofing, icebergs y heatmap',min:6,tema:'dom',whop:'Cómo funciona ATAS',
+teoria:`<p>El libro se puede usar para engañar, y también para esconder.</p>
+<ul><li><b>Spoofing:</b> poner órdenes grandes que no se quieren ejecutar para asustar o atraer a otros, y quitarlas cuando el precio se acerca.</li>
+<li><b>Iceberg:</b> una orden grande que solo enseña una parte; según se ejecuta, se repone. En el footprint se ve como mucho volumen ejecutado en un precio con poco tamaño visible en el libro.</li>
+<li><b>Heatmap:</b> dibuja la liquidez del libro a lo largo del tiempo. Las franjas intensas son zonas donde hubo mucho tamaño esperando.</li></ul>
+<h3>Cómo protegerte</h3>
+<p>No operes solo porque ves un muro en el libro. Espera a ver qué pasa cuando el precio llega: si el muro desaparece era spoofing; si se ejecuta mucho y aguanta, hay alguien de verdad.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Lo que desaparece no cuenta. Lo que se ejecuta y aguanta, sí.</p></div>`,
+usar:['dom-3','dom-5','dom-6','dom-7','dom-8','dom-11','absorcion-2','absorcion-6'],
+preg:[
+['¿Cómo distingues un muro real de uno de spoofing?',['Viendo si se ejecuta y aguanta cuando llega el precio','Viendo si es mayor que la media del libro','Viendo si aparece en un número redondo'],'Real es lo que se ejecuta. El spoofing se retira.'],
+['En el heatmap ves una franja muy intensa que dura horas. ¿Qué representa?',['Mucho tamaño esperando en ese precio durante ese tiempo','Mucho volumen ejecutado en ese precio en ese tiempo','Un hueco de precio sin ninguna orden'],'El heatmap pinta liquidez del libro, no ejecuciones.']
+]},
+{id:'n5-3',titulo:'La cinta y el Smart Tape',min:6,tema:'cinta',whop:'que es el orderflow?',
+teoria:`<p>La cinta (Time and Sales) lista cada operación ejecutada: hora, precio, volumen y si se hizo en el bid o en el ask.</p>
+<h3>Smart Tape</h3>
+<p>Muchas operaciones grandes llegan troceadas en piezas pequeñas. La Smart Tape de ATAS las agrupa para que veas la orden real y no cien prints sueltos. Con el filtro de volumen ocultas lo pequeño y ves solo lo que importa en tu instrumento.</p>
+<h3>Qué mirar</h3>
+<ul><li>Prints grandes que barren varios precios: urgencia.</li>
+<li>Prints grandes que no mueven el precio: alguien pasivo enfrente.</li>
+<li>La cinta como confirmación en tus niveles, no como sistema completo.</li></ul>
+<div class="lec-clave"><b>Idea clave</b><p>Agrupa, filtra y mira la cinta solo en tus niveles. Leerla todo el día agota y confunde.</p></div>`,
+usar:['cinta-1','cinta-2','cinta-3','cinta-6','cinta-10','cinta-11','cinta-12'],
+preg:[
+['¿Qué información trae cada línea de la cinta?',['Hora, precio, volumen y lado de la operación','Precio de apertura, máximo, mínimo y cierre','Órdenes límite pendientes en cada precio'],'Es el registro de cada ejecución.'],
+['¿Por qué las órdenes grandes suelen llegar troceadas en la cinta?',['Porque se ejecutan contra varias órdenes límite distintas','Porque el broker divide todas las órdenes en diez partes','Porque la cinta no admite operaciones grandes'],'Una orden grande se llena contra muchas pequeñas.'],
+['¿Dónde tiene más sentido leer la cinta?',['En tus niveles, como confirmación','Durante toda la sesión sin parar','Solo después del cierre del mercado'],'Leerla siempre agota y genera ruido.']
+]},
+{id:'n5-4',titulo:'Speed of Tape: la velocidad de la cinta',min:6,tema:'cinta',whop:'que es el speed of tape?',
+teoria:`<p>El indicador Speed of Tape de ATAS mide lo rápido que se mueve la cinta: operaciones, volumen o delta por segundo en una ventana de tiempo. Resalta las velas donde la actividad supera tu umbral.</p>
+<h3>Configuración básica</h3>
+<ul><li><b>Qué mide:</b> número de operaciones, volumen, delta, solo compras o solo ventas.</li>
+<li><b>Ventana:</b> en segundos.</li>
+<li><b>Filtro automático:</b> ajusta el umbral al instrumento; puedes desactivarlo y poner el tuyo.</li></ul>
+<p>Funciona mejor en gráficos de pocos minutos o de ticks.</p>
+<h3>Cómo leerlo</h3>
+<ul><li>Aceleración al llegar a un nivel, con volumen: la ruptura gana probabilidad.</li>
+<li>Cinta que se frena en el nivel: la ruptura puede fallar.</li>
+<li>En rangos la velocidad baja a su media. Las oportunidades aparecen cuando sube junto al volumen.</li></ul>
+<p>Solo, dice poco. Úsalo en tus niveles y con el footprint.</p>
+<div class="lec-clave"><b>Idea clave</b><p>La velocidad dice cuánta urgencia hay. El nivel y el footprint dicen si esa urgencia tiene sentido.</p></div>`,
+usar:['cinta-4','cinta-5','cinta-7','cinta-8','cinta-9'],
+preg:[
+['¿Qué mide el indicador Speed of Tape?',['La actividad de la cinta por segundo en una ventana de tiempo','El tiempo que tarda una orden en ejecutarse en el exchange','La velocidad de tu conexión de datos con el servidor del feed'],'Operaciones, volumen o delta por segundo.'],
+['¿En qué unidad se define la ventana del Speed of Tape?',['En segundos','En velas','En días'],'La ventana se mide siempre en segundos.'],
+['El precio llega a una resistencia, se acelera la cinta y sube el volumen. ¿Qué gana probabilidad?',['La ruptura de la resistencia','El rechazo inmediato en la resistencia','Un rango estrecho durante horas'],'Urgencia con volumen en el nivel favorece la ruptura.'],
+['En consolidación, ¿qué suele hacer la velocidad de la cinta?',['Bajar hacia su media','Subir de forma constante','Marcar máximos en cada vela'],'Sin urgencia, la cinta va despacio.'],
+['¿Por qué Speed of Tape funciona mejor en gráficos cortos o de ticks?',['Porque resalta velas completas y en marcos largos se diluye','Porque en marcos largos no se puede calcular','Porque los gráficos largos no tienen volumen'],'Una vela de una hora mezcla demasiada actividad.']
+]},
+{id:'n5-5',titulo:'Big Trades',min:6,tema:'bigtrades',whop:'que es un big trade?',
+teoria:`<p>Big Trades marca en el gráfico las operaciones grandes, ya sea una sola ejecución grande o un grupo de ejecuciones que pertenecen a la misma orden.</p>
+<h3>Ajustes</h3>
+<ul><li><b>Operaciones acumuladas o separadas:</b> en modo acumulado agrupa las piezas de una misma orden.</li>
+<li><b>Filtro automático:</b> elige el umbral según el instrumento y la actividad, con intensidad fuerte, media o débil.</li>
+<li><b>Volumen mínimo y máximo:</b> para fijar tú el tamaño.</li>
+<li><b>Ubicación:</b> filtrar solo las de las mechas o del cuerpo de la vela.</li></ul>
+<h3>Cómo leerlo</h3>
+<p>Un círculo solo dice que hubo una operación grande. Lo importante es qué hizo el precio después: si siguió, si se paró o si giró. Un big trade de compra en un máximo que no consigue subir más es muy distinto de uno que barre precios y sigue.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El big trade es la pregunta. La reacción del precio es la respuesta.</p></div>`,
+usar:['bigtrades-1','bigtrades-2','bigtrades-3','bigtrades-4','bigtrades-5','bigtrades-6','bigtrades-11','bigtrades-12'],
+preg:[
+['¿Para qué sirve filtrar Big Trades por ubicación en la vela?',['Para separar lo que pasa en las mechas de lo que pasa en el cuerpo','Para pintar de otro color las velas alcistas y las bajistas','Para que el indicador cargue más rápido con mucho historial'],'Un big trade en la mecha suele contar otra historia que en el cuerpo.'],
+['Aparecen demasiados círculos de Big Trades. ¿Qué haces?',['Subir el volumen mínimo o la intensidad del filtro','Bajar el volumen mínimo para ver más','Quitar el indicador porque no funciona'],'Si todo es grande, nada es grande.']
+]},
+{id:'n5-6',titulo:'Cluster Search',min:5,tema:'bigtrades',whop:'configuracion big trade',
+teoria:`<p>Cluster Search busca en el footprint las celdas que cumplen las condiciones que tú pongas: volumen, delta, compras, ventas, operaciones, en una o varias velas.</p>
+<h3>Diferencia con Big Trades</h3>
+<p>Big Trades detecta operaciones grandes. Cluster Search detecta celdas con mucho volumen sumado, aunque se haya hecho con muchas operaciones pequeñas. Por eso uno puede marcar algo que el otro no.</p>
+<h3>Cuidado con el modo Volumen</h3>
+<p>Si buscas por volumen total mezclas compras y ventas: una celda enorme puede ser de los dos lados. Para saber quién agredió, filtra por bid, ask o delta.</p>
+<h3>Uso práctico</h3>
+<ul><li>Filtra por ubicación (máximos, mínimos, mechas) para buscar absorciones o agotamientos en extremos.</li>
+<li>Verifica siempre en el footprint y en el contexto antes de actuar.</li></ul>
+<div class="lec-clave"><b>Idea clave</b><p>Cluster Search te ahorra buscar a ojo. La decisión sigue siendo tuya.</p></div>`,
+usar:['bigtrades-7','bigtrades-8','bigtrades-9','bigtrades-10'],
+preg:[
+['¿Qué busca Cluster Search?',['Celdas del footprint que cumplen las condiciones que pones','Operaciones individuales mayores que un tamaño fijo','Órdenes límite grandes en el libro de órdenes'],'Busca celdas por volumen, delta, bid, ask u operaciones.'],
+['¿Por qué Cluster Search puede marcar algo que Big Trades no marca?',['Porque suma volumen de muchas operaciones pequeñas en una celda','Porque solo funciona en gráficos de un minuto o de ticks','Porque toma los datos de otro instrumento relacionado'],'Mucho volumen puede venir de muchas operaciones pequeñas.'],
+['Buscas por volumen total y sale una celda enorme. ¿Qué no sabes todavía?',['Qué lado agredió: puede ser compra, venta o ambos','A qué precio exacto ocurrió esa celda','En qué vela del gráfico está esa celda'],'Volumen total mezcla los dos lados.'],
+['¿Cómo buscas absorción en los extremos con Cluster Search?',['Filtrando por ubicación en máximos, mínimos o mechas','Filtrando solo por la hora de apertura de Nueva York','Buscando celdas con volumen cero en toda la vela'],'La absorción interesa sobre todo en los extremos.'],
+['Te salta Cluster Search en un nivel clave. ¿Qué haces antes de entrar?',['Verificar en el footprint y en el contexto','Entrar a mercado en ese mismo instante','Aumentar el tamaño porque es una señal fuerte'],'Es una alerta, no una entrada.'],
+['¿Qué filtro te dice quién agredió en la celda?',['Filtrar por bid, ask o delta','Filtrar por volumen total','Filtrar por número de velas'],'Bid, ask o delta separan compras y ventas agresivas.']
+]}
+]});
+
+RUTA.push({id:'n6',titulo:'Footprint y clusters',desc:'Bid x ask, POC de vela, imbalances, extremos y absorción.',lecciones:[
+{id:'n6-1',titulo:'Leer el footprint bid x ask',min:7,tema:'footprint',whop:'footprint explicacion',
+teoria:`<p>En cada precio de la vela, el footprint bid x ask enseña dos números. A la izquierda, lo vendido a mercado (ejecutado en el bid). A la derecha, lo comprado a mercado (ejecutado en el ask).</p>
+<h3>Lectura en diagonal</h3>
+<p>Un comprador agresivo que sube el precio compra en el ask de un nivel, y quien le vende está en el bid del nivel de arriba. Por eso las comparaciones útiles son en diagonal: el ask de un precio contra el bid del precio de debajo.</p>
+<h3>Qué es normal</h3>
+<p>Antes de buscar señales, aprende qué volumen es normal en tu instrumento y horario. Un 300 en NQ a las 15:31 no significa lo mismo que a las 19:00.</p>
+<h3>Perfil dentro de la vela</h3>
+<p>Muchas plantillas dibujan además el perfil de volumen de cada vela. Te dice de un vistazo dónde se concentró el negocio.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Izquierda bid, ventas agresivas. Derecha ask, compras agresivas. Se compara en diagonal.</p></div>`,
+usar:['footprint-1','footprint-9','footprint-10','footprint-11','footprint-12','subastas-11'],
+preg:[
+['En el footprint bid x ask, ¿qué número está a la izquierda en cada precio?',['Lo vendido a mercado, ejecutado en el bid','Lo comprado a mercado, ejecutado en el ask','Las órdenes límite de compra pendientes'],'Izquierda bid: ventas agresivas.'],
+['¿Por qué se compara el footprint en diagonal?',['Porque el agresor de un nivel se cruza con el pasivo del nivel contiguo','Porque así lo exige la configuración por defecto de ATAS','Porque los números horizontales siempre salen iguales en NQ'],'Comprador en el ask de un nivel, vendedor pasivo en el bid del de arriba.'],
+['¿Qué tienes que aprender antes de buscar señales en el footprint?',['Qué volumen es normal en tu instrumento y horario','Qué colores tiene la plantilla por defecto','Qué indicadores usan otros traders'],'Sin referencia de lo normal no detectas lo anormal.'],
+['¿Por qué un mismo volumen significa cosas distintas a las 15:31 y a las 19:00 en NQ?',['Porque la actividad del mercado es muy distinta a esas horas','Porque a las 19:00 el footprint deja de funcionar','Porque el valor del punto cambia por la tarde'],'En la apertura todo es más grande. Lo que importa es lo relativo.']
+]},
+{id:'n6-2',titulo:'El POC de la vela y los tipos de clusters',min:6,tema:'footprint',whop:'tipos de clusters',
+teoria:`<p>El POC de una vela es el precio donde más volumen se negoció dentro de ella. En el Método AGX llamamos <b>cluster</b> al POC de cada vela del footprint.</p>
+<h3>Dónde está el cluster importa</h3>
+<ul><li><b>Cluster arriba en vela alcista:</b> se compró mucho arriba. Si el precio no sigue, esos compradores quedan expuestos.</li>
+<li><b>Cluster abajo en vela alcista:</b> la base de la subida está defendida; la parte alta tuvo poca gente.</li>
+<li><b>Cluster en la mecha:</b> mucho negocio en un precio que el mercado rechazó. Suele ser una zona importante.</li></ul>
+<h3>Patrones P y b</h3>
+<p>Una vela con el volumen concentrado arriba (forma de P) en un máximo puede indicar compras que no avanzan. Una con el volumen abajo (forma de b) en un mínimo puede indicar ventas que no consiguen seguir.</p>
+<div class="lec-clave"><b>Idea clave</b><p>No mires solo si la vela es verde o roja. Mira dónde está su cluster.</p></div>`,
+usar:['footprint-3','footprint-6','subastas-3','subastas-4','subastas-5','subastas-6'],
+preg:[
+['¿Qué es el POC de una vela?',['El precio con más volumen negociado dentro de la vela','El precio de cierre de la vela en el footprint','El precio medio entre el máximo y el mínimo de la vela'],'Point of control: donde hubo más negocio.'],
+['En el Método AGX, ¿qué llamamos cluster?',['El POC de cada vela del footprint','Cualquier celda con un imbalance','El volumen total de la vela'],'Cluster = POC de la vela.'],
+['Vela alcista con el cluster arriba y el precio no sigue subiendo. ¿Qué riesgo hay?',['Que los que compraron arriba queden atrapados','Que la subida continúe con más fuerza','Que el volumen desaparezca de la sesión'],'Si se compró mucho arriba y no avanza, esos compradores sufren.'],
+['Un cluster en la mecha de una vela suele señalar…',['Una zona de mucho negocio que el mercado rechazó','Un error en los datos del footprint','Un precio sin ningún interés para nadie'],'Mucho volumen y rechazo: zona a vigilar.']
+]},
+{id:'n6-3',titulo:'Imbalances diagonales',min:6,tema:'imbalances',whop:'imbalances',
+teoria:`<p>Un imbalance (desequilibrio) aparece cuando un lado agrede mucho más que el otro en diagonal.</p>
+<ul><li><b>Imbalance de compra:</b> el ask de un precio es varias veces el bid del precio de debajo.</li>
+<li><b>Imbalance de venta:</b> el bid de un precio es varias veces el ask del precio de encima.</li></ul>
+<h3>El umbral</h3>
+<p>Se usa un ratio, por ejemplo 300 %: el ask debe ser al menos el triple del bid en diagonal. Además conviene pedir un volumen mínimo, para que 6 contra 2 no cuente como imbalance.</p>
+<h3>Un imbalance solo no es señal</h3>
+<p>En NQ salen imbalances en casi todas las velas. Lo que importa es dónde aparecen (en un nivel, en una ruptura, en un extremo) y si se apilan.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Diagonal, umbral y volumen mínimo. Y siempre en contexto.</p></div>`,
+usar:['imbalances-1','imbalances-2','imbalances-3','imbalances-5','imbalances-8','imbalances-12','footprint-2'],
+preg:[
+['¿Por qué conviene pedir un volumen mínimo para marcar un imbalance?',['Para que celdas como 6 contra 2 no cuenten como desequilibrio','Para que el footprint cargue más rápido en mercados como NQ','Para que solo se marquen los imbalances del lado comprador'],'Con números pequeños el ratio engaña.'],
+['¿Cómo se calcula un imbalance de venta?',['El bid de un precio frente al ask del precio de encima','El bid de un precio frente al ask del mismo precio','El volumen de la vela frente al de la anterior'],'En diagonal: bid del nivel contra ask del nivel superior.'],
+['¿Qué hace que un imbalance tenga más valor?',['Que aparezca en un nivel o extremo relevante y se apile','Que aparezca en cualquier vela de la sesión','Que su ratio sea exactamente del 300 %'],'Contexto y acumulación le dan valor.']
+]},
+{id:'n6-4',titulo:'Imbalances apilados y zonas',min:6,tema:'imbalances',whop:'imbalances en grafico',
+teoria:`<p>Cuando aparecen tres o más imbalances del mismo lado en precios seguidos tienes un <b>stacked imbalance</b>: agresión fuerte y sostenida de un lado.</p>
+<h3>La zona que dejan</h3>
+<p>Esa franja de precios se convierte en una zona de referencia. Si el precio vuelve a ella, puede actuar como soporte (imbalances de compra) o resistencia (de venta), porque ahí entró gente con convicción que suele defender su entrada.</p>
+<h3>Cuándo se invalida</h3>
+<p>Si el precio vuelve a la zona y la atraviesa con imbalances del lado contrario, la zona ha perdido su papel. Y un apilado en la parte alta de una vela que cierra a mitad indica agresión que no consiguió avanzar.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Un imbalance es una pista. Varios apilados en un sitio importante son una huella.</p></div>`,
+usar:['imbalances-4','imbalances-6','imbalances-7','imbalances-9','imbalances-10','imbalances-11','footprint-5'],
+preg:[
+['¿Cuántos imbalances seguidos se suelen pedir para hablar de stacked imbalance?',['Tres o más del mismo lado en precios seguidos','Uno solo si el ratio es muy alto','Dos de lados contrarios en la misma vela'],'Tres o más apilados es la referencia habitual.'],
+['¿Por qué una zona de stacked imbalances de compra puede actuar como soporte?',['Porque ahí entró gente con convicción que suele defender su entrada','Porque el exchange prohíbe vender en esos precios','Porque el volumen de esa zona ya no se puede negociar'],'Quien compró fuerte ahí tiende a defenderlo.'],
+['El precio vuelve a una zona de imbalances de compra y la cruza con imbalances de venta. ¿Qué pasa con la zona?',['Pierde su papel de soporte','Se refuerza como soporte','No cambia nada en su lectura'],'La agresión contraria la ha invalidado.']
+]},
+{id:'n6-5',titulo:'Extremos: subastas terminadas y sin terminar',min:6,tema:'subastas',whop:'single print teoria',fig:'max',
+teoria:`<p>Los extremos de las velas cuentan cómo terminó la subasta en ese precio.</p>
+<ul><li><b>Subasta terminada:</b> en el máximo hay compras agresivas cerca de cero (por ejemplo 28 x 0). Ya nadie pagaba más; el máximo es limpio.</li>
+<li><b>Subasta sin terminar:</b> en el máximo hay volumen en los dos lados (por ejemplo 42 x 37). Quedó negocio pendiente y el precio suele volver.</li></ul>
+<h3>Cómo usarlo</h3>
+<p>Una subasta sin terminar es un imán: un objetivo razonable. Una subasta terminada en un extremo importante es una pista de agotamiento, sobre todo si viene con volumen alto en la mecha.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Extremo limpio: se acabó el interés. Extremo con volumen a los dos lados: queda trabajo por hacer.</p></div>`,
+usar:['subastas-1','subastas-7','footprint-4','footprint-7'],
+preg:[
+['¿Qué indica un máximo con 28 x 0 en el footprint?',['Subasta terminada: ya no había compradores agresivos','Subasta sin terminar: el precio volverá seguro','Absorción compradora fuerte en el máximo'],'Cero en el ask del máximo: nadie pagó más.'],
+['¿Qué indica un máximo con 42 x 37?',['Subasta sin terminar: hubo negocio en los dos lados','Subasta terminada con un máximo muy limpio','Que el máximo nunca volverá a visitarse'],'Volumen en ambos lados: negocio pendiente.'],
+['¿Para qué puede servir una subasta sin terminar?',['Como objetivo, porque el precio suele volver','Como stop, porque el precio nunca vuelve','Como entrada a mercado inmediata'],'Actúa como imán para el precio.'],
+['Subasta terminada en un máximo importante con mucho volumen en la mecha. ¿Qué sugiere?',['Posible agotamiento comprador en ese extremo','Continuación segura de la subida','Que el volumen de la mecha no tiene valor'],'Esfuerzo en la mecha y nadie que pague más: agotamiento.'],
+['¿Dónde se mira si una subasta está terminada?',['En el último precio del extremo de la vela','En el POC de la vela, donde hubo más volumen','En el precio de cierre de la vela'],'Es una lectura del extremo.'],
+['Un mínimo con 0 x 31 (bid x ask). ¿Cómo se lee?',['Subasta terminada: no quedaban vendedores agresivos','Subasta sin terminar: queda venta pendiente','Imbalance de venta muy fuerte en el mínimo'],'Cero en el bid del mínimo: nadie vendió más abajo.']
+]},
+{id:'n6-6',titulo:'Absorción e icebergs',min:7,tema:'absorcion',whop:'bigtrade en mecha',fig:'abs',
+teoria:`<p>La absorción es esfuerzo sin resultado: un lado agrede con mucho volumen y el precio no avanza, porque alguien pasivo se lo está comiendo todo.</p>
+<h3>Cómo se ve</h3>
+<ul><li>Volumen muy superior al de los precios vecinos en uno o pocos niveles.</li>
+<li>El precio no consigue seguir en la dirección de la agresión.</li>
+<li>A veces, un iceberg: mucho ejecutado con poco tamaño visible en el libro.</li></ul>
+<h3>Dónde vale más</h3>
+<p>En niveles relevantes y en extremos: mínimo de sesión, VAL, máximo del día anterior. En mitad de la nada vale poco.</p>
+<h3>Cómo operarla</h3>
+<p>La absorción no predice: muestra que alguien defiende. Entra cuando el precio confirme saliendo del nivel y pon el stop al otro lado de la zona absorbida. Si el nivel se rompe con fuerza, el que defendía se rinde y el movimiento suele acelerar.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Mucho esfuerzo, poco avance, en un nivel importante. Y luego, confirmación.</p></div>`,
+usar:['absorcion-1','absorcion-3','absorcion-4','absorcion-5','absorcion-7','absorcion-8','absorcion-9','absorcion-10','absorcion-11','absorcion-12']}
+]});
+/* ---------- Ruta de formación: niveles 7 a 9 ---------- */
+RUTA.push({id:'n7',titulo:'Delta',desc:'Delta de vela, delta acumulado, divergencias y giros de delta.',lecciones:[
+{id:'n7-1',titulo:'El delta de la vela',min:6,tema:'delta',whop:'delta',
+teoria:`<p>El delta es la diferencia entre compras agresivas y ventas agresivas: volumen en el ask menos volumen en el bid. Mide quién tuvo la iniciativa en esa vela.</p>
+<h3>Delta en porcentaje</h3>
+<p>Un delta de +300 no significa lo mismo en una vela de 1.000 contratos que en una de 20.000. Por eso se mira también en porcentaje sobre el volumen de la vela. Por debajo del 5 % la vela está bastante equilibrada; por encima del 10 o el 15 %, un lado dominó claramente.</p>
+<h3>Lo que el delta no ve</h3>
+<p>Solo cuenta agresión. No ve las órdenes límite que absorben. Por eso un delta muy positivo puede no mover el precio si hay vendedores pasivos enfrente.</p>
+<h3>Delta máximo y mínimo</h3>
+<p>Durante la vela el delta sube y baja. Si llegó a ser muy positivo y cerró negativo, los compradores perdieron la pelea dentro de esa vela.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El delta dice quién empujó. El precio dice si sirvió de algo.</p></div>`,
+usar:['delta-1','delta-6','delta-7','delta-9','delta-10','delta-11','delta-12','subastas-8','subastas-9','subastas-12']},
+{id:'n7-2',titulo:'Delta acumulado (CVD)',min:6,tema:'cvd',whop:'delta',
+teoria:`<p>El delta acumulado (CVD) va sumando el delta de cada vela. Enseña si, en conjunto, la agresión compradora o vendedora va ganando a lo largo de la sesión.</p>
+<h3>Modo sesión</h3>
+<p>En ATAS puedes reiniciar el CVD en cada sesión, para que no arrastre el desequilibrio de días anteriores.</p>
+<h3>El punto ciego</h3>
+<p>Igual que el delta, el CVD solo ve agresión. No sabe si las órdenes límite están absorbiendo. Por eso el CVD puede caer todo el día mientras el precio sube: los vendedores agresivos chocan con compradores pasivos más fuertes.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El CVD es el marcador de la agresión, no del partido. Compáralo siempre con el precio.</p></div>`,
+usar:['delta-5','cvd-1','cvd-2','cvd-3','cvd-4','cvd-9','cvd-11'],
+preg:[
+['¿Qué suma el delta acumulado?',['El delta de cada vela a lo largo del periodo','El volumen total de cada vela de la sesión','La diferencia entre máximo y mínimo de cada vela'],'Es la suma de los deltas.'],
+['¿Para qué sirve reiniciar el CVD en cada sesión?',['Para no arrastrar el desequilibrio de días anteriores','Para que el indicador consuma menos memoria','Para que solo cuente las compras agresivas'],'Cada sesión empieza en cero y se compara mejor.'],
+['El CVD sube toda la sesión y el precio no avanza. ¿Qué es lo más probable?',['Que vendedores pasivos estén absorbiendo las compras','Que el precio esté a punto de subir mucho','Que el CVD esté mal calculado por la plataforma'],'Agresión compradora sin avance: alguien vende con límite.']
+]},
+{id:'n7-3',titulo:'Divergencias de delta',min:7,tema:'cvd',whop:'delta',
+teoria:`<p>Hay divergencia cuando el precio y el delta (o el CVD) cuentan historias distintas.</p>
+<ul><li><b>Divergencia por falta de participación:</b> el precio hace un máximo nuevo, pero el delta o el CVD no. Menos compradores agresivos empujando.</li>
+<li><b>Divergencia de absorción:</b> el delta marca un extremo muy fuerte, pero el precio no consigue hacer un extremo nuevo. Alguien pasivo está absorbiendo.</li></ul>
+<h3>Una divergencia no es una entrada</h3>
+<p>Las divergencias pueden durar mucho. Úsalas como aviso en tus niveles y espera la confirmación: pérdida del extremo, subasta terminada o fallo del último empuje.</p>
+<h3>Stop runs</h3>
+<p>Un barrido de un mínimo por pocos ticks, sin que el CVD acompañe y con la vela cerrando de vuelta dentro, suele ser un stop run y no una ruptura real.</p>
+<div class="lec-clave"><b>Idea clave</b><p>La divergencia avisa. La confirmación decide.</p></div>`,
+usar:['delta-2','delta-4','delta-8','cvd-5','cvd-6','cvd-7','cvd-8','cvd-10','cvd-12'],
+preg:[
+['El delta de una vela es muy negativo, pero el precio no hace un mínimo nuevo. ¿Qué divergencia es?',['De absorción: alguien compra con límite','De falta de participación vendedora','No es divergencia porque el delta es negativo'],'Mucha venta agresiva sin nuevo mínimo: hay compradores pasivos.']
+]},
+{id:'n7-4',titulo:'Giros de delta y big trade en mecha',min:7,tema:'delta',whop:'delta tround',
+teoria:`<p>Dos situaciones muy útiles para detectar giros en extremos.</p>
+<h3>Giro de delta</h3>
+<p>El precio marca un extremo nuevo respecto a la vela anterior, pero la vela cierra en contra y su delta cambia de signo. Por ejemplo, un máximo nuevo con una vela que cierra abajo y delta negativo: los compradores empujaron, fallaron y los vendedores tomaron la iniciativa. ATAS tiene un indicador, Delta Turnaround, pensado para señalar estas velas; en la clase de Alex tienes su configuración.</p>
+<h3>Big trade en la mecha</h3>
+<p>Un big trade agresivo en la mecha de un extremo, seguido de rechazo, suele significar que alguien grande entró tarde o fue absorbido. Si el precio se aleja de esa mecha, ese participante queda atrapado y su salida empuja a favor del giro.</p>
+<h3>Cómo operarlo</h3>
+<ul><li>Solo en niveles relevantes: máximos o mínimos de sesión, extremos del día anterior, VAH o VAL.</li>
+<li>Stop al otro lado de la mecha.</li>
+<li>Si el precio vuelve y supera la mecha con agresión, la idea se cancela.</li></ul>
+<div class="lec-clave"><b>Idea clave</b><p>Agresión en el extremo que no consigue continuidad = gasolina para el giro.</p></div>`,
+usar:['rupturas-5'],
+preg:[
+['¿Qué es un giro de delta?',['Un extremo nuevo con la vela cerrando en contra y el delta cambiando de signo','Un cruce del delta acumulado con su media móvil de la sesión','Una vela que repite el mismo delta y el mismo cierre que la anterior'],'Empuje que falla y cambio de iniciativa en la misma vela.'],
+['Máximo nuevo, la vela cierra abajo y su delta es negativo. ¿Qué te dice?',['Los compradores empujaron, fallaron y los vendedores tomaron la iniciativa','Los compradores siguen dominando y el precio subirá más','El mercado está en equilibrio y no hay lectura'],'Es la definición de un giro de delta bajista.'],
+['¿Dónde tiene más valor un giro de delta?',['En un nivel relevante como el máximo de la sesión','En mitad de un rango, lejos de cualquier referencia','En cualquier vela del día, valen todas por igual'],'Fuera de niveles, es ruido.'],
+['Big trade de compra en la mecha superior de un máximo y luego el precio cae. ¿Qué suele significar?',['Que ese comprador grande quedó atrapado o fue absorbido','Que el comprador grande acertó y el precio subirá','Que el big trade era un error de datos del feed'],'Agresión grande en el extremo que no avanza.'],
+['¿Por qué un big trade atrapado en la mecha puede empujar a favor del giro?',['Porque al cerrar su posición vende y añade presión','Porque el exchange cancela su orden automáticamente','Porque deja de operar y baja el volumen'],'Su stop o su cierre es venta a mercado.'],
+['¿Dónde va el stop al operar un big trade en mecha?',['Al otro lado de la mecha','En el cierre de la vela del big trade','A la misma distancia que el objetivo'],'Si el precio supera la mecha, la idea ya no vale.'],
+['El precio vuelve y supera la mecha con agresión a favor. ¿Qué haces con la idea?',['Darla por cancelada','Añadir más contratos a la posición','Mover el stop más lejos para aguantar'],'La mecha superada invalida el giro.'],
+['¿Qué indicador de ATAS está pensado para señalar velas de giro de delta?',['Delta Turnaround','Speed of Tape','Dynamic Levels'],'Delta Turnaround marca esas velas.'],
+['¿Qué combinación refuerza más un giro en un máximo de sesión?',['Giro de delta, subasta terminada y big trade en la mecha','Vela verde grande, delta positivo y volumen creciente','Precio sobre el VWAP y CVD subiendo'],'Varias huellas de agotamiento en el mismo extremo.']
+]}
+]});
+
+RUTA.push({id:'n8',titulo:'Valor y contexto',desc:'VWAP, perfil de volumen, Market Profile, aperturas y noticias.',lecciones:[
+{id:'n8-1',titulo:'VWAP y sus bandas',min:6,tema:'contexto',whop:'vwap',
+teoria:`<p>El VWAP es el precio medio ponderado por volumen desde el inicio de la sesión. Muchos institucionales lo usan como referencia de buena o mala ejecución, por eso el mercado lo respeta.</p>
+<h3>Cómo se lee</h3>
+<ul><li>Precio por encima de un VWAP con pendiente alcista: sesgo comprador.</li>
+<li>Precio por debajo con pendiente bajista: sesgo vendedor.</li>
+<li>VWAP plano con el precio cruzándolo una y otra vez: rango.</li></ul>
+<h3>Bandas de desviación</h3>
+<p>Las bandas marcan distancias estadísticas al VWAP. En días de rango, las exteriores suelen frenar el precio; en días de tendencia, el precio puede caminar pegado a una banda.</p>
+<h3>VWAP anclado</h3>
+<p>Es un VWAP que empieza en el punto que tú eliges, por ejemplo un mínimo importante o una noticia. Te dice el precio medio de quien entró desde ahí.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El VWAP no es una señal. Es el precio justo del día y te dice quién está ganando.</p></div>`,
+usar:['contexto-1','contexto-5','contexto-6','contexto-11','contexto-12'],
+preg:[
+['¿Por qué el mercado respeta el VWAP?',['Porque muchos institucionales lo usan como referencia de ejecución','Porque el exchange impide operar por debajo de él','Porque es el precio de cierre del día anterior'],'Grandes órdenes se miden contra el VWAP.'],
+['El VWAP está plano y el precio lo cruza una y otra vez. ¿Qué tipo de día es?',['Un día de rango','Un día de tendencia alcista','Un día de tendencia bajista'],'VWAP plano y cruces: equilibrio.'],
+['En un día de tendencia fuerte, ¿qué puede hacer el precio respecto a las bandas?',['Caminar pegado a una banda','Volver siempre al VWAP en cada vela','Quedarse siempre entre las bandas interiores'],'En tendencia las bandas no frenan igual.'],
+['¿Para qué sirve anclar un VWAP en un mínimo importante?',['Para ver el precio medio de quien compró desde ahí','Para saber a qué hora abrió la sesión','Para calcular el valor del punto del contrato'],'Te dice si los que entraron desde ese punto ganan o pierden.'],
+['El precio está por debajo de un VWAP que baja. ¿Qué sesgo es más lógico?',['Vendedor','Comprador','Neutral'],'Precio bajo un VWAP descendente: mandan los vendedores.']
+]},
+{id:'n8-2',titulo:'Perfil de volumen: POC, VAH y VAL',min:6,tema:'perfil',whop:'perfil de volumen explicacion',
+teoria:`<p>El perfil de volumen acumula el volumen negociado en cada precio durante un periodo. Se dibuja de lado, como un histograma.</p>
+<ul><li><b>POC:</b> el precio con más volumen. El precio más aceptado.</li>
+<li><b>Área de valor:</b> la zona donde se negoció en torno al 70 % del volumen.</li>
+<li><b>VAH y VAL:</b> el borde superior e inferior del área de valor.</li></ul>
+<h3>Por qué importan al día siguiente</h3>
+<p>El POC, el VAH y el VAL de ayer son niveles donde hubo mucho negocio y donde el mercado suele reaccionar hoy. Un POC que todavía no se ha vuelto a tocar (POC virgen) suele atraer al precio.</p>
+<h3>Perfiles de rango fijo</h3>
+<p>Puedes dibujar un perfil solo sobre un movimiento concreto para ver dónde se negoció más dentro de él. Varios POC de días distintos en la misma zona la convierten en un nivel muy fuerte.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Marca cada mañana POC, VAH y VAL de ayer. Son tus primeras referencias.</p></div>`,
+usar:['contexto-2','contexto-3','contexto-8','contexto-9','perfil-9','perfil-10','perfil-11'],
+preg:[
+['¿Qué porcentaje del volumen suele contener el área de valor?',['En torno al 70 %','Exactamente el 50 %','En torno al 95 %'],'Por convención, alrededor del 70 %.'],
+['¿Qué es el POC del perfil de la sesión?',['El precio con más volumen negociado en la sesión','El precio de apertura de la sesión regular','El punto medio entre máximo y mínimo del día'],'El precio más aceptado del día.'],
+['¿Por qué conviene marcar el VAH y el VAL de ayer?',['Porque son zonas de mucho negocio donde el precio suele reaccionar','Porque el precio nunca consigue pasar de ellos al día siguiente','Porque marcan la hora en la que hubo más volumen del día'],'Son referencias de valor que mira todo el mercado.']
+]},
+{id:'n8-3',titulo:'HVN, LVN y formas del perfil',min:6,tema:'perfil',whop:'perfil de volumen',
+teoria:`<p>El perfil no tiene la misma altura en todos los precios. Las zonas gruesas y finas se comportan distinto.</p>
+<ul><li><b>HVN (nodo de alto volumen):</b> mucho negocio. El precio tiende a frenarse y rotar ahí.</li>
+<li><b>LVN (nodo de bajo volumen):</b> poco negocio. El precio suele atravesarlo rápido o rechazarlo.</li></ul>
+<h3>Formas</h3>
+<ul><li><b>Campana:</b> equilibrio, volumen en el centro.</li>
+<li><b>P:</b> volumen arriba tras una subida; a menudo cierre de cortos o compras que se paran.</li>
+<li><b>b:</b> volumen abajo tras una bajada; a menudo cierre de largos o liquidación.</li>
+<li><b>Doble distribución:</b> dos zonas de valor separadas por un hueco: el mercado cambió de valor durante la sesión.</li></ul>
+<p>Si el POC se desplaza al alza durante el día, el valor está subiendo: los compradores aceptan precios más altos.</p>
+<div class="lec-clave"><b>Idea clave</b><p>En los HVN se negocia; por los LVN se viaja.</p></div>`,
+usar:['perfil-1','perfil-2','perfil-3','perfil-4','perfil-5','perfil-6','perfil-7','perfil-8','perfil-12','contexto-7']},
+{id:'n8-4',titulo:'Market Profile, Initial Balance y single prints',min:7,tema:'tpo',whop:'singleprint',
+teoria:`<p>El Market Profile organiza el precio por tiempo: cada letra (TPO) es un periodo, normalmente de 30 minutos, en el que el precio pasó por ese nivel.</p>
+<h3>Initial Balance</h3>
+<p>Es el rango de la primera hora de la sesión regular. Un IB estrecho suele anticipar expansión; uno muy ancho, rotación dentro de él.</p>
+<h3>Tipos de día</h3>
+<ul><li><b>Tendencia:</b> el precio se aleja del IB en una dirección y no vuelve.</li>
+<li><b>Neutral:</b> extiende a los dos lados del IB y termina en el medio.</li>
+<li><b>Open drive:</b> abre y se va en una dirección desde el primer minuto.</li></ul>
+<h3>Single prints, máximos pobres y colas</h3>
+<p>Un single print es un precio con un solo TPO: el mercado pasó rápido y dejó un hueco que a menudo vuelve a rellenar o defiende. Un máximo pobre (varios TPO en el mismo máximo) es un extremo sin terminar. Una cola en un extremo es rechazo fuerte.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El tiempo también cuenta: dónde pasa tiempo el precio es dónde hay acuerdo.</p></div>`,
+usar:['tpo-1','tpo-2','tpo-3','tpo-4','tpo-5','tpo-6','tpo-7','tpo-8','tpo-9','tpo-10','tpo-11','tpo-12']},
+{id:'n8-5',titulo:'Aperturas, sesiones y noticias',min:6,tema:'sesiones',whop:'AMD',
+teoria:`<p>El mismo patrón no vale igual a todas horas.</p>
+<ul><li><b>Asia:</b> poco volumen en índices americanos. Movimientos lentos.</li>
+<li><b>Londres:</b> primer empuje de volumen; a menudo marca máximos o mínimos de la noche.</li>
+<li><b>Apertura de Nueva York:</b> el momento de más volumen y mejores oportunidades de Order Flow.</li>
+<li><b>Mediodía de Nueva York:</b> menos volumen y más ruido.</li></ul>
+<h3>La apertura respecto a ayer</h3>
+<p>Si el precio abre fuera del área de valor de ayer y no vuelve a entrar, el mercado acepta precios nuevos. Si abre fuera y vuelve dentro, suele recorrer el área de valor.</p>
+<h3>Noticias</h3>
+<p>Antes de datos como el IPC, el empleo o el FOMC, la liquidez desaparece y los spreads se abren. Lo sensato es estar fuera y esperar a que el mercado se asiente.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Prepara la sesión antes de abrir: niveles de ayer, máximos y mínimos de la noche y calendario de noticias.</p></div>`,
+usar:['sesiones-1','sesiones-2','sesiones-3','sesiones-4','sesiones-5','sesiones-6','sesiones-7','sesiones-8','sesiones-9','sesiones-10','sesiones-11','sesiones-12','contexto-4','contexto-10']}
+]});
+
+RUTA.push({id:'n9',titulo:'Rupturas, atrapados y ejecución',desc:'Rupturas reales y falsas, stop runs, entradas, stops y salidas.',lecciones:[
+{id:'n9-1',titulo:'Rupturas reales y falsas',min:6,tema:'rupturas',whop:'Entradas que NO tomo (y por qué)',
+teoria:`<p>Muchas rupturas de máximos y mínimos fallan, porque ahí están los stops y las órdenes de quien persigue el precio. Una ruptura falsa deja atrapados a los que entraron a favor.</p>
+<h3>Qué marca una ruptura real</h3>
+<ul><li>Agresión a favor que sigue después de cruzar el nivel.</li>
+<li>Aceptación: el precio se queda fuera negociando volumen.</li>
+<li>Retest del nivel roto que aguanta.</li></ul>
+<h3>Qué marca una falsa</h3>
+<ul><li>Mucha agresión justo en el nivel y nada después.</li>
+<li>El delta cambia de signo rápido tras la ruptura.</li>
+<li>El precio vuelve dentro del rango.</li></ul>
+<p>Una vela que cierra por encima del nivel no confirma nada por sí sola. Las noticias y los números redondos son terreno abonado para rupturas falsas.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Ruptura real: se queda fuera. Ruptura falsa: vuelve dentro y deja atrapados.</p></div>`,
+usar:['rupturas-1','rupturas-2','rupturas-3','rupturas-4','rupturas-6','rupturas-8','rupturas-11'],
+preg:[
+['¿Por qué fallan tantas rupturas de máximos y mínimos?',['Porque ahí se juntan stops y órdenes de quien persigue el precio','Porque el exchange para la cotización en los extremos','Porque los máximos y mínimos nunca se pueden romper'],'Mucha liquidez de stops alimenta el barrido y luego se agota.'],
+['Rompe el máximo, el precio se queda fuera negociando con volumen y el retest aguanta. ¿Qué es?',['Una ruptura aceptada','Una ruptura falsa clásica','Un stop run que va a fallar'],'Aceptación más retest que aguanta.'],
+['Tras una ruptura al alza el delta pasa rápido a muy negativo y el precio vuelve dentro. ¿Qué es?',['Una ruptura falsa','Una ruptura real con retroceso normal','Una acumulación fuera del rango'],'Cambio de iniciativa y vuelta al rango.']
+]},
+{id:'n9-2',titulo:'Traders atrapados y stop runs',min:6,tema:'atrapados',whop:'Entradas que NO tomo (y por qué)',
+teoria:`<p>Un trader atrapado es el que entró y el precio se le ha ido en contra sin darle opción a salir bien. Su salida, tarde o temprano, empuja el precio a favor del otro lado.</p>
+<h3>Stop run</h3>
+<p>Un stop run es un movimiento rápido que dispara los stops acumulados detrás de un nivel. Quien gana con él suele ser quien tenía órdenes límite esperando: compra barato los stops de los largos o vende caro a los stops de los cortos.</p>
+<h3>Cómo no ser tú el atrapado</h3>
+<ul><li>No persigas la ruptura en el último segundo.</li>
+<li>Entra tras confirmar el fallo, no durante el barrido.</li>
+<li>Tu invalidación va al otro lado del extremo del barrido.</li></ul>
+<div class="lec-clave"><b>Idea clave</b><p>Donde otros quedan atrapados nace tu operación. Espera a ver que están atrapados.</p></div>`,
+usar:['atrapados-8','atrapados-9','atrapados-10','atrapados-11','rupturas-7','rupturas-9','rupturas-10'],
+preg:[
+['¿Por qué la salida de los atrapados empuja a favor del otro lado?',['Porque cierran con órdenes a mercado en contra de su posición','Porque al quedar atrapados dejan de operar ese día','Porque sus órdenes se cancelan automáticamente'],'Un largo atrapado cierra vendiendo.'],
+['¿Quién suele ganar en un stop run bajista que falla?',['Quien tenía compras límite esperando debajo del nivel','Quien vendió a mercado justo en la ruptura','Quien no tenía ninguna posición abierta'],'Compran barato a los stops que saltan.'],
+['¿Qué es más prudente durante un barrido rápido de un mínimo?',['Esperar a que el precio vuelva dentro antes de comprar','Comprar a mercado en mitad del barrido','Vender a mercado para seguir el movimiento'],'La confirmación del fallo reduce el riesgo de ser tú el atrapado.']
+]},
+{id:'n9-3',titulo:'Entradas, stops y salidas',min:7,tema:'ejecucion',whop:'Mi setup principal paso a paso',
+teoria:`<p>Una buena lectura mal ejecutada es una mala operación.</p>
+<h3>Entrada</h3>
+<p>Con límite en el nivel consigues mejor precio, pero a veces no te llenan y otras te llenan sin confirmación. A mercado en la confirmación pagas algo peor, pero entras con más información.</p>
+<h3>Stop</h3>
+<p>El stop va donde tu idea deja de ser válida, no a una distancia que te resulte cómoda. Si ese sitio implica arriesgar demasiado, se bajan contratos o no se opera.</p>
+<h3>Gestión</h3>
+<ul><li>Objetivos lógicos: el siguiente nivel de valor, una subasta sin terminar, el POC.</li>
+<li>Parciales para asegurar parte del beneficio.</li>
+<li>Break even solo cuando el precio ha confirmado, no por miedo.</li>
+<li>Si la operación no hace lo esperado en un tiempo razonable, sal.</li></ul>
+<p>Nunca promedies a la baja en intradía: es convertir un error pequeño en uno grande.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Antes de entrar debes saber tres cosas: por qué entras, dónde te equivocas y dónde cobras.</p></div>`,
+usar:['ejecucion-1','ejecucion-2','ejecucion-3','ejecucion-4','ejecucion-5','ejecucion-6','ejecucion-7','ejecucion-8','ejecucion-9','ejecucion-10','ejecucion-11','ejecucion-12']}
+]});
+/* ---------- Ruta de formación: niveles 10 a 13 ---------- */
+RUTA.push({id:'n10',titulo:'Riesgo y cuentas de fondeo',desc:'La R, micros, cuándo parar, cómo escalar y cómo funcionan las prop firms.',lecciones:[
+{id:'n10-1',titulo:'La R, el tamaño y la esperanza',min:7,tema:'riesgo',whop:'Gestión de riesgo para cuentas de fondeo',
+teoria:`<p>Gestionar el riesgo es decidir antes de entrar cuánto vas a perder si te equivocas. Ese importe es tu R.</p>
+<h3>Tamaño de posición</h3>
+<p>Primero decides la R (por ejemplo, 150 $). Después miras dónde va el stop según tu lectura. Los contratos salen de dividir: R ÷ (puntos de stop × valor del punto). Si el resultado es menos de un contrato, no hay operación o se baja a micros.</p>
+<h3>Las rachas</h3>
+<p>Diez pérdidas seguidas pasan a cualquier método. Con un 1 % por operación son un 10 % de caída aproximada; con un 5 %, casi la mitad de la cuenta. Y recuperar cuesta más que perder: tras perder un 50 % hay que ganar un 100 %.</p>
+<h3>Esperanza</h3>
+<p>Tu método gana a la larga si la esperanza en R es positiva. Una ganancia fuera de plan no es una buena operación: es suerte que refuerza un mal hábito.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Primero la R, luego el stop, al final los contratos. Nunca al revés.</p></div>`,
+usar:['riesgo-3','riesgo-4','riesgo-6','riesgo-7','riesgo-9','riesgo-10','riesgo-11'],
+preg:[
+['Tu R es 150 $ y tu stop en NQ es de 7,5 puntos. ¿Cuántos contratos de NQ puedes usar?',['1 contrato','2 contratos','3 contratos'],'7,5 × 20 $ = 150 $. Justo un contrato.'],
+['¿En qué orden se decide el tamaño de una operación?',['Primero la R, luego el stop y al final los contratos','Primero los contratos, luego el stop y al final la R','Primero el objetivo, luego los contratos y al final la R'],'El tamaño se adapta al stop, no al revés.'],
+['Tu R es 100 $ y tu stop necesita 15 puntos de NQ. ¿Qué haces?',['Usar micros o no operar: un NQ arriesgaría 300 $','Usar un NQ y acercar el stop a 5 puntos','Usar un NQ porque la entrada es muy buena'],'Acercar el stop a lo cómodo rompe la lógica de la entrada.']
+]},
+{id:'n10-2',titulo:'Micros y precio por contrato',min:6,tema:'riesgo',whop:'gestion de micros',
+teoria:`<p>Los micros (MNQ, MES) valen la décima parte de los minis. Son la herramienta perfecta para aprender y para ajustar el riesgo con precisión.</p>
+<h3>Por qué empezar con micros</h3>
+<ul><li>Puedes poner el stop donde dice tu lectura sin arriesgar de más.</li>
+<li>Puedes hacer parciales: con 5 MNQ puedes salir por partes; con 1 NQ, no.</li>
+<li>Los errores de aprendizaje cuestan diez veces menos.</li></ul>
+<h3>Equivalencias</h3>
+<p>10 MNQ equivalen en riesgo a 1 NQ, pero pagan más comisiones (diez contratos). Cuando tu tamaño llegue a 10 micros con soltura, pasar al mini es más eficiente.</p>
+<h3>En cuentas de fondeo</h3>
+<p>Muchas firmas cuentan el límite de contratos en minis y te dejan usar micros en proporción. Revisa siempre las reglas de tu firma.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Los micros te dejan poner el stop donde toca. Con un mini, el stop lo decide tu cuenta.</p></div>`,
+usar:['riesgo-1','riesgo-2','riesgo-5','riesgo-12'],
+preg:[
+['¿Cuántos MNQ equivalen en riesgo a 1 NQ?',['10','5','20'],'MNQ vale 2 $ por punto; NQ, 20 $.'],
+['¿Qué ventaja tienen 5 MNQ frente a 1 NQ para gestionar la salida?',['Que puedes cerrar por partes','Que pagan menos comisiones en total','Que el tick vale más dinero'],'Con un solo contrato no hay parciales.'],
+['¿Qué desventaja tiene operar 10 MNQ en lugar de 1 NQ?',['Pagas más comisiones por el mismo riesgo','Arriesgas diez veces más dinero','No puedes poner stop en los micros'],'Diez contratos, diez comisiones.'],
+['Arriesgas 20 puntos con 2 MNQ. ¿Cuánto es?',['80 $','40 $','800 $'],'20 × 2 $ × 2 = 80 $.'],
+['¿Por qué los micros son buenos para aprender?',['Porque los errores cuestan diez veces menos','Porque se mueven más despacio que los minis','Porque no tienen comisiones de ningún tipo'],'Mismo gráfico, mismo movimiento, una décima parte del riesgo.'],
+['Tu firma limita a 5 minis. ¿Qué tienes que comprobar si quieres usar micros?',['La proporción que permite la firma entre micros y minis','Si la firma deja operar en horario de Asia','Si el broker cobra más por los micros en fondeo'],'Cada firma tiene su regla de equivalencias.']
+]},
+{id:'n10-3',titulo:'Cuándo parar y cómo escalar',min:6,tema:'riesgo',whop:'Cuándo parar de operar: tu plan diario',
+teoria:`<p>Saber cuándo parar vale más que cualquier setup. Los peores días casi nunca vienen de una operación, sino de seguir operando después de que el día se tuerza.</p>
+<h3>Reglas de parada</h3>
+<ul><li><b>Pérdida máxima diaria:</b> por ejemplo, −2R. Al tocarla se cierra la plataforma.</li>
+<li><b>Pérdidas seguidas:</b> por ejemplo, dos. La tercera suele ser por revancha.</li>
+<li><b>Objetivo diario:</b> opcional. Proteger un buen día también es disciplina.</li></ul>
+<h3>Escalar sin destruir la cuenta</h3>
+<p>Sube el tamaño por escalones y con datos: por ejemplo, de 2 a 3 MNQ tras un mes cumpliendo el plan y con esperanza positiva. Si la cuenta cae por debajo del escalón, vuelves al tamaño anterior. Nunca subas para recuperar.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Se sube despacio con datos y se baja rápido con pérdidas.</p></div>`,
+usar:['riesgo-8','psico-10'],
+preg:[
+['Llevas −2R y tu regla es parar en −2R. ¿Qué haces?',['Cerrar la plataforma por hoy','Hacer una última operación con medio tamaño','Esperar una hora y volver a operar'],'La regla no tiene excepciones.'],
+['¿Por qué limitar las pérdidas seguidas a dos o tres?',['Porque la siguiente suele hacerse por revancha','Porque el mercado cierra tras tres pérdidas','Porque la firma cancela la cuenta tras tres'],'Tras varias pérdidas, el juicio empeora.'],
+['¿De dónde salen los peores días de trading casi siempre?',['De seguir operando cuando el día ya se ha torcido','De una sola operación con un stop bien puesto','De no operar los días de noticias importantes'],'El daño grande viene de no parar.'],
+['¿Cuándo tiene sentido subir el tamaño?',['Tras un periodo cumpliendo el plan y con esperanza positiva','Después de un día con una pérdida grande','Cuando tienes una corazonada sobre el mercado'],'Con datos, no con emociones.'],
+['Subes de 2 a 3 MNQ y la cuenta cae por debajo del escalón. ¿Qué haces?',['Volver a 2 MNQ','Subir a 4 MNQ para recuperar antes','Mantener 3 MNQ hasta recuperar'],'Se baja rápido cuando hay pérdidas.'],
+['¿Qué significa escalar por escalones?',['Subir el tamaño poco a poco con reglas fijas','Doblar el tamaño después de cada ganancia','Cambiar de instrumento cada semana'],'Pasos pequeños y definidos de antemano.'],
+['Llegas a tu objetivo diario a las 16:00. ¿Qué es lo más disciplinado?',['Respetar tu regla de proteger el día','Seguir operando porque el día va bien','Subir el tamaño para aprovechar la racha'],'Si tu plan dice parar, se para.'],
+['¿Cuál de estas es una mala razón para subir el tamaño?',['Recuperar lo perdido la semana pasada','Llevar un mes cumpliendo el plan','Tener una esperanza positiva medida'],'Subir para recuperar es el atajo al desastre.']
+]},
+{id:'n10-4',titulo:'Cómo funcionan las cuentas de fondeo',min:7,tema:'fondeo',whop:'Cómo funcionan las prop firms por dentro',
+teoria:`<p>Una firma de fondeo te deja operar su capital a cambio de cumplir sus reglas. Primero pasas una evaluación; después operas una cuenta fondeada y cobras una parte del beneficio.</p>
+<h3>Las reglas que más importan</h3>
+<ul><li><b>Drawdown máximo:</b> lo máximo que puede caer la cuenta. Puede ser estático (fijo desde el saldo inicial) o trailing (sube con tus máximos).</li>
+<li><b>Trailing intradía o de fin de día:</b> el intradía sigue el máximo de tu saldo en cada momento, incluso con beneficios no cerrados; el de fin de día solo se mueve con el saldo al cierre.</li>
+<li><b>Límite de pérdida diaria:</b> en algunas firmas, cuánto puedes perder en un día.</li>
+<li><b>Consistencia:</b> en algunas firmas, ningún día puede suponer más de cierto porcentaje del beneficio total.</li></ul>
+<h3>Margen o headroom</h3>
+<p>Es lo que te queda hasta tocar el drawdown. Es tu capital real: todo tu riesgo se calcula sobre él, no sobre el saldo de la cuenta.</p>
+<div class="lec-clave"><b>Idea clave</b><p>En fondeo no operas 50.000 $. Operas el margen que te queda hasta el drawdown.</p></div>`,
+usar:['fondeo-1','fondeo-2','fondeo-3','fondeo-4','fondeo-5','fondeo-6'],
+preg:[
+['¿Qué es en realidad tu capital en una cuenta de fondeo?',['El margen que te queda hasta tocar el drawdown','El saldo nominal de la cuenta, por ejemplo 50.000 $','El objetivo de beneficio de la evaluación'],'Si pierdes ese margen, pierdes la cuenta.'],
+['Tienes una operación con +600 $ abiertos y una cuenta con trailing intradía. ¿Qué pasa con el drawdown?',['Puede subir siguiendo ese máximo aunque no hayas cerrado','No se mueve hasta que cierres la operación','Baja para darte más margen de pérdida'],'El intradía sigue el máximo del saldo en tiempo real.'],
+['¿Qué regla dice que ningún día puede pesar demasiado en el beneficio total?',['La regla de consistencia','El límite de pérdida diaria','El trailing de fin de día'],'Busca que el beneficio no venga de un solo golpe de suerte.'],
+['¿Qué tienes que hacer siempre antes de empezar con una firma nueva?',['Leer sus reglas concretas, porque cambian mucho entre firmas','Usar el máximo de contratos permitido desde el primer día','Operar las noticias para pasar la evaluación antes'],'Cada firma tiene sus propias reglas.']
+]},
+{id:'n10-5',titulo:'Pasar la evaluación y cobrar',min:7,tema:'fondeo',whop:'Mi estrategia para pasar el challenge',
+teoria:`<p>La evaluación no se pasa con un día enorme. Se pasa no perdiendo la cuenta mientras tu ventaja trabaja.</p>
+<h3>Estrategia sensata</h3>
+<ul><li>Riesgo por operación pequeño respecto al margen: por ejemplo, un 10 % del drawdown o menos.</li>
+<li>Pérdida máxima diaria propia, más estricta que la de la firma.</li>
+<li>Cuando el margen se estrecha, bajar el tamaño, no subirlo.</li>
+<li>Respetar las reglas de noticias y de consistencia.</li></ul>
+<h3>Errores que te descalifican</h3>
+<ul><li>Dejar que una operación ganadora vuelva a cero con trailing intradía.</li>
+<li>Operar fuera del horario permitido o mantener posiciones cuando no se puede.</li>
+<li>Superar el máximo de contratos.</li></ul>
+<h3>De la cuenta fondeada al cobro</h3>
+<p>Al pasar a la cuenta fondeada revisa el tamaño: a menudo el margen inicial es menor. Cada firma tiene requisitos para cobrar (días mínimos, colchón de beneficio, importes máximos). Léelos antes de planificar tus retiros.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El objetivo de la evaluación llega solo si no pierdes la cuenta por el camino.</p></div>`,
+usar:['fondeo-7','fondeo-8','fondeo-9','fondeo-10','fondeo-11','fondeo-12'],
+preg:[
+['¿Cuál es el enfoque más sensato para pasar una evaluación?',['Riesgo pequeño y constante mientras la ventaja trabaja','Arriesgar mucho al principio para llegar rápido','Operar solo los días de noticias fuertes'],'No perder la cuenta es lo primero.'],
+['El margen hasta el drawdown se estrecha. ¿Qué haces con el tamaño?',['Bajarlo para proteger lo que queda','Subirlo para salir antes del apuro','Mantenerlo igual pase lo que pase'],'Con menos margen, menos riesgo por operación.'],
+['¿Por qué conviene tener una pérdida diaria propia más estricta que la de la firma?',['Para no llegar nunca al límite que te descalifica','Porque la firma te paga más si paras antes','Porque así el trailing deja de moverse'],'Tu límite te protege antes de que actúe el de la firma.'],
+['¿Qué tienes que revisar antes de planificar tu primer cobro?',['Los requisitos de la firma: días mínimos, colchón e importes','El color de la plantilla de tu cuenta fondeada','El volumen medio de NQ del último mes'],'Cada firma pone sus condiciones para retirar.']
+]}
+]});
+
+RUTA.push({id:'n11',titulo:'Psicotrading y rutinas',desc:'Miedo, avaricia, revancha, sesgos y la rutina del profesional.',lecciones:[
+{id:'n11-1',titulo:'Miedo, avaricia y revancha',min:7,tema:'psico',whop:'miedo avaricia y trading de venganza',
+teoria:`<p>Las emociones no se eliminan; se gestionan con reglas que actúan antes de que aparezcan.</p>
+<ul><li><b>Miedo:</b> cerrar ganadoras demasiado pronto, no entrar en tu setup, mover el stop a break even sin motivo.</li>
+<li><b>Avaricia y FOMO:</b> perseguir el precio, entrar sin setup por miedo a perderte el movimiento, subir tamaño tras ganar.</li>
+<li><b>Revancha:</b> después de una pérdida, entrar rápido para recuperar. Suele terminar en la peor pérdida del día.</li>
+<li><b>Tilt:</b> encadenar errores emocionales hasta perder el control.</li></ul>
+<h3>Qué hacer</h3>
+<ul><li>Reglas escritas de parada que no se negocian en caliente.</li>
+<li>Pausa obligatoria tras una pérdida: levantarte de la mesa cinco minutos.</li>
+<li>Apuntar en el diario la emoción de cada operación para ver tu patrón.</li></ul>
+<div class="lec-clave"><b>Idea clave</b><p>Las reglas se escriben en frío para obedecerlas en caliente.</p></div>`,
+usar:['psico-1','psico-2','psico-3','psico-6','psico-10'],
+preg:[
+['¿Qué conducta es típica del miedo?',['Cerrar las ganadoras demasiado pronto','Perseguir el precio sin setup','Subir el tamaño tras ganar'],'El miedo corta lo que va bien.'],
+['Acabas de perder y entras a los dos minutos sin setup. ¿Qué es?',['Revancha','Disciplina','Paciencia'],'Querer recuperar ya es la revancha.'],
+['¿Para qué sirve una pausa obligatoria tras una pérdida?',['Para cortar la reacción emocional antes de la siguiente entrada','Para dar tiempo a que el mercado cambie de dirección','Para que la plataforma recalcule los datos del footprint'],'Cinco minutos fuera rompen el impulso.'],
+['¿Cuándo hay que escribir las reglas de parada?',['En frío, antes de la sesión','En caliente, cuando aparece el problema','Después del cierre, solo si fue un mal día'],'En caliente siempre parecen negociables.'],
+['¿Qué te enseña apuntar la emoción de cada operación en el diario?',['Tu patrón emocional repetido','El precio al que deberías haber entrado','El volumen exacto de la operación'],'Lo que se mide se puede corregir.']
+]},
+{id:'n11-2',titulo:'Los errores que no sabes que cometes',min:7,tema:'psico',whop:'los errores que no sabes que comentes',
+teoria:`<p>Hay errores que no se sienten como errores. Son sesgos: atajos mentales que distorsionan cómo ves el gráfico.</p>
+<ul><li><b>Aversión a la pérdida:</b> cierras pronto las ganadoras y dejas correr las perdedoras porque perder duele más que ganar alegra.</li>
+<li><b>Confirmación:</b> solo ves lo que apoya tu idea y descartas lo que la contradice.</li>
+<li><b>Recencia:</b> das demasiado peso a las últimas operaciones. Tres pérdidas y crees que el método no vale; tres ganancias y te crees invencible.</li>
+<li><b>Resultado sobre proceso:</b> juzgas una operación por si ganó, no por si estaba bien hecha.</li></ul>
+<h3>Antídotos</h3>
+<ul><li>Antes de entrar, escribe qué invalidaría tu idea.</li>
+<li>Revisa por muestras de 20 o 30 operaciones, no por días.</li>
+<li>Puntúa cada operación por ejecución, no por resultado.</li></ul>
+<div class="lec-clave"><b>Idea clave</b><p>Si no buscas lo que te contradice, el mercado te lo enseñará con tu dinero.</p></div>`,
+usar:['psico-4','psico-7','psico-8','psico-11'],
+preg:[
+['¿Qué sesgo te hace mantener una perdedora esperando que vuelva?',['La aversión a la pérdida','La recencia','El exceso de prudencia'],'Cerrar en pérdida duele, así que se aplaza.'],
+['Tras tres pérdidas seguidas decides que tu método ya no sirve. ¿Qué sesgo es?',['Recencia','Confirmación','Anclaje al precio de entrada'],'Tres operaciones no son una muestra.'],
+['¿Cuál es un buen antídoto contra el sesgo de confirmación?',['Escribir antes de entrar qué invalidaría tu idea','Buscar más indicadores que confirmen la entrada','Leer foros donde opinen como tú'],'Obligarte a buscar la evidencia contraria.'],
+['¿Con qué muestra conviene evaluar un método?',['Con 20 o 30 operaciones o más','Con las operaciones de un solo día','Con la última operación cerrada'],'Menos operaciones son puro ruido.'],
+['Ganas dinero en una operación que rompía tu plan. ¿Cómo la puntúas?',['Como mala ejecución, aunque ganara','Como buena, porque ganó dinero','No se puntúa porque ganó'],'El resultado no arregla el proceso.'],
+['¿Qué es puntuar por ejecución?',['Valorar si seguiste el plan en esa operación','Valorar cuánto dinero ganó la operación','Valorar lo rápido que entraste al mercado'],'Así entrenas lo que controlas.']
+]},
+{id:'n11-3',titulo:'Rutinas del trader profesional',min:6,tema:'psico',whop:'Rutinas del trader profesional',
+teoria:`<p>La rutina hace que operar bien sea lo normal y no un acto de voluntad.</p>
+<h3>Antes de la sesión</h3>
+<ul><li>Revisa el calendario de noticias.</li>
+<li>Marca niveles: máximo, mínimo, POC, VAH y VAL de ayer; máximo y mínimo de la noche.</li>
+<li>Repasa tu plan: riesgo por operación, pérdida máxima y setups permitidos.</li>
+<li>Comprueba tu estado: si has dormido mal o estás alterado, reduce tamaño o no operes.</li></ul>
+<h3>Durante</h3>
+<p>Opera solo en tus niveles y tus horarios. Apunta cada operación al cerrarla, con su captura.</p>
+<h3>Después</h3>
+<p>Revisa el día contra tu plan, no contra el dinero. Una sola mejora para mañana, concreta y comprobable.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Prepara, ejecuta, revisa. Todos los días, igual.</p></div>`,
+usar:['psico-5','psico-9','psico-12'],
+preg:[
+['¿Qué es lo primero que conviene revisar antes de la sesión?',['El calendario de noticias del día','Las redes sociales de otros traders','El resultado de ayer en dinero'],'Saber si hay datos fuertes cambia todo el día.'],
+['Has dormido muy mal. ¿Qué tiene más sentido?',['Reducir tamaño o no operar','Operar más para aprovechar el día','Quitar el stop para no salir pronto'],'Tu estado es parte de tu riesgo.'],
+['¿Qué niveles conviene marcar antes de abrir?',['Máximo, mínimo, POC, VAH y VAL de ayer, y los extremos de la noche','Todos los máximos y mínimos del último año en el diario','Solo el precio de apertura de hoy y el cierre de la semana'],'Son las referencias que mira el mercado.'],
+['¿Cuándo hay que apuntar cada operación en el diario?',['Al cerrarla, con su captura','A final de mes, todas juntas','Solo las que pierden dinero'],'En caliente recuerdas por qué entraste.'],
+['¿Contra qué revisas el día al terminar?',['Contra tu plan','Contra el dinero ganado','Contra lo que hicieron otros traders'],'El proceso es lo que controlas.'],
+['¿Cuántas mejoras para mañana es buena idea sacar de la revisión?',['Una, concreta y comprobable','Todas las que se te ocurran','Ninguna, solo hay que olvidar el día'],'Una mejora clara se aplica; diez, no.'],
+['¿Para qué sirve repasar el plan antes de la sesión?',['Para tener frescos el riesgo, la parada y los setups permitidos','Para cambiar las reglas según cómo abra el mercado','Para decidir si hoy se opera sin stop'],'El plan se lee antes, no se improvisa durante.']
+]}
+]});
+
+RUTA.push({id:'n12',titulo:'Opciones y GEX',desc:'Qué es una opción, griegas, market makers, Call Wall, Put Wall, 0DTE y su uso en NQ y ES.',lecciones:[
+{id:'n12-1',titulo:'Qué es una opción',min:6,tema:'op-basicos',
+teoria:`<p>Una opción es un contrato que da un derecho, no una obligación. Una <b>call</b> da derecho a comprar el activo a un precio fijado (el strike) hasta una fecha; una <b>put</b>, a venderlo.</p>
+<ul><li>El comprador paga una <b>prima</b> y su pérdida máxima es esa prima.</li>
+<li>El vendedor cobra la prima y asume la obligación si le ejercen.</li>
+<li>Cada opción tiene un <b>vencimiento</b>: llegado ese día, vale lo que valga su parte dentro del dinero o nada.</li></ul>
+<p>Para un trader de futuros, las opciones importan por cómo se cubren los que las venden: esas coberturas mueven el subyacente.</p>
+<div class="lec-clave"><b>Idea clave</b><p>No hace falta operar opciones para que te afecten. Sus coberturas se ven en NQ y ES.</p></div>`,
+usar:['op-basicos-1','op-basicos-2','op-basicos-3','op-basicos-4','op-basicos-5','op-basicos-6','op-basicos-7','op-basicos-8','op-basicos-9','op-basicos-10','op-basicos-11','op-basicos-12']},
+{id:'n12-2',titulo:'El precio de una opción',min:6,tema:'op-precio',
+teoria:`<p>La prima tiene dos partes:</p>
+<ul><li><b>Valor intrínseco:</b> lo que vale si se ejerciera ahora. Una call con strike 100 y el precio en 105 tiene 5 de valor intrínseco.</li>
+<li><b>Valor temporal:</b> lo que se paga por la posibilidad de que gane más antes de vencer. Se va consumiendo con el tiempo.</li></ul>
+<h3>Volatilidad implícita</h3>
+<p>Es la volatilidad que el mercado descuenta en el precio de las opciones. Más volatilidad implícita, primas más caras. El VIX resume la del S&amp;P 500.</p>
+<h3>Interés abierto y OPEX</h3>
+<p>El interés abierto (OI) es el número de contratos de opciones que siguen abiertos en cada strike. El OPEX es el día de vencimiento mensual, cuando gran parte de ese interés desaparece.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Prima = intrínseco + tiempo. Y el tiempo se paga según la volatilidad que se espera.</p></div>`,
+usar:['op-precio-1','op-precio-2','op-precio-3','op-precio-4','op-precio-5','op-precio-6','op-precio-7','op-precio-8','op-precio-9','op-precio-10','op-precio-11','op-precio-12']},
+{id:'n12-3',titulo:'Las griegas',min:7,tema:'op-griegas',
+teoria:`<p>Las griegas miden cómo cambia el precio de una opción cuando cambia algo.</p>
+<ul><li><b>Delta:</b> cuánto cambia la opción por cada punto del subyacente.</li>
+<li><b>Gamma:</b> cuánto cambia la delta cuando el subyacente se mueve. Es máxima cerca del strike y del vencimiento.</li>
+<li><b>Theta:</b> lo que pierde la opción cada día por el paso del tiempo.</li>
+<li><b>Vega:</b> cuánto cambia con la volatilidad implícita.</li>
+<li><b>Vanna:</b> cómo cambia la delta cuando cambia la volatilidad.</li>
+<li><b>Charm:</b> cómo cambia la delta con el paso del tiempo.</li></ul>
+<p>Para leer el mercado, la clave es la gamma: obliga a quien está cubierto a comprar o vender subyacente cuando el precio se mueve.</p>
+<div class="lec-clave"><b>Idea clave</b><p>La delta dice cuánto; la gamma, cuánto cambia ese cuánto. Ahí nacen los flujos de cobertura.</p></div>`,
+usar:['op-griegas-1','op-griegas-2','op-griegas-3','op-griegas-4','op-griegas-5','op-griegas-6','op-griegas-7','op-griegas-8','op-griegas-9','op-griegas-10','op-griegas-11','op-griegas-12']},
+{id:'n12-4',titulo:'El market maker y sus coberturas',min:7,tema:'op-mm',
+teoria:`<p>El market maker vende y compra opciones a los clientes y no quiere apostar a la dirección. Por eso se cubre con el subyacente para quedar neutral en delta.</p>
+<h3>Gamma larga y gamma corta</h3>
+<ul><li><b>Con gamma larga:</b> para seguir neutral vende cuando el precio sube y compra cuando baja. Frena los movimientos: el mercado se vuelve más tranquilo.</li>
+<li><b>Con gamma corta:</b> tiene que comprar cuando sube y vender cuando baja. Acelera los movimientos: más volatilidad.</li></ul>
+<p>Saber en qué régimen está el mercado te dice si esperar rotación o expansión.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Gamma positiva amortigua; gamma negativa acelera.</p></div>`,
+usar:['op-mm-1','op-mm-2','op-mm-3','op-mm-4','op-mm-5','op-mm-6','op-mm-7','op-mm-8','op-mm-9','op-mm-10','op-mm-11','op-mm-12']},
+{id:'n12-5',titulo:'Call Wall, Put Wall y GEX',min:7,tema:'op-niveles',fig:'gex',
+teoria:`<p>La exposición gamma (GEX) estima cuánta gamma tienen los market makers en cada strike. Con ella se marcan niveles que el mercado suele respetar.</p>
+<ul><li><b>Call Wall:</b> el strike con más gamma de calls. Suele actuar como techo o imán por arriba.</li>
+<li><b>Put Wall:</b> el strike con más gamma de puts. Suele actuar como suelo por abajo.</li>
+<li><b>Gamma flip:</b> el precio donde la gamma total pasa de positiva a negativa. Por encima, mercado más tranquilo; por debajo, más nervioso.</li></ul>
+<p>Son zonas de contexto, igual que el VAH o el VAL. La entrada sigue saliendo del footprint.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Call Wall arriba, Put Wall abajo y el flip en medio: el mapa del día según las opciones.</p></div>`,
+usar:['op-niveles-1','op-niveles-2','op-niveles-3','op-niveles-4','op-niveles-5','op-niveles-6','op-niveles-7','op-niveles-8','op-niveles-9','op-niveles-10','op-niveles-11','op-niveles-12']},
+{id:'n12-6',titulo:'Opciones 0DTE',min:6,tema:'op-0dte',
+teoria:`<p>Las 0DTE son opciones que vencen el mismo día. Hoy son una parte muy grande del volumen del S&amp;P 500.</p>
+<ul><li>Tienen muchísima gamma cerca del precio, así que sus coberturas pueden mover el subyacente con fuerza durante el día.</li>
+<li>Su efecto cambia rápido: un strike importante por la mañana puede no serlo por la tarde.</li>
+<li>Cerca del cierre su gamma se dispara y pueden provocar movimientos bruscos o al revés, un precio pegado a un strike.</li></ul>
+<div class="lec-clave"><b>Idea clave</b><p>Con 0DTE los niveles de opciones se mueven durante el día. Revísalos, no los des por fijos.</p></div>`,
+usar:['op-0dte-1','op-0dte-2','op-0dte-3','op-0dte-4','op-0dte-5','op-0dte-6','op-0dte-7','op-0dte-8','op-0dte-9','op-0dte-10','op-0dte-11','op-0dte-12']},
+{id:'n12-7',titulo:'Flujos de gamma, vanna y charm',min:7,tema:'op-flujos',
+teoria:`<p>Además del precio, el tiempo y la volatilidad también obligan a los market makers a ajustar coberturas.</p>
+<ul><li><b>Vanna:</b> si baja la volatilidad implícita, cambian las deltas y los market makers suelen recomprar coberturas: viento de cola alcista en mercados tranquilos.</li>
+<li><b>Charm:</b> según pasa el tiempo las deltas se mueven solas, sobre todo cerca del vencimiento, lo que genera flujos aunque el precio no se mueva.</li></ul>
+<p>Estos flujos se notan especialmente en la semana del OPEX y desaparecen en buena parte después.</p>
+<div class="lec-clave"><b>Idea clave</b><p>No solo el precio mueve coberturas: la volatilidad y el reloj también.</p></div>`,
+usar:['op-flujos-1','op-flujos-2','op-flujos-3','op-flujos-4','op-flujos-5','op-flujos-6','op-flujos-7','op-flujos-8','op-flujos-9','op-flujos-10','op-flujos-11','op-flujos-12']},
+{id:'n12-8',titulo:'Opciones aplicadas a NQ y ES',min:6,tema:'op-aplicacion',fig:'oi',
+teoria:`<p>Los niveles de opciones suelen calcularse sobre los índices al contado (SPX, NDX) o sus ETF (SPY, QQQ). Para usarlos en futuros hay que trasladarlos con la diferencia (base) entre el futuro y el índice.</p>
+<h3>Cómo encajan en tu operativa</h3>
+<ul><li>Marca Call Wall, Put Wall y gamma flip trasladados a NQ o ES antes de la apertura.</li>
+<li>Úsalos como zonas de contexto junto a VAH, VAL y POC.</li>
+<li>Cuando coinciden un nivel de opciones y uno de volumen, la zona gana peso.</li>
+<li>La entrada sigue saliendo del flujo: absorción, agotamiento, subasta terminada.</li></ul>
+<div class="lec-clave"><b>Idea clave</b><p>Las opciones dan el mapa; el footprint dice cuándo actuar en él.</p></div>`,
+usar:['op-aplicacion-1','op-aplicacion-2','op-aplicacion-3','op-aplicacion-4','op-aplicacion-5','op-aplicacion-6','op-aplicacion-7','op-aplicacion-8','op-aplicacion-9','op-aplicacion-10','op-aplicacion-11','op-aplicacion-12']}
+]});
+
+RUTA.push({id:'n13',titulo:'Los setups del Método AGX',desc:'Tu setup principal, confluencias y las entradas que no se toman, explicadas por Alex.',preparando:true,lecciones:[
+{id:'n13-1',titulo:'Mi setup principal paso a paso',min:0,tema:'ejecucion',whop:'Mi setup principal paso a paso'},
+{id:'n13-2',titulo:'Confluencias: cómo filtrar entradas',min:0,tema:'ejecucion',whop:'Confluencias: cómo filtrar entradas'},
+{id:'n13-3',titulo:'Ejemplos de entradas ganadoras',min:0,tema:'ejecucion',whop:'Ejemplos de entradas ganadoras'},
+{id:'n13-4',titulo:'Entradas que no tomo (y por qué)',min:0,tema:'ejecucion',whop:'Entradas que NO tomo (y por qué)'}
+]});
+/* ---------- Ruta de formación: índice, desbloqueo y vistas ---------- */
+const RUTA_APROBADO=0.9, RUTA_N_TEST=10, RUTA_N_NIVEL=20;
+const WHOP_CURSO='https://whop.com/alexgonxz/exp_sD2yoXn74C2J4U/app/';
+TEMAS.push(
+  {id:'mentalidad',bloque:'mente',corto:'Mentalidad',nombre:'Mentalidad del trader',desc:'Por qué se pierde, qué es ser rentable y cómo estudiar.'},
+  {id:'estructura',bloque:'ctx',corto:'Estructura',nombre:'Estructura de mercado',desc:'Soportes, resistencias, tendencias, giros y AMD.'},
+  {id:'atas',bloque:'base',corto:'ATAS',nombre:'Futuros y ATAS',desc:'Contratos, valor del punto, datos y gráficos de clusters.'}
+);
+ICO_TEMA.mentalidad=ICO_TEMA.psico||ICO_TEMA.riesgo; ICO_TEMA.estructura=ICO_TEMA.perfil||ICO_TEMA.contexto; ICO_TEMA.atas=ICO_TEMA.dom||ICO_TEMA.footprint;
+const RUTA_LEC={};
+RUTA.forEach((n,ni)=>n.lecciones.forEach((l,li)=>{
+  RUTA_LEC[l.id]={lec:l,nivel:n,ni,li};
+  (l.preg||[]).forEach((q,k)=>PREGUNTAS.push({id:l.id+'-p'+(k+1),tema:l.tema,texto:q[0],opciones:q[1],nota:q[2],fig:q[3]||null}));
+}));
+const RUTA_ACTIVOS=RUTA.filter(n=>!n.preparando);
+const RUTA_TOTAL=RUTA_ACTIVOS.reduce((s,n)=>s+n.lecciones.length,0);
+const RUTA_MIN=RUTA_ACTIVOS.reduce((s,n)=>s+n.lecciones.reduce((a,l)=>a+(l.min||0),0),0);
+ICO.candado='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="9" width="11" height="8" rx="2"/><path d="M7 9V6.5a3 3 0 016 0V9"/></svg>';
+ICO.libro='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4.5h5a2 2 0 012 2V16a1.5 1.5 0 00-1.5-1.5H3z"/><path d="M17 4.5h-5a2 2 0 00-2 2V16a1.5 1.5 0 011.5-1.5H17z"/></svg>';
+ICO.video='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="11" height="10" rx="2"/><path d="M13.5 9l4-2.5v7l-4-2.5"/></svg>';
+let subForm='ruta', lecVista=null;
+
+function estRuta(){ if(!state.ruta || typeof state.ruta!=='object') state.ruta={lec:{},niv:{}}; state.ruta.lec=state.ruta.lec||{}; state.ruta.niv=state.ruta.niv||{}; return state.ruta; }
+function rutaLibre(){ return !SERVIDOR || !!(YO && YO.admin && !REV); }
+function lecOk(id){ const r=estRuta().lec[id]; return !!(r && r.ok); }
+function nivOk(n){ const r=estRuta().niv[n.id]; return !!(r && r.ok); }
+function nivAbierto(n){ if(n.preparando) return false; if(rutaLibre()) return true; const i=RUTA_ACTIVOS.indexOf(n); return i===0 || nivOk(RUTA_ACTIVOS[i-1]); }
+function lecAbierta(l){ const x=RUTA_LEC[l.id]; if(!x || !nivAbierto(x.nivel)) return false; if(rutaLibre()) return true; return x.li===0 || lecOk(x.nivel.lecciones[x.li-1].id); }
+function examenAbierto(n){ return nivAbierto(n) && (rutaLibre() || n.lecciones.every(l=>lecOk(l.id))); }
+function poolLec(l){ const ids=new Set((l.usar||[]).concat((l.preg||[]).map((_,k)=>l.id+'-p'+(k+1)))); return PREGUNTAS.filter(p=>ids.has(p.id)); }
+function poolNivel(n){ const vistos=new Set(), out=[]; n.lecciones.forEach(l=>poolLec(l).forEach(p=>{ if(!vistos.has(p.id)){ vistos.add(p.id); out.push(p); } })); return out; }
+function maxFallos(n){ return Math.floor(n*(1-RUTA_APROBADO)+1e-9); }
+function progresoRuta(st){ const r=(st||state).ruta||{}, lec=r.lec||{}; const ok=RUTA_ACTIVOS.reduce((s,n)=>s+n.lecciones.filter(l=>lec[l.id] && lec[l.id].ok).length,0); return {ok,total:RUTA_TOTAL,pct:RUTA_TOTAL?ok/RUTA_TOTAL:0}; }
+function siguienteLec(){ for(const n of RUTA_ACTIVOS){ for(const l of n.lecciones){ if(!lecOk(l.id)) return lecAbierta(l)?l:null; } if(!nivOk(n)) return null; } return null; }
+function nivelActual(){ return RUTA_ACTIVOS.find(n=>!nivOk(n)) || RUTA_ACTIVOS[RUTA_ACTIVOS.length-1]; }
+function horas(min){ const h=Math.floor(min/60), m=min%60; return h?(h+' h'+(m?' '+m+' min':'')):m+' min'; }
+function tabsForm(){ return `<nav class="sub-tabs entra" aria-label="Secciones de la formación"><a href="#formacion"${subForm!=='libre'?' aria-current="page"':''}>Ruta por niveles</a><a href="#formacion/libre"${subForm==='libre'?' aria-current="page"':''}>Repaso libre y examen</a></nav>`; }
+
+function vistaRuta(){
+  const pr=progresoRuta(), sig=siguienteLec(), na=nivelActual(), iNa=RUTA_ACTIVOS.indexOf(na);
+  const nPreg=new Set(RUTA_ACTIVOS.flatMap(n=>poolNivel(n).map(p=>p.id))).size;
+  const horasTot=Math.round((RUTA_MIN+nPreg*0.75)/60);
+  const exPend=!sig && nivAbierto(na) && !nivOk(na) && examenAbierto(na);
+  const cta=sig?`<a class="boton blanco" href="#formacion/l/${sig.id}">${pr.ok?'Continuar':'Empezar'}: ${esc(sig.titulo)}</a>`:(exPend?`<button type="button" class="boton blanco" data-accion="examen-nivel" data-n="${na.id}">Hacer el examen del nivel ${iNa+1}</button>`:'');
+  const niveles=RUTA.map((n,k)=>{
+    const abierto=nivAbierto(n), hechas=n.lecciones.filter(l=>lecOk(l.id)).length, ex=estRuta().niv[n.id];
+    const actual=n===na && !n.preparando;
+    const estado=n.preparando?'<span class="niv-est prep">En preparación</span>':(nivOk(n)?`<span class="niv-est ok">${ICO.check}Aprobado</span>`:(abierto?`<span class="niv-est">${hechas} de ${n.lecciones.length}</span>`:`<span class="niv-est cerr">${ICO.candado}Bloqueado</span>`));
+    const filas=n.lecciones.map((l,j)=>{
+      const ok=lecOk(l.id), ab=!n.preparando && lecAbierta(l), r=estRuta().lec[l.id];
+      const chip=n.preparando?'<span class="lec-chip prep">Próximamente</span>':(ok?`<span class="lec-chip ok">${ICO.check}${r.mejor} %</span>`:(ab?'<span class="lec-chip dis">Disponible</span>':`<span class="lec-chip cerr">${ICO.candado}<span class="sr">Bloqueada</span></span>`));
+      const cuerpo=`<span class="lec-n">${j+1}</span><span class="lec-t"><b>${esc(l.titulo)}</b><small>${n.preparando?'Con las clases en directo de Alex':(l.min?l.min+' min de lectura · ':'')+(n.preparando?'':'test de '+Math.min(RUTA_N_TEST,poolLec(l).length)+' preguntas')}</small></span>${chip}`;
+      return `<li>${ab?`<a class="lec-fila${sig&&sig.id===l.id?' sig':''}" href="#formacion/l/${l.id}">${cuerpo}</a>`:`<div class="lec-fila cerrada" aria-disabled="true">${cuerpo}</div>`}</li>`;
+    }).join('');
+    const nEx=Math.min(RUTA_N_NIVEL,poolNivel(n).length), exAb=examenAbierto(n);
+    const filaEx=n.preparando?'':`<li>${exAb?`<button type="button" class="lec-fila ex" data-accion="examen-nivel" data-n="${n.id}">`:'<div class="lec-fila ex cerrada" aria-disabled="true">'}<span class="lec-n ex">${ICO_TEMA.examen||ICO.check}</span><span class="lec-t"><b>Examen del nivel ${k+1}</b><small>${nEx} preguntas, ${nEx} minutos · apruebas con ${maxFallos(nEx)} ${maxFallos(nEx)===1?'fallo':'fallos'} o menos</small></span>${ex?`<span class="lec-chip ${ex.ok?'ok':'ko'}">${ex.ok?ICO.check+'Apto':'No apto · '+ex.fallos+' fallos'}</span>`:(exAb?'<span class="lec-chip dis">Disponible</span>':`<span class="lec-chip cerr">${ICO.candado}<span class="sr">Bloqueado</span></span>`)}${exAb?'</button>':'</div>'}</li>`;
+    return `<details class="niv entra${actual?' actual':''}${n.preparando?' prep':''}" style="animation-delay:${Math.min(k,8)*0.03}s"${actual||k===0&&!pr.ok?' open':''}>
+      <summary><span class="niv-num">${String(k+1).padStart(2,'0')}</span><span class="niv-tit"><b>${esc(n.titulo)}</b><small>${esc(n.desc)}</small></span>${estado}<span class="niv-chev" aria-hidden="true">${ICO.chev}</span>
+        ${n.preparando?'':`<span class="niv-barra" aria-hidden="true"><span style="width:${hechas/n.lecciones.length*100}%"></span></span>`}</summary>
+      ${n.preparando?'<p class="niv-nota">Estas lecciones salen de las clases en directo de Alex. Aparecerán aquí con su teoría y su test en cuanto estén preparadas.</p>':''}
+      <ol class="lec-lista">${filas}${filaEx}</ol></details>`;
+  }).join('');
+  return `<header class="cab-modulo entra"><div><h1>Formación AGX</h1><p class="sub">Del primer día a operar con Order Flow: ${RUTA_ACTIVOS.length} niveles y ${RUTA_TOTAL} lecciones. Cada lección se desbloquea al aprobar la anterior con un 90 %, y cada nivel termina con su examen, como en la autoescuela.</p></div></header>
+  ${tabsForm()}
+  <section class="hero hero-form ruta-hero entra" aria-labelledby="r-tit"><div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="f-anillo">${anillo(pr.pct,156,14,'')}<div class="f-anillo-txt"><b id="f-pct">0 %</b><span>completado</span></div></div>
+    <div><p class="hero-saludo">${rutaLibre()&&SERVIDOR?'Vista de Alex: todo desbloqueado':'Nivel '+(iNa+1)+' de '+RUTA_ACTIVOS.length}</p><p class="f-titulo" id="r-tit">${esc(na.titulo)}</p>
+      <p class="hero-sub">${pr.ok} de ${RUTA_TOTAL} lecciones aprobadas. Unas ${horasTot} horas de formación entre teoría y tests, más las clases en vídeo de Alex en Whop.</p>
+      <div class="f-acc">${cta}<a class="boton fantasma" href="#formacion/libre">Repaso libre y examen final</a></div></div>
+    <ul class="ruta-datos"><li><b>${RUTA_ACTIVOS.filter(nivOk).length}</b><span>niveles aprobados</span></li><li><b>${pr.ok}</b><span>lecciones aprobadas</span></li><li><b>${nPreg}</b><span>preguntas en la ruta</span></li></ul>
+  </section>
+  <div class="niveles">${niveles}</div>`;
+}
+
+function vistaLeccion(id){
+  const x=RUTA_LEC[id];
+  if(!x) return `<div class="admin-carga"><p>No encuentro esa lección.</p><a class="boton sec" href="#formacion">Volver a la ruta</a></div>`;
+  const l=x.lec, n=x.nivel, iN=RUTA.indexOf(n), r=estRuta().lec[l.id], nT=Math.min(RUTA_N_TEST,poolLec(l).length), nOk=Math.ceil(nT*RUTA_APROBADO-1e-9);
+  const volver=`<a class="volver" href="#formacion">${ICO.izq}Ruta de formación</a>`;
+  if(n.preparando) return `<header class="cab-modulo entra"><div>${volver}<h1>${esc(l.titulo)}</h1><p class="sub">Nivel ${iN+1}: ${esc(n.titulo)}</p></div></header>
+    <section class="panel entra"><div class="panel-cuerpo"><p class="vacio">Esta lección sale de las clases en directo de Alex y todavía se está preparando. Mientras tanto la tienes en vídeo en Whop.</p><p><a class="boton sec" href="${WHOP_CURSO}" target="_blank" rel="noopener">${ICO.video}Abrir el curso en Whop</a></p></div></section>`;
+  if(!lecAbierta(l)) return `<header class="cab-modulo entra"><div>${volver}<h1>${esc(l.titulo)}</h1><p class="sub">Nivel ${iN+1}: ${esc(n.titulo)}</p></div></header>
+    <section class="panel entra"><div class="panel-cuerpo lec-bloq"><span class="lec-bloq-ico">${ICO.candado}</span><p>Esta lección se desbloquea al aprobar la anterior${x.li===0?' y el examen del nivel previo':''}.</p><a class="boton" href="#formacion">Ir a mi siguiente lección</a></div></section>`;
+  const prev=x.li>0?n.lecciones[x.li-1]:null, next=n.lecciones[x.li+1]||null;
+  const fig=l.fig&&FIGS[l.fig]?`<figure class="figura lec-fig">${figura(FIGS[l.fig])}<figcaption>${FIGS[l.fig].pie}</figcaption></figure>`:'';
+  const estado=r&&r.ok?`<p class="lec-ok">${ICO.check}Aprobada con un ${r.mejor} %${r.fecha?' el '+fechaCorta(r.fecha):''}.</p>`:(r?`<p class="lec-ko">Tu mejor nota: ${r.mejor} %. Necesitas un 90 % para aprobar.</p>`:'');
+  const sigBtn=r&&r.ok?(next?`<a class="boton sec" href="#formacion/l/${next.id}">Siguiente lección</a>`:(examenAbierto(n)&&!nivOk(n)?`<button type="button" class="boton sec" data-accion="examen-nivel" data-n="${n.id}">Examen del nivel ${iN+1}</button>`:'')):'';
+  return `<header class="cab-modulo entra"><div>${volver}<p class="lec-migas">Nivel ${iN+1} · ${esc(n.titulo)} · Lección ${x.li+1} de ${n.lecciones.length}</p><h1>${esc(l.titulo)}</h1><p class="sub">${l.min} min de lectura y un test de ${nT} preguntas. Apruebas con ${nOk} aciertos.</p></div></header>
+  <div class="lec-grid">
+    <article class="panel lec-art entra"><div class="lec-teoria">${l.teoria||''}${fig}</div></article>
+    <aside class="lec-lado">
+      <section class="panel lec-test entra" aria-labelledby="t-lt"><div class="panel-cuerpo"><h2 id="t-lt">Test de la lección</h2><p>${nT} preguntas con la explicación de cada una. Apruebas con ${nOk} de ${nT} y se desbloquea lo siguiente.</p>${estado}
+        <div class="lec-acc"><button type="button" class="boton" data-accion="test-leccion" data-l="${l.id}">${r?'Repetir el test':'Hacer el test'}</button>${sigBtn}</div></div></section>
+      ${l.whop?`<a class="panel lec-whop entra" href="${WHOP_CURSO}" target="_blank" rel="noopener"><span class="lec-whop-ico">${ICO.video}</span><span><b>Clase en vídeo de Alex</b><small>«${esc(l.whop)}» en el curso de Whop</small></span></a>`:''}
+      <nav class="lec-nav" aria-label="Lecciones del nivel">${prev?`<a href="#formacion/l/${prev.id}">${ICO.izq}${esc(prev.titulo)}</a>`:'<span></span>'}${next&&lecAbierta(next)?`<a class="dcha" href="#formacion/l/${next.id}">${esc(next.titulo)}${ICO.chev}</a>`:''}</nav>
+    </aside>
+  </div>`;
+}
+
+function renderFormacion(){
+  if(quiz){ vista.innerHTML=quiz.fin?vistaResultado():vistaPregunta(); return; }
+  if(subForm==='libre'){ vista.innerHTML=vistaFormacion(); const h=$('.cab-modulo',vista); if(h) h.insertAdjacentHTML('afterend',tabsForm()); const pc=Math.round(progresoForm().pct*100); odometro($('#f-pct'),pc+' %','Completado: '+pc+' %'); return; }
+  if(lecVista){ vista.innerHTML=vistaLeccion(lecVista); return; }
+  vista.innerHTML=vistaRuta(); const pc=Math.round(progresoRuta().pct*100); odometro($('#f-pct'),pc+' %','Completado: '+pc+' %');
+}
+
 const EXAMEN_N=30, EXAMEN_MIN=30, EXAMEN_FALLOS=3;
 
 /* ---------- Plan de trading: reglas y comprobación (el mismo código en la web y en el servidor) ---------- */
@@ -3590,7 +4776,7 @@ function pintarLateral0(){
   let u=0, n=0; state.trades.forEach(t=>{ if(enSemana(t.fecha)){ u+=calc(t).usd; n++; } });
   const f=progresoForm();
   $('#lat-widgets').innerHTML=`<div class="lw"><p>Esta semana, ${n} ${n===1?'operación':'operaciones'}</p><b class="${claseO(u)}">${n?fmtUSD(u):MENOS}</b></div>
-    <div class="lw"><p>Formación completada</p><b>${Math.round(f.pct*100)} %</b><div class="lw-barra"><span style="width:${f.pct*100}%"></span></div></div>
+    ${(()=>{ const r=progresoRuta(); return `<a class="lw lw-rk" href="#formacion"><p>Formación: ${r.ok} de ${r.total} lecciones</p><b>${Math.round(r.pct*100)} %</b><div class="lw-barra"><span style="width:${r.pct*100}%"></span></div></a>`; })()}
     ${(()=>{ const dR=datosRanking(), iR=dR.mes.findIndex(x=>x.discord_id===MI_DISCORD); return `<a class="lw lw-rk" href="#ranking"><p>Ranking de ${MESES_L[mesMadrid(Date.now()).m]}</p><b>${iR<0?'Sin logros':(iR+1)+'º · '+nLogros(dR.mes[iR].total)}</b></a>`; })()}`;
 }
 
@@ -4008,11 +5194,13 @@ function temasDe(b){ return TEMAS.filter(t=>t.bloque===b); }
 function nTema(id){ return PREGUNTAS.filter(p=>p.tema===id).length; }
 function bloqueActual(){ return BLOQUES.some(x=>x.id===state.bloque)?state.bloque:'of'; }
 function pctBloque(b){ let d=0,t=0; temasDe(b).forEach(x=>{ const n=nTema(x.id); t+=n; const pr=state.temas[x.id]; if(pr) d+=Math.min(pr.mejor,n); }); return t?d/t:0; }
-function esPractica(){ return !!quiz && quiz.modo!=='examen'; }
+function esPractica(){ return !!quiz && quiz.modo!=='examen' && quiz.modo!=='nivel'; }
 function tituloQuiz(){
   if(quiz.modo==='practica'){ const i=TEMAS.findIndex(t=>t.id===quiz.tema); return `Tema ${i+1}: ${TEMAS[i].nombre}`; }
   if(quiz.modo==='rapido'){ const b=BLOQUES.find(x=>x.id===quiz.bloque); return 'Test rápido'+(b?' de '+b.nombre:''); }
   if(quiz.modo==='fallos') return 'Repaso de tus fallos';
+  if(quiz.modo==='leccion'){ const x=RUTA_LEC[quiz.lec]; return 'Test: '+x.lec.titulo; }
+  if(quiz.modo==='nivel'){ const n=RUTA.find(v=>v.id===quiz.nivel); return 'Examen del nivel '+(RUTA.indexOf(n)+1)+': '+n.titulo; }
   return 'Examen final';
 }
 function registrar(it){ const set=new Set(state.fallos||[]); if(it.resp===0) set.delete(it.p.id); else set.add(it.p.id); state.fallos=Array.from(set); }
@@ -4090,7 +5278,7 @@ function navegador(){
 }
 function rachaQuiz(){ let r=0; for(let i=quiz.items.length-1;i>=0;i--){ const x=quiz.items[i]; if(x.resp===null) continue; if(x.resp===0) r++; else break; } return r; }
 function relojHTML(){
-  const total=EXAMEN_MIN*60000, rest=Math.max(0,quiz.limite-Date.now());
+  const total=(quiz.minutos||EXAMEN_MIN)*60000, rest=Math.max(0,quiz.limite-Date.now());
   return `<div class="reloj${rest<120000?' poco':''}" id="reloj">${anillo(rest/total,52,6,'')}<div><b id="reloj-t">${mmss()}</b><span class="sr"> de tiempo restante</span></div></div>`;
 }
 function mmss(){ const s=Math.ceil(Math.max(0,quiz.limite-Date.now())/1000); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
@@ -4121,7 +5309,7 @@ function vistaPregunta(){
     if(quiz.i>0) nav+='<button type="button" class="boton sec" data-accion="anterior">Anterior</button>';
     if(quiz.i<total-1) nav+='<button type="button" class="boton" data-accion="siguiente">Siguiente</button>';
     lado=`<section class="panel lado" aria-labelledby="t-res"><div class="panel-cab"><h2 id="t-res">Tu examen</h2></div><div class="panel-cuerpo">
-      <dl class="resumen-ex"><dt>Contestadas</dt><dd>${hechas} de ${total}</dd><dt>Sin contestar</dt><dd>${sin}</dd><dt>Para aprobar</dt><dd>${EXAMEN_FALLOS} fallos o menos</dd></dl>
+      <dl class="resumen-ex"><dt>Contestadas</dt><dd>${hechas} de ${total}</dd><dt>Sin contestar</dt><dd>${sin}</dd><dt>Para aprobar</dt><dd>${quiz.maxFallos!=null?quiz.maxFallos:EXAMEN_FALLOS} ${quiz.maxFallos===1?'fallo':'fallos'} o menos</dd></dl>
       <p class="aviso-txt">${sin?'Las preguntas sin contestar cuentan como fallo. Puedes cambiar cualquier respuesta hasta que entregues.':'Todo contestado. Puedes revisar y cambiar respuestas hasta que entregues.'}</p>
       <div><button type="button" class="boton" data-accion="entregar">Entregar examen</button></div></div></section>`;
   }
@@ -4129,7 +5317,7 @@ function vistaPregunta(){
   const fig=p.fig?`<figure class="figura">${figura(FIGS[p.fig])}<figcaption>${FIGS[p.fig].pie}</figcaption></figure>`:'';
   const bl=BLOQUES.find(x=>x.id===TEMAS[tIdx].bloque);
   return `<header class="quiz-cab">
-    <div class="quiz-titulo"><button type="button" class="volver" data-accion="abandonar">${ICO.izq}${practica?'Volver a formación':'Salir del examen'}</button>
+    <div class="quiz-titulo"><button type="button" class="volver" data-accion="abandonar">${ICO.izq}${quiz.modo==='leccion'?'Volver a la lección':(practica?'Volver a formación':'Salir del examen')}</button>
       <h1>${tituloQuiz()}</h1></div>
     ${practica?`<span class="racha${quiz.subeRacha?' sube':''}" aria-label="Racha de ${r} aciertos seguidos">${ICO.rayo}Racha ${r}</span>`:relojHTML()}
   </header>
@@ -4137,7 +5325,7 @@ function vistaPregunta(){
   ${navegador()}
   <div class="quiz-grid">
     <section class="panel" aria-labelledby="t-preg"><div class="preg-cuerpo">
-      <p class="p-num">Pregunta ${quiz.i+1} de ${total}${quiz.modo==='practica'?'':`, ${bl.nombre}: ${TEMAS[tIdx].nombre}`}</p>
+      <p class="p-num">Pregunta ${quiz.i+1} de ${total}${quiz.modo==='practica'||quiz.modo==='leccion'?'':`, ${bl.nombre}: ${TEMAS[tIdx].nombre}`}</p>
       <p class="enunciado" id="t-preg">${p.texto}</p>
       ${fig}
       <ol class="opciones">${opciones}</ol>
@@ -4148,10 +5336,16 @@ function vistaPregunta(){
 }
 function vistaResultado(){
   const total=quiz.items.length, practica=esPractica();
-  const aciertos=quiz.items.filter(x=>x.resp===0).length, fallos=total-aciertos, apto=fallos<=EXAMEN_FALLOS;
+  const aciertos=quiz.items.filter(x=>x.resp===0).length, fallos=total-aciertos, apto=fallos<=(quiz.maxFallos!=null?quiz.maxFallos:EXAMEN_FALLOS);
+  let sigLec=null;
   const fallados=quiz.items.filter(x=>x.resp!==0), nFal=fallosPendientes().length;
   let txt;
-  if(practica){
+  if(quiz.modo==='leccion'){
+    const x=RUTA_LEC[quiz.lec], need=Math.ceil(total*RUTA_APROBADO-1e-9), ok=aciertos>=need, n=x.nivel;
+    sigLec=ok?(n.lecciones[x.li+1]||null):null;
+    const tras=ok?(sigLec?`Se ha desbloqueado «${esc(sigLec.titulo)}».`:(examenAbierto(n)&&!nivOk(n)?`Has terminado las lecciones del nivel. Ya puedes hacer su examen.`:'Lección superada.')):`Necesitas ${need} de ${total}. Repasa la teoría y vuelve a intentarlo; abajo tienes las que fallaste.`;
+    txt=`<p class="hero-saludo">${esc(x.lec.titulo)}</p><span class="veredicto ${ok?'':'no'}">${ok?'Aprobada':'No aprobada'}</span><p class="f-titulo">${aciertos} de ${total} correctas</p><p>${tras}</p>`;
+  } else if(practica){
     const perfecto=aciertos===total;
     const sub=quiz.modo==='practica'?'Tema: '+TEMAS.find(t=>t.id===quiz.tema).nombre:tituloQuiz();
     const tit=perfecto?(quiz.modo==='practica'?'Tema dominado':'Todas correctas'):`${aciertos} de ${total} correctas`;
@@ -4161,19 +5355,20 @@ function vistaResultado(){
     const cuenta={}; fallados.forEach(x=>{ cuenta[x.p.tema]=(cuenta[x.p.tema]||0)+1; });
     const porTema=Object.keys(cuenta).sort((a,b)=>cuenta[b]-cuenta[a]).map(k=>`${TEMAS.find(t=>t.id===k).nombre} (${cuenta[k]})`).join(', ');
     txt=`<span class="veredicto ${apto?'':'no'}">${apto?'Apto':'No apto'}</span><p class="f-titulo">${fallos} ${fallos===1?'fallo':'fallos'} de ${total}</p>
-      <p>${apto?'Examen aprobado. Tienes la base de Order Flow y opciones para aplicarla en tu diario.':`Para aprobar necesitas ${EXAMEN_FALLOS} fallos o menos.`}${porTema?` Fallos por tema: ${porTema}.`:''}</p>`;
+      <p>${quiz.modo==='nivel'?(apto?'Nivel aprobado. Se ha desbloqueado el nivel siguiente de la ruta.':`Para aprobar el nivel necesitas ${quiz.maxFallos} ${quiz.maxFallos===1?'fallo':'fallos'} o menos. Repasa las lecciones donde más has fallado.`):(apto?'Examen aprobado. Tienes la base de Order Flow y opciones para aplicarla en tu diario.':`Para aprobar necesitas ${EXAMEN_FALLOS} fallos o menos.`)}${porTema?` Fallos por tema: ${porTema}.`:''}</p>`;
   }
-  const repetir={practica:'Repetir tema',rapido:'Otro test rápido',fallos:'Repasar fallos otra vez',examen:'Repetir examen'}[quiz.modo];
+  const repetir={practica:'Repetir tema',rapido:'Otro test rápido',fallos:'Repasar fallos otra vez',examen:'Repetir examen',leccion:'Repetir el test',nivel:'Repetir examen'}[quiz.modo];
+  const vuelta=quiz.modo==='leccion'?'Volver a la lección':(quiz.modo==='nivel'?'Volver a la ruta':'Volver a formación');
   const extra=(quiz.modo!=='fallos' && nFal)?`<button type="button" class="boton fantasma" data-accion="fallos">Repasar mis fallos (${nFal})</button>`:'';
   const lista=fallados.length?`<section class="panel entra" aria-labelledby="t-fallos"><div class="panel-cab"><h2 id="t-fallos">Repasa tus fallos</h2><span class="panel-meta">${fallados.length} ${fallados.length===1?'pregunta':'preguntas'}</span></div><ol class="fallos">${fallados.map(x=>`
     <li class="fallo"><div><p class="fallo-q">${x.p.texto}</p>
       <p class="fallo-tuya">Tu respuesta: ${x.resp===null?'sin contestar':x.p.opciones[x.resp]}</p>
       <p class="fallo-buena">Correcta: ${x.p.opciones[0]}</p></div>
       <div class="exp"><div class="autor"><span class="avatar peq" aria-hidden="true">AG</span><span><b>Alex</b>, Método AGX</span></div><p>${x.p.nota}</p></div></li>`).join('')}</ol></section>`:'';
-  return `<header class="quiz-cab"><div class="quiz-titulo"><button type="button" class="volver" data-accion="temario">${ICO.izq}Volver a formación</button><h1>${practica?'Resultado del test':'Resultado del examen'}</h1></div></header>
+  return `<header class="quiz-cab"><div class="quiz-titulo"><button type="button" class="volver" data-accion="temario">${ICO.izq}${vuelta}</button><h1>${practica?'Resultado del test':'Resultado del examen'}</h1></div></header>
   <section class="hero res-hero entra" aria-label="Resultado"><div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="f-anillo">${anillo(aciertos/total,156,14,'')}<div class="f-anillo-txt"><b>${aciertos}/${total}</b><span>correctas</span></div></div>
-    <div class="res-txt">${txt}<div class="res-acc"><button type="button" class="boton blanco" data-accion="repetir">${repetir}</button>${extra}<button type="button" class="boton fantasma" data-accion="temario">Volver a formación</button></div></div>
+    <div class="res-txt">${txt}<div class="res-acc">${sigLec?`<button type="button" class="boton blanco" data-accion="ir-leccion" data-l="${sigLec.id}">Siguiente lección</button><button type="button" class="boton fantasma" data-accion="repetir">${repetir}</button>`:`<button type="button" class="boton blanco" data-accion="repetir">${repetir}</button>`}${quiz.modo==='leccion'||quiz.modo==='nivel'?'':extra}<button type="button" class="boton fantasma" data-accion="temario">${vuelta}</button></div></div>
   </section>
   ${navegador()}
   ${lista}`;
@@ -4184,9 +5379,14 @@ function empezar(modo,arg){
   if(modo==='practica') ps=shuffle(PREGUNTAS.filter(p=>p.tema===arg));
   else if(modo==='rapido') ps=shuffle(PREGUNTAS.filter(p=>!arg || (TEMAS.find(t=>t.id===p.tema)||{}).bloque===arg)).slice(0,10);
   else if(modo==='fallos'){ const set=new Set(fallosPendientes()); ps=shuffle(PREGUNTAS.filter(p=>set.has(p.id))).slice(0,20); if(!ps.length){ toast('No tienes fallos pendientes'); return; } }
+  else if(modo==='leccion'){ const x=RUTA_LEC[arg]; if(!x || !lecAbierta(x.lec)) return; ps=shuffle(poolLec(x.lec)).slice(0,RUTA_N_TEST); }
+  else if(modo==='nivel'){ const n=RUTA.find(v=>v.id===arg); if(!n || !examenAbierto(n)) return; ps=shuffle(poolNivel(n)).slice(0,RUTA_N_NIVEL); }
   else { modo='examen'; ps=shuffle(PREGUNTAS).slice(0,EXAMEN_N); }
-  quiz={modo,tema:modo==='practica'?arg:null,bloque:modo==='rapido'?(arg||null):null,items:ps.map(p=>({p,orden:shuffle([0,1,2]),resp:null})),i:0,fin:false,subeRacha:false,limite:modo==='examen'?Date.now()+EXAMEN_MIN*60000:0};
-  if(modo==='examen') arrancarReloj();
+  const crono=modo==='examen'||modo==='nivel', minutos=modo==='nivel'?ps.length:EXAMEN_MIN;
+  quiz={modo,tema:modo==='practica'?arg:null,bloque:modo==='rapido'?(arg||null):null,lec:modo==='leccion'?arg:null,nivel:modo==='nivel'?arg:null,
+    maxFallos:modo==='nivel'?maxFallos(ps.length):(modo==='examen'?EXAMEN_FALLOS:null),minutos,
+    items:ps.map(p=>({p,orden:shuffle([0,1,2]),resp:null})),i:0,fin:false,subeRacha:false,limite:crono?Date.now()+minutos*60000:0};
+  if(crono) arrancarReloj();
   transicion(()=>{ render(); subir(); });
 }
 function finalizar(){
@@ -4196,6 +5396,10 @@ function finalizar(){
   let fiesta=false;
   if(quiz.modo==='examen'){ quiz.items.forEach(registrar); state.examen={fallos:total-ac,total,fecha:iso(new Date()),apto:total-ac<=EXAMEN_FALLOS}; fiesta=state.examen.apto; }
   else if(quiz.modo==='practica'){ const pr=state.temas[quiz.tema]||{mejor:0,intentos:0}; pr.mejor=Math.max(pr.mejor,ac); pr.intentos++; state.temas[quiz.tema]=pr; fiesta=ac===total; }
+  else if(quiz.modo==='leccion'){ const r=estRuta().lec[quiz.lec]||{mejor:0,intentos:0}, pc=Math.round(ac/total*100), ok=ac>=Math.ceil(total*RUTA_APROBADO-1e-9);
+    r.mejor=Math.max(r.mejor||0,pc); r.intentos=(r.intentos||0)+1; if(ok && !r.ok){ r.ok=true; r.fecha=iso(new Date()); } estRuta().lec[quiz.lec]=r; fiesta=ok; }
+  else if(quiz.modo==='nivel'){ quiz.items.forEach(registrar); const prev=estRuta().niv[quiz.nivel], ok=total-ac<=quiz.maxFallos;
+    estRuta().niv[quiz.nivel]={ok:ok||!!(prev&&prev.ok),fallos:total-ac,total,fecha:iso(new Date())}; fiesta=ok; }
   else fiesta=ac===total;
   guardar(); pintarLateral();
   if(ruta==='formacion'){ render(); subir(); if(fiesta) setTimeout(confeti,250); }
@@ -4203,10 +5407,10 @@ function finalizar(){
 function arrancarReloj(){
   pararReloj();
   reloj=setInterval(()=>{
-    if(!quiz||quiz.fin||quiz.modo!=='examen'){ pararReloj(); return; }
+    if(!quiz||quiz.fin||(quiz.modo!=='examen'&&quiz.modo!=='nivel')){ pararReloj(); return; }
     if(Date.now()>=quiz.limite){ finalizar(); toast('Se acabó el tiempo. Examen entregado.'); return; }
     const el=$('#reloj'); if(!el) return;
-    const total=EXAMEN_MIN*60000, rest=quiz.limite-Date.now();
+    const total=(quiz.minutos||EXAMEN_MIN)*60000, rest=quiz.limite-Date.now();
     $('#reloj-t').textContent=mmss(); el.classList.toggle('poco',rest<120000);
     const c=el.querySelector('.an-valor'); if(c){ const C=parseFloat(c.getAttribute('stroke-dasharray')); c.style.strokeDashoffset=(C*(1-rest/total)).toFixed(2); }
   },1000);
@@ -4259,12 +5463,14 @@ function accionesPaleta(){
   a.push({g:'Plan e IA',t:'Analizar mi último día con la IA',k:'agente informe parte revisar',f:()=>irRuta('diario/plan',()=>pedirAnalisis('dia',diasOperados().slice(-1)[0]))});
   ['semana','mes','todo'].forEach(p=>a.push({g:'Diario',t:'Ver resultados: '+PER_T[p].toLowerCase(),k:'periodo filtro',f:()=>irRuta('diario',()=>{ state.periodo=p; guardar(); pintarDatos(); })}));
   SETUPS.forEach(st=>a.push({g:'Setups',t:'Ver operaciones de '+st,k:'filtrar setup',f:()=>irRuta('diario',()=>{ filtro.setup=st; refrescarFiltros(); alPanelOps(); })}));
-  a.push({g:'Formación',t:'Ir a formación',k:'temario test autoescuela permiso',f:()=>irRuta('formacion',()=>{ if(quiz){ quiz=null; pararReloj(); render(); } })});
+  a.push({g:'Formación',t:'Ir a formación',k:'temario test autoescuela permiso ruta niveles',f:()=>irRuta('formacion',()=>{ if(quiz){ quiz=null; pararReloj(); render(); } })});
+  a.push({g:'Formación',t:'Continuar mi ruta de formación',k:'siguiente leccion nivel desbloquear',f:()=>{ const l=siguienteLec(); irRuta(l?'formacion/l/'+l.id:'formacion',()=>{ if(quiz){ quiz=null; pararReloj(); render(); } }); }});
   a.push({g:'Formación',t:'Empezar examen final',k:'test dgt aprobar',f:()=>irRuta('formacion',()=>empezar('examen'))});
   a.push({g:'Formación',t:'Test rápido de 10 preguntas',k:'rapido aleatorio azar',f:()=>irRuta('formacion',()=>empezar('rapido',null))});
   a.push({g:'Formación',t:'Repasar mis fallos',k:'errores repaso',f:()=>irRuta('formacion',()=>empezar('fallos'))});
-  BLOQUES.forEach(bq=>a.push({g:'Formación',t:'Ver temario de '+bq.nombre,k:'bloque opciones order flow gex gamma',f:()=>irRuta('formacion',()=>{ quiz=null; pararReloj(); state.bloque=bq.id; guardar(); render(); })}));
-  TEMAS.forEach((t,i)=>a.push({g:'Formación',t:`Practicar tema ${i+1}: ${t.nombre}`,k:'test practica',f:()=>irRuta('formacion',()=>empezar('practica',t.id))}));
+  BLOQUES.forEach(bq=>a.push({g:'Formación',t:'Ver temario de '+bq.nombre,k:'bloque opciones order flow gex gamma',f:()=>irRuta('formacion/libre',()=>{ quiz=null; pararReloj(); state.bloque=bq.id; guardar(); render(); })}));
+  TEMAS.forEach((t,i)=>a.push({g:'Formación',t:`Practicar tema ${i+1}: ${t.nombre}`,k:'test practica',f:()=>irRuta('formacion/libre',()=>empezar('practica',t.id))}));
+  RUTA_ACTIVOS.forEach(n=>n.lecciones.forEach(l=>{ if(lecAbierta(l)) a.push({g:'Lecciones',t:l.titulo,k:'leccion teoria '+n.titulo,f:()=>irRuta('formacion/l/'+l.id)}); }));
   a.push({g:'Ranking',t:'Ir al ranking de logros',k:'premio discord podio clasificacion logros',f:()=>irRuta('ranking')});
   a.push({g:'Ranking',t:'Ver ranking histórico',k:'todos campeones historico',f:()=>irRuta('ranking',()=>{ rank.periodo='historico'; render(); })});
   if(YO && YO.admin) a.push({g:'Alumnos',t:'Ver las operaciones de los alumnos',k:'admin revisar comentarios alumnos diario',f:()=>irRuta('alumnos')});
@@ -4605,7 +5811,7 @@ function resumenAlumno(a){
   const temas=(a.datos && a.datos.temas)||{}; let dom=0;
   TEMAS.forEach(t=>{ const pr=temas[t.id]; if(pr) dom+=Math.min(pr.mejor,nTema(t.id)); });
   return { n:ts.length, nMes:mes.length, usdMes:mes.reduce((s,t)=>s+calc(t).usd,0), semana:ts.filter(t=>enSemana(t.fecha)).length,
-    sinCom:ts.filter(t=>!t.comentario).length, ult:ts.reduce((m,t)=>t.fecha>m?t.fecha:m,''), form:dom/PREGUNTAS.length, plan:resumenPlan(a) };
+    sinCom:ts.filter(t=>!t.comentario).length, ult:ts.reduce((m,t)=>t.fecha>m?t.fecha:m,''), form:progresoRuta(a.datos||{}).pct, plan:resumenPlan(a) };
 }
 function vistaAlumnos(){
   const cab=`<header class="cab-modulo entra"><div><h1>Alumnos</h1><p class="sub">Las operaciones de cada alumno con su captura de ATAS. Entra en uno para revisar su diario y dejarle comentarios.</p></div>${adminLista?'<input type="search" class="al-buscar" id="al-buscar" placeholder="Buscar alumno" aria-label="Buscar alumno">':''}</header>`;
@@ -4618,7 +5824,7 @@ function vistaAlumnos(){
   if(!lista.length) return cab+'<div class="panel"><div class="panel-cuerpo"><p class="vacio">Todavía no ha entrado ningún alumno. Cuando entren con su Discord aparecerán aquí.</p></div></div>';
   const tot=lista.reduce((s,x)=>({semana:s.semana+x.r.semana,sinCom:s.sinCom+x.r.sinCom,form:s.form+x.r.form}),{semana:0,sinCom:0,form:0});
   const kc=(t,v,s,i,d)=>`<div class="kcard entra" style="animation-delay:${d}s"><div class="kcard-cab"><p class="kcard-t">${t}</p><span class="kicono">${i}</span></div><p class="kcard-v">${v}</p><p class="kcard-s">${s}</p></div>`;
-  const kpis=`<div class="kpis4">${kc('Alumnos',lista.length,'han entrado al área',ICO_K.barras,0)}${kc('Esta semana',tot.semana,tot.semana===1?'operación registrada':'operaciones registradas',ICO_K.rayo,.05)}${kc('Sin comentar',tot.sinCom,'operaciones esperando tu revisión',ICO_I.alerta,.1)}${kc('Formación media',Math.round(tot.form/lista.length*100)+' %','de las 336 preguntas',ICO_K.diana,.15)}</div>`;
+  const kpis=`<div class="kpis4">${kc('Alumnos',lista.length,'han entrado al área',ICO_K.barras,0)}${kc('Esta semana',tot.semana,tot.semana===1?'operación registrada':'operaciones registradas',ICO_K.rayo,.05)}${kc('Sin comentar',tot.sinCom,'operaciones esperando tu revisión',ICO_I.alerta,.1)}${kc('Formación media',Math.round(tot.form/lista.length*100)+' %','de las lecciones de la ruta',ICO_K.diana,.15)}</div>`;
   const cards=lista.map(({a,r},k)=>`<a class="al-card entra" style="animation-delay:${Math.min(k,12)*0.03}s" href="#alumnos/${encodeURIComponent(a.id)}" data-nombre="${esc(a.nombre)}">
       <span class="al-top">${avatarR({discord_id:a.id,nombre:a.nombre,avatar_url:a.avatar})}<span class="al-quien"><b class="al-nom">${esc(a.nombre)}</b><span class="al-sub">${r.ult?'Última operación: '+fechaCorta(r.ult):'Sin operaciones todavía'}</span></span></span>
       <span class="al-stats"><span><b>${r.nMes}</b>ops. este mes</span><span class="${claseO(r.usdMes)}"><b>${r.nMes?fmtUSD(r.usdMes):MENOS}</b>resultado del mes</span><span><b>${Math.round(r.form*100)} %</b>formación</span></span>
@@ -4633,7 +5839,7 @@ function trasAlumnos(){
 }
 
 /* ---------- Render y eventos ---------- */
-function leerRuta(){ const hs=location.hash, sub=s=>['estadisticas','plan'].includes(s)?s:'resumen'; if(/^#alumnos(\/|$)/.test(hs) && YO && YO.admin){ const pz=hs.split('/'); ruta='alumnos'; revId=pz[1]?decodeURIComponent(pz[1]):null; subDiario=sub(pz[2]); return; } revId=null; const m=/^#diario\/(\w+)$/.exec(hs); subDiario=sub(m&&m[1]); ruta=hs==='#formacion'?'formacion':(hs==='#ranking'?'ranking':'diario'); }
+function leerRuta(){ const hs=location.hash, sub=s=>['estadisticas','plan'].includes(s)?s:'resumen'; if(/^#alumnos(\/|$)/.test(hs) && YO && YO.admin){ const pz=hs.split('/'); ruta='alumnos'; revId=pz[1]?decodeURIComponent(pz[1]):null; subDiario=sub(pz[2]); return; } revId=null; const m=/^#diario\/(\w+)$/.exec(hs); subDiario=sub(m&&m[1]); const mf=/^#formacion(?:\/(libre|l\/([\w-]+)))?$/.exec(hs); subForm=mf&&mf[1]==='libre'?'libre':'ruta'; lecVista=mf&&mf[2]?mf[2]:null; ruta=mf?'formacion':(hs==='#ranking'?'ranking':'diario'); }
 function render(){
   $$('.nav a').forEach(a=>{ if(a.dataset.ruta===ruta) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
   if(ro){ ro.disconnect(); ro=null; }
@@ -4645,8 +5851,7 @@ function render(){
     if(revId){ if(REV && REV.id===revId) renderDiario(); else { vista.innerHTML=cargandoAdmin('Abriendo el diario del alumno…'); abrirRevision(revId); } }
     else { vista.innerHTML=vistaAlumnos(); trasAlumnos(); }
   } else {
-    vista.innerHTML=!quiz?vistaFormacion():(quiz.fin?vistaResultado():vistaPregunta());
-    if(!quiz){ const pc=Math.round(progresoForm().pct*100); odometro($('#f-pct'),pc+' %','Completado: '+pc+' %'); }
+    renderFormacion();
   }
   pintarLateral();
 }
@@ -4704,7 +5909,10 @@ document.addEventListener('click',e=>{
     case 'anterior': quiz.i--; render(); subir(); break;
     case 'ver-resultado': case 'entregar': finalizar(); break;
     case 'abandonar': case 'temario': quiz=null; pararReloj(); transicion(()=>{ render(); subir(); }); break;
-    case 'repetir': { const m=quiz.modo, a=quiz.tema||quiz.bloque; empezar(m,a); } break;
+    case 'repetir': { const m=quiz.modo, a=quiz.tema||quiz.bloque||quiz.lec||quiz.nivel; empezar(m,a); } break;
+    case 'test-leccion': empezar('leccion',b.dataset.l); break;
+    case 'examen-nivel': { if(quiz){ quiz=null; pararReloj(); } if(ruta!=='formacion' || lecVista || subForm!=='ruta'){ irRuta('formacion',()=>empezar('nivel',b.dataset.n)); } else empezar('nivel',b.dataset.n); } break;
+    case 'ir-leccion': quiz=null; pararReloj(); location.hash='#formacion/l/'+b.dataset.l; break;
     case 'bloque': state.bloque=BLOQUES.some(x=>x.id===b.dataset.b)?b.dataset.b:'of'; guardar(); transicion(()=>{ render(); const s=$('[data-accion="bloque"][aria-pressed="true"]'); if(s) s.focus({preventScroll:true}); }); break;
     case 'rapido': empezar('rapido',b.dataset.b||null); break;
     case 'fallos': empezar('fallos'); break;
