@@ -1059,6 +1059,251 @@ html.vt-modo::view-transition-new(root){z-index:2}
 .rev-estado{font-size:13px;color:var(--tinta-2)}
 @media (max-width:1060px){ .al-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
 @media (max-width:640px){ .al-grid{grid-template-columns:minmax(0,1fr)} }
+
+/* ===================== Diario pro: secciones, importar, estadísticas y plan con IA ===================== */
+.cab-acc{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.btn-imp{min-height:46px;padding:0 18px;font-size:15px}
+.sub-tabs{display:flex;gap:4px;margin:-6px 0 22px;padding:4px;width:max-content;max-width:100%;overflow-x:auto;border:1px solid var(--borde);border-radius:13px;background:var(--fondo)}
+.sub-tabs a{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;border-radius:9px;color:var(--tinta-2);font-size:14.5px;font-weight:650;text-decoration:none;white-space:nowrap;transition:background .2s,color .2s}
+.sub-tabs a:hover{color:var(--morado);background:var(--fondo-2)}
+.sub-tabs a[aria-current="page"]{background:var(--morado-suave);color:var(--morado)}
+.ia-chip{display:inline-grid;place-items:center;padding:1px 6px;border-radius:6px;background:var(--grad-marca);color:var(--blanco);font-size:10.5px;font-weight:800;letter-spacing:.04em;line-height:1.5}
+h2 .ia-chip{margin-right:8px;vertical-align:2px}
+
+/* Avisos del resumen */
+.avisos-d{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.aviso-d{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1px solid var(--borde);border-radius:14px;background:var(--fondo);color:var(--tinta);text-decoration:none}
+.aviso-d p{flex:1;min-width:0;margin:0;font-size:14px;color:var(--tinta-2)}
+.aviso-d p b{color:var(--tinta)}
+.aviso-ico{flex:none;width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--morado-suave);color:var(--morado)}
+.aviso-ico svg{width:17px;height:17px}
+.aviso-d.plan .aviso-ico{background:var(--grad-marca);color:var(--blanco)}
+.aviso-d.ok .aviso-ico{background:var(--compra-suave);color:var(--compra)}
+.aviso-d.ko .aviso-ico{background:var(--venta-suave);color:var(--venta)}
+a.aviso-d{transition:border-color .2s,box-shadow .25s}
+a.aviso-d:hover{border-color:var(--violeta);box-shadow:var(--sombra)}
+.aviso-ir{display:inline-flex;align-items:center;gap:4px;color:var(--morado);font-size:13.5px;font-weight:650;white-space:nowrap}
+.aviso-ir svg{width:14px;height:14px}
+
+/* Tabla y detalle de operaciones importadas */
+.hora-op{color:var(--tinta-2);font-size:13px}
+.etq-atas{margin-left:4px;padding:1px 7px;border:1px solid var(--borde-2);color:var(--tinta-2);font-size:11px;font-weight:700;letter-spacing:.03em}
+.etq-falta{border:1px dashed var(--violeta);background:transparent;color:var(--morado);cursor:pointer;font:inherit;font-size:12.5px;font-weight:650}
+button.etq-falta:hover{background:var(--morado-suave)}
+.det-atas{margin:6px 0 0;font-size:13.5px;color:var(--tinta-2);font-variant-numeric:tabular-nums}
+.detalle-acc{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+
+/* Cajón en modo completar */
+.cajon.atas [data-atas="ocultar"]{display:none!important}
+.atas-res{grid-column:1 / -1;padding:14px 16px;border-radius:12px;background:var(--fondo-2);border:1px solid var(--borde)}
+.atas-res p{margin:2px 0;font-size:14px;color:var(--tinta-2);font-variant-numeric:tabular-nums}
+.atas-res b{color:var(--tinta)}
+.atas-res b.pos{color:var(--compra)}
+.atas-res b.neg{color:var(--venta)}
+.atas-t{display:flex;align-items:center;gap:8px;margin-bottom:6px!important;font-size:12.5px!important;font-weight:700;color:var(--morado)!important}
+.atas-t svg{width:16px;height:16px}
+
+/* Ventana de importar */
+.imp-capa{position:fixed;inset:0;z-index:72;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;
+  padding:max(8vh,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));
+  background:var(--capa);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:aparecer .15s ease-out both;opacity:0}
+.imp{width:min(620px,100%);display:flex;flex-direction:column;border-radius:18px;background:var(--fondo);box-shadow:0 30px 80px rgba(20,12,45,.35),0 0 0 1px var(--borde);animation:zoom .22s cubic-bezier(.2,.8,.2,1) both}
+.imp-cab{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 22px;border-bottom:1px solid var(--borde)}
+.imp-cab h2{margin:0;font-size:20px;font-weight:740}
+.imp-cab p{margin:3px 0 0;font-size:13.5px;color:var(--tinta-2)}
+.imp-cuerpo{display:flex;flex-direction:column;gap:16px;padding:20px 22px}
+.imp-pie{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-top:1px solid var(--borde);background:var(--fondo-2);border-radius:0 0 18px 18px}
+.imp-pie:empty{display:none}
+.imp-pasos{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.imp-pasos li{display:flex;align-items:flex-start;gap:12px}
+.imp-pasos li>span{flex:none;width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:var(--morado-suave);color:var(--morado);font-size:13px;font-weight:750}
+.imp-pasos p{margin:2px 0 0;font-size:14.5px}
+.imp .subida svg{width:34px;height:34px}
+.imp-tz{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:14px;color:var(--tinta-2)}
+.imp-tz select{min-height:38px;padding:0 10px;border:1px solid var(--borde-2);border-radius:10px;background:var(--fondo);color:var(--tinta);font-size:14px}
+.imp-arch{display:flex;align-items:center;gap:8px;margin:0;font-size:13.5px;color:var(--tinta-2);word-break:break-all}
+.imp-arch svg{flex:none;width:18px;height:18px;color:var(--morado)}
+.imp-res{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.imp-res>div{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:12px;background:var(--fondo-2)}
+.imp-res b{font-size:20px;font-weight:780;font-variant-numeric:tabular-nums}
+.imp-res b.p{color:var(--compra)}
+.imp-res b.n{color:var(--venta)}
+.imp-res span{font-size:12.5px;color:var(--tinta-2)}
+.imp-cuentas{margin:0;padding:0;border:0}
+.imp-cuentas legend{margin-bottom:8px;padding:0;font-size:13px;font-weight:650;color:var(--tinta-2)}
+.imp-tabla{border:1px solid var(--borde);border-radius:12px}
+.imp-tabla .tabla{font-size:13.5px}
+
+/* Estadísticas */
+.est-barra{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.est-per{margin:0;font-size:18px;font-weight:720}
+.seg-claro{display:inline-flex;gap:2px;padding:3px;border:1px solid var(--borde);border-radius:11px;background:var(--fondo)}
+.seg-claro button{border:0;background:none;padding:6px 14px;border-radius:8px;font-size:13.5px;font-weight:650;color:var(--tinta-2);cursor:pointer}
+.seg-claro button:hover{color:var(--morado)}
+.seg-claro button[aria-pressed="true"]{background:var(--morado);color:var(--blanco)}
+.est-vacio{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.num-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0}
+.nd{display:flex;flex-direction:column;gap:3px;padding:14px 18px;border-bottom:1px solid var(--borde);border-right:1px solid var(--borde)}
+.nd:nth-child(4n){border-right:0}
+.nd:nth-last-child(-n+4){border-bottom:0}
+.nd dt{font-size:12.5px;color:var(--tinta-2)}
+.nd dd{margin:0;font-size:18px;font-weight:750;font-variant-numeric:tabular-nums}
+.nd dd.pos{color:var(--compra)}
+.nd dd.neg{color:var(--venta)}
+.nd small{display:block;margin-top:2px;font-size:12px;font-weight:500;color:var(--tinta-2)}
+.est-desg{display:flex;flex-direction:column;gap:18px}
+.est-t caption{padding:0 0 6px;text-align:left;font-size:12.5px;font-weight:700;color:var(--tinta-2)}
+.est-t th[scope="row"]{font-weight:650;color:var(--tinta);background:none;border-bottom:1px solid var(--borde);font-size:14px}
+.est-t td,.est-t th{padding:8px 10px}
+.est-nota{margin-top:10px}
+
+/* Columnas */
+.bv{--alto:190px}
+.bv-zona{position:relative;height:var(--alto);margin-bottom:6px}
+.bv-area{position:absolute;inset:20px 0 0;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr))}
+.bv-area.con-neg{bottom:20px}
+.bv-cero{position:absolute;left:0;right:0;height:1px;background:var(--tinta-2);opacity:.45;z-index:1}
+.bv-col{position:relative;height:100%;outline:none;cursor:default;border-radius:6px}
+.bv-col:hover,.bv-col:focus-visible{background:var(--fondo-2)}
+.bv-col:focus-visible{box-shadow:inset 0 0 0 2px var(--morado)}
+.bv-barra{position:absolute;left:50%;width:min(24px,62%);transform:translateX(-50%);border-radius:4px 4px 0 0;transform-origin:bottom;animation:subir-b .7s cubic-bezier(.2,.8,.2,1) both}
+.bv-barra.abajo{border-radius:0 0 4px 4px;transform-origin:top}
+.bv-barra.g{background:var(--compra)}
+.bv-barra.p{background:var(--venta)}
+.bv-barra.z{background:var(--borde-2)}
+@keyframes subir-b{from{transform:translateX(-50%) scaleY(0)}to{transform:translateX(-50%) scaleY(1)}}
+.bv-val{position:absolute;left:50%;transform:translateX(-50%);font-size:11.5px;font-weight:700;color:var(--tinta);white-space:nowrap;font-variant-numeric:tabular-nums;pointer-events:none}
+.bv-etqs{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));font-size:11.5px;color:var(--tinta-2);text-align:center;font-variant-numeric:tabular-nums}
+.bv-etqs span{overflow:hidden;text-overflow:clip;white-space:nowrap}
+.tip-g{position:fixed;z-index:60;display:flex;flex-direction:column;gap:1px;min-width:150px;padding:9px 12px;border-radius:10px;background:var(--toast-fondo);color:var(--toast-txt);font-size:12.5px;line-height:1.4;box-shadow:var(--sombra-tip);transform:translate(-50%,calc(-100% - 10px));pointer-events:none}
+.tip-g b{font-size:13px}
+.tip-g span{opacity:.85;font-variant-numeric:tabular-nums}
+
+/* Plan */
+.plan-grid{display:grid;grid-template-columns:minmax(0,11fr) minmax(0,10fr);gap:20px;align-items:start}
+.plan-col{display:flex;flex-direction:column;gap:20px;min-width:0}
+.plan-form .panel-cuerpo{display:flex;flex-direction:column;gap:18px}
+.pl-intro{margin:0;font-size:14px;color:var(--tinta-2)}
+.pl-grupo{margin:0;padding:0;border:0;display:flex;flex-direction:column;gap:10px}
+.pl-grupo legend{margin-bottom:10px;padding:0;font-size:12.5px;font-weight:750;letter-spacing:.06em;text-transform:uppercase;color:var(--morado)}
+.pl-campos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pl-horario{display:grid;grid-template-columns:repeat(2,minmax(0,160px));gap:12px}
+.pl-sub{margin:4px 0 0;font-size:13px;font-weight:650;color:var(--tinta-2)}
+.plan-form .chips-sel span{padding:6px 12px;font-size:13.5px}
+.plan-form input:disabled,.plan-form textarea:disabled{background:var(--fondo-2);color:var(--tinta);opacity:1}
+.plan-form .chips-sel input:disabled+span{cursor:default}
+.pl-check{display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:600;cursor:pointer}
+.pl-check input{width:18px;height:18px;accent-color:var(--morado)}
+.pl-pie{position:sticky;bottom:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:14px 18px;border-top:1px solid var(--borde);background:var(--fondo-2);border-radius:0 0 16px 16px}
+.pl-estado{font-size:13.5px;color:var(--tinta-2)}
+.cu{display:flex;flex-direction:column;gap:14px}
+.cu-top{display:flex;align-items:center;gap:16px}
+.cu-v{margin:0;font-size:22px;font-weight:780}
+.cu-dias{display:flex;flex-wrap:wrap;gap:6px}
+.cu-d{position:relative;width:38px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:1px solid transparent;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;font-variant-numeric:tabular-nums}
+.cu-d svg{width:11px;height:11px}
+.cu-d.ok{background:var(--compra-suave);color:var(--compra)}
+.cu-d.ko{background:var(--venta-suave);color:var(--venta)}
+.cu-d.sel{border-color:currentColor;box-shadow:0 0 0 2px var(--fondo),0 0 0 4px currentColor}
+.cu-top3 ul{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
+.cu-top3 li{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.cu-top3 b{color:var(--venta);font-variant-numeric:tabular-nums}
+.cu-dia{border-top:1px solid var(--borde);padding-top:14px}
+.cu-dia-cab{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;margin-bottom:10px;font-size:14.5px}
+.cu-dia-cab span{font-weight:650;font-variant-numeric:tabular-nums}
+.reglas{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.reglas li{display:flex;align-items:flex-start;gap:10px}
+.reglas b{font-size:14px}
+.reglas p{margin:1px 0 0;font-size:13.5px;color:var(--tinta-2)}
+.r-ico{flex:none;width:22px;height:22px;display:grid;place-items:center;border-radius:50%}
+.r-ico svg{width:12px;height:12px}
+.reglas .ok .r-ico{background:var(--compra-suave);color:var(--compra)}
+.reglas .ko .r-ico{background:var(--venta-suave);color:var(--venta)}
+.panel-ia{overflow:hidden}
+.panel-ia .panel-cab{background:linear-gradient(100deg,var(--morado-suave),transparent 70%)}
+#ia-cuerpo{display:flex;flex-direction:column;gap:14px;padding:16px 18px}
+.ia-acc p{margin:0 0 12px;font-size:14px;color:var(--tinta-2)}
+.ia-botones{display:flex;flex-wrap:wrap;gap:10px}
+.ia-botones + .ayuda{margin-top:8px}
+.boton:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.ia-cargando{display:flex;align-items:center;gap:14px;padding:14px;border-radius:12px;background:var(--morado-suave)}
+.ia-cargando p{margin:0;font-size:13.5px;color:var(--tinta-2)}
+.ia-cargando b{color:var(--morado)}
+.ia-orbe{flex:none;width:30px;height:30px;border-radius:50%;background:conic-gradient(from 0deg,var(--morado),var(--orquidea),var(--violeta-claro),var(--morado));animation:girar 1.1s linear infinite;-webkit-mask:radial-gradient(circle,transparent 8px,#000 9px);mask:radial-gradient(circle,transparent 8px,#000 9px)}
+@keyframes girar{to{transform:rotate(360deg)}}
+.ia-carga{padding:24px 0}
+.ia-vacio{padding:6px 0}
+.infs{display:flex;flex-direction:column;gap:10px}
+.inf{border:1px solid var(--borde);border-radius:14px;background:var(--fondo)}
+.inf[open]{border-color:var(--violeta-claro);box-shadow:0 10px 28px -16px rgba(58,28,147,.4)}
+.inf summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;cursor:pointer;list-style:none}
+.inf summary::-webkit-details-marker{display:none}
+.inf-cab{display:flex;flex-direction:column;min-width:0}
+.inf-tipo{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--morado)}
+.inf-t{font-size:14.5px;font-weight:680}
+.inf-dcha{display:flex;align-items:center;gap:10px;flex:none}
+.inf-dcha>svg{width:14px;height:14px;color:var(--tinta-2);transition:transform .2s}
+.inf[open] .inf-dcha>svg{transform:rotate(90deg)}
+.inf-res{font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.inf-nota{padding:3px 9px;border-radius:999px;font-size:12px;font-weight:650;font-variant-numeric:tabular-nums}
+.inf-nota b{font-size:14px;font-weight:800}
+.inf-nota.alta{background:var(--compra-suave);color:var(--compra)}
+.inf-nota.media{background:color-mix(in srgb,var(--ambar) 16%,var(--fondo));color:color-mix(in srgb,var(--ambar) 70%,var(--tinta))}
+.inf-nota.baja{background:var(--venta-suave);color:var(--venta)}
+.inf-cuerpo{display:flex;flex-direction:column;gap:12px;padding:2px 14px 16px}
+.inf-titular{margin:0;font-size:16px;font-weight:740;line-height:1.35}
+.inf-resumen{margin:0;font-size:14.5px;line-height:1.55;color:var(--tinta-2)}
+.inf-sub{margin:0 0 6px;font-size:12px;font-weight:750;letter-spacing:.05em;text-transform:uppercase;color:var(--tinta-2)}
+.inf-bloque ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.inf-bloque li{display:flex;align-items:flex-start;gap:8px;font-size:14px;line-height:1.45}
+.inf-bloque li>span{flex:none;width:18px;height:18px;display:grid;place-items:center;border-radius:50%;margin-top:1px}
+.inf-bloque li>span svg{width:10px;height:10px}
+.inf-bloque.bien li>span{background:var(--compra-suave);color:var(--compra)}
+.inf-bloque.mal li>span{background:var(--venta-suave);color:var(--venta)}
+.inf-bloque.pat li{padding-left:12px;border-left:2px solid var(--violeta-claro)}
+.inf-acciones{padding:12px 14px;border-radius:12px;background:var(--morado-suave)}
+.inf-acciones .inf-sub{color:var(--morado)}
+.inf-acciones ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600;line-height:1.45}
+.inf-viejo{margin:0;padding:8px 12px;border-radius:10px;background:var(--fondo-2);font-size:13.5px;color:var(--tinta-2)}
+.inf.ej{border-style:dashed}
+.al-plan{font-size:12.5px;color:var(--tinta-2)}
+.al-plan b{color:var(--tinta)}
+
+@media (max-width:1200px){
+  .num-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nd:nth-child(4n){border-right:1px solid var(--borde)}
+  .nd:nth-child(2n){border-right:0}
+  .nd:nth-last-child(-n+4){border-bottom:1px solid var(--borde)}
+  .nd:nth-last-child(-n+2){border-bottom:0}
+}
+@media (max-width:1060px){
+  .plan-grid{grid-template-columns:minmax(0,1fr)}
+  .plan-grid.guardado .plan-col{order:-1}
+}
+@media (max-width:900px){
+  .cab-acc .btn-imp{min-height:42px}
+}
+@media (max-width:640px){
+  .sub-tabs{width:100%}
+  .sub-tabs a{flex:1;justify-content:center;padding:8px 10px}
+  .pl-campos{grid-template-columns:minmax(0,1fr)}
+  .imp-res{grid-template-columns:minmax(0,1fr)}
+  .imp-pie{flex-wrap:wrap}
+  .bv{--alto:160px}
+  .bv-etqs{font-size:10.5px}
+  .aviso-d{flex-wrap:wrap}
+}
+@media (prefers-reduced-motion:reduce){ .ia-orbe{animation:none} .bv-barra{animation:none} }
+
+/* Stop, riesgo y R de cada operación */
+.dinero.sufijo-l input{padding-right:46px!important}
+.r-caja{display:flex;align-items:center;min-height:42px;padding:0 12px;border:1px dashed var(--borde-2);border-radius:10px;background:var(--fondo-2);color:var(--tinta-2);font-size:17px;font-weight:750;font-variant-numeric:tabular-nums}
+.r-caja.pos{color:var(--compra)}
+.r-caja.neg{color:var(--venta)}
+.r-op{display:block;margin-top:2px;font-size:12px;font-weight:650;opacity:.85}
+.det-riesgo{margin:6px 0 0;font-size:13.5px;color:var(--tinta-2);font-variant-numeric:tabular-nums}
+.det-riesgo.falta{color:var(--venta)}
+.pl-checks{display:flex;flex-direction:column;gap:12px}
 </style>
 
 </head>
@@ -1098,15 +1343,15 @@ html.vt-modo::view-transition-new(root){z-index:2}
 <div class="capa" id="capa" hidden></div>
 <aside class="cajon" id="cajon" role="dialog" aria-modal="true" aria-labelledby="t-nueva" hidden>
   <div class="cajon-cab">
-    <div><h2 id="t-nueva">Nueva operación</h2><p>Rellénala justo después de cerrar, con la captura de ATAS.</p></div>
+    <div><h2 id="t-nueva">Nueva operación</h2><p id="cajon-desc">Rellénala justo después de cerrar, con la captura de ATAS.</p></div>
     <button type="button" class="icono-btn" data-accion="cerrar-cajon" aria-label="Cerrar"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
   </div>
   <div class="cajon-cuerpo">
     <form id="form-op" novalidate>
       <div class="campos">
-        <div class="campo"><label for="f-fecha">Fecha</label><input type="date" id="f-fecha"></div>
-        <div class="campo" id="c-ct"><label for="f-ct">Contratos</label>
-          <div class="stepper"><button type="button" data-accion="ct-menos" aria-label="Un contrato menos">−</button><input type="text" inputmode="numeric" id="f-ct" value="1" autocomplete="off"><button type="button" data-accion="ct-mas" aria-label="Un contrato más">+</button></div></div>
+        <div class="atas-res" id="atas-res" hidden></div>
+        <div class="campo" data-atas="ocultar"><label for="f-fecha">Fecha</label><input type="date" id="f-fecha"></div>
+        <div class="campo" id="c-hora" data-atas="ocultar"><label for="f-hora">Hora de entrada</label><input type="time" id="f-hora"></div>
         <fieldset class="campo ancho-total"><legend>Sesión</legend>
           <div class="radios r3">
             <label><input type="radio" name="f-sesion" id="f-ses-asia" value="Asia"><span>Asia</span></label>
@@ -1114,21 +1359,26 @@ html.vt-modo::view-transition-new(root){z-index:2}
             <label><input type="radio" name="f-sesion" id="f-ses-ny" value="NY" checked><span>NY</span></label>
           </div>
         </fieldset>
-        <fieldset class="campo ancho-total"><legend>Instrumento</legend><div id="f-inst"></div></fieldset>
-        <fieldset class="campo ancho-total"><legend>Dirección</legend>
+        <fieldset class="campo ancho-total" data-atas="ocultar"><legend>Instrumento</legend><div id="f-inst"></div></fieldset>
+        <fieldset class="campo ancho-total" data-atas="ocultar"><legend>Dirección</legend>
           <div class="radios r2">
             <label><input type="radio" name="f-dir" id="f-dir-l" value="L" checked><span class="verde">Largo</span></label>
             <label><input type="radio" name="f-dir" id="f-dir-c" value="C"><span class="rojo">Corto</span></label>
           </div>
         </fieldset>
+        <div class="campo" id="c-ct" data-atas="ocultar"><label for="f-ct">Contratos</label>
+          <div class="stepper"><button type="button" data-accion="ct-menos" aria-label="Un contrato menos">−</button><input type="text" inputmode="numeric" id="f-ct" value="1" autocomplete="off"><button type="button" data-accion="ct-mas" aria-label="Un contrato más">+</button></div></div>
+        <div class="campo" id="c-stop"><label for="f-stop">Stop</label><div class="dinero sufijo-l"><input type="text" inputmode="decimal" id="f-stop" placeholder="15" autocomplete="off" aria-describedby="stop-ayuda"><span aria-hidden="true">pts</span></div><p class="ayuda" id="stop-ayuda">Puntos desde la entrada hasta el stop.</p></div>
         <fieldset class="campo ancho-total" id="c-setup"><legend>Setup</legend><div class="chips-sel" id="f-setup"></div></fieldset>
-        <fieldset class="campo"><legend>Resultado</legend>
+        <fieldset class="campo" data-atas="ocultar"><legend>Resultado</legend>
           <div class="radios r2">
             <label><input type="radio" name="f-res" id="f-res-g" value="G" checked><span class="verde">Ganada</span></label>
             <label><input type="radio" name="f-res" id="f-res-p" value="P"><span class="rojo">Perdida</span></label>
           </div>
         </fieldset>
-        <div class="campo" id="c-imp"><label for="f-imp">Importe</label><div class="dinero"><input type="text" inputmode="decimal" id="f-imp" placeholder="400" autocomplete="off" aria-describedby="calculo"><span aria-hidden="true">$</span></div><p class="ayuda" id="calculo" aria-live="polite"></p></div>
+        <div class="campo" id="c-imp" data-atas="ocultar"><label for="f-imp">Importe</label><div class="dinero"><input type="text" inputmode="decimal" id="f-imp" placeholder="400" autocomplete="off" aria-describedby="calculo"><span aria-hidden="true">$</span></div><p class="ayuda" id="calculo" aria-live="polite"></p></div>
+        <div class="campo" id="c-riesgo"><label for="f-riesgo">Riesgo</label><div class="dinero"><input type="text" inputmode="decimal" id="f-riesgo" autocomplete="off" aria-describedby="riesgo-ayuda"><span aria-hidden="true">$</span></div><p class="ayuda" id="riesgo-ayuda">Lo que perdías si saltaba el stop. Sale solo del stop y los contratos.</p></div>
+        <div class="campo"><span class="etiqueta" id="l-r">Resultado en R</span><output id="f-r" class="r-caja" aria-labelledby="l-r">−</output></div>
         <div class="campo ancho-total" id="c-cap"><span class="etiqueta" id="l-cap">Captura de ATAS de la entrada</span>
           <div class="zona" id="zona-cap"></div>
           <input type="file" id="f-cap" accept="image/*" hidden>
@@ -1140,7 +1390,7 @@ html.vt-modo::view-transition-new(root){z-index:2}
   </div>
   <div class="cajon-pie">
     <div class="pie-res"><span>Resultado</span><b id="pie-res">0 $</b></div>
-    <div class="pie-acc"><button type="button" class="boton sec" data-accion="cerrar-cajon">Cancelar</button><button type="submit" class="boton" form="form-op">Guardar operación</button></div>
+    <div class="pie-acc"><button type="button" class="boton sec" data-accion="cerrar-cajon">Cancelar</button><button type="submit" class="boton" form="form-op" id="btn-guardar-op">Guardar operación</button></div>
   </div>
 </aside>
 
@@ -1158,6 +1408,15 @@ html.vt-modo::view-transition-new(root){z-index:2}
     <div class="paleta-pie"><span><kbd>&uarr;</kbd> <kbd>&darr;</kbd> moverte</span><span><kbd>Intro</kbd> abrir</span><span><kbd>Esc</kbd> cerrar</span></div>
   </div>
 </div>
+<div class="imp-capa" id="imp" hidden>
+  <div class="imp" role="dialog" aria-modal="true" aria-labelledby="imp-t">
+    <div class="imp-cab"><div><h2 id="imp-t">Importar operaciones de ATAS</h2><p>Se rellenan solas: hora, instrumento, dirección, contratos, precios y resultado.</p></div>
+      <button type="button" class="icono-btn" data-accion="cerrar-imp" aria-label="Cerrar"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+    <div class="imp-cuerpo" id="imp-cuerpo"></div>
+    <div class="imp-pie" id="imp-pie"></div>
+  </div>
+</div>
+<input type="file" id="imp-file" accept=".xlsx,.xls,.csv,.txt" hidden>
 <div id="toast" class="toast" role="status" hidden></div>
 
 <script>
@@ -1245,12 +1504,13 @@ const EJEMPLOS=[
  ['2026-10-28','NY','MES','L',3,-4,'Giro por perfil','','El perfil no estaba formado todavía. Espera a que el valor se defina.'],
  ['2026-10-29','NY','NQ','L',1,25,'Patrón Gonzi','Esperé la confirmación del patrón. Paciencia.','']
 ];
-function estadoVacio(){ return {periodo:'mes',trades:[],temas:{},examen:null,fallos:[],bloque:'base',progresoEjemplo:false,objetivo:3000}; }
+function estadoVacio(){ return {periodo:'mes',trades:[],temas:{},examen:null,fallos:[],bloque:'base',progresoEjemplo:false,objetivo:3000,plan:null}; }
 function normalizarEstado(d){ if(!d || !Array.isArray(d.trades)) return null; return Object.assign(estadoVacio(),d,{progresoEjemplo:false}); }
 function estadoInicial(){
   return {
     periodo:'mes',
-    trades:EJEMPLOS.map((e,i)=>({id:'e'+(i+1),fecha:e[0],sesion:e[1],inst:e[2],dir:e[3],ct:e[4],pts:e[5],setup:e[6],nota:e[7],comentario:e[8],ejemplo:true})),
+    trades:EJEMPLOS.map((e,i)=>horasEjemplo({id:'e'+(i+1),fecha:e[0],sesion:e[1],inst:e[2],dir:e[3],ct:e[4],pts:e[5],setup:e[6],nota:e[7],comentario:e[8],ejemplo:true},i)),
+    plan:planEjemplo(),
     temas:{subasta:{mejor:12,intentos:2},dom:{mejor:9,intentos:1},footprint:{mejor:11,intentos:2},imbalances:{mejor:8,intentos:1},delta:{mejor:9,intentos:1},absorcion:{mejor:6,intentos:1},perfil:{mejor:5,intentos:1},riesgo:{mejor:10,intentos:1},'op-basicos':{mejor:9,intentos:1},'op-griegas':{mejor:5,intentos:1}},
     examen:{fallos:5,total:30,fecha:'2026-10-27',apto:false},
     fallos:['delta-2','absorcion-4','contexto-7','op-griegas-6','op-niveles-5','op-flujos-2'],
@@ -2201,8 +2461,914 @@ Object.keys(ALARGA).forEach(id=>{ if(DISTR[id]) DISTR[id][ALARGA[id][0]]+=ALARGA
 PREGUNTAS.forEach(p=>{ const d=DISTR[p.id]; if(d) p.opciones=[p.opciones[0],d[0],d[1]]; });
 const EXAMEN_N=30, EXAMEN_MIN=30, EXAMEN_FALLOS=3;
 
+/* ---------- Plan de trading: reglas y comprobación (el mismo código en la web y en el servidor) ---------- */
+const VALOR_PUNTO={NQ:20,ES:50,YM:5,RTY:50,MNQ:2,MES:5,MYM:0.5,M2K:5};
+const PLAN_DIAS_L=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const PLAN_REGLAS={
+  perdida:'Pérdida máxima diaria',
+  riesgo:'Riesgo máximo por operación',
+  stop:'Stop en cada operación',
+  contratos:'Contratos máximos',
+  ops:'Operaciones máximas al día',
+  racha:'Parar tras pérdidas seguidas',
+  objetivo:'Parar al llegar al objetivo',
+  horario:'Horario',
+  dias:'Días de trading',
+  instrumentos:'Instrumentos',
+  setups:'Setups del plan',
+  registro:'Registrar setup y nota'
+};
+function planVacio(){
+  return {perdidaMaxDia:null,riesgoMaxOp:null,maxContratos:null,maxOps:null,maxPerdidasSeguidas:null,objetivoDia:null,
+    horaDesde:'',horaHasta:'',dias:[1,2,3,4,5],instrumentos:[],setups:[],registro:true,conStop:true,texto:'',zona:'',actualizado:null};
+}
+function planNormal(p){
+  const b=planVacio(); if(!p || typeof p!=='object') return b;
+  const n=v=>{ const x=Number(v); return isFinite(x) && x>0 ? Math.round(x*100)/100 : null; };
+  const h=v=>/^([01]?\d|2[0-3]):[0-5]\d$/.test(String(v||'')) ? String(v).padStart(5,'0') : '';
+  const l=v=>Array.isArray(v) ? v.map(x=>String(x).slice(0,60)).filter(Boolean).slice(0,30) : [];
+  return {
+    perdidaMaxDia:n(p.perdidaMaxDia), riesgoMaxOp:n(p.riesgoMaxOp), maxContratos:n(p.maxContratos), maxOps:n(p.maxOps),
+    maxPerdidasSeguidas:n(p.maxPerdidasSeguidas), objetivoDia:n(p.objetivoDia),
+    horaDesde:h(p.horaDesde), horaHasta:h(p.horaHasta),
+    dias:Array.isArray(p.dias) ? Array.from(new Set(p.dias.map(Number).filter(d=>d>=0 && d<=6))).sort() : b.dias,
+    instrumentos:l(p.instrumentos), setups:l(p.setups), registro:p.registro!==false, conStop:p.conStop!==false,
+    texto:String(p.texto||'').slice(0,4000), zona:String(p.zona||'').slice(0,60), actualizado:p.actualizado||null
+  };
+}
+function planGuardado(p){ return !!(p && p.actualizado); }
+function plural(n,a,b){ return n+' '+(n===1?a:b); }
+function usdOp(t){ if(t.usd!=null && isFinite(t.usd)) return Number(t.usd); return (Number(t.pts)||0)*(VALOR_PUNTO[t.inst]||20)*(Number(t.ct)||1); }
+function dolares(u){ const v=Math.round(u); return (v>0?'+':v<0?'−':'')+String(Math.abs(v)).replace(/\B(?=(\d{3})+(?!\d))/g,'.')+' $'; }
+function importe(u){ return dolares(Math.abs(u)).replace(/^[+−]/,''); }
+function riesgoOp(t){ const r=Number(t.riesgo); return isFinite(r) && r>0 ? r : null; }
+function stopOp(t){ const s=Number(t.stop); return isFinite(s) && s>0 ? s : null; }
+function rOp(t){ const r=riesgoOp(t); return r ? usdOp(t)/r : null; }
+function minutosHora(s){ const m=/^(\d{1,2}):(\d{2})$/.exec(String(s||'')); return m ? Number(m[1])*60+Number(m[2]) : null; }
+function hhmm(m){ return String(Math.floor(m/60)%24).padStart(2,'0')+':'+String(m%60).padStart(2,'0'); }
+function horaEn(ts,zona){
+  try{
+    const o={}; new Intl.DateTimeFormat('en-GB',{timeZone:zona||undefined,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(ts)).forEach(p=>{ o[p.type]=p.value; });
+    return (parseInt(o.hour,10)%24)*60+parseInt(o.minute,10);
+  }catch(e){ const d=new Date(ts); return d.getHours()*60+d.getMinutes(); }
+}
+function diaDeFecha(f){ const a=String(f).split('-').map(Number); return new Date(Date.UTC(a[0],a[1]-1,a[2])).getUTCDay(); }
+function sumarDias(f,n){ const a=String(f).split('-').map(Number); const d=new Date(Date.UTC(a[0],a[1]-1,a[2]+n)); return d.toISOString().slice(0,10); }
+function ordenarDia(ts){ return ts.every(t=>t.hEnt) ? ts.slice().sort((a,b)=>a.hEnt-b.hEnt) : ts.slice(); }
+function huellaOps(ts){
+  const s=JSON.stringify(ts.map(t=>[t.id,Math.round(usdOp(t)),t.setup||'',t.nota||'',t.ct,t.hEnt||0,t.inst,stopOp(t)||0,riesgoOp(t)||0]).sort((a,b)=>String(a[0]).localeCompare(String(b[0]))));
+  let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return (h>>>0).toString(36);
+}
+
+/* Comprueba un día de operaciones contra el plan. Devuelve una regla por cada norma que el alumno ha puesto en su plan. */
+function evaluarDia(plan,ops,zona){
+  const p=planNormal(plan), o=ordenarDia(ops), R=[], z=zona||p.zona||undefined;
+  const usd=o.map(usdOp); let c=0; const acum=usd.map(u=>(c+=u)); const neto=c;
+  const cual=t=>t.hEnt ? 'la de las '+hhmm(horaEn(t.hEnt,z)) : 'la '+(o.indexOf(t)+1)+'ª del día';
+  const lista=ts=>ts.slice(0,3).map(cual).join(', ')+(ts.length>3?' y '+(ts.length-3)+' más':'');
+  const regla=(id,ok,detalle,malas)=>R.push({id,nombre:PLAN_REGLAS[id],ok,detalle,ops:(malas||[]).map(t=>t.id)});
+
+  if(p.perdidaMaxDia){
+    const L=p.perdidaMaxDia, k=acum.findIndex(v=>v<=-L+1e-9), despues=k>=0?o.slice(k+1):[];
+    if(despues.length) regla('perdida',false,`Tocaste tu pérdida máxima de ${dolares(-L)} y seguiste operando: ${plural(despues.length,'operación','operaciones')} más. Cerraste el día en ${dolares(neto)}.`,despues);
+    else if(neto<-L*1.1) regla('perdida',false,`Cerraste el día en ${dolares(neto)}, pasado tu límite de ${dolares(-L)}.`,o.slice(-1));
+    else if(k>=0) regla('perdida',true,`Llegaste a tu pérdida máxima (${dolares(-L)}) y paraste.`);
+    else regla('perdida',true,Math.min(...acum)<0?`El peor momento del día fue ${dolares(Math.min(...acum))}, dentro de tu límite de ${dolares(-L)}.`:`El día no llegó a estar en negativo. Tu límite: ${dolares(-L)}.`);
+  }
+  if(p.riesgoMaxOp){
+    // Cuenta el riesgo que apuntó (stop × contratos) y, además, lo que perdió de verdad
+    const L=p.riesgoMaxOp, altas=o.filter(t=>riesgoOp(t)>L*1.001), perdidas=o.filter(t=>!altas.includes(t) && usdOp(t)<-L*1.1);
+    const txt=[];
+    if(altas.length) txt.push(`Arriesgaste más de ${importe(L)} en ${lista(altas)} (hasta ${importe(Math.max(...altas.map(riesgoOp)))}).`);
+    if(perdidas.length) txt.push(`${perdidas.length===1?'Una operación perdió':plural(perdidas.length,'operación','operaciones')+' perdieron'} más de ${importe(L)} (${lista(perdidas)}). La peor: ${dolares(Math.min(...perdidas.map(usdOp)))}.`);
+    if(txt.length) regla('riesgo',false,txt.join(' '),altas.concat(perdidas));
+    else regla('riesgo',true,o.some(riesgoOp)?`Todas las entradas con un riesgo de ${importe(L)} o menos.`:`Ninguna operación perdió más de ${importe(L)}.`);
+  }
+  if(p.conStop){
+    // Sin stop apuntado, o perdiendo bastante más de lo que arriesgaba (señal de que movió el stop)
+    const sin=o.filter(t=>!stopOp(t)), movido=o.filter(t=>stopOp(t) && riesgoOp(t) && usdOp(t)<-riesgoOp(t)*1.25-5);
+    const txt=[];
+    if(sin.length) txt.push(`${sin.length===1?'Una operación no tiene':plural(sin.length,'operación','operaciones')+' no tienen'} el stop apuntado (${lista(sin)}).`);
+    if(movido.length) txt.push(`En ${lista(movido)} perdiste más de lo que arriesgabas (${movido.map(t=>dolares(usdOp(t))+' con '+importe(riesgoOp(t))+' de riesgo').slice(0,2).join('; ')}): ¿moviste el stop?`);
+    if(txt.length) regla('stop',false,txt.join(' '),sin.concat(movido));
+    else regla('stop',true,'Todas las operaciones con su stop, y ninguna perdió más de lo arriesgado.');
+  }
+  if(p.maxContratos){
+    const malas=o.filter(t=>Number(t.ct)>p.maxContratos);
+    if(malas.length) regla('contratos',false,`Entraste con más de ${plural(p.maxContratos,'contrato','contratos')} en ${lista(malas)} (hasta ${Math.max(...malas.map(t=>Number(t.ct)))}).`,malas);
+    else regla('contratos',true,`Todas las entradas con ${p.maxContratos===1?'1 contrato':'un máximo de '+p.maxContratos+' contratos'}.`);
+  }
+  if(p.maxOps){
+    if(o.length>p.maxOps) regla('ops',false,`Hiciste ${plural(o.length,'operación','operaciones')}; tu máximo es ${p.maxOps}.`,o.slice(p.maxOps));
+    else regla('ops',true,`${plural(o.length,'operación','operaciones')} de un máximo de ${p.maxOps}.`);
+  }
+  if(p.maxPerdidasSeguidas){
+    const K=p.maxPerdidasSeguidas; let r=0, corte=-1;
+    for(let i=0;i<o.length;i++){ if(usd[i]<0){ r++; if(r>=K){ corte=i; break; } } else r=0; }
+    const despues=corte>=0?o.slice(corte+1):[];
+    if(despues.length) regla('racha',false,`Tras ${K} ${K===1?'pérdida':'pérdidas seguidas'} hiciste ${plural(despues.length,'operación','operaciones')} más.`,despues);
+    else regla('racha',true,corte>=0?`Llegaste a ${K} ${K===1?'pérdida':'pérdidas seguidas'} y paraste.`:`No llegaste a ${K} ${K===1?'pérdida':'pérdidas seguidas'}.`);
+  }
+  if(p.objetivoDia){
+    const k=acum.findIndex(v=>v>=p.objetivoDia-1e-9), despues=k>=0?o.slice(k+1):[];
+    if(despues.length) regla('objetivo',false,`Llegaste a tu objetivo de ${dolares(p.objetivoDia)} y seguiste operando: ${plural(despues.length,'operación','operaciones')} más. Cerraste en ${dolares(neto)}.`,despues);
+    else regla('objetivo',true,k>=0?`Objetivo de ${dolares(p.objetivoDia)} conseguido y a casa.`:`No llegaste al objetivo de ${dolares(p.objetivoDia)}; no aplica parar.`);
+  }
+  const ini=minutosHora(p.horaDesde), fin=minutosHora(p.horaHasta);
+  if(ini!=null && fin!=null){
+    const conHora=o.filter(t=>t.hEnt), dentro=m=>ini<=fin ? (m>=ini && m<=fin) : (m>=ini || m<=fin);
+    const malas=conHora.filter(t=>!dentro(horaEn(t.hEnt,z)));
+    const sin=o.length-conHora.length;
+    if(malas.length) regla('horario',false,`Fuera de tu horario (${p.horaDesde} a ${p.horaHasta}): ${lista(malas)}.`,malas);
+    else if(conHora.length) regla('horario',true,`Todas las entradas dentro de tu horario (${p.horaDesde} a ${p.horaHasta}).`+(sin?` ${plural(sin,'operación','operaciones')} sin hora no se han podido comprobar.`:''));
+  }
+  if(p.dias.length && p.dias.length<7 && o.length){
+    const d=diaDeFecha(o[0].fecha);
+    if(!p.dias.includes(d)) regla('dias',false,`Operaste un ${PLAN_DIAS_L[d]}, que no está entre tus días de trading.`,o);
+    else regla('dias',true,`El ${PLAN_DIAS_L[d]} es día de trading en tu plan.`);
+  }
+  if(p.instrumentos.length){
+    const malas=o.filter(t=>!p.instrumentos.includes(t.inst));
+    if(malas.length) regla('instrumentos',false,`Operaste ${Array.from(new Set(malas.map(t=>t.inst))).join(', ')}, fuera de tus instrumentos (${p.instrumentos.join(', ')}).`,malas);
+    else regla('instrumentos',true,`Solo instrumentos de tu plan (${p.instrumentos.join(', ')}).`);
+  }
+  if(p.setups.length){
+    const malas=o.filter(t=>t.setup && !p.setups.includes(t.setup));
+    if(malas.length) regla('setups',false,`${malas.length===1?'Una entrada':plural(malas.length,'entrada','entradas')} con setups fuera de tu plan: ${Array.from(new Set(malas.map(t=>t.setup))).join(', ')}.`,malas);
+    else regla('setups',true,o.some(t=>t.setup)?'Todas las entradas con setups de tu plan.':'Sin setups apuntados todavía.');
+  }
+  if(p.registro){
+    const malas=o.filter(t=>!t.setup || !String(t.nota||'').trim());
+    if(malas.length) regla('registro',false,`${malas.length===1?'Una operación está':plural(malas.length,'operación','operaciones')+' están'} sin setup o sin nota.`,malas);
+    else regla('registro',true,'Todas las operaciones con su setup y su nota.');
+  }
+  const ok=R.filter(r=>r.ok).length;
+  return {fecha:o.length?o[0].fecha:null,n:o.length,neto,reglas:R,cumplidas:ok,aplicables:R.length,ok:R.every(r=>r.ok),pct:R.length?ok/R.length:null};
+}
+
+/* Todos los días con operaciones entre dos fechas (incluidas) */
+function evaluarPeriodo(plan,trades,desde,hasta,zona){
+  const por={};
+  trades.forEach(t=>{ if(!t.fecha || t.fecha<desde || t.fecha>hasta) return; (por[t.fecha]=por[t.fecha]||[]).push(t); });
+  const dias=Object.keys(por).sort().map(f=>evaluarDia(plan,por[f],zona));
+  const rotas={}; dias.forEach(d=>d.reglas.forEach(r=>{ if(!r.ok) rotas[r.id]=(rotas[r.id]||0)+1; }));
+  const ok=dias.filter(d=>d.ok).length, reg=dias.reduce((s,d)=>s+d.aplicables,0), cum=dias.reduce((s,d)=>s+d.cumplidas,0);
+  return {dias,diasOk:ok,pctDias:dias.length?ok/dias.length:null,pctReglas:reg?cum/reg:null,rotas,neto:dias.reduce((s,d)=>s+d.neto,0),n:dias.reduce((s,d)=>s+d.n,0)};
+}
+
+/* El plan en texto, para el agente de IA */
+function planComoTexto(plan){
+  const p=planNormal(plan), l=[];
+  if(p.perdidaMaxDia) l.push(`Pérdida máxima diaria: ${p.perdidaMaxDia} $`);
+  if(p.riesgoMaxOp) l.push(`Riesgo máximo por operación: ${p.riesgoMaxOp} $`);
+  if(p.conStop) l.push('Stop puesto y apuntado en cada operación, sin moverlo en contra');
+  if(p.maxContratos) l.push(`Contratos máximos por operación: ${p.maxContratos}`);
+  if(p.maxOps) l.push(`Operaciones máximas al día: ${p.maxOps}`);
+  if(p.maxPerdidasSeguidas) l.push(`Parar tras ${p.maxPerdidasSeguidas} pérdidas seguidas`);
+  if(p.objetivoDia) l.push(`Parar al llegar a +${p.objetivoDia} $ en el día`);
+  if(p.horaDesde && p.horaHasta) l.push(`Horario de entradas: de ${p.horaDesde} a ${p.horaHasta} (hora del alumno)`);
+  if(p.dias.length && p.dias.length<7) l.push(`Días de trading: ${p.dias.map(d=>PLAN_DIAS_L[d]).join(', ')}`);
+  if(p.instrumentos.length) l.push(`Instrumentos permitidos: ${p.instrumentos.join(', ')}`);
+  if(p.setups.length) l.push(`Setups permitidos: ${p.setups.join(', ')}`);
+  if(p.registro) l.push('Apuntar setup y nota en cada operación');
+  return l;
+}
+
+/* ---------- Importar operaciones del export de ATAS (Excel o CSV). También entiende otros diarios con columnas parecidas ---------- */
+const IMP_COLS={
+  cuenta:['account','cuenta','account name','nombre de cuenta'],
+  inst:['instrument','instrumento','symbol','simbolo','security','contract','contrato','ticker','market','mercado'],
+  tEnt:['open time','opentime','time open','entry time','entrytime','open date','entry date','hora de apertura','hora apertura','tiempo de apertura','fecha de apertura','fecha apertura','apertura','hora de entrada','fecha de entrada','entrada'],
+  pEnt:['open price','openprice','entry price','entryprice','avg entry price','precio de apertura','precio apertura','precio de entrada','precio entrada'],
+  vEnt:['open volume','openvolume','volumen de apertura','volumen apertura','qty','quantity','cantidad','size','volume','volumen','contracts','contratos','lots'],
+  tSal:['close time','closetime','time close','exit time','exittime','close date','exit date','hora de cierre','hora cierre','tiempo de cierre','fecha de cierre','fecha cierre','cierre','hora de salida','fecha de salida','salida'],
+  pSal:['close price','closeprice','exit price','exitprice','avg exit price','precio de cierre','precio cierre','precio de salida','precio salida'],
+  vSal:['close volume','closevolume','volumen de cierre','volumen cierre'],
+  pnl:['pnl','p l','net pnl','net p l','pnl net','profit','net profit','profit loss','realized pnl','realized p l','beneficio','ganancia','ganancias','resultado','pyg','p y g','pnl $','pnl usd'],
+  pnlPts:['price pnl','pnl price','pnl precio','pnl en precio'],
+  ticks:['profit ticks','ticks','pnl ticks','pnl in ticks','beneficio ticks','ticks de beneficio'],
+  com:['commission','commissions','comission','comision','comisiones','fees','fee','comisión','comisiones pagadas'],
+  coment:['comment','comments','comentario','comentarios','note','notes','nota','notas'],
+  dir:['direction','side','direccion','dirección','sentido','lado','market pos','market position','position','posicion','buy sell','b s','action','accion','operation','operacion'],
+  tiempo:['time','hora','date','fecha','date time','datetime','fecha hora','timestamp','fill time','execution time'],
+  precio:['price','precio','fill price','avg price','avgprice','precio medio'],
+  tBuy:['boughttimestamp','bought timestamp'], tSell:['soldtimestamp','sold timestamp'],
+  pBuy:['buyprice','buy price'], pSell:['sellprice','sell price']
+};
+const IMP_RAICES=['MNQ','MES','MYM','M2K','NQ','ES','YM','RTY','MGC','GC','MCL','CL','SIL','SI','6E','6B','ZN','ZB','HG','NG','RB'];
+const IMP_ALIAS={ENQ:'NQ',EP:'ES'};
+function impNorm(s){ return String(s==null?'':s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9$]+/g,' ').trim(); }
+function impNum(v){
+  if(v==null || v==='') return null;
+  if(typeof v==='number') return isFinite(v)?v:null;
+  let s=String(v).trim().replace(/[\s$€]/g,'').replace(/[−–]/g,'-');
+  let neg=false; if(/^\(.*\)$/.test(s)){ neg=true; s=s.slice(1,-1); }
+  if(!s) return null;
+  const c=s.lastIndexOf(','), p=s.lastIndexOf('.');
+  if(c>-1 && p>-1){ if(c>p) s=s.replace(/\./g,'').replace(',','.'); else s=s.replace(/,/g,''); }
+  else if(c>-1) s=s.split(',').length>2 ? s.replace(/,/g,'') : s.replace(',','.');
+  const n=Number(s); return isFinite(n)?(neg?-n:n):null;
+}
+/* Fecha y hora "de pared": devuelve {y,mo,d,h,mi,s} sin zona horaria */
+function impFechaHora(v,orden){
+  if(v==null || v==='') return null;
+  if(v instanceof Date && !isNaN(v)) return {y:v.getFullYear(),mo:v.getMonth()+1,d:v.getDate(),h:v.getHours(),mi:v.getMinutes(),s:v.getSeconds()};
+  if(typeof v==='number' && v>20000 && v<80000){ const d=new Date(Math.round((v-25569)*864e5)); return {y:d.getUTCFullYear(),mo:d.getUTCMonth()+1,d:d.getUTCDate(),h:d.getUTCHours(),mi:d.getUTCMinutes(),s:d.getUTCSeconds()}; }
+  const s=String(v).trim(); let m;
+  const hora=t=>{ const x=/(\d{1,2}):(\d{2})(?::(\d{2}))?(?:[.,]\d+)?\s*([ap]\.?\s?m\.?)?/i.exec(t||''); if(!x) return {h:0,mi:0,s:0}; let h=Number(x[1]); const ap=(x[4]||'').toLowerCase(); if(ap.startsWith('p') && h<12) h+=12; if(ap.startsWith('a') && h===12) h=0; return {h,mi:Number(x[2]),s:Number(x[3]||0)}; };
+  if((m=/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[T\s]+(.*))?$/.exec(s))) return Object.assign({y:+m[1],mo:+m[2],d:+m[3]},hora(m[4]));
+  if((m=/^(\d{1,2})[./-](\d{1,2})[./-](\d{2,4})(?:[,\s]+(.*))?$/.exec(s))){
+    let a=+m[1], b=+m[2], y=+m[3]; if(y<100) y+=2000;
+    const mdy=orden==='md' || (a<=12 && b>12);
+    return Object.assign(mdy && !(a>12)?{y,mo:a,d:b}:{y,mo:b,d:a},hora(m[4]));
+  }
+  const t=Date.parse(s); if(!isNaN(t)){ const d=new Date(t); return {y:d.getFullYear(),mo:d.getMonth()+1,d:d.getDate(),h:d.getHours(),mi:d.getMinutes(),s:d.getSeconds()}; }
+  return null;
+}
+function impOrdenFechas(valores){
+  let dm=0, md=0;
+  valores.forEach(v=>{ if(typeof v!=='string') return; const m=/^(\d{1,2})[./-](\d{1,2})[./-]\d{2,4}/.exec(v.trim()); if(!m) return; if(+m[1]>12) dm++; else if(+m[2]>12) md++; else if(v.indexOf('.')>-1) dm+=0.01; });
+  return md>dm?'md':'dm';
+}
+function impEpoch(w,zona){ return zona==='utc' ? Date.UTC(w.y,w.mo-1,w.d,w.h,w.mi,w.s) : new Date(w.y,w.mo-1,w.d,w.h,w.mi,w.s).getTime(); }
+function impPared(w){ return w.y+'-'+String(w.mo).padStart(2,'0')+'-'+String(w.d).padStart(2,'0')+' '+String(w.h).padStart(2,'0')+':'+String(w.mi).padStart(2,'0')+':'+String(w.s).padStart(2,'0'); }
+function impFechaLocal(ts){ const d=new Date(ts); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function impInst(raw){
+  const s=String(raw||'').toUpperCase().replace(/^[A-Z]\.US\./,'').replace(/[^A-Z0-9]/g,' ').trim();
+  const pal=s.split(/\s+/)[0]||'';
+  for(const r of Object.keys(IMP_ALIAS)) if(pal.startsWith(r) && /^[FGHJKMNQUVXZ]?\d{0,4}$/.test(pal.slice(r.length))) return IMP_ALIAS[r];
+  for(const r of IMP_RAICES) if(pal.startsWith(r) && /^[FGHJKMNQUVXZ]?\d{0,4}$/.test(pal.slice(r.length))) return r;
+  return (pal.replace(/[FGHJKMNQUVXZ]\d{1,4}$/,'')||pal||'?').slice(0,10);
+}
+function impDir(v){
+  const s=impNorm(v);
+  if(/^(buy|b|long|l|compra|comprar|largo|bought|bot)$/.test(s) || /\b(buy|long|compra|largo)\b/.test(s)) return 'L';
+  if(/^(sell|s|short|c|venta|vender|corto|sold|sld)$/.test(s) || /\b(sell|short|venta|corto)\b/.test(s)) return 'C';
+  return null;
+}
+/* ET (Nueva York) para saber la sesión */
+function impSesion(ts){
+  let h;
+  try{ h=parseInt(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'2-digit',hourCycle:'h23'}).format(new Date(ts)),10)%24; }catch(e){ h=new Date(ts).getUTCHours()-5; }
+  if(h>=8 && h<17) return 'NY';
+  if(h>=2 && h<8) return 'Londres';
+  return 'Asia';
+}
+/* Busca la fila de cabecera y qué columna es cada dato */
+function impTabla(filas){
+  let mejor=null;
+  for(let i=0;i<Math.min(filas.length,20);i++){
+    const f=filas[i]||[], mapa={}; let n=0;
+    f.forEach((c,j)=>{ const k=impNorm(c); if(!k) return; for(const campo in IMP_COLS){ if(mapa[campo]==null && IMP_COLS[campo].includes(k)){ mapa[campo]=j; n++; break; } } });
+    if(n>=3 && (!mejor || n>mejor.n)) mejor={fila:i,mapa,n};
+  }
+  if(!mejor) return null;
+  const m=mejor.mapa;
+  if(m.tBuy!=null && m.tSell!=null && m.pBuy!=null && m.pSell!=null) mejor.tipo='tradovate';
+  else if(m.tEnt!=null && m.tSal!=null && (m.pEnt!=null || m.pnl!=null)) mejor.tipo='journal';
+  else if(m.tiempo!=null && m.precio!=null && m.dir!=null && m.vEnt!=null) mejor.tipo='ejecuciones';
+  else return null;
+  return mejor;
+}
+function impValorPunto(inst){ return typeof VALOR_PUNTO!=='undefined' && VALOR_PUNTO[inst] ? VALOR_PUNTO[inst] : null; }
+function impTrade(o){
+  const pts=(o.pSal!=null && o.pEnt!=null) ? Math.round((o.pSal-o.pEnt)*(o.dir==='L'?1:-1)*1e4)/1e4 : null;
+  let usd=o.usd; if(usd==null && pts!=null && impValorPunto(o.inst)) usd=pts*impValorPunto(o.inst)*o.ct;
+  if(usd==null || !isFinite(usd)) return null;
+  const t={fecha:impFechaLocal(o.hEnt),sesion:impSesion(o.hEnt),inst:o.inst,dir:o.dir,ct:o.ct,usd:Math.round(usd*100)/100,
+    hEnt:o.hEnt,hSal:o.hSal||null,pEnt:o.pEnt,pSal:o.pSal,com:o.com?Math.round(o.com*100)/100:0,
+    setup:'',nota:o.nota||'',comentario:'',ejemplo:false,origen:'atas',clave:o.clave};
+  if(pts!=null) t.pts=pts;
+  if(o.cuenta) t.cuenta=String(o.cuenta).slice(0,40);
+  return t;
+}
+function impDesdeJournal(filas,tab,zona){
+  const m=tab.mapa, out=[], datos=filas.slice(tab.fila+1);
+  const orden=impOrdenFechas(datos.map(f=>f[m.tEnt]));
+  const v=(f,c)=>m[c]==null?null:f[m[c]];
+  datos.forEach(f=>{
+    if(!f) return;
+    const wE=impFechaHora(v(f,'tEnt'),orden); if(!wE) return;
+    const wS=impFechaHora(v(f,'tSal'),orden);
+    const pEnt=impNum(v(f,'pEnt')), pSal=impNum(v(f,'pSal')), volE=impNum(v(f,'vEnt')), volS=impNum(v(f,'vSal'));
+    const pnl=impNum(v(f,'pnl')), ref=impNum(v(f,'pnlPts'))!=null?impNum(v(f,'pnlPts')):(impNum(v(f,'ticks'))!=null?impNum(v(f,'ticks')):pnl);
+    const raw=v(f,'inst'); if(raw==null || String(raw).trim()==='') return;
+    let dir=m.dir!=null?impDir(v(f,'dir')):null;
+    if(!dir && volE!=null && volE<0) dir='C';
+    if(!dir && pEnt!=null && pSal!=null && pSal!==pEnt && ref) dir=Math.sign(pSal-pEnt)===Math.sign(ref)?'L':'C';
+    if(!dir) dir='L';
+    const ct=Math.abs(volE||volS||1);
+    const hEnt=impEpoch(wE,zona), hSal=wS?impEpoch(wS,zona):null;
+    const t=impTrade({cuenta:v(f,'cuenta'),inst:impInst(raw),dir,ct,pEnt,pSal,usd:pnl,hEnt,hSal,com:Math.abs(impNum(v(f,'com'))||0),nota:v(f,'coment')?String(v(f,'coment')).slice(0,500):'',
+      clave:[v(f,'cuenta')||'',String(raw).trim(),impPared(wE),pEnt,wS?impPared(wS):'',pSal].join('|')});
+    if(t) out.push(t);
+  });
+  return out;
+}
+function impDesdeTradovate(filas,tab,zona){
+  const m=tab.mapa, out=[], datos=filas.slice(tab.fila+1);
+  const orden=impOrdenFechas(datos.map(f=>f[m.tBuy]));
+  datos.forEach(f=>{
+    if(!f) return;
+    const wB=impFechaHora(f[m.tBuy],orden), wS=impFechaHora(f[m.tSell],orden); if(!wB || !wS) return;
+    const tB=impEpoch(wB,zona), tS=impEpoch(wS,zona), dir=tB<=tS?'L':'C';
+    const pB=impNum(f[m.pBuy]), pS=impNum(f[m.pSell]), raw=m.inst!=null?f[m.inst]:'';
+    const t=impTrade({cuenta:m.cuenta!=null?f[m.cuenta]:'',inst:impInst(raw),dir,ct:Math.abs(impNum(m.vEnt!=null?f[m.vEnt]:1)||1),
+      pEnt:dir==='L'?pB:pS,pSal:dir==='L'?pS:pB,usd:m.pnl!=null?impNum(f[m.pnl]):null,hEnt:Math.min(tB,tS),hSal:Math.max(tB,tS),com:0,
+      clave:[m.cuenta!=null?f[m.cuenta]:'',String(raw).trim(),impPared(wB),pB,impPared(wS),pS].join('|')});
+    if(t) out.push(t);
+  });
+  return out;
+}
+/* Ejecuciones sueltas: reconstruye cada operación (de plano a plano) */
+function impDesdeEjecuciones(filas,tab,zona){
+  const m=tab.mapa, datos=filas.slice(tab.fila+1), orden=impOrdenFechas(datos.map(f=>f[m.tiempo]));
+  const ej=[];
+  datos.forEach((f,i)=>{
+    if(!f) return; const w=impFechaHora(f[m.tiempo],orden), dir=impDir(f[m.dir]), q=Math.abs(impNum(f[m.vEnt])||0), p=impNum(f[m.precio]);
+    if(!w || !dir || !q || p==null) return;
+    const raw=m.inst!=null?String(f[m.inst]||'').trim():'';
+    ej.push({i,ts:impEpoch(w,zona),pared:impPared(w),dir,q,p,raw,inst:impInst(raw),cuenta:m.cuenta!=null?String(f[m.cuenta]||''):'',com:Math.abs(impNum(m.com!=null?f[m.com]:0)||0)});
+  });
+  const grupos={}; ej.forEach(e=>{ (grupos[e.cuenta+'|'+e.raw]=grupos[e.cuenta+'|'+e.raw]||[]).push(e); });
+  const out=[];
+  Object.values(grupos).forEach(g=>{
+    g.sort((a,b)=>a.ts-b.ts||a.i-b.i);
+    let pos=0, op=null;
+    const cerrar=()=>{
+      const qE=op.ent.reduce((s,x)=>s+x.q,0), qS=op.sal.reduce((s,x)=>s+x.q,0);
+      const pE=op.ent.reduce((s,x)=>s+x.p*x.q,0)/qE, pS=op.sal.reduce((s,x)=>s+x.p*x.q,0)/qS, vp=impValorPunto(op.inst);
+      const t=impTrade({cuenta:op.cuenta,inst:op.inst,dir:op.dir,ct:op.max,pEnt:Math.round(pE*1e4)/1e4,pSal:Math.round(pS*1e4)/1e4,
+        usd:vp?(pS-pE)*(op.dir==='L'?1:-1)*vp*qS:null,hEnt:op.ent[0].ts,hSal:op.sal[op.sal.length-1].ts,com:op.com,
+        clave:[op.cuenta,op.raw,op.ent[0].pared,'ej',op.sal[op.sal.length-1].pared].join('|')});
+      if(t) out.push(t); op=null;
+    };
+    g.forEach(e=>{
+      let q=e.q; const s=e.dir==='L'?1:-1;
+      while(q>0){
+        if(pos===0){ op={dir:e.dir,ent:[],sal:[],com:0,max:0,inst:e.inst,raw:e.raw,cuenta:e.cuenta}; }
+        if(Math.sign(pos)===s || pos===0){ op.ent.push({p:e.p,q,ts:e.ts,pared:e.pared}); op.com+=e.com*q/e.q; pos+=s*q; op.max=Math.max(op.max,Math.abs(pos)); q=0; }
+        else { const c=Math.min(q,Math.abs(pos)); op.sal.push({p:e.p,q:c,ts:e.ts,pared:e.pared}); op.com+=e.com*c/e.q; pos+=s*c; q-=c; if(pos===0) cerrar(); }
+      }
+    });
+  });
+  return out.sort((a,b)=>a.hEnt-b.hEnt);
+}
+/* Entrada: hojas [{nombre, filas:[[...]]}]. Salida: operaciones listas para el diario */
+function importarHojas(hojas,zona){
+  const tabs=hojas.map(h=>({h,t:impTabla(h.filas||[])})).filter(x=>x.t);
+  const pick=tipo=>tabs.find(x=>x.t.tipo===tipo);
+  const jr=pick('journal'), tv=pick('tradovate'), ex=pick('ejecuciones');
+  let ops=[], fuente='';
+  if(jr){ ops=impDesdeJournal(jr.h.filas,jr.t,zona); fuente='journal'; }
+  else if(tv){ ops=impDesdeTradovate(tv.h.filas,tv.t,zona); fuente='tradovate'; }
+  else if(ex){ ops=impDesdeEjecuciones(ex.h.filas,ex.t,zona); fuente='ejecuciones'; }
+  if(jr && ex && ex.t.mapa.com!=null && !ops.some(t=>t.com)){
+    const e=impDesdeEjecuciones(ex.h.filas,ex.t,zona);
+    ops.forEach(t=>{ const x=e.find(y=>y.inst===t.inst && Math.abs(y.hEnt-t.hEnt)<2000 && (!t.cuenta || !y.cuenta || y.cuenta===t.cuenta)); if(x) t.com=x.com; });
+  }
+  ops.sort((a,b)=>a.hEnt-b.hEnt);
+  return {ops,fuente,cuentas:Array.from(new Set(ops.map(t=>t.cuenta||''))).filter(Boolean)};
+}
+/* CSV sencillo (coma, punto y coma o tabulador, con comillas) */
+function impCSV(txt){
+  txt=String(txt).replace(/^﻿/,'');
+  const prim=txt.split(/\r?\n/).slice(0,5).join('\n');
+  const sep=[';','\t',','].map(s=>[s,(prim.match(new RegExp(s==='\t'?'\t':'\\'+s,'g'))||[]).length]).sort((a,b)=>b[1]-a[1])[0][0];
+  const filas=[]; let f=[], c='', q=false;
+  for(let i=0;i<txt.length;i++){
+    const ch=txt[i];
+    if(q){ if(ch==='"'){ if(txt[i+1]==='"'){ c+='"'; i++; } else q=false; } else c+=ch; continue; }
+    if(ch==='"') q=true;
+    else if(ch===sep){ f.push(c); c=''; }
+    else if(ch==='\n' || ch==='\r'){ if(ch==='\r' && txt[i+1]==='\n') i++; f.push(c); filas.push(f); f=[]; c=''; }
+    else c+=ch;
+  }
+  if(c!=='' || f.length){ f.push(c); filas.push(f); }
+  return filas.filter(r=>r.some(x=>String(x).trim()!==''));
+}
+
+/* ---------- Diario profesional: secciones, importar de ATAS, estadísticas y plan con agente de IA ---------- */
+const SIN_SETUP='Sin setup';
+const ZONA_NAV=(()=>{ try{ return Intl.DateTimeFormat().resolvedOptions().timeZone||'Europe/Madrid'; }catch(e){ return 'Europe/Madrid'; } })();
+let subDiario='resumen';
+let informesCache=null, informesDe=null, iaInfo={ia:false,restantes:null}, analizando=null, diaPlanSel=null;
+let impEstado=null, impFoco=null, xlsxP=null;
+let editandoId=null, capturaOriginal=null, cajonModo='nueva', riesgoManual=false;
+let tipCol=null;
+function ponerTip(c){ const tip=document.getElementById('tip-g'); if(!tip || !c || !document.body.contains(c)){ if(tip) tip.hidden=true; return; } tipCol=c; const r=c.getBoundingClientRect(); tip.style.left=Math.max(90,Math.min(innerWidth-90,r.left+r.width/2))+'px'; tip.style.top=r.top+'px'; }
+window.addEventListener('scroll',()=>{ const t=document.getElementById('tip-g'); if(t && !t.hidden) ponerTip(tipCol); },{passive:true});
+ICO.importar='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v9M6.5 8.5L10 12l3.5-3.5"/><path d="M3.5 13v2.5a1.5 1.5 0 001.5 1.5h10a1.5 1.5 0 001.5-1.5V13"/></svg>';
+ICO.hoja='<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h11l6 6v18a2 2 0 01-2 2H8a2 2 0 01-2-2V5a2 2 0 012-2z"/><path d="M19 3v6h6"/><path d="M10 15h12M10 20h12M15 15v10"/></svg>';
+ICO.chispa='<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 1.5l1.9 5.1 5.1 1.9-5.1 1.9L10 15.5l-1.9-5.1L3 8.5l5.1-1.9z"/><path d="M16 13l.8 2.2 2.2.8-2.2.8L16 19l-.8-2.2-2.2-.8 2.2-.8z" opacity=".7"/></svg>';
+
+function nomSetup(t){ return t.setup||SIN_SETUP; }
+function zonaAlumno(){ const p=state.plan; return (p && p.zona) || ZONA_NAV; }
+function horaOp(t){ return t.hEnt ? hhmm(horaEn(t.hEnt,zonaAlumno())) : ''; }
+function fmtR(r){ return r==null || !isFinite(r) ? MENOS : (r>0.0499?'+':r<-0.0499?'−':'')+nf(Math.abs(r),1,1)+' R'; }
+function tsLocal(f,h){ const a=String(f).split('-').map(Number), b=String(h).split(':').map(Number); if(a.length<3 || b.length<2 || b.some(isNaN)) return null; const d=new Date(a[0],a[1]-1,a[2],b[0],b[1]); return isNaN(d) ? null : d.getTime(); }
+/* Riesgo de la operación: stop × valor del punto × contratos, salvo que el alumno lo haya escrito a mano */
+function riesgoAuto(){ const st=num($('#f-stop').value), ct=parseInt($('#f-ct').value,10)||1, inst=(($('input[name="f-inst"]:checked')||{}).value)||'NQ', v=(INSTR[inst]||INSTR.NQ).v; return st>0 ? Math.round(st*v*ct*100)/100 : null; }
+function autoRiesgo(){ const i=$('#f-riesgo'); if(!i || riesgoManual) return; const r=riesgoAuto(); i.value=r==null?'':String(r).replace('.',','); }
+function precio(n){ return n==null || !isFinite(n) ? MENOS : nf(Number(n),0,2); }
+function fechaLarga(s){ const d=new Date(s); return isNaN(d) ? '' : d.getDate()+' '+MESES[d.getMonth()]+(d.getFullYear()!==new Date().getFullYear()?' '+d.getFullYear():''); }
+function rutaBase(){ return REV ? '#alumnos/'+encodeURIComponent(REV.id) : '#diario'; }
+function hrefSub(s){ return rutaBase()+(s==='resumen'?'':'/'+s); }
+function diasOperados(){ return Array.from(new Set(state.trades.map(t=>t.fecha))).sort(); }
+function incompletas(){ const st=planNormal(state.plan).conStop; return state.trades.filter(t=>t.origen==='atas' && (!t.setup || !String(t.nota||'').trim() || (st && !stopOp(t)))).sort((a,b)=>(b.hEnt||0)-(a.hEnt||0)); }
+function refrescarDiario(){ if(ruta!=='diario' && !(ruta==='alumnos' && REV)) return; if(subDiario==='resumen' && $('#hero-neto')) pintarDatos(); else renderDiario(); }
+async function asegurarGuardado(){ if(SERVIDOR && tGuardar){ clearTimeout(tGuardar); tGuardar=null; await subirDatos(false); } }
+
+function cabDiario(){
+  const tabs=[['resumen','Resumen'],['estadisticas','Estadísticas'],['plan','Plan e IA']];
+  return `<header class="cab-modulo entra">
+    ${REV?`<div><a class="volver" href="#alumnos">${ICO.izq}Todos los alumnos</a><div class="rev-cab">${avatarR({discord_id:REV.id,nombre:REV.nombre,avatar_url:REV.avatar})}<h1>Diario de ${esc(REV.nombre)}</h1></div><p class="sub">Sus operaciones con la captura de ATAS, sus números y su plan. Abre una operación para dejarle tu comentario.</p></div>`
+    :`<div><h1>Diario de trading</h1><p class="sub">Cada operación con su captura de ATAS, su setup, su stop y su riesgo. Tus números y tu plan, revisado cada día por la IA.</p></div>
+    <div class="cab-acc"><button type="button" class="boton sec btn-imp" data-accion="importar">${ICO.importar}Importar de ATAS</button><button type="button" class="boton grande" data-accion="nueva" aria-keyshortcuts="N">${ICO.mas}Nueva operación<kbd class="kbd-b" aria-hidden="true">N</kbd></button></div>`}
+  </header>
+  <nav class="sub-tabs entra" aria-label="Secciones del diario">${tabs.map(([k,t])=>`<a href="${hrefSub(k)}"${subDiario===k?' aria-current="page"':''}>${t}${k==='plan'?'<span class="ia-chip" aria-hidden="true">IA</span>':''}</a>`).join('')}</nav>`;
+}
+function renderDiario(){
+  if(subDiario==='estadisticas'){ vista.innerHTML=vistaEstadisticas(); pintarEstadisticas(); }
+  else if(subDiario==='plan'){ vista.innerHTML=vistaPlan(); trasPlan(); }
+  else {
+    vista.innerHTML=vistaDiario(); pintarDatos();
+    const c=$('#curva');
+    if(c && window.ResizeObserver){ ro=new ResizeObserver(()=>{ const w=Math.round(c.clientWidth); if(w && Math.abs(w-anchoCurva)>2) pintarCurva(filtradas()); }); ro.observe(c); }
+  }
+  if(REV) $$('.rk-av img',vista).forEach(i=>i.addEventListener('error',()=>i.remove(),{once:true}));
+}
+
+/* Avisos del resumen: operaciones por completar y plan del último día */
+function ultimoDiaEval(){
+  const p=planNormal(state.plan); if(!planGuardado(p)) return null;
+  const dias=diasOperados(); if(!dias.length) return null;
+  const f=dias[dias.length-1];
+  return evaluarDia(p,state.trades.filter(t=>t.fecha===f),zonaAlumno());
+}
+function pintarAvisos(){
+  const el=$('#avisos-diario'); if(!el) return;
+  const out=[], inc=incompletas(), p=planNormal(state.plan);
+  if(inc.length && !REV) out.push(`<div class="aviso-d"><span class="aviso-ico">${ICO_I.alerta}</span><p><b>${inc.length===1?'Tienes 1 operación importada sin completar.':'Tienes '+inc.length+' operaciones importadas sin completar.'}</b> Ponles setup, stop y nota para que el agente de IA sepa por qué entraste y cuánto arriesgaste.</p><button type="button" class="boton sec peq" data-accion="completar-sig">Completar</button></div>`);
+  if(!planGuardado(p)){
+    if(!REV) out.push(`<div class="aviso-d plan"><span class="aviso-ico">${ICO.chispa}</span><p><b>Crea tu plan de trading.</b> Cada noche la IA revisará si lo has cumplido y te dirá qué corregir al día siguiente.</p><a class="boton peq" href="${hrefSub('plan')}">Crear mi plan</a></div>`);
+  } else {
+    const d=ultimoDiaEval();
+    if(d && d.aplicables){
+      const rotas=d.reglas.filter(r=>!r.ok).map(r=>r.nombre.toLowerCase());
+      out.push(`<a class="aviso-d plan ${d.ok?'ok':'ko'}" href="${hrefSub('plan')}"><span class="aviso-ico">${d.ok?ICO.check:ICO_I.alerta}</span><p><b>${cap(fechaTabla(d.fecha))}: ${d.ok?(REV?'cumplió':'cumpliste')+' todo el plan.':(REV?'cumplió ':'cumpliste ')+d.cumplidas+' de '+d.aplicables+' reglas.'}</b> ${d.ok?'Así se construye la consistencia.':'Rota: '+esc(rotas.join(', '))+'.'}</p><span class="aviso-ir">Ver el plan${ICO.chev}</span></a>`);
+    }
+  }
+  el.innerHTML=out.join('');
+  el.hidden=!out.length;
+}
+
+/* ---------- Importar de ATAS ---------- */
+function cargarXLSX(){
+  if(window.XLSX) return Promise.resolve(window.XLSX);
+  if(!xlsxP) xlsxP=new Promise((res,rej)=>{ const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload=()=>res(window.XLSX); s.onerror=()=>{ xlsxP=null; s.remove(); rej(new Error('xlsx')); }; document.head.appendChild(s); });
+  return xlsxP;
+}
+function abrirImp(origen){
+  impFoco=origen||document.activeElement; impEstado={paso:'inicio',zona:(impEstado&&impEstado.zona)||'local'};
+  $('#imp').hidden=false; document.body.style.overflow='hidden'; pintarImp();
+  setTimeout(()=>{ const b=$('#imp .subida'); if(b) b.focus(); },0);
+}
+function cerrarImp(){
+  $('#imp').hidden=true;
+  if($('#cajon').hidden && $('#visor').hidden && $('#paleta').hidden) document.body.style.overflow='';
+  if(impFoco && document.body.contains(impFoco)) impFoco.focus();
+}
+function impSeleccion(){
+  const e=impEstado, sel=e.ops.filter(t=>e.cuentas.length<2 || e.sel.has(t.cuenta||''));
+  return {sel,nuevos:sel.filter(t=>!e.claves.has(t.clave))};
+}
+function pintarImp(){
+  const c=$('#imp-cuerpo'), p=$('#imp-pie'), e=impEstado; if(!e) return;
+  if(e.paso==='inicio' || e.paso==='error'){
+    c.innerHTML=`<ol class="imp-pasos">
+        <li><span>1</span><p>En ATAS abre <b>Estadísticas</b> (Statistics) desde la ventana principal.</p></li>
+        <li><span>2</span><p>Pulsa <b>Historial</b> (History), elige las fechas y tu cuenta y pulsa <b>Cargar</b>.</p></li>
+        <li><span>3</span><p>En la rueda dentada de la derecha elige <b>Exportar estadísticas</b> (Export statistics) y guarda el Excel.</p></li>
+      </ol>
+      <div class="zona" id="imp-zona"><button type="button" class="subida" data-accion="imp-elegir">${ICO.hoja}<b>Arrastra aquí el Excel de ATAS</b><span>o pulsa para elegirlo. También vale el CSV de Tradovate o NinjaTrader.</span></button></div>
+      ${e.paso==='error'?`<p class="error" role="alert">${esc(e.error)}</p>`:''}
+      <div class="imp-tz"><label for="imp-tz">Las horas del archivo están en</label><select id="imp-tz"><option value="local"${e.zona==='local'?' selected':''}>tu hora (${esc(ZONA_NAV)})</option><option value="utc"${e.zona==='utc'?' selected':''}>UTC</option></select></div>
+      <p class="ayuda">Súbelo cuando quieras, aunque repitas días: las operaciones que ya están en tu diario no se duplican.</p>`;
+    p.innerHTML=`<span></span><button type="button" class="boton sec" data-accion="cerrar-imp">Cancelar</button>`;
+    const z=$('#imp-zona');
+    z.addEventListener('dragover',ev=>{ ev.preventDefault(); z.classList.add('arrastrando'); });
+    z.addEventListener('dragleave',()=>z.classList.remove('arrastrando'));
+    z.addEventListener('drop',ev=>{ ev.preventDefault(); z.classList.remove('arrastrando'); const f=ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files[0]; if(f) leerArchivoImp(f); });
+    return;
+  }
+  if(e.paso==='leyendo'){
+    c.innerHTML=`<div class="admin-carga" role="status"><div class="entrada-carga"><span></span><span></span><span></span></div><p>Leyendo ${esc(e.nombre||'el archivo')}…</p></div>`; p.innerHTML=''; return;
+  }
+  const {sel,nuevos}=impSeleccion(), rep=sel.length-nuevos.length, neto=nuevos.reduce((s,t)=>s+t.usd,0);
+  const fs=nuevos.map(t=>t.fecha).sort(), rango=fs.length?(fs[0]===fs[fs.length-1]?fechaCorta(fs[0]):fechaCorta(fs[0])+' – '+fechaCorta(fs[fs.length-1])):MENOS;
+  const filas=nuevos.slice().sort((a,b)=>b.hEnt-a.hEnt).slice(0,8).map(t=>`<tr><td>${fechaTabla(t.fecha)}</td><td>${hhmm(horaEn(t.hEnt,ZONA_NAV))}</td><td><b>${esc(t.inst)}</b></td><td><span class="etq ${t.dir==='L'?'etq-l':'etq-c'}">${t.dir==='L'?'Largo':'Corto'}</span></td><td class="num">${t.ct}</td><td class="num fuerte ${clase(t.usd)}">${fmtUSD(t.usd)}</td></tr>`).join('');
+  c.innerHTML=`<p class="imp-arch">${ICO.hoja}<span>${esc(e.nombre||'')}</span></p>
+    <div class="imp-res"><div><b>${nuevos.length}</b><span>${nuevos.length===1?'operación nueva':'operaciones nuevas'}</span></div><div><b class="${claseO(neto)}">${nuevos.length?fmtUSD(neto):MENOS}</b><span>resultado</span></div><div><b>${rango}</b><span>${rep?(rep===1?'1 ya estaba en tu diario':rep+' ya estaban en tu diario'):'periodo'}</span></div></div>
+    ${e.cuentas.length>1?`<fieldset class="imp-cuentas"><legend>Cuentas del archivo</legend><div class="chips-sel">${e.cuentas.map(cu=>`<label><input type="checkbox" data-cuenta="${esc(cu)}"${e.sel.has(cu)?' checked':''}><span>${esc(cu)}</span></label>`).join('')}</div></fieldset>`:''}
+    ${nuevos.length?`<div class="tabla-wrap imp-tabla"><table class="tabla"><caption class="sr">Últimas operaciones que se van a importar</caption><thead><tr><th scope="col">Fecha</th><th scope="col">Hora</th><th scope="col">Instr.</th><th scope="col">Dirección</th><th scope="col" class="num">Contr.</th><th scope="col" class="num">Resultado</th></tr></thead><tbody>${filas}</tbody></table></div>${nuevos.length>8?`<p class="ayuda">Y ${nuevos.length-8} más.</p>`:''}`:`<p class="vacio">Todas las operaciones de este archivo ya estaban en tu diario.</p>`}
+    <p class="ayuda">Después solo te queda ponerles el setup y la nota: así el agente de IA sabe por qué entraste.</p>`;
+  p.innerHTML=`<button type="button" class="enlace" data-accion="imp-otro">Elegir otro archivo</button><button type="button" class="boton" data-accion="imp-ok"${nuevos.length?'':' disabled'}>${nuevos.length?'Importar '+(nuevos.length===1?'1 operación':nuevos.length+' operaciones'):'Nada nuevo que importar'}</button>`;
+}
+async function leerArchivoImp(file){
+  if(!impEstado) return;
+  impEstado.paso='leyendo'; impEstado.nombre=file.name; pintarImp();
+  try{
+    let hojas;
+    if(/\.(csv|txt)$/i.test(file.name)) hojas=[{nombre:file.name,filas:impCSV(await file.text())}];
+    else {
+      const X=await cargarXLSX();
+      const wb=X.read(new Uint8Array(await file.arrayBuffer()),{type:'array'});
+      hojas=wb.SheetNames.map(n=>({nombre:n,filas:X.utils.sheet_to_json(wb.Sheets[n],{header:1,raw:true,defval:null,blankrows:false})}));
+    }
+    const r=importarHojas(hojas,impEstado.zona);
+    if(!r.ops.length){ impEstado.paso='error'; impEstado.error='No encontramos operaciones cerradas en este archivo. Comprueba que es el export de estadísticas de ATAS (o el CSV de tu plataforma).'; pintarImp(); return; }
+    Object.assign(impEstado,{paso:'vista',ops:r.ops,cuentas:r.cuentas,sel:new Set(r.cuentas),claves:new Set(state.trades.map(t=>t.clave).filter(Boolean))});
+    pintarImp();
+    const b=$('[data-accion="imp-ok"]'); if(b && !b.disabled) b.focus();
+  }catch(err){
+    impEstado.paso='error';
+    impEstado.error=err && err.message==='xlsx'?'No se ha podido abrir el lector de Excel. Revisa tu conexión o guarda el archivo como CSV.':'No se ha podido leer el archivo. Si es un Excel, ábrelo y guárdalo otra vez como .xlsx o .csv.';
+    pintarImp();
+  }
+}
+function confirmarImp(){
+  if(!impEstado || impEstado.paso!=='vista') return;
+  const {nuevos}=impSeleccion(); if(!nuevos.length) return;
+  const base=Date.now().toString(36);
+  nuevos.forEach((t,i)=>state.trades.push(Object.assign({id:'i'+base+i.toString(36)},t)));
+  if(nuevos.some(t=>!enPeriodo(t.fecha))) state.periodo='todo';
+  guardar(); cerrarImp();
+  if(ruta==='diario') refrescarDiario(); else irRuta('diario');
+  toast(nuevos.length===1?'1 operación importada':nuevos.length+' operaciones importadas');
+  autoAnalisis(nuevos);
+}
+/* Al importar un día ya cerrado, la IA lo analiza sin esperar a la noche */
+async function autoAnalisis(nuevos){
+  if(!SERVIDOR || REV || !planGuardado(planNormal(state.plan))) return;
+  const hoy=iso(new Date()), dias=Array.from(new Set(nuevos.map(t=>t.fecha))).filter(f=>f<hoy).sort();
+  if(!dias.length) return;
+  const f=dias[dias.length-1];
+  await cargarInformes();
+  if((informesCache||[]).some(x=>x.clave==='dia:'+f) || !iaInfo.ia) return;
+  pedirAnalisis('dia',f,{auto:true});
+}
+
+/* ---------- Estadísticas ---------- */
+function estadisticasPro(ts){
+  const o=ordenAsc(ts), u=o.map(t=>calc(t).usd), n=o.length, suma=a=>a.reduce((s,x)=>s+x,0);
+  const g=u.filter(x=>x>0), p=u.filter(x=>x<0), gan=suma(g), per=-suma(p), neto=suma(u);
+  let pico=0, acc=0, dd=0, ddFecha=null; u.forEach((x,i)=>{ acc+=x; if(acc>pico) pico=acc; if(pico-acc>dd){ dd=pico-acc; ddFecha=o[i].fecha; } });
+  let rg=0, rp=0, mg=0, mp=0; u.forEach(x=>{ if(x>0){ rg++; rp=0; } else if(x<0){ rp++; rg=0; } else { rg=0; rp=0; } mg=Math.max(mg,rg); mp=Math.max(mp,rp); });
+  const dias={}; o.forEach((t,i)=>{ dias[t.fecha]=(dias[t.fecha]||0)+u[i]; }); const dv=Object.values(dias);
+  const durG=[], durP=[]; o.forEach((t,i)=>{ if(t.hEnt && t.hSal && t.hSal>t.hEnt) (u[i]>0?durG:durP).push((t.hSal-t.hEnt)/60000); });
+  const media=a=>a.length?suma(a)/a.length:null;
+  return {o,u,n,g,p,gan,per,neto,dd,ddFecha,mg,mp,dias,dv,nDias:dv.length,diasVerde:dv.filter(x=>x>0).length,
+    pf:per>0?gan/per:null,exp:n?neto/n:0,mediaG:media(g),mediaP:media(p),mejor:g.length?Math.max(...g):null,peor:p.length?Math.min(...p):null,
+    durG:media(durG),durP:media(durP),com:suma(o.map(t=>Number(t.com)||0)),ct:media(o.map(t=>Number(t.ct)||1)),conHora:o.filter(t=>t.hEnt).length,
+    conR:o.filter(riesgoOp).length,rMedia:media(o.filter(riesgoOp).map(rOp)),riesgoMedio:media(o.map(riesgoOp).filter(Boolean)),
+    rG:media(o.filter(t=>riesgoOp(t) && usdOp(t)>0).map(rOp)),rP:media(o.filter(t=>riesgoOp(t) && usdOp(t)<0).map(rOp)),sinStop:o.filter(t=>!stopOp(t)).length};
+}
+function grupoDe(ts,clave){
+  const m=new Map(); ts.forEach(t=>{ const k=clave(t), c=calc(t).usd, x=m.get(k)||{k,n:0,w:0,u:0}; x.n++; if(c>0) x.w++; x.u+=c; m.set(k,x); });
+  return Array.from(m.values());
+}
+/* Columnas desde una línea base en 0: verde si gana, rojo si pierde. Valor en el máximo y el mínimo; el resto en la ayuda al pasar el ratón */
+function barrasV(items,opc){
+  opc=opc||{};
+  if(!items.length) return '';
+  const max=Math.max(0,...items.map(i=>i.v)), min=Math.min(0,...items.map(i=>i.v)), rango=(max-min)||1, cero=max/rango*100;
+  let iMax=-1, iMin=-1; items.forEach((it,k)=>{ if(it.v>0 && (iMax<0 || it.v>items[iMax].v)) iMax=k; if(it.v<0 && (iMin<0 || it.v<items[iMin].v)) iMin=k; });
+  const fmt=opc.fmt||fmtCorto;
+  return `<div class="bv" style="--n:${items.length}"><div class="bv-zona"><div class="bv-area${min<0?' con-neg':''}"><span class="bv-cero" style="top:${cero}%"></span>${items.map((it,k)=>{
+      const h=Math.abs(it.v)/rango*100, pos=it.v>=0, cls=it.cls||(it.v>0?'g':(it.v<0?'p':'z'));
+      const est=pos?`bottom:${100-cero}%;height:${Math.max(h,it.v?1.5:0)}%`:`top:${cero}%;height:${Math.max(h,1.5)}%`;
+      const val=(k===iMax||k===iMin)&&it.v?`<span class="bv-val" style="${pos?`bottom:calc(${100-cero+h}% + 4px)`:`top:calc(${cero+h}% + 4px)`}">${fmt(it.v)}</span>`:'';
+      return `<div class="bv-col" tabindex="0" role="img" aria-label="${esc(it.aria)}" data-tip="${esc(it.tip)}"><span class="bv-barra ${cls}${pos?'':' abajo'}" style="${est};animation-delay:${k*0.03}s"></span>${val}</div>`;
+    }).join('')}</div></div><div class="bv-etqs">${items.map(it=>`<span>${esc(it.etq)}</span>`).join('')}</div></div>`;
+}
+function tablaGrupo(titulo,filas){
+  if(!filas.length) return '';
+  return `<table class="tabla est-t"><caption>${titulo}</caption><thead><tr><th scope="col"><span class="sr">Grupo</span></th><th scope="col" class="num">Ops.</th><th scope="col" class="num">Acierto</th><th scope="col" class="num">Neto</th><th scope="col" class="num">Media</th></tr></thead><tbody>${filas.map(x=>`<tr><th scope="row">${esc(x.nom)}</th><td class="num">${x.n}</td><td class="num">${Math.round(x.w/x.n*100)} %</td><td class="num fuerte ${clase(x.u)}">${fmtUSD(x.u)}</td><td class="num ${clase(x.u)}">${fmtUSD(x.u/x.n)}</td></tr>`).join('')}</tbody></table>`;
+}
+function vistaEstadisticas(){
+  const seg=['semana','mes','todo'].map(k=>`<button type="button" data-accion="periodo" data-periodo="${k}" aria-pressed="${state.periodo===k}">${PER_T[k]}</button>`).join('');
+  return cabDiario()+`<div class="est-barra entra"><p class="est-per">${state.periodo==='mes'?'Tus números de '+MESES_L[HOY.getMonth()]:(state.periodo==='semana'?'Tus números de esta semana':'Tus números desde que empezaste')}</p><div class="seg-claro" role="group" aria-label="Periodo">${seg}</div></div><div id="est"></div><div class="tip-g" id="tip-g" hidden></div>`;
+}
+function pintarEstadisticas(){
+  const el=$('#est'); if(!el) return;
+  const ts=filtradas();
+  if(!ts.length){ el.innerHTML=`<div class="panel"><div class="panel-cuerpo est-vacio"><p class="vacio">No hay operaciones ${PER[state.periodo]}.${REV?'':' Importa tu historial de ATAS y aquí tendrás todos tus números.'}</p>${REV?'':`<button type="button" class="boton sec" data-accion="importar">${ICO.importar}Importar de ATAS</button>`}</div></div>`; return; }
+  const s=estadisticasPro(ts), z=zonaAlumno();
+  const kc=(t,i,v,cl,sub,d)=>`<div class="kcard entra" style="animation-delay:${d}s"><div class="kcard-cab"><p class="kcard-t">${t}</p><span class="kicono">${i}</span></div><p class="kcard-v ${cl}">${v}</p><p class="kcard-s">${sub}</p></div>`;
+  const kpis=`<div class="kpis4">
+    ${kc('Resultado neto',ICO_K.barras,fmtUSD(s.neto),clase(s.neto),`${s.n} ${s.n===1?'operación':'operaciones'}${s.com?', '+fmtValor(s.com)+' en comisiones':''}`,0)}
+    ${kc('Expectativa',ICO_K.diana,fmtUSD(s.exp),clase(s.exp),'lo que ganas de media por operación',.05)}
+    ${kc('Profit factor',ICO_K.balanza,s.pf!=null?nf(s.pf,2,2):(s.gan>0?'Sin pérdidas':MENOS),'',s.pf!=null?`ganas ${nf(s.pf,2,2)} $ por cada dólar que pierdes`:'todavía sin pérdidas en el periodo',.1)}
+    ${kc('Drawdown máximo',ICO_I.alerta,s.dd?fmtUSD(-s.dd):'0 $',s.dd?'neg':'',s.dd?`la mayor caída desde un máximo, hasta el ${fechaCorta(s.ddFecha)}`:'tu curva no ha caído desde un máximo',.15)}</div>`;
+  const dato=(t,v,cl,sub)=>`<div class="nd"><dt>${t}</dt><dd class="${cl||''}">${v}${sub?`<small>${sub}</small>`:''}</dd></div>`;
+  const ratio=s.mediaG!=null && s.mediaP!=null?nf(s.mediaG/Math.abs(s.mediaP),2,2):MENOS;
+  const numeros=`<section class="panel entra" aria-labelledby="t-num"><div class="panel-cab"><h2 id="t-num">Números clave</h2><span class="panel-meta">${s.nDias} ${s.nDias===1?'día operado':'días operados'}</span></div><dl class="num-grid">
+    ${dato('Acierto',Math.round(s.g.length/s.n*100)+' %','',`${s.g.length} de ${s.n}`)}
+    ${dato('Ganancia media',s.mediaG!=null?fmtUSD(s.mediaG):MENOS,'pos')}
+    ${dato('Pérdida media',s.mediaP!=null?fmtUSD(s.mediaP):MENOS,'neg')}
+    ${dato('Ratio ganancia / pérdida',ratio,'','media ganadora entre media perdedora')}
+    ${dato('Mayor ganancia',s.mejor!=null?fmtUSD(s.mejor):MENOS,'pos')}
+    ${dato('Mayor pérdida',s.peor!=null?fmtUSD(s.peor):MENOS,'neg')}
+    ${dato('Racha ganadora máxima',s.mg+(s.mg===1?' operación':' seguidas'))}
+    ${dato('Racha perdedora máxima',s.mp+(s.mp===1?' operación':' seguidas'))}
+    ${dato('Días en verde',s.diasVerde+' de '+s.nDias,'',Math.round(s.diasVerde/s.nDias*100)+' % de los días')}
+    ${dato('Media por día',fmtUSD(s.neto/s.nDias),clase(s.neto))}
+    ${dato('Operaciones por día',nf(s.n/s.nDias,0,1))}
+    ${dato('Contratos por operación',nf(s.ct,0,1))}
+    ${dato('Duración media ganadoras',s.durG!=null?dur(s.durG):MENOS)}
+    ${dato('Duración media perdedoras',s.durP!=null?dur(s.durP):MENOS,'',s.durG!=null&&s.durP!=null&&s.durP>s.durG*1.5?'aguantas más las que pierden':'')}
+    ${dato('Comisiones',s.com?fmtValor(s.com):MENOS)}
+    ${dato('Mejor día',fmtUSD(Math.max(...s.dv)),clase(Math.max(...s.dv)))}
+    ${s.conR?dato('Expectativa en R',fmtR(s.rMedia),clase(s.rMedia),'lo que ganas por cada R que arriesgas')
+      +dato('Riesgo medio',fmtValor(Math.round(s.riesgoMedio)),'',`en ${s.conR} de ${s.n} operaciones`)
+      +dato('Ganadora media en R',s.rG!=null?fmtR(s.rG):MENOS,'pos')
+      +dato('Perdedora media en R',s.rP!=null?fmtR(s.rP):MENOS,'neg',s.rP!=null&&s.rP<-1.15?'pierdes más de lo que arriesgas':''):''}
+  </dl></section>`;
+  // Por hora de entrada
+  let horas='';
+  if(s.conHora){
+    const hm={}; s.o.forEach((t,i)=>{ if(!t.hEnt) return; const h=Math.floor(horaEn(t.hEnt,z)/60), x=hm[h]||{u:0,n:0,w:0}; x.u+=s.u[i]; x.n++; if(s.u[i]>0) x.w++; hm[h]=x; });
+    const hs=Object.keys(hm).map(Number), lo=Math.min(...hs), hi=Math.max(...hs), it=[];
+    for(let h=lo; h<=hi; h++){ const x=hm[h]; it.push({etq:h+'h',v:x?x.u:0,tip:x?`${h}:00 a ${h}:59\n${fmtUSD(x.u)} en ${x.n} ${x.n===1?'operación':'operaciones'}\n${Math.round(x.w/x.n*100)} % de acierto`:`${h}:00 a ${h}:59\nSin operaciones`,aria:x?`De ${h} a ${h+1}: ${fmtUSD(x.u)} en ${x.n} operaciones`:`De ${h} a ${h+1}: sin operaciones`}); }
+    horas=barrasV(it)+(s.conHora<s.n?`<p class="ayuda est-nota">${s.n-s.conHora} ${s.n-s.conHora===1?'operación no tiene':'operaciones no tienen'} hora de entrada apuntada.</p>`:'');
+  } else horas=`<p class="vacio">Apunta la hora de entrada en tus operaciones para ver a qué horas ganas y a cuáles pierdes.</p>`;
+  // Por día de la semana
+  const dw={}; s.o.forEach((t,i)=>{ const d=fechaObj(t.fecha).getDay(), x=dw[d]||{u:0,n:0,w:0}; x.u+=s.u[i]; x.n++; if(s.u[i]>0) x.w++; dw[d]=x; });
+  const ordenD=[1,2,3,4,5].concat([6,0].filter(d=>dw[d]));
+  const dias=barrasV(ordenD.map(d=>{ const x=dw[d]; return {etq:cap(DIAS[d]),v:x?x.u:0,tip:x?`${cap(DIAS_L[d])}\n${fmtUSD(x.u)} en ${x.n} ${x.n===1?'operación':'operaciones'}\n${Math.round(x.w/x.n*100)} % de acierto`:`${cap(DIAS_L[d])}\nSin operaciones`,aria:x?`${cap(DIAS_L[d])}: ${fmtUSD(x.u)} en ${x.n} operaciones`:`${cap(DIAS_L[d])}: sin operaciones`}; }));
+  // Distribución de resultados
+  const umin=Math.min(...s.u), umax=Math.max(...s.u), bruto=((umax-umin)||100)/8, pot=Math.pow(10,Math.floor(Math.log10(bruto)));
+  const paso=[1,2,2.5,5,10].map(m=>m*pot).find(x=>x>=bruto-1e-9);
+  const b0=Math.floor(umin/paso)*paso, bins=[];
+  for(let a=b0; a<=umax+1e-9 && bins.length<16; a+=paso) bins.push({a,b:a+paso,n:0});
+  s.u.forEach(x=>{ const k=Math.min(bins.length-1,Math.floor((x-b0)/paso)); bins[k].n++; });
+  const dist=barrasV(bins.map(x=>({etq:fmtCorto(x.a),v:x.n,cls:x.b<=0?'p':(x.a>=0?'g':'z'),tip:`De ${fmtUSD(x.a)} a ${fmtUSD(x.b)}\n${x.n} ${x.n===1?'operación':'operaciones'}`,aria:`De ${fmtUSD(x.a)} a ${fmtUSD(x.b)}: ${x.n} operaciones`})),{fmt:v=>String(v)});
+  // Desglose
+  const dir=grupoDe(ts,t=>t.dir).map(x=>({...x,nom:x.k==='L'?'Largos':'Cortos'})).sort((a,b)=>a.nom.localeCompare(b.nom));
+  const ses=grupoDe(ts,t=>t.sesion||'NY').map(x=>({...x,nom:x.k})).sort((a,b)=>SESIONES.indexOf(a.k)-SESIONES.indexOf(b.k));
+  const ins=grupoDe(ts,t=>t.inst).map(x=>({...x,nom:x.k})).sort((a,b)=>b.n-a.n);
+  el.innerHTML=kpis+`<div class="fila b">${numeros}
+      <section class="panel entra" aria-labelledby="t-desg"><div class="panel-cab"><h2 id="t-desg">Desglose</h2><span class="panel-meta">Dirección, sesión e instrumento</span></div><div class="panel-cuerpo est-desg">${tablaGrupo('Dirección',dir)}${tablaGrupo('Sesión',ses)}${tablaGrupo('Instrumento',ins)}</div></section></div>
+    <div class="fila a">
+      <section class="panel entra" aria-labelledby="t-hora"><div class="panel-cab"><h2 id="t-hora">Resultado por hora de entrada</h2><span class="panel-meta">Tu hora</span></div><div class="panel-cuerpo">${horas}</div></section>
+      <section class="panel entra" aria-labelledby="t-dsem"><div class="panel-cab"><h2 id="t-dsem">Resultado por día de la semana</h2></div><div class="panel-cuerpo">${dias}</div></section>
+    </div>
+    <section class="panel entra" aria-labelledby="t-dist"><div class="panel-cab"><h2 id="t-dist">Cómo se reparten tus resultados</h2><span class="panel-meta">Operaciones por tramo de resultado</span></div><div class="panel-cuerpo">${dist}</div></section>`;
+  const tip=$('#tip-g');
+  const mostrar=c=>{ if(!tip) return; tip.textContent=''; c.dataset.tip.split('\n').forEach((l,i)=>{ const s2=document.createElement(i?'span':'b'); s2.textContent=l; tip.appendChild(s2); }); tip.hidden=false; ponerTip(c); };
+  el.addEventListener('pointerover',e=>{ const c=e.target.closest('.bv-col'); if(c) mostrar(c); });
+  el.addEventListener('pointerout',e=>{ if(tip && e.target.closest('.bv-col') && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.bv-col'))) tip.hidden=true; });
+  el.addEventListener('focusin',e=>{ const c=e.target.closest('.bv-col'); if(c) mostrar(c); });
+  el.addEventListener('focusout',()=>{ if(tip) tip.hidden=true; });
+}
+
+/* ---------- Plan de trading y agente de IA ---------- */
+function huellaCliente(tipo,fecha){
+  const desde=tipo==='semana'?sumarDias(fecha,-6):fecha;
+  return huellaOps(state.trades.filter(t=>!t.ejemplo && t.fecha>=desde && t.fecha<=fecha))+'.'+String(planNormal(state.plan).actualizado||'');
+}
+function vistaPlan(){
+  const p=planNormal(state.plan), ro=!!REV, dis=ro?' disabled':'', tu=ro?'Su':'Tu';
+  const num=(id,lab,val,suf)=>`<div class="campo pl-num"><label for="${id}">${lab}</label><div class="dinero"><input type="text" inputmode="decimal" id="${id}" value="${val==null?'':String(val).replace('.',',')}" autocomplete="off" placeholder="Sin límite"${dis}><span aria-hidden="true">${suf}</span></div></div>`;
+  const instr=Array.from(new Set(Object.keys(INSTR).concat(p.instrumentos)));
+  const sets=Array.from(new Set(SETUPS.concat(p.setups)));
+  const chip=(name,v,on)=>`<label><input type="checkbox" name="${name}" value="${esc(v)}"${on?' checked':''}${dis}><span>${esc(v)}</span></label>`;
+  return cabDiario()+`<div class="plan-grid${planGuardado(p)?' guardado':''}">
+    <form class="panel plan-form entra" id="form-plan" novalidate>
+      <div class="panel-cab"><h2>${tu} plan de trading</h2><span class="panel-meta">${p.actualizado?'Actualizado el '+fechaLarga(p.actualizado):'Sin guardar todavía'}</span></div>
+      <div class="panel-cuerpo">
+        <p class="pl-intro">${ro?'Las reglas con las que la IA revisa cada uno de sus días.':'Pon solo las reglas que de verdad quieres cumplir. Lo que dejes vacío no se comprueba.'}</p>
+        <fieldset class="pl-grupo"><legend>Riesgo</legend><div class="pl-campos">
+          ${num('pl-perdida','Pérdida máxima al día',p.perdidaMaxDia,'$')}
+          ${num('pl-riesgo','Riesgo máximo por operación',p.riesgoMaxOp,'$')}
+          ${num('pl-contratos','Contratos máximos',p.maxContratos,'ct.')}
+        </div></fieldset>
+        <fieldset class="pl-grupo"><legend>Disciplina</legend><div class="pl-campos">
+          ${num('pl-ops','Operaciones máximas al día',p.maxOps,'ops.')}
+          ${num('pl-racha','Paro tras pérdidas seguidas',p.maxPerdidasSeguidas,'')}
+          ${num('pl-objetivo','Paro al ganar en el día',p.objetivoDia,'$')}
+        </div></fieldset>
+        <fieldset class="pl-grupo"><legend>Cuándo opero</legend>
+          <div class="pl-horario"><div class="campo"><label for="pl-desde">Entradas desde</label><input type="time" id="pl-desde" value="${p.horaDesde}"${dis}></div><div class="campo"><label for="pl-hasta">Hasta</label><input type="time" id="pl-hasta" value="${p.horaHasta}"${dis}></div></div>
+          <p class="ayuda">En ${ro?'su':'tu'} hora (${esc(p.zona||ZONA_NAV)}). Se comprueba con la hora de entrada de cada operación.</p>
+          <p class="pl-sub" id="pl-dias-t">Días</p><div class="chips-sel" role="group" aria-labelledby="pl-dias-t">${[1,2,3,4,5,6,0].map(d=>`<label><input type="checkbox" name="pl-dia" value="${d}"${p.dias.includes(d)?' checked':''}${dis}><span>${cap(DIAS[d])}</span></label>`).join('')}</div>
+        </fieldset>
+        <fieldset class="pl-grupo"><legend>Qué opero</legend>
+          <p class="pl-sub" id="pl-ins-t">Instrumentos</p><div class="chips-sel" role="group" aria-labelledby="pl-ins-t">${instr.map(k=>chip('pl-ins',k,p.instrumentos.includes(k))).join('')}</div>
+          <p class="pl-sub" id="pl-set-t">Setups</p><div class="chips-sel" role="group" aria-labelledby="pl-set-t">${sets.map(k=>chip('pl-set',k,p.setups.includes(k))).join('')}</div>
+          <p class="ayuda">Sin marcar ninguno, no se comprueba.</p>
+        </fieldset>
+        <div class="pl-checks"><label class="pl-check"><input type="checkbox" id="pl-stop"${p.conStop?' checked':''}${dis}><span>Pongo stop en cada operación, lo apunto y no lo muevo en contra</span></label>
+        <label class="pl-check"><input type="checkbox" id="pl-registro"${p.registro?' checked':''}${dis}><span>Apunto el setup y una nota en cada operación</span></label></div>
+        <div class="campo pl-texto"><label for="pl-texto">${tu} plan con ${ro?'sus':'tus'} palabras</label><textarea id="pl-texto" rows="7" maxlength="4000"${dis} placeholder="Qué tiene que pasar para que entre, cuándo no opero, cómo gestiono la posición, qué hago después de una pérdida…">${esc(p.texto)}</textarea><p class="ayuda">La IA lo lee entero cada vez que revisa ${ro?'sus':'tus'} días. Cuanto más concreto, mejor ${ro?'le':'te'} puede ayudar.</p></div>
+      </div>
+      ${ro?'':`<div class="pl-pie"><span class="pl-estado" id="pl-estado" role="status"></span><button type="submit" class="boton">Guardar plan</button></div>`}
+    </form>
+    <div class="plan-col">
+      <section class="panel entra" aria-labelledby="t-cumple"><div class="panel-cab"><h2 id="t-cumple">Cumplimiento</h2><span class="panel-meta">Últimos 30 días</span></div><div id="cumple"></div></section>
+      <section class="panel entra panel-ia" aria-labelledby="t-ia"><div class="panel-cab"><h2 id="t-ia"><span class="ia-chip">IA</span>Agente del plan</h2><span class="panel-meta">Revisa ${ro?'sus':'tus'} días contra ${ro?'su':'tu'} plan</span></div><div id="ia-cuerpo" aria-live="polite"></div></section>
+    </div>
+  </div>`;
+}
+function trasPlan(){
+  const quien=REV?REV.id:'yo';
+  if(informesDe!==quien){ informesCache=null; informesDe=null; }
+  pintarCumple(); pintarIA();
+  const f=$('#form-plan');
+  if(f && !REV) f.addEventListener('submit',e=>{ e.preventDefault(); guardarPlan(); });
+  if(f && !REV) f.addEventListener('input',()=>{ const s=$('#pl-estado'); if(s) s.textContent='Cambios sin guardar'; });
+}
+function guardarPlan(){
+  const v=id=>{ const x=$('#'+id); return x?x.value:''; }, n=id=>{ const x=num(v(id)); return isFinite(x)&&x>0?x:null; };
+  const marcados=nm=>$$(`input[name="${nm}"]:checked`).map(i=>i.value);
+  const desde=v('pl-desde'), hasta=v('pl-hasta'), est=$('#pl-estado');
+  if((desde && !hasta) || (!desde && hasta)){ if(est) est.textContent='Pon la hora de inicio y la de fin, o deja las dos vacías.'; return; }
+  state.plan=planNormal({perdidaMaxDia:n('pl-perdida'),riesgoMaxOp:n('pl-riesgo'),maxContratos:n('pl-contratos'),maxOps:n('pl-ops'),maxPerdidasSeguidas:n('pl-racha'),objetivoDia:n('pl-objetivo'),
+    horaDesde:desde,horaHasta:hasta,dias:marcados('pl-dia').map(Number),instrumentos:marcados('pl-ins'),setups:marcados('pl-set'),registro:$('#pl-registro').checked,conStop:$('#pl-stop').checked,
+    texto:v('pl-texto').trim(),zona:ZONA_NAV,actualizado:new Date().toISOString()});
+  guardar();
+  const r=planComoTexto(state.plan).length;
+  toast('Plan guardado');
+  renderDiario();
+  const s=$('#pl-estado'); if(s) s.textContent=`Guardado. La IA comprobará ${r} ${r===1?'regla':'reglas'}${state.plan.texto?' y tu texto':''}.`;
+}
+function pintarCumple(){
+  const el=$('#cumple'); if(!el) return;
+  const p=planNormal(state.plan);
+  if(!planGuardado(p)){ el.innerHTML=`<div class="panel-cuerpo"><p class="vacio">${REV?'Todavía no ha guardado su plan.':'Guarda tu plan y aquí verás, día a día, si lo cumples.'}</p></div>`; return; }
+  const hoy=iso(new Date()), per=evaluarPeriodo(p,state.trades,sumarDias(hoy,-29),hoy,zonaAlumno());
+  if(!per.dias.length){ el.innerHTML=`<div class="panel-cuerpo"><p class="vacio">Cuando ${REV?'tenga':'tengas'} operaciones en los últimos 30 días, aquí aparece día a día si ${REV?'cumple':'cumples'} el plan.</p></div>`; return; }
+  if(!diaPlanSel || !per.dias.some(d=>d.fecha===diaPlanSel)) diaPlanSel=per.dias[per.dias.length-1].fecha;
+  const d=per.dias.find(x=>x.fecha===diaPlanSel);
+  const top=Object.entries(per.rotas).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const pct=per.pctDias||0;
+  el.innerHTML=`<div class="panel-cuerpo cu">
+    <div class="cu-top">${anillo(pct,84,10,Math.round(pct*100)+'%')}<div><p class="cu-v">${per.diasOk} de ${per.dias.length} ${per.dias.length===1?'día':'días'}</p><p class="kcard-s">${REV?'cumplió':'cumpliste'} todo el plan.${per.pctReglas!=null?' Contando regla a regla, un '+Math.round(per.pctReglas*100)+'\u00a0%.':''}</p></div></div>
+    <p class="pl-sub" id="cu-dias-t">Días operados. Pulsa uno para ver el detalle</p>
+    <div class="cu-dias" role="group" aria-labelledby="cu-dias-t">${per.dias.slice(-24).map(x=>`<button type="button" class="cu-d ${x.ok?'ok':'ko'}${x.fecha===diaPlanSel?' sel':''}" data-accion="plan-dia" data-fecha="${x.fecha}" aria-pressed="${x.fecha===diaPlanSel}" aria-label="${fechaTabla(x.fecha)}: ${x.ok?'plan cumplido':plural(x.aplicables-x.cumplidas,'regla rota','reglas rotas')}, ${fmtUSD(x.neto)}" title="${fechaTabla(x.fecha)} · ${x.ok?'plan cumplido':plural(x.aplicables-x.cumplidas,'regla rota','reglas rotas')}"><span>${fechaObj(x.fecha).getDate()}</span>${x.ok?ICO.check:ICO.cruz}</button>`).join('')}</div>
+    ${top.length?`<div class="cu-top3"><p class="pl-sub">Las reglas que más ${REV?'rompe':'rompes'}</p><ul>${top.map(([id,k])=>`<li><span>${PLAN_REGLAS[id]}</span><b>${k} ${k===1?'día':'días'}</b></li>`).join('')}</ul></div>`:''}
+    <div class="cu-dia"><div class="cu-dia-cab"><b>${cap(fechaTabla(d.fecha))}</b><span class="${clase(d.neto)}">${fmtUSD(d.neto)} · ${d.n} ${d.n===1?'operación':'operaciones'}</span></div>
+      ${d.reglas.length?`<ul class="reglas">${d.reglas.map(r=>`<li class="${r.ok?'ok':'ko'}"><span class="r-ico" aria-hidden="true">${r.ok?ICO.check:ICO.cruz}</span><div><b>${r.nombre}<span class="sr">${r.ok?': cumplida':': rota'}</span></b><p>${esc(r.detalle)}</p></div></li>`).join('')}</ul>`:'<p class="vacio">El plan no tiene reglas que se puedan comprobar con números. La IA revisará tu texto.</p>'}
+    </div>
+  </div>`;
+}
+function informeEjemplo(){
+  const f='2026-10-22';
+  return {clave:'dia:'+f,tipo:'dia',origen:'auto',desde:f,hasta:f,creado:'2026-10-22T22:10:00Z',huella:huellaCliente('dia',f),n:1,neto:-96,ejemplo:true,
+    ia:{puntuacion:4,titular:'Divergencia sola otra vez, y con el doble de contratos',
+      resumen:'Entraste en corto en MNQ con 4 contratos por una divergencia, sin confirmación en el footprint. Tu plan dice máximo 2 contratos y la divergencia no está entre tus setups. La pérdida fue pequeña, pero rompiste dos reglas en una sola operación.',
+      bien:['Respetaste tu pérdida máxima del día y paraste después de una operación.'],
+      mal:[{regla:'Contratos máximos',detalle:'Entraste con 4 contratos cuando tu máximo es 2. Duplicar tamaño en un setup que no es tuyo es la peor combinación.'},{regla:'Setups del plan',detalle:'Divergencia no está en tu plan, y Alex ya te lo marcó el día 6.'}],
+      patrones:['Es la segunda divergencia sola este mes y las dos acabaron en pérdida.'],
+      acciones:['Antes de entrar, señala en la captura el setup de tu plan que estás operando. Si no está en la lista, no hay entrada.','Fija 2 contratos en el DOM de ATAS para que no puedas meter más por impulso.']}};
+}
+function informesLista(){ return (informesCache||[]).slice().sort((a,b)=>String(b.hasta).localeCompare(String(a.hasta))||String(b.creado).localeCompare(String(a.creado))); }
+async function cargarInformes(){
+  const quien=REV?REV.id:'yo';
+  if(informesDe===quien && informesCache) return;
+  if(!SERVIDOR){ informesCache=planGuardado(planNormal(state.plan))&&state.trades.some(t=>t.ejemplo)?[informeEjemplo()]:[]; informesDe=quien; iaInfo={ia:true,restantes:null}; return; }
+  try{
+    const r=await fetch(REV?'/api/admin/informes?alumno='+encodeURIComponent(REV.id):'/api/analisis',{credentials:'same-origin',cache:'no-store'});
+    const j=await r.json(); if(!r.ok) throw new Error(r.status);
+    if((REV?REV.id:'yo')!==quien) return;
+    informesCache=j.informes||[]; informesDe=quien; iaInfo={ia:!!j.ia,restantes:j.restantes==null?null:j.restantes};
+  }catch(e){ informesCache=[]; informesDe=quien; }
+}
+function tarjetaInforme(inf,abierto){
+  const ia=inf.ia, viejo=!inf.ejemplo && huellaCliente(inf.tipo,inf.hasta)!==inf.huella;
+  const titulo=inf.tipo==='semana'?`Semana del ${fechaCorta(inf.desde)} al ${fechaCorta(inf.hasta)}`:`Parte del ${fechaTabla(inf.hasta)}`;
+  const nota=ia&&ia.puntuacion!=null?`<span class="inf-nota ${ia.puntuacion>=8?'alta':ia.puntuacion>=5?'media':'baja'}"><b>${ia.puntuacion}</b>/10<span class="sr"> de disciplina</span></span>`:'';
+  const lista=(t,arr,cls,fn)=>arr&&arr.length?`<div class="inf-bloque ${cls}"><p class="inf-sub">${t}</p><ul>${arr.map(fn).join('')}</ul></div>`:'';
+  const rotas=(inf.detalle||[]).flatMap(d=>d.reglas.filter(r=>!r.ok).map(r=>({d:d.fecha,r})));
+  const cuerpo=ia?`<p class="inf-titular">${esc(ia.titular)}</p><p class="inf-resumen">${esc(ia.resumen)}</p>
+      ${lista('Lo que hiciste bien',ia.bien,'bien',x=>`<li><span aria-hidden="true">${ICO.check}</span>${esc(x)}</li>`)}
+      ${lista('Lo que tienes que corregir',ia.mal,'mal',x=>`<li><span aria-hidden="true">${ICO.cruz}</span><div><b>${esc(x.regla)}</b> ${esc(x.detalle)}</div></li>`)}
+      ${lista('Patrones',ia.patrones,'pat',x=>`<li>${esc(x)}</li>`)}
+      ${ia.acciones&&ia.acciones.length?`<div class="inf-acciones"><p class="inf-sub">Para tu próxima sesión</p><ol>${ia.acciones.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`:''}`
+    :`<p class="inf-resumen">${inf.dias===inf.diasOk?'Plan cumplido todos los días analizados.':`Plan cumplido ${inf.diasOk} de ${inf.dias} ${inf.dias===1?'día':'días'}.`}</p>
+      ${rotas.length?`<div class="inf-bloque mal"><p class="inf-sub">Reglas rotas</p><ul>${rotas.slice(0,8).map(x=>`<li><span aria-hidden="true">${ICO.cruz}</span><div><b>${x.r.nombre}</b> ${esc(x.r.detalle)}</div></li>`).join('')}</ul></div>`:''}
+      <p class="ayuda">El agente de IA todavía no está activado, así que este informe solo comprueba tus reglas.</p>`;
+  return `<details class="inf${inf.ejemplo?' ej':''}"${abierto?' open':''}><summary><span class="inf-cab"><span class="inf-tipo">${inf.ejemplo?'Ejemplo':(inf.origen==='auto'?'Parte automático':'Pedido por '+(REV?'el alumno':'ti'))}</span><span class="inf-t">${titulo}</span></span><span class="inf-dcha">${nota}<span class="inf-res ${clase(inf.neto)}">${fmtUSD(inf.neto)}</span>${ICO.chev}</span></summary>
+    <div class="inf-cuerpo">${viejo&&!REV?`<p class="inf-viejo">Has cambiado operaciones o el plan desde este análisis. <button type="button" class="enlace" data-accion="analizar" data-tipo="${inf.tipo}" data-fecha="${inf.hasta}">Volver a analizar</button></p>`:''}${cuerpo}</div></details>`;
+}
+function pintarIA(){
+  const el=$('#ia-cuerpo'); if(!el) return;
+  const p=planNormal(state.plan), dias=diasOperados(), sel=diaPlanSel||dias[dias.length-1];
+  let html='';
+  if(!REV){
+    const puede=planGuardado(p) && dias.length && !analizando;
+    const motivo=!planGuardado(p)?'Guarda tu plan para activar el agente.':(!dias.length?'Cuando tengas operaciones podrás analizarlas.':'');
+    html+=`<div class="ia-acc"><p>Cada noche, al cerrar la sesión, revisa tu día y te deja un parte con lo que tienes que corregir. También puedes pedírselo cuando quieras.</p>
+      <div class="ia-botones"><button type="button" class="boton" data-accion="analizar" data-tipo="dia" data-fecha="${sel||''}"${puede?'':' disabled'}>${ICO.chispa}Analizar el ${sel?fechaCorta(sel):'día'}</button><button type="button" class="boton sec" data-accion="analizar" data-tipo="semana" data-fecha="${sel||''}"${puede?'':' disabled'}>Analizar la semana</button></div>
+      ${motivo?`<p class="ayuda">${motivo}</p>`:(SERVIDOR&&iaInfo.restantes!=null&&iaInfo.ia?`<p class="ayuda">Te quedan ${iaInfo.restantes} ${iaInfo.restantes===1?'análisis':'análisis'} hoy.</p>`:'')}</div>`;
+  }
+  if(analizando) html+=`<div class="ia-cargando" role="status"><span class="ia-orbe" aria-hidden="true"></span><p><b>Analizando ${analizando.tipo==='semana'?'tu semana':'tu día'}…</b> La IA está revisando cada operación contra tu plan. Tarda unos segundos.</p></div>`;
+  if(informesCache===null){
+    html+='<div class="admin-carga ia-carga" role="status"><div class="entrada-carga"><span></span><span></span><span></span></div><p>Cargando informes…</p></div>';
+    el.innerHTML=html;
+    cargarInformes().then(()=>{ if(informesCache!==null) pintarIA(); });
+    return;
+  }
+  const lista=informesLista();
+  if(!lista.length) html+=`<p class="vacio ia-vacio">${REV?'Todavía no tiene informes.':'Aún no hay informes. Esta noche, después de la sesión, aquí aparecerá el parte de tu día.'}</p>`;
+  else html+=`<div class="infs">${lista.slice(0,12).map((x,i)=>tarjetaInforme(x,i===0)).join('')}</div>`;
+  el.innerHTML=html;
+}
+const MSG_IA={sin_plan:'Guarda tu plan antes de pedir un análisis.',sin_operaciones:'No hay operaciones en ese periodo.',ia_error:'La IA no ha podido responder ahora. Inténtalo en un rato.',limite:'Has llegado al máximo de análisis de hoy.'};
+async function pedirAnalisis(tipo,fecha,opc){
+  opc=opc||{};
+  if(analizando || REV || !fecha) return;
+  if(!SERVIDOR){ toast('En agxcommunity.com la IA analiza tus operaciones reales'); return; }
+  analizando={tipo,fecha}; pintarIA();
+  try{
+    await asegurarGuardado();
+    const r=await fetch('/api/analisis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo,fecha}),credentials:'same-origin'});
+    const j=await r.json().catch(()=>({}));
+    if(r.status===429){ iaInfo.restantes=0; if(!opc.auto) toast(MSG_IA.limite); }
+    else if(!r.ok){ if(!opc.auto) toast(MSG_IA[j.error]||'No se ha podido analizar. Inténtalo en un rato.'); }
+    else {
+      informesCache=[j.informe].concat((informesCache||[]).filter(x=>x.clave!==j.informe.clave)); informesDe='yo';
+      if(j.restantes!=null) iaInfo.restantes=j.restantes;
+      toast(opc.auto?'La IA ha revisado tu '+fechaCorta(fecha)+'. Lo tienes en Plan e IA':'Análisis listo');
+    }
+  }catch(e){ if(!opc.auto) toast('No se ha podido analizar. Revisa tu conexión.'); }
+  finally{ analizando=null; pintarIA(); }
+}
+
+/* ---------- Editar o completar una operación ---------- */
+function marcar(nombre,valor){ const r=$(`input[name="${nombre}"][value="${CSS.escape(String(valor))}"]`); $$(`input[name="${nombre}"]`).forEach(x=>{ x.checked=false; }); if(r) r.checked=true; return !!r; }
+function prepararCajon(){
+  const caj=$('#cajon'), t=editandoId?state.trades.find(x=>x.id===editandoId):null;
+  const atas=!!(t && t.origen==='atas');
+  caj.classList.toggle('atas',atas);
+  $('#t-nueva').textContent=t?(atas?'Completar operación':'Editar operación'):'Nueva operación';
+  $('#cajon-desc').textContent=t?(atas?'Pon el setup, el stop, la nota y, si quieres, la captura. Los datos de ATAS no se tocan.':'Corrige lo que necesites y guarda.'):'Rellénala justo después de cerrar, con la captura de ATAS.';
+  $('#btn-guardar-op').textContent=t?'Guardar cambios':'Guardar operación';
+  if(t){
+    $('#f-fecha').value=t.fecha; $('#f-ct').value=t.ct; marcar('f-sesion',t.sesion||'NY'); marcar('f-inst',t.inst); marcar('f-dir',t.dir);
+    if(!marcar('f-setup',t.setup||'')) $$('input[name="f-setup"]').forEach(x=>{ x.checked=false; });
+    const u=calc(t).usd; marcar('f-res',u<0?'P':'G'); $('#f-imp').value=String(Math.abs(Math.round(u*100)/100)).replace('.',',');
+    $('#f-nota').value=t.nota||''; $('#f-hora').value=t.hEnt?horaOp(t):'';
+    $('#f-stop').value=stopOp(t)?String(stopOp(t)).replace('.',','):'';
+    $('#f-riesgo').value=riesgoOp(t)?String(riesgoOp(t)).replace('.',','):'';
+    { const a=riesgoAuto(); riesgoManual=!!riesgoOp(t) && !(a!=null && Math.abs(a-riesgoOp(t))<0.5); }
+    const r=$('#atas-res');
+    r.innerHTML=atas?`<p class="atas-t">${ICO.hoja}Datos de ATAS</p><p><b>${esc(t.inst)} ${t.dir==='L'?'largo':'corto'}</b>, ${t.ct} ${t.ct===1?'contrato':'contratos'} · <b class="${clase(t.usd)}">${fmtUSD(t.usd)}</b></p><p>${fechaTabla(t.fecha)}${t.hEnt?', '+horaOp(t):''}${t.hSal?' a '+hhmm(horaEn(t.hSal,zonaAlumno())):''} · entrada ${precio(t.pEnt)}, salida ${precio(t.pSal)}</p>`:'';
+    r.hidden=!atas;
+    capturaForm=capturas.get(t.id)||null; capturaOriginal=capturaForm; pintarZona();
+    const id=t.id; obtenerCaptura(id).then(u2=>{ if(editandoId===id && !capturaForm && u2){ capturaForm=u2; capturaOriginal=u2; pintarZona(); } });
+    cajonModo='editar';
+  } else {
+    $('#atas-res').hidden=true;
+    if(cajonModo==='editar'){
+      $('#f-fecha').value=iso(new Date()); $('#f-ct').value=1; $('#f-imp').value=''; $('#f-nota').value=''; marcar('f-sesion','NY'); marcar('f-inst','NQ'); marcar('f-dir','L'); marcar('f-res','G');
+      $('#f-hora').value=''; $('#f-stop').value=''; $('#f-riesgo').value=''; riesgoManual=false;
+      $$('input[name="f-setup"]').forEach(x=>{ x.checked=false; }); capturaForm=null; capturaOriginal=null; pintarZona();
+    }
+    cajonModo='nueva';
+  }
+}
+function guardarEdicion(t){
+  const o=state.trades.find(x=>x.id===editandoId); if(!o) return false;
+  Object.assign(o,o.origen==='atas'?{sesion:t.sesion,setup:t.setup,nota:t.nota,stop:t.stop,riesgo:t.riesgo}:t);
+  if(capturaForm!==capturaOriginal){
+    if(capturaForm){ capturas.set(o.id,capturaForm); IDB.set(o.id,capturaForm).catch(()=>{ if(SERVIDOR) toast('No se ha podido subir la captura. Vuelve a guardarla.'); }); }
+    else { capturas.delete(o.id); IDB.del(o.id).catch(()=>{}); }
+  }
+  guardar();
+  const quedan=incompletas().length;
+  capturaForm=null; capturaOriginal=null; cerrarCajon(); refrescarDiario();
+  toast(o.origen==='atas' && quedan?`Guardada. Te ${quedan===1?'queda 1':'quedan '+quedan} por completar`:'Operación actualizada');
+  return true;
+}
+
+function horasEjemplo(t,i){
+  const a=t.fecha.split('-').map(Number), b={NY:[15,34],Londres:[9,12],Asia:[2,20]}[t.sesion]||[15,34];
+  t.hEnt=new Date(a[0],a[1]-1,a[2],b[0],b[1]+(i*7)%40).getTime(); t.hSal=t.hEnt+(6+(i*11)%29)*60000;
+  const base={NQ:12,MNQ:15,ES:4,MES:5}[t.inst]||10;
+  if(i!==5){ t.stop=t.pts<0?Math.max(base,Math.abs(t.pts)):base; t.riesgo=Math.round(t.stop*(INSTR[t.inst]||INSTR.NQ).v*t.ct); }
+  return t;
+}
+function planEjemplo(){
+  return planNormal({perdidaMaxDia:600,riesgoMaxOp:300,maxContratos:2,maxOps:3,maxPerdidasSeguidas:2,horaDesde:'15:30',horaHasta:'18:30',dias:[1,2,3,4,5],
+    instrumentos:['NQ','MNQ','ES','MES'],setups:['Patrón Gonzi','Imbalance','Agotamiento de Big Trade','Rechazo Call Wall / Put Wall','Giro por perfil'],registro:true,
+    texto:'Opero la apertura de Nueva York, de 15:30 a 18:30. Solo entro con confirmación en el footprint: absorción o agotamiento en un nivel marcado antes de la sesión. Si pierdo dos seguidas, cierro la plataforma. La divergencia sola no es un setup.',
+    zona:ZONA_NAV,actualizado:'2026-10-04T18:00:00.000Z'});
+}
+
 /* ---------- Estado ---------- */
-const CLAVE='agx-alumnos-v3';
+const CLAVE='agx-alumnos-v4';
 function cargar(){
   try{ const raw=localStorage.getItem(CLAVE); if(raw){ const s=JSON.parse(raw); if(s && Array.isArray(s.trades) && s.temas){ if(s.progresoEjemplo && !s.fallos){ const e=estadoInicial(); s.temas=e.temas; s.examen=e.examen; s.fallos=e.fallos; } return s; } } }catch(e){}
   return estadoInicial();
@@ -2402,7 +3568,7 @@ function abrirVisor(id,origen){
   obtenerCaptura(id).then(u=>{
     if(!u){ toast('Esta operación no tiene captura'); return; }
     const im=$('#visor-img'); im.src=u; im.alt=`Captura de ATAS de la operación del ${fechaCorta(t.fecha)}`;
-    $('#visor-t').textContent=`${t.inst} ${t.dir==='L'?'largo':'corto'}, ${fechaTabla(t.fecha)}, ${t.setup}, ${fmtUSD(calc(t).usd)}`;
+    $('#visor-t').textContent=`${t.inst} ${t.dir==='L'?'largo':'corto'}, ${fechaTabla(t.fecha)}, ${nomSetup(t)}, ${fmtUSD(calc(t).usd)}`;
     $('#visor').hidden=false; document.body.style.overflow='hidden';
     $('[data-accion="cerrar-visor"]').focus();
   });
@@ -2431,11 +3597,7 @@ function pintarLateral0(){
 /* ---------- Diario ---------- */
 function vistaDiario(){
   const seg=['semana','mes','todo'].map(k=>`<button type="button" data-accion="periodo" data-periodo="${k}" aria-pressed="${state.periodo===k}">${PER_T[k]}</button>`).join('');
-  return `<header class="cab-modulo entra">
-    ${REV?`<div><a class="volver" href="#alumnos">${ICO.izq}Todos los alumnos</a><div class="rev-cab">${avatarR({discord_id:REV.id,nombre:REV.nombre,avatar_url:REV.avatar})}<h1>Diario de ${esc(REV.nombre)}</h1></div><p class="sub">Abre una operación para ver su captura de ATAS y dejarle tu comentario. Lo verá en su diario.</p></div>`
-    :`<div><h1>Diario de trading</h1><p class="sub">Cada operación con su captura de ATAS, su setup y su resultado, con los comentarios de Alex.</p></div>
-    <button type="button" class="boton grande" data-accion="nueva" aria-keyshortcuts="N">${ICO.mas}Nueva operación<kbd class="kbd-b" aria-hidden="true">N</kbd></button>`}
-  </header>
+  return `${cabDiario()}
   <section class="hero hero-diario entra" aria-labelledby="hero-saludo">
     <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="hero-izq">
@@ -2451,6 +3613,7 @@ function vistaDiario(){
     </div>
     <div class="ticker" id="ticker-caja" hidden></div>
   </section>
+  <div class="avisos-d" id="avisos-diario" hidden></div>
   <div class="kpis4" id="kpis"></div>
   <section class="ins-sec" aria-labelledby="t-ins"><div class="ins-cab"><h2 id="t-ins">Lo que dicen tus datos</h2><span class="panel-meta">Pulsa una tarjeta para ver esas operaciones</span></div><div class="insights" id="insights"></div></section>
   <div class="fila a">
@@ -2471,7 +3634,7 @@ function vistaDiario(){
 }
 function pintarDatos(){
   const ts=filtradas();
-  pintarHero(ts); pintarTicker(); pintarCurva(ts); pintarKpis(ts); pintarInsights(ts); pintarCalendario(); pintarMapa(ts); pintarSetups(ts); pintarComentarios(); pintarAviso(); pintarFiltros(); pintarTabla();
+  pintarHero(ts); pintarTicker(); pintarCurva(ts); pintarKpis(ts); pintarInsights(ts); pintarCalendario(); pintarMapa(ts); pintarSetups(ts); pintarComentarios(); pintarAviso(); pintarAvisos(); pintarFiltros(); pintarTabla();
   $$('.seg-oscuro button',vista).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.periodo===state.periodo)));
   pintarLateral();
 }
@@ -2580,7 +3743,7 @@ function mostrarPunto(i){
   const g=svg.querySelector('.h-cursor'); g.setAttribute('opacity','1');
   const ln=g.querySelector('line'); ln.setAttribute('x1',cx); ln.setAttribute('x2',cx);
   const c=g.querySelector('circle'); c.setAttribute('cx',cx); c.setAttribute('cy',cy);
-  tip.innerHTML=`<b>${fechaTabla(t.fecha)}, ${esc(t.inst)} ${t.dir==='L'?'largo':'corto'}</b><span>${esc(t.setup)}</span><span class="tip-r ${clase(op)}">${fmtUSD(op)}</span><span>Acumulado ${fmtUSD(curva.cum[i])}</span><small>Pulsa para ver la operación</small>`;
+  tip.innerHTML=`<b>${fechaTabla(t.fecha)}, ${esc(t.inst)} ${t.dir==='L'?'largo':'corto'}</b><span>${esc(nomSetup(t))}</span><span class="tip-r ${clase(op)}">${fmtUSD(op)}</span><span>Acumulado ${fmtUSD(curva.cum[i])}</span><small>Pulsa para ver la operación</small>`;
   const r=svg.getBoundingClientRect(), left=Math.max(100,Math.min(r.width-100,cx*r.width/curva.W)), top=cy*r.height/curva.H;
   tip.style.left=left+'px'; tip.style.top=top+'px'; tip.hidden=false;
   tip.style.transform=top<130?'translate(-50%,18px)':'';
@@ -2651,7 +3814,7 @@ function pintarMapa(ts){
 }
 function porSetup(ts){
   const m=new Map();
-  ts.forEach(t=>{ const c=calc(t); const o=m.get(t.setup)||{setup:t.setup,n:0,w:0,u:0}; o.n++; if(c.usd>0) o.w++; o.u+=c.usd; m.set(t.setup,o); });
+  ts.forEach(t=>{ const c=calc(t), k=nomSetup(t); const o=m.get(k)||{setup:k,n:0,w:0,u:0}; o.n++; if(c.usd>0) o.w++; o.u+=c.usd; m.set(k,o); });
   return Array.from(m.values()).sort((a,b)=>b.u-a.u);
 }
 function pintarSetups(ts){
@@ -2669,7 +3832,7 @@ function pintarComentarios(){
   const cs=state.trades.filter(t=>t.comentario).sort((a,b)=>b.fecha.localeCompare(a.fecha)).slice(0,4);
   if(!cs.length){ el.innerHTML='<div class="panel-cuerpo"><p class="vacio">'+(REV?'Todavía no le has comentado ninguna operación.':'Cuando Alex revise tus operaciones, sus comentarios aparecen aquí.')+'</p></div>'; return; }
   el.innerHTML='<ul class="coments">'+cs.map(t=>`<li><span class="avatar peq" aria-hidden="true">AG</span><div>
-    <p class="coment-meta"><b>${REV?'Tú':'Alex'}</b> en ${REV?'su':'tu'} operación del ${fechaCorta(t.fecha)}, ${esc(t.setup)}</p><p class="txt">${esc(t.comentario)}</p>
+    <p class="coment-meta"><b>${REV?'Tú':'Alex'}</b> en ${REV?'su':'tu'} operación del ${fechaCorta(t.fecha)}, ${esc(nomSetup(t))}</p><p class="txt">${esc(t.comentario)}</p>
     <button type="button" class="enlace" data-accion="ir-op" data-id="${t.id}">Ver operación</button></div></li>`).join('')+'</ul>';
 }
 function pintarAviso(){
@@ -2690,7 +3853,7 @@ function pintarFiltros(){
 }
 function operacionesTabla(){
   const base=filtro.dia?state.trades:filtradas();
-  return base.filter(t=>(!filtro.dia||t.fecha===filtro.dia)&&(!filtro.setup||t.setup===filtro.setup)&&(!filtro.sesion||t.sesion===filtro.sesion)&&(filtro.dow==null||fechaObj(t.fecha).getDay()===filtro.dow)&&(!filtro.dir||t.dir===filtro.dir));
+  return base.filter(t=>(!filtro.dia||t.fecha===filtro.dia)&&(!filtro.setup||nomSetup(t)===filtro.setup)&&(!filtro.sesion||t.sesion===filtro.sesion)&&(filtro.dow==null||fechaObj(t.fecha).getDay()===filtro.dow)&&(!filtro.dir||t.dir===filtro.dir));
 }
 function pintarTabla(){
   const el=$('#tabla'); if(!el) return;
@@ -2703,21 +3866,21 @@ function pintarTabla(){
     filas+=`<tr class="op${ab?' abierta':''}" id="fila-${t.id}">
       <td><button type="button" class="chev" data-accion="detalle" data-id="${t.id}" aria-expanded="${ab}" aria-controls="det-${t.id}" aria-label="Ver detalle de la operación del ${fechaCorta(t.fecha)}">${ICO.chev}</button></td>
       <td><button type="button" class="mini-cap" data-accion="ver-captura" data-id="${t.id}" aria-label="Ver captura de ATAS del ${fechaCorta(t.fecha)}"><img data-cap="${t.id}" alt=""></button></td>
-      <td>${fechaTabla(t.fecha)} ${t.ejemplo?'<span class="etq etq-ej">Ejemplo</span>':''}</td>
+      <td>${fechaTabla(t.fecha)}${t.hEnt?` <span class="hora-op">${horaOp(t)}</span>`:''} ${t.ejemplo?'<span class="etq etq-ej">Ejemplo</span>':''}${t.origen==='atas'?'<span class="etq etq-atas" title="Importada de ATAS">ATAS</span>':''}</td>
       <td>${esc(t.sesion)}</td>
       <td><b>${esc(t.inst)}</b></td>
       <td><span class="etq ${t.dir==='L'?'etq-l':'etq-c'}">${t.dir==='L'?'Largo':'Corto'}</span></td>
-      <td><span class="etq etq-setup">${esc(t.setup)}</span></td>
+      <td>${t.setup?`<span class="etq etq-setup">${esc(t.setup)}</span>`:(REV?'<span class="etq etq-falta">Sin setup</span>':`<button type="button" class="etq etq-falta" data-accion="editar-op" data-id="${t.id}">Sin setup · completar</button>`)}</td>
       <td class="num">${t.ct}</td>
-      <td class="num fuerte ${clase(c.usd)}">${fmtUSD(c.usd)}</td></tr>`;
+      <td class="num fuerte ${clase(c.usd)}">${fmtUSD(c.usd)}${riesgoOp(t)?`<small class="r-op">${fmtR(c.usd/riesgoOp(t))}</small>`:''}</td></tr>`;
     if(ab){
       const acc=borrando===t.id
         ? `<span>¿Borrar esta operación?</span><button type="button" class="enlace peligro" data-accion="borrar-si" data-id="${t.id}">Sí, borrar</button><button type="button" class="enlace" data-accion="borrar-no">Cancelar</button>`
-        : `<button type="button" class="enlace" data-accion="borrar" data-id="${t.id}">Borrar operación</button>`;
+        : `<button type="button" class="enlace" data-accion="editar-op" data-id="${t.id}">${t.origen==='atas'?'Completar setup y nota':'Editar operación'}</button><button type="button" class="enlace" data-accion="borrar" data-id="${t.id}">Borrar operación</button>`;
       filas+=`<tr class="detalle" id="det-${t.id}"><td colspan="9"><div class="det-grid">
         <button type="button" class="det-cap" data-accion="ver-captura" data-id="${t.id}" aria-label="Ampliar captura de ATAS"><img data-cap="${t.id}" alt="Captura de ATAS de la entrada"></button>
         <div class="det-info">
-          <div><h3>Resultado</h3><p><b class="${clase(c.usd)}">${fmtUSD(c.usd)}</b> con ${t.ct} ${t.ct===1?'contrato':'contratos'} de ${esc(t.inst)} (${esc(ins.nombre)}), sesión de ${esc(t.sesion)}.</p></div>
+          <div><h3>Resultado</h3><p><b class="${clase(c.usd)}">${fmtUSD(c.usd)}</b> con ${t.ct} ${t.ct===1?'contrato':'contratos'} de ${esc(t.inst)}${INSTR[t.inst]?' ('+esc(ins.nombre)+')':''}, sesión de ${esc(t.sesion)}.</p>${t.pEnt!=null?`<p class="det-atas">Entrada ${precio(t.pEnt)}${t.hEnt?' a las '+horaOp(t):''} · salida ${precio(t.pSal)}${t.hSal?' a las '+hhmm(horaEn(t.hSal,zonaAlumno())):''}${t.hSal&&t.hEnt?' ('+dur((t.hSal-t.hEnt)/60000)+')':''}${t.pts!=null?' · '+fmtPts(t.pts)+' puntos':''}${t.com?' · comisión '+fmtValor(t.com):''}</p>`:''}<p class="det-riesgo${stopOp(t)?'':' falta'}">${t.hEnt && t.pEnt==null?'Entrada a las '+horaOp(t)+' · ':''}${stopOp(t)?'Stop de '+nf(stopOp(t),0,2)+' puntos':'Sin stop apuntado'}${riesgoOp(t)?' · riesgo '+fmtValor(riesgoOp(t))+' · <b class="'+clase(c.usd)+'">'+fmtR(c.usd/riesgoOp(t))+'</b>':''}</p></div>
           <div><h3>${REV?'Su nota':'Tu nota'}</h3><p>${t.nota?esc(t.nota):'Sin nota.'}</p></div>
           ${REV?`<div class="det-alex rev"><span class="avatar peq" aria-hidden="true">AG</span><div class="rev-com"><h3><label for="com-${t.id}">Tu comentario</label></h3><textarea id="com-${t.id}" rows="3" maxlength="2000" placeholder="Qué ha hecho bien y qué puede mejorar en esta entrada">${esc(t.comentario||'')}</textarea><div class="rev-acc"><button type="button" class="boton peq" data-accion="guardar-com" data-id="${t.id}">Guardar comentario</button><span class="rev-estado" id="com-est-${t.id}" role="status"></span></div></div></div>`
           :`<div class="det-alex"><span class="avatar peq" aria-hidden="true">AG</span><div><h3>Comentario de Alex</h3><p>${t.comentario?esc(t.comentario):'Todavía sin revisar.'}</p></div></div>
@@ -2753,33 +3916,40 @@ function prepararForm(){
 function leerForm(){
   const v=n=>(($(`input[name="${n}"]:checked`)||{}).value)||'';
   const p=Math.abs(num($('#f-imp').value));
+  const st=num($('#f-stop').value), rs=num($('#f-riesgo').value), hh=$('#f-hora').value;
   return {fecha:$('#f-fecha').value,sesion:v('f-sesion')||'NY',inst:v('f-inst')||'NQ',ct:parseInt($('#f-ct').value,10),dir:v('f-dir')||'L',
-    usd:isFinite(p)?(v('f-res')==='P'?-p:p):NaN,setup:v('f-setup'),nota:$('#f-nota').value.trim()};
+    usd:isFinite(p)?(v('f-res')==='P'?-p:p):NaN,setup:v('f-setup'),nota:$('#f-nota').value.trim(),
+    hEnt:hh?tsLocal($('#f-fecha').value,hh):null,stop:st>0?Math.round(st*100)/100:null,riesgo:rs>0?Math.round(rs*100)/100:null};
 }
 function validar(t){
   if(!t.fecha) return ['Falta la fecha.',null];
   if(!(t.ct>=1)) return ['Pon al menos 1 contrato.','c-ct'];
   if(!t.setup) return ['Elige el setup de la operación.','c-setup'];
   if(!isFinite(t.usd)) return ['Falta el importe ganado o perdido, en dólares.','c-imp'];
-  if(!capturaForm) return ['Falta la captura de ATAS de la entrada.','c-cap'];
+  if($('#f-stop').value.trim() && !t.stop) return ['El stop tiene que ser un número de puntos, por ejemplo 15.','c-stop'];
+  if($('#f-riesgo').value.trim() && !t.riesgo) return ['El riesgo tiene que ser un importe en dólares, por ejemplo 300.','c-riesgo'];
+  if(!capturaForm && !editandoId) return ['Falta la captura de ATAS de la entrada.','c-cap'];
   return null;
 }
 function pintarCalculo(){
-  const t=leerForm(), pie=$('#pie-res');
+  autoRiesgo();
+  const t=leerForm(), pie=$('#pie-res'), rc=$('#f-r');
+  if(rc){ const r=t.riesgo && isFinite(t.usd) ? t.usd/t.riesgo : null; rc.textContent=fmtR(r); rc.className='r-caja '+(r==null?'':clase(r)); }
   if(!isFinite(t.usd)){ $('#calculo').textContent='Lo que ganaste o perdiste en la operación, sin comisiones.'; pie.textContent='0 $'; pie.className=''; return; }
   const ct=t.ct>=1?t.ct:1;
   $('#calculo').textContent=Math.abs(t.usd)<1e-9?'Operación en break even.':`${t.usd>0?'Ganancia':'Pérdida'} con ${ct} ${ct===1?'contrato':'contratos'} de ${t.inst}.`;
   pie.textContent=fmtUSD(t.usd); pie.className=clase(t.usd);
 }
 function focoCajon(){ return $$('#cajon button, #cajon input:not([hidden]), #cajon textarea').filter(e=>!e.disabled && e.offsetParent!==null); }
-function abrirCajon(origen){
+function abrirCajon(origen,id){
+  editandoId=id||null; prepararCajon();
   ultimoFoco=origen||document.activeElement;
   $('#capa').hidden=false; $('#cajon').hidden=false; document.body.style.overflow='hidden';
   $('#form-error').hidden=true; $$('.campo.invalido').forEach(c=>c.classList.remove('invalido')); pintarCalculo();
-  setTimeout(()=>{ $('#f-fecha').focus(); },0);
+  setTimeout(()=>{ const t=editandoId&&state.trades.find(x=>x.id===editandoId); const f=t&&t.origen==='atas'?($('input[name="f-setup"]:checked')||$('input[name="f-setup"]')):$('#f-fecha'); if(f) f.focus(); },0);
 }
 function cerrarCajon(){
-  $('#capa').hidden=true; $('#cajon').hidden=true; document.body.style.overflow='';
+  $('#capa').hidden=true; $('#cajon').hidden=true; document.body.style.overflow=''; editandoId=null;
   if(ultimoFoco && document.body.contains(ultimoFoco)) ultimoFoco.focus();
 }
 
@@ -3062,7 +4232,7 @@ function pintarTicker(){
   const ult=state.trades.slice().sort((a,b)=>b.fecha.localeCompare(a.fecha)||state.trades.indexOf(b)-state.trades.indexOf(a)).slice(0,10);
   if(ult.length<2){ el.innerHTML=''; el.hidden=true; return; }
   el.hidden=false;
-  const item=(t,copia)=>{ const u=calc(t).usd; return `<button type="button" class="tk" data-accion="ir-op" data-id="${t.id}"${copia?' tabindex="-1"':''} aria-label="${esc(t.inst)} ${t.dir==='L'?'largo':'corto'} del ${fechaCorta(t.fecha)}, ${fmtUSD(u)}, ${esc(t.setup)}"><b>${esc(t.inst)}</b><span class="tk-dir ${t.dir==='L'?'l':'c'}">${t.dir==='L'?'Largo':'Corto'}</span><span class="tk-r ${claseO(u)}">${fmtUSD(u)}</span><span class="tk-s">${esc(t.setup)}</span><span class="tk-f">${fechaCorta(t.fecha)}</span></button>`; };
+  const item=(t,copia)=>{ const u=calc(t).usd; return `<button type="button" class="tk" data-accion="ir-op" data-id="${t.id}"${copia?' tabindex="-1"':''} aria-label="${esc(t.inst)} ${t.dir==='L'?'largo':'corto'} del ${fechaCorta(t.fecha)}, ${fmtUSD(u)}, ${esc(nomSetup(t))}"><b>${esc(t.inst)}</b><span class="tk-dir ${t.dir==='L'?'l':'c'}">${t.dir==='L'?'Largo':'Corto'}</span><span class="tk-r ${claseO(u)}">${fmtUSD(u)}</span><span class="tk-s">${esc(t.setup)}</span><span class="tk-f">${fechaCorta(t.fecha)}</span></button>`; };
   el.innerHTML=`<p class="tk-titulo">Últimas operaciones</p><div class="tk-marco"><div class="tk-pista" style="--dur:${ult.length*6}s"><div class="tk-grupo">${ult.map(t=>item(t,false)).join('')}</div><div class="tk-grupo" aria-hidden="true">${ult.map(t=>item(t,true)).join('')}</div></div></div>`;
 }
 
@@ -3070,7 +4240,8 @@ function pintarTicker(){
 let pendiente=null;
 function transicion(fn){ if(document.startViewTransition && !REDUCIR){ try{ document.startViewTransition(fn); return; }catch(e){} } fn(); }
 function irRuta(r,despues){
-  if(ruta===r){ if(despues) despues(); return; }
+  const actual=location.hash.replace(/^#/,'')||'diario';
+  if(actual===r || (r==='diario' && ruta==='diario' && subDiario==='resumen' && !REV)){ if(despues) despues(); return; }
   pendiente=despues||null; location.hash='#'+r;
 }
 
@@ -3081,7 +4252,11 @@ function accionesPaleta(){
   const a=[];
   a.push({g:'Diario',t:'Nueva operación',k:'anotar añadir crear trade captura',f:()=>irRuta('diario',()=>abrirCajon(null))});
   a.push({g:'Diario',t:'Cambiar el objetivo del mes',k:'meta objetivo',f:()=>irRuta('diario',()=>{ editandoObj=true; pintarChips(); const i=$('#obj-in'); if(i){ i.focus(); i.select(); } })});
-  a.push({g:'Diario',t:'Ir al diario de trading',k:'panel estadisticas curva',f:()=>irRuta('diario')});
+  a.push({g:'Diario',t:'Ir al diario de trading',k:'panel resumen curva',f:()=>irRuta('diario')});
+  a.push({g:'Diario',t:'Importar operaciones de ATAS',k:'excel csv export subir journal tradovate ninjatrader',f:()=>irRuta('diario',()=>abrirImp(null))});
+  a.push({g:'Diario',t:'Ver mis estadísticas',k:'profit factor drawdown expectativa hora numeros',f:()=>irRuta('diario/estadisticas')});
+  a.push({g:'Plan e IA',t:'Mi plan de trading',k:'reglas agente ia cumplimiento disciplina',f:()=>irRuta('diario/plan')});
+  a.push({g:'Plan e IA',t:'Analizar mi último día con la IA',k:'agente informe parte revisar',f:()=>irRuta('diario/plan',()=>pedirAnalisis('dia',diasOperados().slice(-1)[0]))});
   ['semana','mes','todo'].forEach(p=>a.push({g:'Diario',t:'Ver resultados: '+PER_T[p].toLowerCase(),k:'periodo filtro',f:()=>irRuta('diario',()=>{ state.periodo=p; guardar(); pintarDatos(); })}));
   SETUPS.forEach(st=>a.push({g:'Setups',t:'Ver operaciones de '+st,k:'filtrar setup',f:()=>irRuta('diario',()=>{ filtro.setup=st; refrescarFiltros(); alPanelOps(); })}));
   a.push({g:'Formación',t:'Ir a formación',k:'temario test autoescuela permiso',f:()=>irRuta('formacion',()=>{ if(quiz){ quiz=null; pararReloj(); render(); } })});
@@ -3405,12 +4580,6 @@ async function abrirRevision(id){
     entrarRevision(a); render();
   }catch(e){ vista.innerHTML=`<div class="admin-carga"><p>No se ha podido cargar el diario. Revisa tu conexión.</p><a class="boton sec" href="#alumnos">Volver a la lista</a></div>`; }
 }
-function renderDiario(){
-  vista.innerHTML=vistaDiario(); pintarDatos();
-  const c=$('#curva');
-  if(c && window.ResizeObserver){ ro=new ResizeObserver(()=>{ const w=Math.round(c.clientWidth); if(w && Math.abs(w-anchoCurva)>2) pintarCurva(filtradas()); }); ro.observe(c); }
-  if(REV) $$('.rk-av img',vista).forEach(i=>i.addEventListener('error',()=>i.remove(),{once:true}));
-}
 async function guardarComentario(id,b){
   if(!REV) return;
   const ta=$('#com-'+id), est=$('#com-est-'+id); if(!ta) return;
@@ -3425,13 +4594,18 @@ async function guardarComentario(id,b){
   }catch(e){ if(est) est.textContent='No se ha podido guardar. Vuelve a intentarlo.'; }
   finally{ b.disabled=false; }
 }
+function resumenPlan(a){
+  const p=planNormal(a.datos && a.datos.plan); if(!planGuardado(p)) return null;
+  const hoyI=iso(new Date()), per=evaluarPeriodo(p,(a.datos.trades||[]),sumarDias(hoyI,-29),hoyI,p.zona||ZONA_NAV);
+  return {dias:per.dias.length,ok:per.diasOk};
+}
 function resumenAlumno(a){
   const ts=(a.datos && a.datos.trades)||[], hoy=new Date();
   const mes=ts.filter(t=>{ const d=fechaObj(t.fecha); return d.getFullYear()===hoy.getFullYear() && d.getMonth()===hoy.getMonth(); });
   const temas=(a.datos && a.datos.temas)||{}; let dom=0;
   TEMAS.forEach(t=>{ const pr=temas[t.id]; if(pr) dom+=Math.min(pr.mejor,nTema(t.id)); });
   return { n:ts.length, nMes:mes.length, usdMes:mes.reduce((s,t)=>s+calc(t).usd,0), semana:ts.filter(t=>enSemana(t.fecha)).length,
-    sinCom:ts.filter(t=>!t.comentario).length, ult:ts.reduce((m,t)=>t.fecha>m?t.fecha:m,''), form:dom/PREGUNTAS.length };
+    sinCom:ts.filter(t=>!t.comentario).length, ult:ts.reduce((m,t)=>t.fecha>m?t.fecha:m,''), form:dom/PREGUNTAS.length, plan:resumenPlan(a) };
 }
 function vistaAlumnos(){
   const cab=`<header class="cab-modulo entra"><div><h1>Alumnos</h1><p class="sub">Las operaciones de cada alumno con su captura de ATAS. Entra en uno para revisar su diario y dejarle comentarios.</p></div>${adminLista?'<input type="search" class="al-buscar" id="al-buscar" placeholder="Buscar alumno" aria-label="Buscar alumno">':''}</header>`;
@@ -3448,6 +4622,7 @@ function vistaAlumnos(){
   const cards=lista.map(({a,r},k)=>`<a class="al-card entra" style="animation-delay:${Math.min(k,12)*0.03}s" href="#alumnos/${encodeURIComponent(a.id)}" data-nombre="${esc(a.nombre)}">
       <span class="al-top">${avatarR({discord_id:a.id,nombre:a.nombre,avatar_url:a.avatar})}<span class="al-quien"><b class="al-nom">${esc(a.nombre)}</b><span class="al-sub">${r.ult?'Última operación: '+fechaCorta(r.ult):'Sin operaciones todavía'}</span></span></span>
       <span class="al-stats"><span><b>${r.nMes}</b>ops. este mes</span><span class="${claseO(r.usdMes)}"><b>${r.nMes?fmtUSD(r.usdMes):MENOS}</b>resultado del mes</span><span><b>${Math.round(r.form*100)} %</b>formación</span></span>
+      <span class="al-plan">${r.plan?(r.plan.dias?`Plan cumplido <b>${r.plan.ok} de ${r.plan.dias}</b> días`:'Plan creado, sin días operados'):'Sin plan de trading'}${a.ultimoInforme&&a.ultimoInforme.puntuacion!=null?` · IA <b>${a.ultimoInforme.puntuacion}/10</b>`:''}</span>
       ${r.sinCom?`<span class="al-pend">${r.sinCom} ${r.sinCom===1?'operación sin comentar':'operaciones sin comentar'}</span>`:(r.n?'<span class="al-ok">Todo revisado</span>':'')}
     </a>`).join('');
   return cab+kpis+`<div class="al-grid" id="al-grid">${cards}</div>`;
@@ -3458,7 +4633,7 @@ function trasAlumnos(){
 }
 
 /* ---------- Render y eventos ---------- */
-function leerRuta(){ const hs=location.hash; if(/^#alumnos(\/|$)/.test(hs) && YO && YO.admin){ ruta='alumnos'; revId=hs.split('/')[1]||null; return; } revId=null; ruta=hs==='#formacion'?'formacion':(hs==='#ranking'?'ranking':'diario'); }
+function leerRuta(){ const hs=location.hash, sub=s=>['estadisticas','plan'].includes(s)?s:'resumen'; if(/^#alumnos(\/|$)/.test(hs) && YO && YO.admin){ const pz=hs.split('/'); ruta='alumnos'; revId=pz[1]?decodeURIComponent(pz[1]):null; subDiario=sub(pz[2]); return; } revId=null; const m=/^#diario\/(\w+)$/.exec(hs); subDiario=sub(m&&m[1]); ruta=hs==='#formacion'?'formacion':(hs==='#ranking'?'ranking':'diario'); }
 function render(){
   $$('.nav a').forEach(a=>{ if(a.dataset.ruta===ruta) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
   if(ro){ ro.disconnect(); ro=null; }
@@ -3479,18 +4654,28 @@ document.addEventListener('click',e=>{
   if(e.target.id==='capa'){ cerrarCajon(); return; }
   if(e.target.id==='visor'){ cerrarVisor(); return; }
   if(e.target.id==='paleta'){ cerrarPaleta(); return; }
+  if(e.target.id==='imp'){ cerrarImp(); return; }
   const po=e.target.closest('.pal-op'); if(po){ ejecutarPaleta(Number(po.dataset.i)); return; }
   const b=e.target.closest('[data-accion]'); if(!b||b.disabled) return;
-  if(REV && ['nueva','editar-obj','borrar','borrar-si','borrar-no','borrar-ejemplos'].includes(b.dataset.accion)) return;
+  if(REV && ['nueva','editar-obj','borrar','borrar-si','borrar-no','borrar-ejemplos','importar','editar-op','completar-sig','analizar'].includes(b.dataset.accion)) return;
   switch(b.dataset.accion){
     case 'guardar-com': guardarComentario(b.dataset.id,b); break;
+    case 'importar': abrirImp(b); break;
+    case 'cerrar-imp': cerrarImp(); break;
+    case 'imp-elegir': $('#imp-file').click(); break;
+    case 'imp-otro': impEstado={paso:'inicio',zona:impEstado?impEstado.zona:'local'}; pintarImp(); { const s=$('#imp .subida'); if(s) s.focus(); } break;
+    case 'imp-ok': confirmarImp(); break;
+    case 'editar-op': abrirCajon(b,b.dataset.id); break;
+    case 'completar-sig': { const t=incompletas()[0]; if(t) abrirCajon(b,t.id); } break;
+    case 'plan-dia': diaPlanSel=b.dataset.fecha; pintarCumple(); pintarIA(); { const s=$(`[data-accion="plan-dia"][data-fecha="${diaPlanSel}"]`); if(s) s.focus(); } break;
+    case 'analizar': pedirAnalisis(b.dataset.tipo==='semana'?'semana':'dia',b.dataset.fecha||diasOperados().slice(-1)[0]); break;
     case 'paleta': abrirPaleta(); break;
     case 'modo': cambiarModo(b); break;
     case 'editar-obj': editandoObj=true; pintarChips(); { const i=$('#obj-in'); if(i){ i.focus(); i.select(); } } break;
     case 'insight': { const tp=b.dataset.tipo, v=b.dataset.v; filtro.dia=null; filtro.setup=null; filtro.sesion=null; filtro.dow=null; filtro.dir=null;
       if(tp==='sesion') filtro.sesion=v; else if(tp==='setup') filtro.setup=v; else if(tp==='dir') filtro.dir=v; else if(tp==='dow') filtro.dow=Number(v);
       refrescarFiltros(); alPanelOps(); } break;
-    case 'periodo': state.periodo=b.dataset.periodo; guardar(); borrando=null; pintarDatos(); break;
+    case 'periodo': state.periodo=b.dataset.periodo; guardar(); borrando=null; if(subDiario==='resumen' && $('#hero-neto')) pintarDatos(); else renderDiario(); break;
     case 'nueva': abrirCajon(b); break;
     case 'cerrar-cajon': cerrarCajon(); break;
     case 'ct-menos': { const i=$('#f-ct'); i.value=Math.max(1,(parseInt(i.value,10)||1)-1); pintarCalculo(); } break;
@@ -3530,6 +4715,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{
   if((e.ctrlKey||e.metaKey) && !e.altKey && e.key.toLowerCase()==='k'){ e.preventDefault(); if($('#paleta').hidden) abrirPaleta(); else cerrarPaleta(); return; }
   if(!$('#paleta').hidden){ if(e.key==='Tab') e.preventDefault(); return; }
+  if(!$('#imp').hidden){ if(e.key==='Escape'){ e.preventDefault(); cerrarImp(); } return; }
   if(e.key==='Escape' && e.target && e.target.id==='obj-in'){ editandoObj=false; pintarChips(); const b=$('[data-accion="editar-obj"]'); if(b) b.focus(); return; }
   if(!$('#visor').hidden){ if(e.key==='Escape'||e.key==='Tab'){ e.preventDefault(); if(e.key==='Escape') cerrarVisor(); } return; }
   if(!$('#cajon').hidden){
@@ -3567,23 +4753,32 @@ zona.addEventListener('dragover',e=>{ e.preventDefault(); zona.classList.add('ar
 zona.addEventListener('dragleave',()=>zona.classList.remove('arrastrando'));
 zona.addEventListener('drop',e=>{ e.preventDefault(); zona.classList.remove('arrastrando'); const f=e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if(f) procesarImagen(f); });
 $('#f-cap').addEventListener('change',e=>{ const f=e.target.files && e.target.files[0]; if(f) procesarImagen(f); e.target.value=''; });
+$('#imp-file').addEventListener('change',e=>{ const f=e.target.files && e.target.files[0]; if(f) leerArchivoImp(f); e.target.value=''; });
+document.addEventListener('change',e=>{
+  if(e.target.id==='imp-tz' && impEstado){ impEstado.zona=e.target.value==='utc'?'utc':'local'; }
+  else if(e.target.dataset && e.target.dataset.cuenta!=null && impEstado && impEstado.sel){ if(e.target.checked) impEstado.sel.add(e.target.dataset.cuenta); else impEstado.sel.delete(e.target.dataset.cuenta); pintarImp(); }
+});
 const form=$('#form-op');
-function alCambiar(e){ pintarCalculo(); $('#form-error').hidden=true; const c=e.target.closest('.campo'); if(c) c.classList.remove('invalido'); }
+function alCambiar(e){ if(e.target.id==='f-riesgo') riesgoManual=!!e.target.value.trim(); pintarCalculo(); $('#form-error').hidden=true; const c=e.target.closest('.campo'); if(c) c.classList.remove('invalido'); }
 form.addEventListener('input',alCambiar);
 form.addEventListener('change',alCambiar);
 form.addEventListener('submit',e=>{
   e.preventDefault();
-  const t=leerForm(), err=validar(t), er=$('#form-error');
+  const t=leerForm(), er=$('#form-error');
+  const orig=editandoId?state.trades.find(x=>x.id===editandoId):null;
+  if(orig && orig.origen==='atas') Object.assign(t,{fecha:orig.fecha,ct:orig.ct,inst:orig.inst,dir:orig.dir,usd:orig.usd});
+  const err=validar(t);
   $$('.campo.invalido').forEach(c=>c.classList.remove('invalido'));
   if(err){ er.textContent=err[0]; er.hidden=false; if(err[1]){ const c=$('#'+err[1]); c.classList.add('invalido'); c.scrollIntoView({block:'center',behavior:REDUCIR?'auto':'smooth'}); const f=c.querySelector('input:not([hidden]),button'); if(f) f.focus({preventScroll:true}); } return; }
+  if(editandoId){ guardarEdicion(t); return; }
   const id='t'+Date.now();
   capturas.set(id,capturaForm); IDB.set(id,capturaForm).catch(()=>{ if(SERVIDOR) toast('No se ha podido subir la captura. Vuelve a guardarla.'); });
   state.trades.push(Object.assign({id,comentario:'',ejemplo:false},t));
   guardar();
   capturaForm=null; pintarZona();
-  $('#f-imp').value=''; $('#f-nota').value=''; $$('input[name="f-setup"]').forEach(r=>{ r.checked=false; });
+  $('#f-imp').value=''; $('#f-nota').value=''; $('#f-hora').value=''; $('#f-stop').value=''; $('#f-riesgo').value=''; riesgoManual=false; $$('input[name="f-setup"]').forEach(r=>{ r.checked=false; });
   pintarCalculo(); cerrarCajon();
-  if(ruta==='diario'){ pintarDatos(); if(enPeriodo(t.fecha)) setTimeout(()=>irAOperacion(id),300); }
+  if(ruta==='diario'){ refrescarDiario(); if(enPeriodo(t.fecha) && subDiario==='resumen') setTimeout(()=>irAOperacion(id),300); }
   toast(enPeriodo(t.fecha)?'Operación guardada':'Operación guardada. Cambia el periodo para verla.');
 });
 window.addEventListener('hashchange',()=>transicion(()=>{ leerRuta(); render(); if(pendiente){ const f=pendiente; pendiente=null; f(); } }));
