@@ -2718,7 +2718,7 @@ preg:[
 ['¿Qué busca quien usa el futuro como cobertura?',['Reducir el riesgo de otra posición, no ganar con el futuro','Ganar con el futuro aprovechando los movimientos cortos','Mover el precio para cerrar sus opciones con beneficio'],'La cobertura protege. Por eso puede vender aunque el mercado suba.'],
 ['¿Qué parte del volumen suele representar el trader minorista?',['Una parte pequeña aunque sea la mayoría de cuentas','Casi todo el volumen negociado en los futuros','Exactamente la mitad del volumen de cada sesión'],'Muchas cuentas pequeñas suman poco volumen frente a los grandes.'],
 ['¿Cuál de estas es una huella típica del dinero grande?',['Volumen anormal en un nivel sin que el precio avance','Velas pequeñas con poco volumen durante horas','Un indicador de sobrecompra en zona alta'],'Volumen grande con poco desplazamiento suele ser alguien grande absorbiendo.'],
-['¿Qué es una orden iceberg?',['Una orden grande que solo muestra una parte en el libro','Una orden que se cancela justo antes de ejecutarse','Una orden que solo se ejecuta en la apertura'],'Enseña poco tamaño y se va reponiendo según se ejecuta.'],
+['¿Cómo se comporta una orden iceberg en el libro?',['Enseña solo una parte y se va reponiendo según se ejecuta','Una orden que se cancela justo antes de ejecutarse','Una orden que solo se ejecuta en la apertura'],'Enseña poco tamaño y se va reponiendo según se ejecuta.'],
 ['¿Necesitas saber qué fondo concreto está comprando para operar?',['No: basta con ver dónde aparece el volumen y cómo reacciona el precio','Sí: sin saber quién compra no se puede operar Order Flow','Sí: hay que seguir las noticias de cada fondo cada día'],'El flujo te enseña la huella. El nombre no cambia la lectura.'],
 ['Un barrido agresivo de varios precios con mucho volumen suele indicar…',['Alguien con urgencia por entrar o salir del mercado','Un error de la plataforma al dibujar el gráfico','Que el mercado está cerrado en ese momento'],'Quien barre varios niveles acepta pagar peor: tiene prisa.'],
 ['¿Por qué los algoritmos ponen liquidez a los dos lados del libro?',['Para ganar el spread mientras gestionan su riesgo','Para empujar el precio en una dirección concreta','Para impedir que los minoristas puedan operar'],'Su negocio es dar liquidez y cobrar por ello.'],
@@ -2781,7 +2781,7 @@ preg:[
 ['¿Por qué conviene marcar zonas en lugar de líneas exactas?',['Porque el precio rara vez gira en el tick exacto','Porque las líneas no se pueden dibujar en ATAS','Porque las zonas son más fáciles de borrar'],'Una zona de pocos puntos refleja mejor dónde están las órdenes.'],
 ['Una resistencia se toca cinco veces sin romperse. ¿Qué suele pasar con ella?',['Se debilita: cada toque consume órdenes del nivel','Se hace más fuerte con cada toque nuevo','No cambia: el número de toques no importa'],'Cada visita gasta liquidez. Al final suele ceder.'],
 ['¿Cuál de estos niveles suele ser más relevante para el día?',['El máximo y el mínimo de la sesión anterior','Un máximo de hace dos años en gráfico semanal','El cruce de dos medias en un minuto'],'Los extremos recientes los mira todo el mercado.'],
-['¿Qué son el ONH y el ONL?',['El máximo y el mínimo de la sesión nocturna','El precio de apertura y de cierre de Nueva York','Los niveles del VWAP con sus bandas'],'Overnight high y overnight low: referencias para la apertura.'],
+['¿A qué se refieren las siglas ONH y ONL al marcar niveles?',['Al máximo y al mínimo de la sesión nocturna','El precio de apertura y de cierre de Nueva York','Los niveles del VWAP con sus bandas'],'Overnight high y overnight low: referencias para la apertura.'],
 ['El precio llega a tu soporte. ¿Qué necesitas antes de comprar?',['Una reacción en el flujo: absorción o agotamiento vendedor','Que el soporte haya funcionado más de tres veces','Que un indicador de momento marque sobreventa'],'El nivel te dice dónde mirar. El flujo te dice si hay compradores.'],
 ['¿Por qué los números redondos actúan como niveles?',['Porque se amontonan órdenes y stops en ellos','Porque el exchange para el mercado en esos precios','Porque los algoritmos no pueden operar en ellos'],'Mucha gente pone órdenes en precios redondos.'],
 ['¿Qué niveles de volumen conviene marcar?',['El POC, el VAH y el VAL','Los máximos de cada vela','La apertura de cada hora'],'Son zonas donde se negoció mucho y el precio reacciona.'],
@@ -2935,7 +2935,7 @@ teoria:`<p>El DOM (profundidad de mercado) enseña las órdenes límite que espe
 <div class="lec-clave"><b>Idea clave</b><p>El DOM enseña lo que alguien dice que hará. El footprint enseña lo que se hizo.</p></div>`,
 usar:['dom-1','dom-2','dom-4','dom-9','dom-10','dom-12'],
 preg:[
-['¿Qué muestra el DOM?',['Las órdenes límite que esperan en cada precio','Las operaciones ya ejecutadas en cada precio','El volumen total de la sesión anterior'],'Es la liquidez pasiva disponible ahora.'],
+['¿Qué enseña la profundidad de mercado en cada nivel de precio?',['Las órdenes límite que esperan ahí para comprar o vender','Las operaciones ya ejecutadas en cada precio','El volumen total de la sesión anterior'],'Es la liquidez pasiva disponible ahora.'],
 ['¿Dónde aparecen las órdenes límite de compra en el DOM?',['Por debajo del precio actual','Por encima del precio actual','Solo en el precio actual'],'Quien compra con límite espera más abajo.'],
 ['¿Por qué un tamaño grande en el libro es una intención y no un hecho?',['Porque la orden límite se puede cancelar antes de ejecutarse','Porque el DOM muestra datos con un día de retraso','Porque las órdenes grandes no se pueden ejecutar'],'Hasta que no se ejecuta, puede desaparecer.'],
 ['¿Dónde ves lo que de verdad se ejecutó?',['En la cinta y en el footprint','En el DOM y en el heatmap','En las plantillas de la plataforma'],'Ejecución real: cinta y footprint.']
@@ -3539,9 +3539,356 @@ RUTA.push({id:'n13',titulo:'Los setups del Método AGX',desc:'Tu setup principal
 {id:'n13-3',titulo:'Ejemplos de entradas ganadoras',min:0,tema:'ejecucion',whop:'Ejemplos de entradas ganadoras'},
 {id:'n13-4',titulo:'Entradas que no tomo (y por qué)',min:0,tema:'ejecucion',whop:'Entradas que NO tomo (y por qué)'}
 ]});
+/* ---------- Ruta de formación: libro de órdenes avanzado (se inserta tras el nivel de Delta) ---------- */
+RUTA.splice(RUTA.findIndex(n=>n.id==='n7')+1,0,{id:'n7b',titulo:'Libro de órdenes avanzado',desc:'Cómo funciona el libro por dentro, icebergs, spoofing, pulling y stacking, heatmap y cómo operarlo.',lecciones:[
+{id:'n7b-1',titulo:'Anatomía del libro: cola, profundidad y lo que no se ve',min:8,tema:'dom',
+teoria:`<p>El libro de órdenes es la lista de órdenes límite que esperan a cada precio. Entenderlo por dentro evita la mayoría de errores al leer el DOM.</p>
+<h3>Prioridad: precio y luego tiempo</h3>
+<p>En los futuros de CME las órdenes de un mismo precio se ejecutan por orden de llegada (FIFO). Quien llega primero a un nivel cobra primero. Por eso una orden grande que se modifica al alza o se repone pierde su sitio y se va al final de la cola.</p>
+<h3>Niveles agregados y órdenes individuales</h3>
+<ul><li><b>Datos por precio (MBP):</b> lo normal. Ves la suma de contratos en cada nivel, no cuántas órdenes hay ni de quién son.</li>
+<li><b>Datos por orden (MBO):</b> cada orden con su identificador. Permite ver cuántas órdenes forman un nivel y detectar icebergs nativos. Pocas plataformas y feeds lo ofrecen.</li></ul>
+<h3>Profundidad</h3>
+<p>Un feed normal enseña unos 10 niveles por lado. Para ES suele bastar; en CL o NQ, que se mueven rápido, el problema no es la profundidad sino la velocidad de actualización. Lo que ves siempre llega con algo de retraso.</p>
+<h3>Lo que el libro no enseña</h3>
+<ul><li><b>Los stops:</b> no están en el libro hasta que saltan. Por eso una zona fina puede acelerar de golpe.</li>
+<li><b>La parte oculta de los icebergs:</b> solo ves el trozo visible.</li>
+<li><b>Las órdenes a mercado:</b> no esperan; consumen. Las ves en la cinta y en el footprint, no en el libro.</li>
+<li><b>La intención:</b> una orden límite se puede cancelar en cualquier momento.</li></ul>
+<div class="lec-clave"><b>Idea clave</b><p>El libro es una declaración de intenciones con fecha de caducidad. La cinta y el footprint son los hechos.</p></div>`,
+usar:['dom-1','dom-2','dom-9','dom-12','subasta-10'],
+preg:[
+['Dos órdenes límite de compra esperan al mismo precio. ¿Cuál se ejecuta primero en CME?',['La que llegó antes a ese precio','La de mayor tamaño','La que pertenece a un creador de mercado'],'Prioridad precio-tiempo: a igual precio, manda el orden de llegada.'],
+['Un trader modifica al alza el tamaño de su orden límite. ¿Qué pasa con su posición en la cola?',['La pierde y pasa al final de la cola de ese precio','La mantiene porque el precio no ha cambiado','Sube al principio porque ahora es más grande'],'Aumentar el tamaño cuenta como orden nueva para la cola. Reducirlo, en cambio, suele conservar la prioridad.'],
+['¿Qué diferencia hay entre datos por precio (MBP) y datos por orden (MBO)?',['MBP suma los contratos de cada nivel; MBO enseña cada orden por separado','MBP enseña solo las órdenes a mercado y MBO solo las órdenes límite que esperan','MBP llega en tiempo real al terminal y MBO se publica con un día de retraso'],'Con MBO ves cuántas órdenes forman un nivel y puedes seguir una orden concreta.'],
+['¿Por qué una zona del libro con poco tamaño puede moverse de golpe mucho más de lo que parece?',['Porque los stops no están en el libro y al saltar añaden órdenes a mercado','Porque el exchange elimina las órdenes pequeñas en esas zonas','Porque los creadores de mercado cierran el libro unos segundos'],'Los stops son invisibles hasta que se disparan, y entonces empujan como agresión.'],
+['En NQ, ¿cuál suele ser la mayor dificultad al leer el DOM?',['La velocidad a la que cambia el libro','La falta de niveles de profundidad','Que no muestra el precio actual'],'NQ tiene liquidez fina y se actualiza muy rápido. En ES el libro es grueso y más lento.'],
+['¿Dónde ves las órdenes a mercado?',['En la cinta y en el footprint, como volumen ejecutado','En el libro, como tamaño que espera en cada precio','En el heatmap, como bandas brillantes'],'Las órdenes a mercado no esperan; se ejecutan y desaparecen del libro.'],
+['Un nivel del DOM muestra 850 contratos. ¿Qué sabes con seguridad?',['Que ahora mismo hay 850 contratos visibles esperando en ese precio','Que se van a negociar 850 contratos cuando llegue el precio','Que una sola institución tiene una orden de 850 contratos'],'Es una suma de órdenes visibles en este instante. Pueden ser muchas órdenes, pueden cancelarse y puede haber más oculto.'],
+['¿Qué información añade un feed MBO que resulta útil para detectar icebergs?',['El identificador de cada orden, que se mantiene cuando un iceberg nativo se recarga','El nombre de la entidad que envía cada orden y el broker por el que la manda','El precio objetivo y el stop que lleva asociados cada orden límite del libro'],'Si tras ejecutarse el trozo visible reaparece tamaño con el mismo identificador, es un iceberg nativo.'],
+['¿Por qué lo que ves en el DOM va siempre algo por detrás de la realidad?',['Porque los datos viajan del exchange a tu pantalla y tardan milisegundos','Porque el exchange publica el libro cada minuto','Porque ATAS filtra las órdenes pequeñas antes de mostrarlas'],'La latencia es pequeña, pero en mercados rápidos cuenta.'],
+['¿Cuál es la lectura correcta de una orden límite enorme que acaba de aparecer a 20 ticks del precio?',['Una intención que puede cancelarse; no cuenta hasta que el precio la pone a prueba','Un soporte garantizado al que el precio va a reaccionar cuando llegue a ese nivel','Una orden que ya se ha ejecutado en ese precio y aparece en el libro como histórico'],'Lejos del precio, cancelar no cuesta nada. Cuenta lo que pasa cuando el precio llega.']
+]},
+{id:'n7b-2',titulo:'Icebergs: nativos, sintéticos y cómo se recargan',min:8,tema:'absorcion',
+teoria:`<p>Un iceberg es una orden límite grande de la que solo se muestra una parte. Cuando el trozo visible se ejecuta, aparece el siguiente al mismo precio. Las instituciones lo usan para entrar o salir sin anunciar su tamaño.</p>
+<h3>Dos tipos</h3>
+<ul><li><b>Nativo (del exchange):</b> el exchange guarda la reserva y repone solo. En CME la orden conserva su identificador en cada recarga, así que con datos MBO se puede detectar. Cada recarga pierde prioridad y se va al final de la cola.</li>
+<li><b>Sintético (del broker o la plataforma):</b> el broker trocea la orden y manda cada trozo como una orden nueva, con identificador distinto. Es más difícil de detectar y la recarga tarda un poco más porque cada trozo viaja desde el servidor del broker.</li></ul>
+<h3>Cómo se ve</h3>
+<ul><li>En el libro: el tamaño baja al ejecutarse y vuelve a aparecer un trozo parecido en el mismo precio, una y otra vez.</li>
+<li>En la cinta: muchos prints seguidos al mismo precio, a menudo de tamaños similares, muy por encima del tamaño que se veía.</li>
+<li>En el footprint: una celda con un volumen muy superior al de los precios vecinos y el precio sin avanzar.</li></ul>
+<h3>Lo que dicen los datos</h3>
+<p>Estudios sobre datos de CME en ES muestran que los icebergs nativos pesan en torno a un 4 % del volumen negociado pero son una fracción ínfima de las órdenes; los sintéticos pueden pesar bastante más. Más de la mitad de los sintéticos se cancelan antes de completarse, y los trozos tienden a tamaños redondos (15, 25, 50, 100) porque los eligen personas.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El tamaño visible es un mínimo, nunca el total. Lo que delata al iceberg es la recarga.</p></div>`,
+usar:['absorcion-2','absorcion-7'],
+preg:[
+['¿Qué define a un iceberg?',['Una orden límite grande de la que solo se muestra una parte y se repone al ejecutarse','Una orden a mercado grande que se ejecuta en varios precios seguidos hasta completarse','Una orden límite grande que se cancela automáticamente justo antes de que la ejecuten'],'Se enseña un trozo; el resto queda en reserva y va saliendo.'],
+['¿Qué ventaja tiene el iceberg nativo para quien lo detecta con datos MBO?',['La orden conserva el mismo identificador en cada recarga','Se ve el nombre del banco que lo ha enviado','El exchange avisa por adelantado del tamaño total'],'El identificador persistente permite seguir la orden y estimar la reserva.'],
+['¿Qué precio paga quien usa un iceberg nativo cada vez que se recarga?',['Pierde la prioridad de cola y se pone al final','Paga una comisión extra por cada trozo','Tiene que mover el precio un tick'],'Cada trozo nuevo entra el último en la cola de ese precio.'],
+['¿Por qué un iceberg sintético es más difícil de detectar?',['Porque cada trozo llega como una orden nueva con identificador distinto','Porque el exchange oculta por completo del libro la orden y todos sus trozos','Porque siempre se coloca a muchos ticks del precio actual y fuera de la pantalla'],'No hay hilo que una los trozos; solo el patrón de recarga al mismo precio y tamaño.'],
+['En la cinta ves 14 prints seguidos de 25 contratos al mismo precio mientras el libro solo mostraba 25. ¿Qué sugiere?',['Un iceberg recargándose en ese precio','Un spoofing que se ha retirado','Catorce traders distintos entrando a la vez por casualidad'],'Volumen ejecutado muy por encima del visible y tamaños repetidos: recarga.'],
+['¿Qué proporción aproximada del volumen de ES representan los icebergs nativos según los estudios con datos de CME?',['En torno a un 4 %','En torno a un 40 %','Menos de un 0,1 %'],'Pocos en número de órdenes, pero un 4 % del volumen. Los sintéticos pueden sumar más.'],
+['¿Qué pasa con más de la mitad de los icebergs sintéticos según esos estudios?',['Se cancelan antes de completarse','Se ejecutan en menos de un segundo','Se convierten en órdenes a mercado'],'Muchos se retiran a medias. Un iceberg no es una promesa de volumen total.'],
+['¿Por qué los trozos de los icebergs suelen ser de 15, 25, 50 o 100 contratos?',['Porque los eligen personas y tendemos a números redondos','Porque el exchange solo permite esos tamaños','Porque los algoritmos exigen múltiplos de cinco'],'Es sesgo humano. Los algoritmos que quieren esconderse usan tamaños irregulares.'],
+['¿Dónde se ve un iceberg en el footprint?',['Una celda con volumen muy superior a los precios vecinos sin que el precio avance','Una fila con cero volumen en el bid y un volumen muy alto en el ask del nivel de arriba','Un imbalance diagonal de compra de más del 300 % repetido en tres precios seguidos'],'Mucho negocio en un precio y el precio clavado: alguien absorbe.'],
+['¿Cuál es la motivación principal de una institución para usar icebergs?',['Entrar o salir sin revelar su tamaño y sin mover el precio en su contra','Pagar menos comisiones al exchange al trocear la orden en lotes más pequeños','Ganar prioridad de cola frente al resto de participantes en cada recarga del nivel'],'Si el mercado viera la orden completa, se movería antes de que terminara de ejecutarla.'],
+['Un iceberg se recarga seis veces y después el precio lo atraviesa con fuerza. ¿Qué ha pasado probablemente?',['El que defendía se quedó sin reserva o se retiró, y la zona se rompe con aceleración','El iceberg era en realidad spoofing y se retiró sin ejecutar ninguno de sus trozos','El exchange canceló la orden por exceso de tamaño y el libro se quedó vacío en el nivel'],'Cuando el defensor se rinde, los que empujaban avanzan de golpe.']
+]},
+{id:'n7b-3',titulo:'Detectar icebergs y absorción en ATAS',min:8,tema:'absorcion',fig:'abs',
+teoria:`<p>ATAS no tiene un botón de «iceberg», pero sus herramientas lo muestran desde ángulos distintos. Lo fiable es que varias coincidan.</p>
+<h3>Smart DOM</h3>
+<p>Añade las columnas de volumen negociado por precio (bid y ask). Si en un nivel el volumen ejecutado crece y crece mientras el tamaño visible se mantiene y el precio no pasa, lo estás viendo en directo. Las columnas de cambios de órdenes muestran cómo se repone el tamaño.</p>
+<h3>Smart Tape</h3>
+<p>Activa la agrupación de prints para ver órdenes completas y pon un filtro de volumen mínimo. Busca prints repetidos al mismo precio, de tamaños parecidos, muy por encima de lo visible. Congela la cinta para revisarlo con calma.</p>
+<h3>Footprint y Cluster Search</h3>
+<p>En el footprint, una celda desproporcionada con el precio clavado. Con Cluster Search puedes buscar celdas con delta muy negativo en mínimos (venta agresiva absorbida por compras límite) o delta muy positivo en máximos, filtrando por ubicación en la vela.</p>
+<h3>Reglas para no engañarte</h3>
+<ul><li>La detección es una probabilidad, no una certeza: varios traders en un mismo nivel, un algoritmo troceando o un creador de mercado reponiendo se ven igual.</li>
+<li>Los icebergs no siempre son direccionales: pueden ser coberturas, spreads o rebalanceos.</li>
+<li>Cuanto más tiempo aguanta la absorción, más fuerte suele ser el defensor.</li>
+<li>Es más fácil verlos en libros finos (NQ, CL) que en ES, donde el libro es muy grueso.</li></ul>
+<div class="lec-clave"><b>Idea clave</b><p>Volumen ejecutado muy por encima del visible, al mismo precio, y el precio que no avanza. Eso, en un nivel que importa.</p></div>`,
+usar:['absorcion-1','absorcion-9','absorcion-12','cinta-2','cinta-3','bigtrades-7','bigtrades-9'],
+preg:[
+['¿Qué columnas del Smart DOM te permiten ver un iceberg mientras ocurre?',['Las de volumen negociado por precio junto al tamaño visible','Las de precio de apertura y cierre de la sesión junto al máximo y el mínimo del día','Las de comisiones por contrato y margen requerido junto al saldo de la cuenta'],'Ejecutado creciente, visible estable, precio clavado.'],
+['¿Para qué sirve agrupar los prints en la Smart Tape al buscar icebergs?',['Para ver cada orden a mercado completa y comparar su tamaño con el visible','Para que la cinta avance más despacio y dé tiempo a leer cada print con calma','Para ocultar las operaciones del lado contrario y ver solo las de tu dirección'],'Sin agrupar, una orden de 50 puede salir como 50 prints de 1.'],
+['¿Qué búsqueda de Cluster Search apunta a una absorción compradora en un mínimo?',['Celdas con delta muy negativo situadas en el mínimo de la vela','Celdas con delta muy positivo en el máximo de la vela','Celdas con volumen cero en el cuerpo de la vela'],'Mucha venta agresiva en el mínimo que no consigue bajar el precio: compras límite enfrente.'],
+['Ves lo que parece un iceberg pero el volumen podría venir de varios traders distintos. ¿Cómo lo tratas?',['Como una probabilidad: buscas que la cinta, el footprint y la reacción del precio coincidan','Como una certeza: entras en cuanto lo detectas sin esperar ninguna otra confirmación','Lo descartas: si la detección no es segura al cien por cien, no sirve para operar'],'La detección es siempre probabilística. La confirmación es la reacción del precio.'],
+['¿Por qué es más fácil ver icebergs en NQ o CL que en ES?',['Porque sus libros son más finos y una orden grande destaca','Porque ES no permite órdenes iceberg','Porque en ES el feed no envía el volumen ejecutado'],'En un libro grueso una orden grande se diluye entre muchas otras.'],
+['Una absorción aguanta cuarenta minutos frente a otra que dura un minuto. ¿Cuál indica un defensor más fuerte?',['La de cuarenta minutos','La de un minuto','Las dos igual, el tiempo no importa'],'Aguantar mucho tiempo y mucho volumen exige reserva real.'],
+['¿Qué botón de la Smart Tape te ayuda a estudiar una secuencia de prints sin que se mueva?',['El de congelar','El de clonar ventana','El de instrumento'],'Congelas, revisas tamaños y precios, y vuelves a soltar.'],
+['Detectas un iceberg comprador en un precio en mitad de la nada, sin nivel cerca. ¿Qué peso le das?',['Poco: lejos de un nivel relevante suele ser cobertura, spread o rebalanceo','Mucho: un iceberg siempre marca un giro, esté donde esté y a la hora que sea','Ninguno si el volumen acumulado en el nivel no supera los 1.000 contratos'],'Los icebergs valen en contexto: VWAP, extremos de ayer, área de valor, redondos.'],
+['¿Qué par de columnas de ATAS muestra directamente cómo se repone el tamaño en un precio?',['Las columnas de cambios de órdenes límite del Smart DOM','Las columnas de hora y precio de la cinta','Las columnas de delta del Cluster Statistic'],'Registran altas y cancelaciones de órdenes límite por nivel.'],
+['Un filtro de volumen mínimo en la cinta sirve para…',['Dejar fuera los prints pequeños y ver solo los que importan en tu instrumento','Aumentar la velocidad de la cinta para que muestre más prints por segundo','Convertir los prints de compra en prints de venta cuando el delta es negativo'],'El umbral depende del instrumento y de la hora: calíbralo mirando la cinta.'],
+['Mucho volumen en una celda del footprint pero el precio la atraviesa sin pararse. ¿Era absorción?',['No: si el precio no se frena, no hubo absorción efectiva','Sí: un volumen alto en una celda es siempre absorción, pase lo que pase después','Depende del color de la vela: en vela verde es absorción y en vela roja no lo es'],'Absorción es esfuerzo sin avance. Si avanza, era simplemente mucho negocio.']
+]},
+{id:'n7b-4',titulo:'Spoofing y layering',min:7,tema:'dom',
+teoria:`<p>Spoofing es colocar órdenes límite grandes que no se quieren ejecutar, para que el mercado crea que hay oferta o demanda, y cancelarlas cuando el precio se acerca. Layering es lo mismo con varias capas de precios.</p>
+<h3>Cómo funciona</h3>
+<p>El manipulador quiere comprar barato. Pone órdenes de venta grandes justo encima del precio: el libro parece lleno de vendedores y el precio baja. Se ejecuta su pequeña compra real, cancela las ventas falsas y repite al revés para vender más caro. Todo ocurre en milisegundos y lo hacen algoritmos, no personas con el ratón.</p>
+<h3>Cómo se ve</h3>
+<ul><li>Tamaños grandes que aparecen y desaparecen muchas veces en el mismo nivel.</li>
+<li>Órdenes que se retiran justo cuando el precio llega, sin ejecutarse.</li>
+<li>En el Smart DOM, las columnas de cambios de órdenes muestran niveles con muchísimas altas y bajas en poco tiempo.</li><li>Algunas plataformas miden la tasa de retirada de cada nivel; niveles con más del 80 % de órdenes retiradas no merecen confianza.</li></ul>
+<h3>Es ilegal, pero existe</h3>
+<p>En Estados Unidos está prohibido y hay sanciones millonarias, pero probar la intención es difícil. Para ti lo importante no es denunciarlo sino no caer: solo cuenta lo que se ejecuta.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Un muro que desaparece cuando el precio llega nunca fue un muro. La única forma de saber si una orden es real es ver qué pasa cuando el precio la toca.</p></div>`,
+usar:['dom-3','dom-7','absorcion-6'],
+preg:[
+['¿Qué es el layering?',['Spoofing con varias capas de órdenes falsas a distintos precios','Comprar y vender a la vez en el mismo precio para quedarse con el spread','Trocear una orden grande en partes pequeñas para que no se note en el libro'],'Varias capas de órdenes que no se quieren ejecutar, para exagerar la presión.'],
+['¿Por qué el spoofing lo hacen casi siempre algoritmos?',['Porque colocar y cancelar en milisegundos no se puede hacer a mano','Porque el exchange solo acepta órdenes de algoritmos','Porque los algoritmos no pueden ser sancionados'],'La velocidad es la clave del engaño.'],
+['Un nivel muestra decenas de altas y cancelaciones de órdenes en pocos segundos. ¿Qué sugiere?',['Actividad algorítmica, posible spoofing','Un iceberg nativo recargándose','Un stop run en curso'],'Las columnas de cambios de órdenes del Smart DOM lo delatan.'],
+['¿Cuál es la diferencia práctica entre un iceberg y un spoofing?',['El iceberg se ejecuta y se repone; el spoofing se retira sin ejecutarse','El iceberg se coloca siempre en el ask y el spoofing siempre en el bid del libro','El iceberg es ilegal en Estados Unidos y el spoofing está permitido por el regulador'],'Uno negocia de verdad; el otro solo quiere que lo vean.'],
+['Un muro de venta de 1.500 contratos desaparece cuando el precio está a dos ticks. ¿Qué haces con la idea de vender?',['La descartas: el muro nunca fue real','La refuerzas: el muro se ha movido más arriba','Vendes a mercado antes de que vuelva a aparecer'],'Si se retira sin ejecutarse, no había vendedor.'],
+['¿Qué nivel de tasa de retirada hace que un nivel del libro no merezca confianza?',['Por encima del 80 % de órdenes retiradas','Por debajo del 10 % de órdenes retiradas','Exactamente el 50 % de órdenes retiradas'],'Si casi todo lo que se pone se quita, no es liquidez real.'],
+['¿Por qué es difícil sancionar el spoofing aunque sea ilegal?',['Porque hay que demostrar la intención de no ejecutar','Porque no deja rastro en los datos del exchange','Porque solo está prohibido en criptomonedas'],'Los reguladores usan comunicaciones y análisis estadístico para probarlo.'],
+['¿Cuál es tu mejor defensa como trader frente al spoofing?',['Decidir con volumen ejecutado y reacción del precio, no con tamaño que espera','Operar siempre en contra de los muros grandes porque suelen ser falsos','Ignorar el DOM por completo y mirar solo el gráfico de velas de un minuto'],'Lo ejecutado no se puede fingir.'],
+['Vendes porque ves oferta enorme y, mientras, los compradores levantan el ask nivel a nivel. ¿Qué error cometes?',['Dejas que el tamaño pasivo te ciegue frente a la agresión que sí avanza','Operas en la sesión equivocada, cuando el libro no tiene suficiente liquidez','Usas demasiados contratos para el tamaño de tu cuenta y el riesgo de la entrada'],'El flujo activo manda sobre el pasivo que todavía no se ha probado.'],
+['Órdenes grandes que parpadean un instante y desaparecen, lejos del precio. ¿A quién van dirigidas probablemente?',['A algoritmos que reaccionan al tamaño del libro','A traders minoristas que miran gráficos diarios','A nadie: son errores del feed'],'Cebo para máquinas. Para ti, ruido.']
+]},
+{id:'n7b-5',titulo:'Pulling, stacking y el flip',min:7,tema:'dom',
+teoria:`<p>El libro cambia todo el tiempo. Tres movimientos merecen nombre propio.</p>
+<ul><li><b>Stacking:</b> la liquidez se acumula en un lado. Por ejemplo, bids que crecen por debajo del precio.</li>
+<li><b>Pulling:</b> la liquidez se retira. Por ejemplo, ofertas que desaparecen por encima del precio.</li>
+<li><b>Flip:</b> un participante que estaba pasivo pasa a agredir: el que esperaba con límite empieza a comprar a mercado. Es de las señales más fuertes del libro.</li></ul>
+<h3>Lectura clásica y sus matices</h3>
+<p>Bids que se apilan debajo y ofertas que se retiran arriba suelen leerse como alcista, y al revés como bajista. Pero cada movimiento tiene varias causas: retirar bids puede ser miedo, pero también reposicionamiento o gestión de riesgo; apilar bids puede ser demanda real, búsqueda de prioridad de cola, cobertura o spoofing.</p>
+<h3>Lo que manda</h3>
+<p>La reacción del precio vale más que el cambio del libro. Si los bids se retiran y el precio cae, confirmado. Si se retiran y el precio aguanta, alguien está absorbiendo de otra forma.</p>
+<h3>Cómo verlo en ATAS</h3>
+<p>En el Smart DOM puedes montar columnas de cambios de profundidad para el bid y para el ask, con autolimpieza, para ver solo las altas y bajas recientes. Hay quien deja solo esas dos columnas y el precio.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Stacking y pulling son preguntas. El precio da la respuesta.</p></div>`,
+usar:['dom-8','dom-11'],
+preg:[
+['¿Qué es el stacking?',['Liquidez que se acumula en un lado del libro','Órdenes que se cancelan de golpe','Una orden a mercado que barre varios precios'],'Se apila tamaño, por ejemplo bids creciendo bajo el precio.'],
+['¿Qué es el flip?',['Un pasivo que pasa a agredir: el que esperaba con límite empieza a cruzar a mercado','Un cambio de color del libro cuando se pasa de la sesión de Londres a la de Nueva York','La inversión del spread en momentos de pánico, cuando el bid supera al ask'],'Quien defendía deja de esperar y empuja. Convicción alta.'],
+['Se retiran bids debajo del precio y el precio cae de inmediato. ¿Qué lectura confirma?',['La bajista: el soporte pasivo se ha ido y el precio lo nota','La alcista: están preparando una compra grande','Ninguna: retirar bids no significa nada'],'Pulling confirmado por la reacción.'],
+['Se retiran bids pero el precio aguanta sin caer. ¿Qué es lo más probable?',['Que otro comprador esté absorbiendo, quizá oculto','Que el mercado esté cerrado y el libro muestre datos congelados de la sesión anterior','Que el libro tenga un error de datos y las retiradas no sean reales'],'Si el precio no responde al pulling, hay demanda que no ves.'],
+['¿Cuál de estas puede explicar unos bids apilados además de la demanda real?',['Búsqueda de prioridad de cola, cobertura o spoofing','Un cierre anticipado del mercado anunciado por el exchange para ese día','Un error de redondeo del exchange al sumar las órdenes de cada nivel'],'Mismo aspecto, causas distintas. Por eso hace falta el precio.'],
+['¿Qué columnas montarías en el Smart DOM para seguir pulling y stacking?',['Dos columnas de cambios de profundidad, una para el bid y otra para el ask, con autolimpieza','Las columnas de apertura y cierre diario junto a las del máximo y el mínimo de la semana','Una columna de comisiones por contrato y otra de margen requerido, con autolimpieza'],'Así ves solo altas y bajas recientes a cada lado.'],
+['Ofertas que se apilan encima del precio durante una consolidación tras una caída. ¿Qué sugiere?',['Que la presión vendedora sigue y la continuación bajista gana probabilidad','Que el giro alcista es inminente porque las ofertas se van a absorber enseguida','Que el volumen va a desaparecer y el mercado se quedará sin movimiento el resto del día'],'Stacking en el ask en contexto bajista: oferta dispuesta a vender.'],
+['La liquidez se retira muy rápido de ambos lados justo antes de un dato. ¿Qué anticipa?',['Un movimiento brusco: nadie quiere quedarse puesto','Un rango muy estrecho: sin órdenes no hay quien mueva el precio','Que el dato no va a publicarse porque el mercado ya lo ha descontado'],'Vacío de liquidez: el precio puede viajar varios ticks con poco volumen.'],
+['¿Qué vale más, el conteo bruto de órdenes retiradas o lo que el cambio sugiere sobre la disposición a negociar?',['Lo que sugiere sobre la disposición a negociar','El conteo bruto de órdenes retiradas, sin interpretar nada más','Ninguno de los dos: el libro no aporta información sobre la dirección'],'El número por sí solo no distingue miedo de gestión de riesgo.'],
+['Un gran comprador pasivo que lleva media hora absorbiendo empieza a comprar a mercado. ¿Qué haces?',['Lo tomas como señal fuerte de continuación alcista y buscas entrada a favor','Vendes porque ha dejado de defender el nivel y eso significa que se rinde','Esperas a que vuelva a poner órdenes límite antes de tomar ninguna decisión'],'Es el flip: de defender a atacar.']
+]},
+{id:'n7b-6',titulo:'Heatmap y DOM Levels',min:7,tema:'dom',
+teoria:`<p>El heatmap dibuja la liquidez del libro a lo largo del tiempo. Cada precio es una franja horizontal; cuanto más tamaño ha habido esperando, más brillante.</p>
+<h3>DOM Levels en ATAS</h3>
+<p>El indicador DOM Levels proyecta el libro sobre el gráfico como un mapa de calor y marca niveles con una cantidad de órdenes inusualmente alta o baja. Desde 2025, con la conexión de dxFeed, puede cargar historial de heatmap en futuros como ES, NQ o GC; antes solo había historia en cripto. Ajustes: esquema de color, contraste y filtro de volumen.</p>
+<h3>Cómo leerlo</h3>
+<ul><li><b>Bandas persistentes:</b> liquidez que aguanta horas en el mismo precio. Suele actuar como soporte o resistencia y es la que merece atención.</li>
+<li><b>Bandas que se apagan al acercarse el precio:</b> órdenes retiradas. Probable spoofing o miedo.</li>
+<li><b>Bandas que el precio atraviesa:</b> la liquidez se consumió o se retiró. Mira si el precio acepta más allá.</li>
+<li><b>Bandas que siguen al precio:</b> algoritmos que mantienen una distancia fija. No son niveles.</li></ul>
+<h3>Trampas</h3>
+<p>Una foto del libro no cuenta la historia; el comportamiento en el tiempo sí. Cada producto tiene su propia escala: lo que brilla en ES no brilla en NQ. Y la banda más grande no es la más importante: lo es la que el precio respeta.</p>
+<div class="lec-clave"><b>Idea clave</b><p>En el heatmap lo que importa no es el brillo, sino la persistencia y la reacción del precio.</p></div>`,
+usar:['dom-6'],
+preg:[
+['¿Qué representa el brillo de una franja en el heatmap?',['Cuánto tamaño de órdenes límite ha habido esperando en ese precio','Cuánto volumen se ha ejecutado a mercado en ese precio durante la sesión','La velocidad de la cinta en ese precio medida en prints por segundo'],'El heatmap pinta liquidez pasiva, no ejecuciones.'],
+['¿Qué permite la conexión de dxFeed en DOM Levels desde 2025?',['Cargar historial de heatmap en futuros como ES o NQ','Operar directamente desde el heatmap','Ver las órdenes de otros traders con nombre'],'Antes la historia del libro solo estaba disponible en cripto.'],
+['Una banda brillante lleva tres horas en el mismo precio. ¿Qué peso tiene?',['Alto: la persistencia es lo que convierte liquidez en nivel','Ninguno: solo cuentan las bandas recientes','Bajo: las bandas largas son siempre spoofing'],'Lo que aguanta tiempo suele ser real.'],
+['Una banda se apaga justo cuando el precio se acerca. ¿Cómo lo interpretas?',['Órdenes retiradas: probable spoofing o miedo a ejecutarse','Órdenes ejecutadas: fue absorción y el nivel ha quedado reforzado','Un fallo del indicador al perder la conexión con el servidor de datos'],'Si se apaga sin que haya volumen ejecutado, se retiró.'],
+['Una banda se mueve manteniendo siempre la misma distancia al precio. ¿Qué es?',['Algoritmos que recolocan sus órdenes, no un nivel','Un iceberg nativo que se recarga en cada precio por el que pasa','El VWAP del día dibujado por el indicador junto al libro de órdenes'],'Liquidez que persigue al precio no se puede operar como nivel.'],
+['¿Qué ajuste de DOM Levels usarías si el mapa está saturado de bandas pequeñas?',['Subir el filtro de volumen','Cambiar la zona horaria','Cargar más días de historial'],'El filtro deja solo la liquidez relevante.'],
+['El precio atraviesa una banda brillante y sigue negociando con volumen al otro lado. ¿Qué indica?',['Que la liquidez se consumió o se retiró y el precio acepta más allá','Que el heatmap estaba equivocado y la banda nunca tuvo liquidez de verdad','Que el precio va a volver con seguridad a la banda para rellenar el hueco'],'Aceptación tras cruzar: ruptura con fundamento.'],
+['¿Por qué no puedes usar el mismo umbral de brillo en ES y en NQ?',['Porque la liquidez por nivel de ES es mucho mayor que la de NQ','Porque NQ no tiene libro de órdenes','Porque el heatmap de ES se actualiza cada hora'],'Cada producto tiene su escala. Compara dentro del mismo instrumento.'],
+['¿Qué vale más al elegir un nivel del heatmap para operar?',['Que el precio lo haya respetado antes','Que sea la banda más grande de la pantalla','Que esté en un número redondo'],'La reacción del precio es la prueba.'],
+['¿Qué error cometes si decides solo con una captura del libro en un instante?',['Lees una foto como si fuera la historia','Ninguno, el libro no cambia','Usas demasiada información'],'El libro cuenta algo cuando lo ves evolucionar.']
+]},
+{id:'n7b-7',titulo:'Operar con el libro: setups, reglas y límites',min:8,tema:'ejecucion',
+teoria:`<p>El libro es una herramienta de ejecución y de timing fino, no una brújula de dirección. Así se usa bien.</p>
+<h3>Setups habituales</h3>
+<ul><li><b>Unirse a la absorción:</b> en un nivel relevante (VWAP, VAH, VAL, extremos de ayer, redondos) un iceberg absorbe y el precio aguanta. Entras a favor del que defiende, stop al otro lado de la zona absorbida.</li>
+<li><b>Validar la ruptura:</b> si al romper un nivel la oferta se recarga y el precio se para, es trampa. Una ruptura real consume el tamaño y sigue.</li>
+<li><b>Agotamiento del agresor:</b> la agresión contra un iceberg se debilita, los prints bajan de tamaño; cuando se agota, el precio suele acelerar en contra del agresor.</li>
+<li><b>Rendición del defensor:</b> el iceberg deja de recargar y el nivel cede: el movimiento se acelera a favor de la ruptura.</li></ul>
+<h3>Reglas</h3>
+<ul><li>No operes contra tamaño grande solo porque es grande: ir contra los muros como norma pierde dinero.</li>
+<li>No esperes a desvanecer tamaño lejano; mejor acompaña un movimiento sano hacia el nivel.</li>
+<li>Mira 5 o 10 niveles alrededor del precio, no todo el libro.</li>
+<li>Funciona mejor en mercados en rango o rotación; en días de tendencia fuerte o libros muy finos pierde valor.</li>
+<li>Scalping con el libro: stops de 2 a 4 ticks, objetivos de 3 a 6, y fuera cuando el volumen se seca.</li>
+<li>Siempre una segunda confirmación: footprint, delta acumulado o perfil.</li></ul>
+<h3>Entrena en replay</h3>
+<p>Market Replay de ATAS puede reproducir ticks con la dinámica real del libro (modo Ticks + DOM). Practica ahí a detectar icebergs y pulling antes de arriesgar dinero.</p>
+<div class="lec-clave"><b>Idea clave</b><p>El libro te dice dónde y cuándo. Nunca entres solo por lo que ves en él.</p></div>`,
+usar:['absorcion-3','absorcion-8','absorcion-11','ejecucion-2','rupturas-10'],
+preg:[
+['Un iceberg comprador absorbe en el VAL y el precio aguanta. ¿Dónde va tu stop si compras?',['Al otro lado de la zona absorbida','A dos ticks por encima de tu entrada','En el POC del día anterior'],'Si el precio supera la zona que el iceberg defendía, la idea muere.'],
+['Rompe el máximo del día, la oferta se recarga en el nivel y el precio se para. ¿Qué es?',['Probable trampa: la ruptura no consume el tamaño','Ruptura confirmada: la recarga demuestra interés comprador','Un flip alcista: los vendedores pasivos se han pasado a comprar'],'Ruptura real = tamaño consumido y precio que sigue.'],
+['Los prints de compra contra un iceberg vendedor son cada vez más pequeños. ¿Qué anticipa?',['Agotamiento comprador y posible aceleración a la baja','Una ruptura alcista inminente porque el iceberg está a punto de agotarse','Que el iceberg va a desaparecer del libro y el precio se quedará quieto'],'Cuando el agresor se queda sin gasolina, el defensor gana.'],
+['¿Por qué ir contra los muros grandes como norma pierde dinero?',['Porque muchos muros son reales y otros se retiran: el tamaño por sí solo no da ventaja','Porque está prohibido por el exchange operar contra órdenes de más de 500 contratos','Porque los muros grandes siempre se ejecutan por completo y el precio los respeta'],'Vender un muro de venta solo porque es grande no tiene esperanza positiva.'],
+['¿En qué tipo de día rinde mejor la lectura del libro?',['En rangos y rotaciones','En tendencias fuertes de apertura','En días de noticias con libros vacíos'],'Con tendencia fuerte, el libro se vacía y engaña.'],
+['¿Cuántos niveles conviene vigilar alrededor del precio?',['Entre 5 y 10','Todos los que ofrezca el feed','Solo el mejor bid y el mejor ask'],'Más niveles no es más información: es más carga mental.'],
+['Scalping con el libro: ¿qué relación stop-objetivo describe la práctica habitual?',['Stops de 2 a 4 ticks y objetivos de 3 a 6','Stops de 20 ticks y objetivos de 5','Sin stop, salida por tiempo'],'Operaciones de segundos a minutos. Fuera cuando el volumen se seca.'],
+['¿Qué modo de Market Replay necesitas para practicar la lectura del libro?',['Ticks + DOM, con la dinámica real de órdenes límite','Ticks reales con un libro de órdenes generado por simulación','Ticks y libro de órdenes generados, el modo de carga más rápida'],'Solo el modo con DOM real reproduce icebergs y pulling.'],
+['Ves tamaño enorme en una oferta a 15 ticks. ¿Qué es mejor que esperar a venderla?',['Acompañar el movimiento sano hacia el nivel y decidir cuando el precio lo pruebe','Vender ya a mercado para adelantarte al resto antes de que el precio llegue','Comprar porque los muros grandes siempre se rompen cuando el precio los alcanza'],'Desvanecer tamaño lejano es apostar sin información.'],
+['¿Qué segunda confirmación encaja con una lectura del libro?',['Footprint, delta acumulado o perfil de volumen','Un cruce de medias móviles en el gráfico de quince minutos','El color de la vela diaria anterior y el cierre de la semana pasada'],'El libro muestra intención; otra herramienta de flujo muestra hechos.'],
+['El iceberg deja de recargar y el nivel cede. ¿Qué suele pasar?',['El movimiento acelera a favor de la ruptura','El precio vuelve al nivel y se queda','El libro se llena de órdenes falsas'],'Rendición del defensor: los que empujaban ya no tienen obstáculo.'],
+['¿Cuál es el papel correcto del libro en tu operativa?',['Timing y ejecución fina en niveles que vienen del contexto','Decidir la dirección del día antes de la apertura mirando la profundidad','Sustituir al footprint y al perfil de volumen como herramienta principal'],'El contexto da el dónde; el libro afina el cuándo.']
+]}
+]});
+
+/* ---------- Ruta de formación: herramientas de ATAS a fondo (tras el libro avanzado) ---------- */
+RUTA.splice(RUTA.findIndex(n=>n.id==='n7b')+1,0,{id:'n7c',titulo:'Herramientas de ATAS a fondo',desc:'Smart Tape, Tape Patterns, Order Flow, Cluster Statistic, Dynamic Levels, tipos de gráfico, Market Replay y flujo de trabajo.',lecciones:[
+{id:'n7c-1',titulo:'Smart Tape a fondo',min:7,tema:'cinta',
+teoria:`<p>La Smart Tape es la cinta de ATAS. Se abre desde Inicio y se vincula a un instrumento.</p>
+<h3>Columnas</h3>
+<ul><li>Hora, precio, dirección del tick (+ o −, con más símbolos cuanto mayor el salto) y volumen.</li>
+<li>Mejor bid y mejor ask, y sus tamaños tras cada print.</li>
+<li>Volumen medio de los prints y un indicador de fuerza compradora o vendedora.</li></ul>
+<h3>Filtros</h3>
+<ul><li><b>Agrupación (ticks acumulados):</b> junta las ejecuciones de una misma orden a mercado en una línea.</li>
+<li><b>Volumen mínimo y máximo</b> de las operaciones agrupadas.</li>
+<li><b>Prints separados:</b> resalta prints individuales en un rango de volumen cuando la agrupación está apagada.</li>
+<li><b>Nivel 1:</b> filtra por tamaño mínimo del mejor bid o ask.</li></ul>
+<h3>Lectura</h3>
+<ul><li>Aceleración al romper extremos de ayer o niveles de volumen: confirma.</li>
+<li>Cinta que se frena en un retroceso: suele ser toma de beneficios, no giro.</li>
+<li>Prints grandes en contra tras un tramo largo en resistencia: posible giro, o toma de beneficios. El contexto decide.</li>
+<li>Patrón de giro: un «triángulo» en las columnas de upticks y downticks cerca de un nivel, seguido de prints en la dirección contraria. Stop más allá de donde terminó el triángulo.</li></ul>
+<p>Ningún patrón de cinta funciona igual en todos los instrumentos. Usa el modo histórico y las plantillas para estudiar y reutilizar configuraciones.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Agrupa, filtra, compara la velocidad con la hora del día y lee la cinta solo donde importa.</p></div>`,
+usar:['cinta-1','cinta-4','cinta-5','cinta-6','cinta-7','cinta-8','cinta-10','cinta-11','cinta-12'],
+preg:[
+['¿Qué significa «++» en la columna de dirección de la Smart Tape?',['Que el print subió dos ticks respecto al anterior','Que hubo dos compras seguidas al mismo precio en el ask','Que el volumen de ese print duplica al volumen medio de la cinta'],'Más símbolos, mayor salto de precio entre prints.'],
+['¿Qué hace el filtro de Nivel 1 de la Smart Tape?',['Muestra solo prints cuando el mejor bid o ask tiene un tamaño mínimo','Oculta todos los prints del lado vendedor para ver solo las compras','Agrupa las operaciones por minutos en lugar de por orden a mercado'],'Filtra por la liquidez visible en el mejor precio.'],
+['¿Cuándo funciona el filtro de prints separados?',['Solo con la agrupación desactivada','Siempre, en cualquier modo','Solo en modo histórico'],'Resalta prints individuales dentro de un rango de volumen.'],
+['La cinta se ralentiza mucho durante un retroceso en tendencia alcista. ¿Qué sugiere?',['Toma de beneficios: la tendencia probablemente continúa','Giro bajista confirmado: los compradores se han retirado del todo','Que el mercado ha cerrado la sesión y la cinta muestra datos atrasados'],'Sin agresión vendedora de verdad, el retroceso suele agotarse.'],
+['¿Cómo se usa el patrón de triángulo de la Smart Tape?',['Cerca de un nivel clave, con prints posteriores en dirección contraria, y stop más allá del final del triángulo','En cualquier momento del día, sin nivel de referencia, entrando en cuanto aparece el triángulo','Como señal de continuación en mitad de un impulso, añadiendo contratos a la posición abierta'],'Nivel, triángulo, confirmación y stop detrás.'],
+['¿Por qué comparar la velocidad de la cinta en la apertura con la del mediodía?',['Porque lo que es rápido a una hora es normal a otra: la referencia cambia','Porque al mediodía la cinta deja de funcionar y hay que recargar la plataforma','Porque el exchange cambia el tamaño del tick entre la apertura y el mediodía'],'La velocidad se lee en relación a la hora.'],
+['¿Qué permite el modo histórico de la Smart Tape?',['Ver solo los prints de un tramo del gráfico que seleccionas','Operar en el pasado con dinero real sobre las operaciones ya ejecutadas','Borrar los prints de un día concreto para que no aparezcan en las estadísticas'],'Ideal para estudiar niveles y repasar tus entradas.'],
+['Prints grandes en contra tras una subida larga hasta una resistencia. ¿Qué dos lecturas compiten?',['Giro o toma de beneficios','Spoofing o iceberg','Noticia o cierre de mercado'],'El contexto y la reacción del precio deciden cuál es.'],
+['¿Para qué sirven las plantillas de la Smart Tape?',['Guardar filtros y columnas para reutilizarlos en otros instrumentos','Enviar órdenes automáticas cuando aparece un print que cumple el filtro','Compartir tus operaciones con otros usuarios de la plataforma en tiempo real'],'Una plantilla por instrumento ahorra configurar cada día.'],
+['¿Qué columna te dice de un vistazo si el print es grande para ese instrumento?',['La de volumen medio de los prints','La de hora, con milisegundos activados','La de mejor ask y su tamaño tras el print'],'Comparas cada print con la media de la cinta.']
+]},
+{id:'n7c-2',titulo:'Tape Patterns, Order Flow y Big Trades',min:7,tema:'bigtrades',
+teoria:`<p>Tres indicadores que llevan la cinta al gráfico.</p>
+<h3>Tape Patterns</h3>
+<p>Marca con cuadrados los precios donde una secuencia de prints cumple tus criterios: volumen mínimo de cada print, suma mínima de la cadena y separación temporal entre prints. Detecta ráfagas muy rápidas (algoritmos) y prints grandes aislados. Un cuadrado mucho mayor que los demás indica más volumen. Por defecto trabaja sobre la sesión actual.</p>
+<h3>Order Flow</h3>
+<p>Dibuja las órdenes a mercado recientes como una cadena sobre el gráfico, con las más grandes como círculos numerados. Tiene menos ajustes que Cluster Search pero filtros de tamaño y alertas. Es la forma más directa de ver dónde cayó cada operación grande.</p>
+<h3>Big Trades y Adaptive Big Trades</h3>
+<p>Adaptive Big Trades marca las diez operaciones más grandes del gráfico visible, sin configurar nada. Big Trades es la versión completa, con filtro automático por intensidad, volumen mínimo y máximo, ubicación en la vela y zonas.</p>
+<h3>Con interés abierto</h3>
+<p>En mercados con interés abierto en tiempo real, una compra grande con OI subiendo es dinero nuevo; una venta grande con OI bajando es cierre de posiciones. En los futuros de CME el OI llega con retraso, así que se usa sobre todo como contexto de días anteriores.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Estos indicadores no dan señales: te enseñan dónde ocurrió lo grande. La lectura sigue siendo la reacción del precio.</p></div>`,
+usar:['bigtrades-1','bigtrades-2','bigtrades-3','bigtrades-4','bigtrades-5','bigtrades-6','bigtrades-11','bigtrades-12'],
+preg:[
+['¿Qué tres ajustes básicos definen una cadena en Tape Patterns?',['Volumen mínimo por print, suma mínima de la cadena y separación temporal entre prints','Color de los cuadrados, grosor del borde y transparencia del relleno','Hora de apertura, hora de cierre y zona horaria del instrumento seleccionado'],'Así defines qué secuencia de prints merece un cuadrado.'],
+['Una ráfaga de prints separados por milisegundos. ¿Qué suele indicar?',['Actividad algorítmica','Un trader manual muy rápido','Un error del feed'],'Nadie pulsa tan rápido. Son máquinas.'],
+['¿Qué diferencia principal tiene el indicador Order Flow frente a Cluster Search?',['Muestra las órdenes a mercado recientes como cadena, con menos ajustes','Busca órdenes límite en el libro y las marca sobre el gráfico como círculos','Solo funciona en gráficos diarios y muestra el volumen total de cada día'],'Order Flow es directo y visual; Cluster Search es un buscador con criterios.'],
+['¿Qué hace Adaptive Big Trades?',['Marca las diez operaciones más grandes del gráfico visible sin configurar nada','Adapta automáticamente el tamaño del tick y el valor del punto al instrumento','Convierte las operaciones en micros a su equivalente en minis en el gráfico'],'Es la versión automática para empezar.'],
+['Compra grande con interés abierto subiendo. ¿Qué indica?',['Dinero nuevo entrando','Cierre de posiciones','Spoofing'],'OI al alza con compras: posiciones nuevas.'],
+['Venta grande cerca del cierre con OI bajando. ¿Qué es lo más probable?',['Cierre de posiciones, no apertura de cortos','Entrada de vendedores nuevos que abren cortos para la sesión siguiente','Un iceberg comprador absorbiendo la venta en el último tramo del día'],'Al cierre se deshacen posiciones. El OI lo confirma.'],
+['¿Por qué el OI se usa como contexto y no como señal intradía en CME?',['Porque llega con retraso','Porque no existe en futuros','Porque solo se publica los viernes'],'Sirve para leer el día anterior, no el minuto actual.'],
+['Un cuadrado de Tape Patterns mucho mayor que los vecinos. ¿Qué significa?',['Que en esa cadena se negoció mucho más volumen','Que el precio subió más rápido mientras duraba esa cadena de prints','Que hubo más traders distintos participando en esa secuencia de prints'],'El tamaño del cuadrado compara el volumen de las cadenas.'],
+['Tape Patterns marca una venta enorme en el mínimo de ayer y el precio no baja. ¿Cómo lo lees?',['Compradores defendiendo el nivel: la reacción importa más que la venta','Ruptura bajista confirmada: la venta grande arrastrará al precio enseguida','Un error de datos del feed: una venta así siempre mueve el precio'],'Esfuerzo vendedor sin resultado en un nivel: absorción.'],
+['¿Cómo calibras Tape Patterns para un instrumento nuevo?',['Mirando primero la cinta para saber qué es un print grande ahí','Copiando los ajustes de otro instrumento que ya tengas bien calibrado','Poniendo el volumen mínimo en cero para que marque todas las cadenas'],'Cada mercado, hora y día tiene su escala.']
+]},
+{id:'n7c-3',titulo:'Cluster Statistic, Dynamic Levels y Market Power',min:7,tema:'delta',
+teoria:`<p>Tres indicadores para leer la vela y el valor sin abrir cada celda.</p>
+<h3>Cluster Statistic</h3>
+<p>Una tabla bajo el gráfico con los datos de cada vela: volumen, volumen por segundo, número de operaciones, ask, bid, delta, delta sobre volumen en porcentaje, delta máximo y mínimo, cambio de delta, delta de sesión y su porcentaje, altura y hora. Permite alertas, por ejemplo cuando el delta supera un valor.</p>
+<p>Lectura: delta positivo creciente con volumen creciente, compradores activos. Delta de sesión que aguanta en un retroceso, tendencia intacta. Pico de operaciones con delta a favor, nivel que se prueba o se rompe. El porcentaje de delta sirve para comparar velas de tamaño distinto.</p>
+<h3>Dynamic Levels</h3>
+<p>Sigue cómo se desplazan los niveles de máximo volumen (y un canal con el 70 % del volumen) a lo largo de una hora, un día o una semana. Modos: bid, ask, delta, volumen, ticks o tiempo, con un filtro mínimo. Precio sostenido por encima de los niveles, el alza sigue viva; en modo delta, clusters negativos tras un tramo rápido avisan de resistencia.</p>
+<h3>Market Power</h3>
+<p>Un delta acumulado que filtra por tamaño de operación. Te deja ver qué hacen solo las operaciones grandes frente a las pequeñas: si los grandes compran mientras los pequeños venden, atención.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Mira la tabla para elegir la vela, y la vela para decidir.</p></div>`,
+usar:['delta-7','delta-9','subastas-8','perfil-8','perfil-9'],
+preg:[
+['¿Qué fila de Cluster Statistic te permite comparar la agresión de velas de distinto tamaño?',['Delta sobre volumen en porcentaje','Altura de la vela en ticks','Hora de cierre de la vela'],'Un +300 en 1.000 no es lo mismo que en 20.000.'],
+['El delta de sesión aguanta positivo durante un retroceso. ¿Qué sugiere?',['Que la tendencia alcista sigue intacta','Que ha empezado una tendencia bajista','Que el volumen ha desaparecido'],'Los compradores agresivos del día no se han ido.'],
+['¿Qué fila muestra la velocidad del negocio dentro de la vela?',['Volumen por segundo','Delta máximo','Cambio de delta'],'Útil para detectar ráfagas de actividad.'],
+['¿Qué muestra Dynamic Levels que un perfil de volumen fijo no muestra?',['Cómo se desplazan los niveles de máximo volumen con el tiempo','El precio de apertura de cada hora y la distancia hasta el cierre','El tamaño de las órdenes límite que esperan en cada nivel del libro'],'Es el perfil en movimiento: ves la dirección del valor.'],
+['Dynamic Levels en modo delta muestra clusters negativos tras una subida rápida. ¿Qué avisa?',['Posible resistencia y retroceso','Continuación alcista segura','Que el indicador está mal configurado'],'Venta agresiva acumulándose arriba.'],
+['¿Qué permite Market Power que no permite el delta acumulado normal?',['Filtrar por tamaño de operación y ver solo las grandes','Ver las órdenes límite del libro acumuladas a lo largo de la sesión','Calcular las comisiones acumuladas de cada operación del día'],'Separa el comportamiento de los grandes del de los pequeños.'],
+['Market Power filtrado a operaciones grandes sube mientras el delta total baja. ¿Qué lectura tiene?',['Los grandes compran mientras los pequeños venden: atención al lado grande','Los pequeños mandan y el precio caerá en cuanto los grandes dejen de comprar','No hay lectura posible: los dos indicadores miden exactamente lo mismo'],'Divergencia entre tamaños: suele pesar más el dinero grande.'],
+['¿Para qué sirve una alerta de delta en Cluster Statistic?',['Para avisarte cuando una vela supera cierta agresión sin mirar el gráfico','Para abrir operaciones automáticamente cuando el delta supera el umbral','Para cambiar el color de la vela en el gráfico según el signo del delta'],'Vigilancia sin estar pegado a la pantalla.'],
+['¿Cuál es el flujo de trabajo correcto con Cluster Statistic?',['Usar la tabla para elegir la vela y después abrir sus clusters para decidir','Decidir solo con la tabla sin abrir nunca los clusters de la vela','Ignorar la tabla y revisar los clusters de todas las velas una por una'],'La tabla es un filtro; la decisión está en el footprint.'],
+['¿Qué periodo elegirías en Dynamic Levels para contexto de varios días?',['Semana o periodo completo','Un minuto o una vela','Un tick o una operación'],'Periodos largos para contexto; cortos para scalping.']
+]},
+{id:'n7c-4',titulo:'Tipos de gráfico: tiempo, ticks, rango, reversal y delta',min:7,tema:'atas',
+teoria:`<p>En ATAS una vela puede cerrar por tiempo, por volumen o por movimiento del precio. Cada tipo enseña algo distinto.</p>
+<ul><li><b>Tiempo:</b> el clásico. Cada vela, un intervalo. Fácil de comparar con otros traders.</li>
+<li><b>Ticks:</b> cada vela tiene el mismo número de operaciones. Con actividad alta salen más velas; con poca, menos. Valores habituales: 89, 144, 233, 1000.</li>
+<li><b>Volumen:</b> cada vela tiene el mismo volumen. Hace las velas comparables entre sí.</li>
+<li><b>Rango:</b> cada vela cubre la misma distancia de precio. Filtra el ruido, pero los cierres siempre están en el máximo o el mínimo, así que los patrones de velas clásicos no sirven.</li>
+<li><b>Reversal:</b> una vela nueva solo nace cuando el precio recorre una distancia mínima y luego retrocede otra (por ejemplo 10/5). Resalta impulsos y retrocesos.</li>
+<li><b>Delta:</b> la vela cierra cuando la diferencia entre compras y ventas agresivas llega a un valor.</li>
+<li><b>Cumulative Trades:</b> dibuja las operaciones grandes como clusters fijos en su precio. Con un umbral alto quedan pocos niveles, que suelen actuar como soporte o resistencia.</li></ul>
+<p>Ningún tipo es mejor en todo. Lo importante es probar tu método en el gráfico que vas a usar y no cambiarlo cada semana.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Elige el gráfico por lo que quieres ver: tiempo para contexto, ticks o volumen para actividad, rango o reversal para limpiar ruido.</p></div>`,
+preg:[
+['¿Cuándo cierra una vela de ticks?',['Al alcanzar un número fijo de operaciones','Al pasar un minuto','Al moverse el precio una distancia fija'],'Operaciones, no volumen ni tiempo.'],
+['¿Qué limitación tienen los gráficos de rango para los patrones de velas clásicos?',['Los cierres caen siempre en el máximo o el mínimo','No muestran el volumen de cada vela ni el delta','No tienen mechas de ningún tipo ni cuerpo visible'],'Sin cierres intermedios, patrones como el martillo no existen.'],
+['Un gráfico reversal 10/5 significa que…',['La vela nace tras recorrer 10 ticks y retroceder 5','Cada vela dura 10 minutos y 5 segundos','Cada vela tiene 10 operaciones y 5 contratos'],'Mínimo de recorrido y retroceso que cierra la vela.'],
+['¿Qué ventaja tienen las velas de volumen?',['Hacen las velas comparables porque todas tienen el mismo volumen','Son siempre verdes porque el volumen de compra las construye','Eliminan los retrocesos y solo muestran los impulsos de la tendencia'],'Misma cantidad de negocio en cada vela.'],
+['¿Cuándo cierra una vela de delta?',['Cuando la diferencia entre compras y ventas agresivas alcanza un valor fijado','Cuando pasa una hora completa desde la apertura de la vela anterior','Cuando el precio toca el VWAP del día o una de sus bandas exteriores'],'La agresión neta construye la vela.'],
+['¿Para qué sirve el gráfico de Cumulative Trades?',['Para ver solo las operaciones grandes como clusters fijos en su precio','Para ver el interés abierto por minuto como una línea sobre el precio','Para operar opciones sobre el futuro desde el propio gráfico de ATAS'],'Con un umbral alto quedan unos pocos niveles que el precio suele respetar.'],
+['Con mucha actividad, ¿qué pasa en un gráfico de ticks?',['Salen más velas en menos tiempo','Salen menos velas','Las velas se vuelven más altas'],'Se adapta a la actividad.'],
+['¿Qué gráfico elegirías para limpiar ruido en un mercado muy nervioso?',['Rango o reversal','De un segundo','Diario'],'Ambos exigen un recorrido mínimo para formar vela.'],
+['¿Cuál es el error más común al elegir tipo de gráfico?',['Cambiarlo cada semana sin probar el método en él','Usar velas de tiempo en lugar de velas de ticks o de volumen','Usar velas de rango en ES cuando el mercado está en tendencia'],'La referencia visual se entrena con un gráfico estable.'],
+['¿Por qué un gráfico de tiempo sigue siendo útil pese a sus limitaciones?',['Porque es el que mira la mayoría y facilita comparar y marcar niveles','Porque es el único tipo de gráfico que muestra el volumen de cada vela','Porque elimina el ruido del mercado mejor que el gráfico de rango'],'Contexto compartido con el resto del mercado.']
+]},
+{id:'n7c-5',titulo:'Market Replay y el entrenamiento deliberado',min:6,tema:'atas',
+teoria:`<p>Market Replay es el simulador de ATAS: reproduce sesiones pasadas como si fueran en directo, con Play, Pausa y Stop y control de velocidad.</p>
+<h3>Tres modos de datos</h3>
+<ul><li><b>Ticks + DOM:</b> ticks reales con la dinámica real del libro. El más completo y el que más tarda en descargar. Imprescindible para practicar lectura del libro.</li>
+<li><b>Ticks + DOM generado:</b> ticks reales, libro simulado. Vale para footprint y perfil.</li>
+<li><b>Ticks y DOM generados:</b> el más rápido, solo para estrategias de precio.</li></ul>
+<h3>Cómo practicar</h3>
+<ul><li>Activa el replay, elige modo y fechas, abre gráfico, Smart DOM o Smart Tape, y dale a Play.</li>
+<li>Opera con Chart Trader en la cuenta de Replay y revisa resultados en Estadísticas filtrando por esa cuenta.</li>
+<li>Entrena una sola cosa cada sesión: detectar icebergs, leer pulling, ejecutar tu setup.</li></ul>
+<h3>Límites</h3>
+<p>No modela deslizamiento. Solo hay una cuenta de replay y cada sesión nueva borra la anterior. El replay sustituye el reloj del sistema: no lo mezcles con operativa real. El historial disponible depende de la licencia.</p>
+<div class="lec-clave"><b>Idea clave</b><p>Lo que no has visto cien veces en replay no lo verás a tiempo en directo.</p></div>`,
+preg:[
+['¿Qué modo de Market Replay necesitas para practicar icebergs y pulling?',['Ticks + DOM','Ticks + DOM generado','Ticks y DOM generados'],'Solo ese modo reproduce la dinámica real de órdenes límite.'],
+['¿Qué modo sirve para practicar footprint sin esperar una descarga larga?',['Ticks + DOM generado','Ticks y DOM generados','Ninguno, el footprint no funciona en replay'],'Ticks reales bastan para el footprint; el libro simulado no importa ahí.'],
+['¿Por qué no conviene usar Market Replay mientras operas en real?',['Porque sustituye el reloj del sistema y puede interferir con gráficos y posiciones reales','Porque consume la cuota de contratos de tu cuenta de fondeo mientras está activo','Porque el broker lo prohíbe y puede cerrarte la cuenta si detecta que lo usas'],'Separa replay y operativa real.'],
+['¿Dónde ves los resultados de tus operaciones de replay?',['En el módulo de estadísticas, filtrando por la cuenta de Replay','En el correo electrónico que envía ATAS al terminar cada sesión de replay','En el Smart DOM, en la columna de posición del instrumento reproducido'],'La cuenta de replay tiene sus propias estadísticas.'],
+['¿Qué pasa con los resultados al empezar una sesión nueva de replay?',['Se borran los de la anterior','Se acumulan para siempre','Se envían a ATAS'],'Solo hay una cuenta de replay. Apunta tus resultados en el diario.'],
+['¿Qué no modela el replay y debes tener en cuenta?',['El deslizamiento: las ejecuciones son ideales','El volumen: en replay todas las velas tienen el mismo volumen','El delta: en replay no se distingue compra de venta agresiva'],'En directo pagarás algo más por entrar y salir.'],
+['¿Cuál es la mejor forma de usar una sesión de replay?',['Entrenar una sola habilidad concreta cada vez','Operar todo lo que se mueva','Verla a máxima velocidad sin operar'],'Entrenamiento deliberado: una cosa, muchas repeticiones.'],
+['¿De qué depende cuánto historial puedes reproducir?',['De tu licencia de ATAS','De la velocidad de tu conexión','Del instrumento que elijas'],'Más licencia, más instrumentos y más meses.'],
+['Terminas una sesión de replay con resultados buenos. ¿Qué haces con ellos?',['Apuntarlos en tu diario antes de que la siguiente sesión los borre','Dejarlos en la cuenta de replay, que los acumula para siempre','Enviarlos a tu firma de fondeo como prueba de rendimiento'],'La cuenta de replay se reinicia. Lo que no apuntas se pierde.'],
+['¿Qué velocidad de reproducción conviene al principio para entrenar lectura del libro?',['Lenta o pausada, para ver cada recarga y cada retirada con detalle','La máxima posible, para repasar muchos días en poco tiempo','Siempre en tiempo real, igual que el mercado en directo'],'Primero despacio hasta reconocer el patrón; luego subes la velocidad.']
+]},
+{id:'n7c-6',titulo:'Flujo de trabajo en ATAS: plantillas, espacio y alertas',min:6,tema:'atas',
+teoria:`<p>La diferencia entre un ATAS que ayuda y uno que abruma está en cómo lo organizas.</p>
+<h3>Espacio de trabajo</h3>
+<p>Monta una pantalla fija: gráfico de contexto (tiempo), gráfico de clusters para ejecutar, Smart DOM y Smart Tape vinculados al mismo instrumento. Guarda el espacio de trabajo y no lo cambies a diario.</p>
+<h3>Plantillas</h3>
+<p>Una plantilla por instrumento para el footprint, para el Smart DOM y para la cinta. Los umbrales de Big Trades, Cluster Search y los filtros de la cinta cambian entre NQ y ES.</p>
+<h3>Alertas</h3>
+<p>Cluster Search, Big Trades, Smart Tape, Cluster Statistic y Tape Patterns pueden avisarte con sonido o ventana. Úsalas para vigilar tus niveles sin estar pegado a la pantalla, y combínalas con filtros de volumen para no recibir ruido.</p>
+<h3>Historial y rendimiento</h3>
+<p>Carga solo los días que necesitas. El tick a tick pesa. Si va lento, menos días, menos gráficos abiertos.</p>
+<h3>Rutina</h3>
+<ul><li>Antes: niveles de ayer, noche y noticias marcados en el gráfico de contexto.</li>
+<li>Durante: solo tus niveles, tus alertas y tu setup.</li>
+<li>Después: capturas al diario y revisión en replay de lo que no entendiste.</li></ul>
+<div class="lec-clave"><b>Idea clave</b><p>Configura una vez, guarda, y dedica el tiempo a leer el mercado, no a tocar botones.</p></div>`,
+preg:[
+['¿Qué tiene que compartir el gráfico, el Smart DOM y la cinta de tu espacio de trabajo?',['El mismo instrumento vinculado','El mismo color de fondo','La misma zona horaria que Nueva York'],'Vinculados, cambias de instrumento en todos a la vez.'],
+['¿Por qué una plantilla distinta para NQ y para ES?',['Porque los umbrales de volumen y filtros cambian mucho entre ellos','Porque ATAS no permite usar una plantilla en dos instrumentos','Porque cotizan en exchanges distintos'],'Lo grande en ES es enorme en NQ.'],
+['¿Qué indicadores de ATAS pueden avisarte con alertas?',['Cluster Search, Big Trades, Smart Tape, Cluster Statistic y Tape Patterns','Solo las medias móviles y el RSI, como en cualquier plataforma de gráficos','Ninguno: ATAS no tiene alertas y hay que vigilar la pantalla en todo momento'],'Vigilancia de niveles sin mirar la pantalla.'],
+['Recibes decenas de alertas por hora. ¿Qué haces?',['Subir los filtros de volumen o limitar la franja horaria','Apagar el ordenador y volver a operar cuando el mercado esté más tranquilo','Añadir más indicadores con alertas para cruzar las señales entre ellos'],'Una alerta útil es una alerta rara.'],
+['La plataforma va lenta con el footprint. ¿Primera medida?',['Cargar menos días de historial','Cambiar de broker','Aumentar el tamaño de la letra'],'El tick a tick es lo que pesa.'],
+['¿Qué va en el gráfico de contexto antes de la sesión?',['Niveles de ayer, extremos de la noche y horas de noticias','Todas las operaciones del mes anterior con sus capturas y comentarios','Las medias móviles de 50 y 200 periodos junto al RSI de catorce'],'El mapa del día antes de abrir.'],
+['¿Para qué usas el replay después de la sesión?',['Para revisar los momentos que no entendiste','Para recuperar las pérdidas del día','Para generar operaciones en el diario'],'Lo que no entendiste en directo se entiende despacio.'],
+['¿Cuál es el síntoma de un espacio de trabajo mal montado?',['Pasas más tiempo tocando ajustes que leyendo el mercado','Tienes dos monitores y el gráfico de contexto en uno de ellos','Usas plantillas distintas para cada instrumento que operas'],'La configuración se hace una vez.'],
+['¿Qué guardas en una plantilla de footprint para NQ?',['Ticks por fila, filtros de volumen, umbral de imbalances y colores que ya has probado','Las operaciones que hiciste la semana pasada en ese instrumento','La lista de noticias económicas de la semana con su hora'],'Todo lo que configuras una vez y no quieres volver a tocar.'],
+['¿Cuál es el gráfico de contexto en tu espacio de trabajo?',['Un gráfico de tiempo con los niveles de ayer y de la noche','El Smart DOM con las columnas de cambios de órdenes','La cinta con el filtro de volumen mínimo activado'],'El contexto se marca sobre tiempo; la ejecución va en el footprint y el libro.']
+]}
+]});
 /* ---------- Ruta de formación: índice, desbloqueo y vistas ---------- */
 const RUTA_APROBADO=0.9, RUTA_N_TEST=10, RUTA_N_NIVEL=20;
-const WHOP_CURSO='https://whop.com/alexgonxz/exp_sD2yoXn74C2J4U/app/';
 TEMAS.push(
   {id:'mentalidad',bloque:'mente',corto:'Mentalidad',nombre:'Mentalidad del trader',desc:'Por qué se pierde, qué es ser rentable y cómo estudiar.'},
   {id:'estructura',bloque:'ctx',corto:'Estructura',nombre:'Estructura de mercado',desc:'Soportes, resistencias, tendencias, giros y AMD.'},
@@ -3590,7 +3937,7 @@ function vistaRuta(){
     const filas=n.lecciones.map((l,j)=>{
       const ok=lecOk(l.id), ab=!n.preparando && lecAbierta(l), r=estRuta().lec[l.id];
       const chip=n.preparando?'<span class="lec-chip prep">Próximamente</span>':(ok?`<span class="lec-chip ok">${ICO.check}${r.mejor} %</span>`:(ab?'<span class="lec-chip dis">Disponible</span>':`<span class="lec-chip cerr">${ICO.candado}<span class="sr">Bloqueada</span></span>`));
-      const cuerpo=`<span class="lec-n">${j+1}</span><span class="lec-t"><b>${esc(l.titulo)}</b><small>${n.preparando?'Con las clases en directo de Alex':(l.min?l.min+' min de lectura · ':'')+(n.preparando?'':'test de '+Math.min(RUTA_N_TEST,poolLec(l).length)+' preguntas')}</small></span>${chip}`;
+      const cuerpo=`<span class="lec-n">${j+1}</span><span class="lec-t"><b>${esc(l.titulo)}</b><small>${n.preparando?'Con las clases de Alex':(l.min?l.min+' min de lectura · ':'')+(n.preparando?'':'test de '+Math.min(RUTA_N_TEST,poolLec(l).length)+' preguntas')}</small></span>${chip}`;
       return `<li>${ab?`<a class="lec-fila${sig&&sig.id===l.id?' sig':''}" href="#formacion/l/${l.id}">${cuerpo}</a>`:`<div class="lec-fila cerrada" aria-disabled="true">${cuerpo}</div>`}</li>`;
     }).join('');
     const nEx=Math.min(RUTA_N_NIVEL,poolNivel(n).length), exAb=examenAbierto(n);
@@ -3606,7 +3953,7 @@ function vistaRuta(){
   <section class="hero hero-form ruta-hero entra" aria-labelledby="r-tit"><div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="f-anillo">${anillo(pr.pct,156,14,'')}<div class="f-anillo-txt"><b id="f-pct">0 %</b><span>completado</span></div></div>
     <div><p class="hero-saludo">${rutaLibre()&&SERVIDOR?'Vista de Alex: todo desbloqueado':'Nivel '+(iNa+1)+' de '+RUTA_ACTIVOS.length}</p><p class="f-titulo" id="r-tit">${esc(na.titulo)}</p>
-      <p class="hero-sub">${pr.ok} de ${RUTA_TOTAL} lecciones aprobadas. Unas ${horasTot} horas de formación entre teoría y tests, más las clases en vídeo de Alex en Whop.</p>
+      <p class="hero-sub">${pr.ok} de ${RUTA_TOTAL} lecciones aprobadas. Unas ${horasTot} horas de formación entre teoría y tests.</p>
       <div class="f-acc">${cta}<a class="boton fantasma" href="#formacion/libre">Repaso libre y examen final</a></div></div>
     <ul class="ruta-datos"><li><b>${RUTA_ACTIVOS.filter(nivOk).length}</b><span>niveles aprobados</span></li><li><b>${pr.ok}</b><span>lecciones aprobadas</span></li><li><b>${nPreg}</b><span>preguntas en la ruta</span></li></ul>
   </section>
@@ -3619,7 +3966,7 @@ function vistaLeccion(id){
   const l=x.lec, n=x.nivel, iN=RUTA.indexOf(n), r=estRuta().lec[l.id], nT=Math.min(RUTA_N_TEST,poolLec(l).length), nOk=Math.ceil(nT*RUTA_APROBADO-1e-9);
   const volver=`<a class="volver" href="#formacion">${ICO.izq}Ruta de formación</a>`;
   if(n.preparando) return `<header class="cab-modulo entra"><div>${volver}<h1>${esc(l.titulo)}</h1><p class="sub">Nivel ${iN+1}: ${esc(n.titulo)}</p></div></header>
-    <section class="panel entra"><div class="panel-cuerpo"><p class="vacio">Esta lección sale de las clases en directo de Alex y todavía se está preparando. Mientras tanto la tienes en vídeo en Whop.</p><p><a class="boton sec" href="${WHOP_CURSO}" target="_blank" rel="noopener">${ICO.video}Abrir el curso en Whop</a></p></div></section>`;
+    <section class="panel entra"><div class="panel-cuerpo"><p class="vacio">Esta lección sale de las clases en directo de Alex y todavía se está preparando.</p></div></section>`;
   if(!lecAbierta(l)) return `<header class="cab-modulo entra"><div>${volver}<h1>${esc(l.titulo)}</h1><p class="sub">Nivel ${iN+1}: ${esc(n.titulo)}</p></div></header>
     <section class="panel entra"><div class="panel-cuerpo lec-bloq"><span class="lec-bloq-ico">${ICO.candado}</span><p>Esta lección se desbloquea al aprobar la anterior${x.li===0?' y el examen del nivel previo':''}.</p><a class="boton" href="#formacion">Ir a mi siguiente lección</a></div></section>`;
   const prev=x.li>0?n.lecciones[x.li-1]:null, next=n.lecciones[x.li+1]||null;
@@ -3632,13 +3979,17 @@ function vistaLeccion(id){
     <aside class="lec-lado">
       <section class="panel lec-test entra" aria-labelledby="t-lt"><div class="panel-cuerpo"><h2 id="t-lt">Test de la lección</h2><p>${nT} preguntas con la explicación de cada una. Apruebas con ${nOk} de ${nT} y se desbloquea lo siguiente.</p>${estado}
         <div class="lec-acc"><button type="button" class="boton" data-accion="test-leccion" data-l="${l.id}">${r?'Repetir el test':'Hacer el test'}</button>${sigBtn}</div></div></section>
-      ${l.whop?`<a class="panel lec-whop entra" href="${WHOP_CURSO}" target="_blank" rel="noopener"><span class="lec-whop-ico">${ICO.video}</span><span><b>Clase en vídeo de Alex</b><small>«${esc(l.whop)}» en el curso de Whop</small></span></a>`:''}
       <nav class="lec-nav" aria-label="Lecciones del nivel">${prev?`<a href="#formacion/l/${prev.id}">${ICO.izq}${esc(prev.titulo)}</a>`:'<span></span>'}${next&&lecAbierta(next)?`<a class="dcha" href="#formacion/l/${next.id}">${esc(next.titulo)}${ICO.chev}</a>`:''}</nav>
     </aside>
   </div>`;
 }
 
 function renderFormacion(){
+  // Si el usuario navega a otra parte de la formación (enlace o botón atrás), el test en curso se cierra
+  if(quiz){
+    if(quiz.hash==null) quiz.hash=location.hash;
+    if(quiz.hash!==location.hash){ quiz=null; pararReloj(); }
+  }
   if(quiz){ vista.innerHTML=quiz.fin?vistaResultado():vistaPregunta(); return; }
   if(subForm==='libre'){ vista.innerHTML=vistaFormacion(); const h=$('.cab-modulo',vista); if(h) h.insertAdjacentHTML('afterend',tabsForm()); const pc=Math.round(progresoForm().pct*100); odometro($('#f-pct'),pc+' %','Completado: '+pc+' %'); return; }
   if(lecVista){ vista.innerHTML=vistaLeccion(lecVista); return; }
@@ -5386,6 +5737,7 @@ function empezar(modo,arg){
   quiz={modo,tema:modo==='practica'?arg:null,bloque:modo==='rapido'?(arg||null):null,lec:modo==='leccion'?arg:null,nivel:modo==='nivel'?arg:null,
     maxFallos:modo==='nivel'?maxFallos(ps.length):(modo==='examen'?EXAMEN_FALLOS:null),minutos,
     items:ps.map(p=>({p,orden:shuffle([0,1,2]),resp:null})),i:0,fin:false,subeRacha:false,limite:crono?Date.now()+minutos*60000:0};
+  quiz.hash=location.hash;
   if(crono) arrancarReloj();
   transicion(()=>{ render(); subir(); });
 }
