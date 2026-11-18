@@ -1633,6 +1633,21 @@ html{scroll-padding-top:86px}
 .hoy-card.rut{flex-wrap:wrap}
 .hoy-card.rut .hoy-txt{flex:1 1 190px}
 .hoy-card .hoy-dato{align-self:flex-start}          /* las cifras de la cuenta, en la misma línea aunque unas lleven medidor y otras no */
+/* si las cifras de la cuenta no caben junto al título (portátil de 1280 o 1366, tableta apaisada) la tarjeta pasa a dos líneas: icono y título
+   arriba y las cifras debajo, a partes iguales (antes le quitaban todo el sitio al título y lo pisaban). Con tres cifras, hasta 1439 px;
+   con dos, hasta 1279. El título se cuenta desde el final: :nth-last-child(4) = le siguen tres cifras. Y si la tarjeta de al lado la estira,
+   el contenido queda centrado en bloque (align-content): la cifra ya no se queda sola arriba con el título en medio */
+@media (min-width:901px) and (max-width:1439px){
+  a.hoy-card{flex-wrap:wrap;align-content:center;row-gap:10px}
+  .hoy-txt:nth-last-child(4){flex-basis:calc(100% - 54px)}
+  .hoy-txt:nth-last-child(4)~.hoy-dato{flex:1 1 0;min-width:0}
+  .hoy-txt:nth-last-child(4)~.hoy-dato small{white-space:normal;text-wrap:balance}
+}
+@media (min-width:901px) and (max-width:1279px){
+  .hoy-txt:nth-last-child(3){flex-basis:calc(100% - 54px)}
+  .hoy-txt:nth-last-child(3)~.hoy-dato{flex:1 1 0;min-width:0}
+  .hoy-txt:nth-last-child(3)~.hoy-dato small{white-space:normal;text-wrap:balance}
+}
 .hoy-barra{height:8px;border-radius:4px}
 .hoy-barra span{border-radius:4px 2px 2px 4px;background:var(--barra-gana)}
 .hoy-barra.obj span{background:var(--barra-marca)}
