@@ -59,7 +59,7 @@
   --f-marca:"Bebas Neue",Impact,"Arial Narrow",sans-serif;
   /* ===== Sistema 3D «Profundidad de mercado»: materiales (tema claro). Ver la capa «SISTEMA 3D» al final del CSS ===== */
   --mesa:var(--fondo-pagina);                                /* nivel 0 · mesa */
-  --hundido:#EAE6F5;--hundido-borde:#D9D2EB;--hundido-sombra:rgba(46,26,110,.14);--hundido-luz:#FFFFFF;      /* nivel H · pozo */
+  --hundido:#EAE6F5;--hundido-borde:#D9D2EB;--hundido-sombra:rgba(46,26,110,.14);--hundido-luz:#FFFFFF;--hundido-ayuda:#68637C;      /* nivel H · pozo (ayuda = texto de ejemplo de un campo vacío) */
   --placa:var(--fondo);--placa-borde:var(--borde);--placa-arista:#FFFFFF;--canto:#C6BDE0;                     /* nivel 1 · placa */
   --tecla:#FFFFFF;--tecla-sube:#FBFAFF;--tecla-borde:#C9C0E0;--tecla-arista:#FFFFFF;--tecla-canto:#AFA3D2;--tecla-tinta:#2A2440;   /* nivel 2 · tecla neutra */
   --marca-cara:#8A63F5;--marca-frente:#5B2ED1;--marca-lado:#35188F;--marca-sube:#6A3EE6;--marca-tinta:#FFFFFF;  /* morado: cara (luz), frente, lado (sombra) */
@@ -357,8 +357,9 @@ h1{margin:0;font-size:30px;line-height:1.12;font-weight:740;font-stretch:108%;le
 .campo legend{margin-bottom:7px}
 .campo input:not([type="radio"]):not([type="checkbox"]),.campo textarea{width:100%;min-width:0;min-height:42px;padding:8px 12px;border:1px solid var(--hundido-borde);border-radius:10px;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz);font-size:15px;font-variant-numeric:tabular-nums;transition:border-color .15s,box-shadow .15s}
 .campo textarea{resize:vertical;line-height:1.45}
-.campo input:focus,.campo textarea:focus{border-color:var(--morado);outline:none;box-shadow:inset 0 2px 0 var(--hundido-sombra),0 0 0 3px var(--morado-suave)}
-.campo.invalido input,.campo.invalido .subida{border-color:var(--venta);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 0 0 3px var(--venta-suave)}
+/* foco y error repiten la cadena de :not() de la regla base: con menos peso, la base les ganaba y el campo no cambiaba */
+.campo input:focus,.campo input:not([type="radio"]):not([type="checkbox"]):focus,.campo textarea:focus{border-color:var(--morado);outline:none;box-shadow:inset 0 2px 0 var(--hundido-sombra),0 0 0 3px var(--morado-suave)}
+.campo.invalido input:not([type="radio"]):not([type="checkbox"]),.campo.invalido .subida{border-color:var(--venta);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 0 0 3px var(--venta-suave)}
 .campo.invalido .chips-sel span{--k-borde:var(--venta)}
 .ancho-total{grid-column:1 / -1}
 .ayuda{margin:0;font-size:12.5px;color:var(--tinta-2);font-variant-numeric:tabular-nums}
@@ -699,7 +700,7 @@ body::after{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-
 
 /* Modo oscuro */
 :root[data-modo="oscuro"]{--fondo:#17103C;--fondo-2:#1E164B;--fondo-pagina:#0A061C;--tinta:#F0ECFF;--tinta-2:#A9A1C9;--borde:#2B2259;--borde-2:#40357F;--morado:#9E86FF;--morado-suave:#241958;--compra:#3DD39B;--compra-suave:rgba(61,211,155,.14);--venta:#FF6B7D;--venta-suave:rgba(255,107,125,.14);--capa:rgba(4,2,14,.66);--toast-fondo:#F0ECFF;--toast-txt:#140E2E;--cristal:rgba(16,10,40,.78);
-  --hundido:#0D0826;--hundido-borde:#231B4E;--hundido-sombra:rgba(0,0,0,.5);--hundido-luz:rgba(255,255,255,.07);
+  --hundido:#0D0826;--hundido-borde:#231B4E;--hundido-sombra:rgba(0,0,0,.5);--hundido-luz:rgba(255,255,255,.07);--hundido-ayuda:#8880AD;
   --placa-arista:rgba(255,255,255,.1);--canto:#04020E;
   --tecla:#261C5E;--tecla-sube:#2E2370;--tecla-borde:#40357F;--tecla-arista:rgba(255,255,255,.14);--tecla-canto:#120B36;--tecla-tinta:#F0ECFF;
   --marca-frente:#6540DC;--marca-sube:#7450EA;--marca-lado:#2B1378;
@@ -1428,7 +1429,8 @@ a.hoy-card:hover{--k-borde:var(--violeta)}
 .hundido,.imp-tz select,.cta-form select,.al-buscar,.rev-com textarea,.sesion-viva,.imp-res>div,.rut-cuenta,.r-caja{
   border:1px solid var(--hundido-borde);background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
 .pista,.hoy-barra,.err-barra,.pista-s,.mini-barra,.q-barra,.rk-barra{background:var(--hundido);box-shadow:inset 0 1px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
-.campo input::placeholder,.campo textarea::placeholder,.al-buscar::placeholder,.rev-com textarea::placeholder,#paleta-in::placeholder{color:var(--tinta-2);opacity:1}
+/* el ejemplo de un campo vacío no puede parecer un dato escrito: letra fina y un tono a 4,5:1 del pozo y a 3:1 del valor */
+.campo input::placeholder,.campo textarea::placeholder,.al-buscar::placeholder,.rev-com textarea::placeholder,#paleta-in::placeholder{color:var(--hundido-ayuda);opacity:1;font-weight:450}
 
 /* ---------- Nivel 1 · placa ---------- */
 .placa,.panel,.kcard,.hoy-card,.aviso-d,.niv,.inf{border:1px solid var(--placa-borde);background:var(--placa);box-shadow:inset 0 1px 0 var(--placa-arista),0 3px 0 var(--canto)}
