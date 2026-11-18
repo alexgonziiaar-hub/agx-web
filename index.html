@@ -591,6 +591,13 @@ body{background:var(--mesa)}
 .tk-grupo{display:flex}
 .tk-marco::-webkit-scrollbar{display:none}
 .tk-grupo[aria-hidden]{display:none}
+/* con ratón no hay dedo que deslice la fila: se enseña una barra fina (pista hundida, tirador del color de las teclas) para llegar a las diez */
+@media (hover:hover) and (pointer:fine){
+  .tk-marco{scrollbar-width:thin;scrollbar-color:var(--osc-tecla-borde) var(--osc-pozo);padding-bottom:8px}
+  .tk-marco::-webkit-scrollbar{display:block;height:8px}
+  .tk-marco::-webkit-scrollbar-track{border-radius:4px;background:var(--osc-pozo)}
+  .tk-marco::-webkit-scrollbar-thumb{border-radius:4px;background:var(--osc-tecla-borde)}
+}
 .tk{display:inline-flex;align-items:center;gap:8px;min-height:32px;padding:4px 13px;border-radius:9px;font-size:13px;white-space:nowrap;cursor:pointer;--k-alto:3px;--k-cara:var(--osc-tecla);--k-tinta:var(--hero-txt);--k-borde:var(--osc-tecla-borde);--k-arista:var(--osc-tecla-arista);--k-canto:var(--osc-tecla-canto)}
 .tk:hover{--k-cara:var(--osc-tecla-sube)}
 .tk b{color:var(--blanco)}
@@ -1458,6 +1465,12 @@ a.hoy-card:hover{--k-borde:var(--violeta)}
 .cu-d:active,.opcion:not(:disabled):active,button.nq:active,a.lec-fila:active,button.lec-fila:active,.lec-nav a:active,.boton-dc:active{
   transform:translateY(calc(var(--k-alto,4px) - 1px));
   box-shadow:inset 0 1px 0 var(--k-arista,var(--tecla-arista)),0 1px 0 var(--k-canto,var(--tecla-canto))}
+/* la cara baja, pero la zona de clic no: un relleno invisible cubre la franja que la tecla deja libre por arriba mientras está pulsada
+   (con ratón, soltar ahí dejaba la pulsación sin efecto). Las fichas con <label> no lo necesitan: el label no se mueve. */
+.tecla:active::after,.boton:active::after,.icono-btn:active::after,.fab:active::after,.buscar:active::after,.nav a:active::after,.sub-tabs a:active::after,.seg-oscuro button:active::after,.seg-claro button:active::after,.stepper button:active::after,
+.tk:active::after,.insight:active::after,.setup-fila:active::after,a.aviso-d:active::after,a.hoy-card:active::after,.tcard:active::after,.al-card:active::after,.ruta-b:active::after,.chev:active::after,.detalle-acc .enlace:active::after,
+.cu-d:active::after,.opcion:not(:disabled):active::after,button.nq:active::after,a.lec-fila:active::after,button.lec-fila:active::after,.lec-nav a:active::after,.boton-dc:active::after{
+  content:"";position:absolute;left:0;right:0;bottom:100%;height:var(--k-alto,4px)}
 
 /* ---------- Tecla elegida: se queda abajo y se enciende ---------- */
 .tecla[aria-pressed="true"],.tecla[aria-current="page"],.nav a[aria-current="page"],.sub-tabs a[aria-current="page"],.seg-oscuro button[aria-pressed="true"],.seg-claro button[aria-pressed="true"],
