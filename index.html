@@ -65,7 +65,7 @@
   --marca-cara:#8A63F5;--marca-frente:#5B2ED1;--marca-lado:#35188F;--marca-sube:#6A3EE6;--marca-tinta:#FFFFFF;  /* morado: cara (luz), frente, lado (sombra) */
   --gana-cara:#45D6A1;--gana-frente:#13805F;--gana-lado:#0A5740;--gana-tinta:#04261A;                         /* ganancia */
   --pierde-cara:#FF8493;--pierde-frente:#C93545;--pierde-lado:#8E1F2D;--pierde-tinta:#3D060E;                 /* pérdida */
-  --pierde-suelo:#FBDDE1;--pierde-suelo-tinta:#9A1C2D;                                                        /* fondo del pozo de una pérdida */
+  --pierde-suelo:#F3C3CA;--pierde-suelo-tinta:#84101F;--pierde-labio:rgba(255,255,255,.9);--pierde-umbra:rgba(142,31,45,.2);   /* pozo de una pérdida: suelo, tinta, labio iluminado y sombra de la pared */
   --neutro-cara:#E4DEF3;--neutro-frente:#BDB2DB;--neutro-lado:#9C8FC2;
   --oro-cara:#FBE08A;--oro-frente:#E5B03F;--oro-lado:#9A6A12;--oro-tinta:#3B2A06;                             /* metales del ranking: no cambian con el tema */
   --plata-cara:#F1F3F8;--plata-frente:#B9C0D0;--plata-lado:#737C92;--plata-tinta:#232733;
@@ -250,30 +250,30 @@ h1{margin:0;font-size:30px;line-height:1.12;font-weight:740;font-stretch:108%;le
 
 /* Calendario */
 .cal-nav{display:flex;align-items:center;gap:8px}
-.cal-dias,.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));column-gap:6px}
+.cal-dias,.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));column-gap:10px;padding-left:6px}
 .cal-dias{margin-bottom:5px;font-size:12px;color:var(--tinta-2);text-align:center}
-.cal{--col-max:16px;list-style:none;margin:0;padding:var(--col-max) 0 0;row-gap:calc(var(--col-max) + 4px)}
+.cal{--col-max:22px;list-style:none;margin:0;padding-top:var(--col-max);row-gap:calc(var(--col-max) + 4px)}
 .cal li{position:relative;min-height:50px;display:flex}
 .cal .celda{position:relative;flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between;padding:5px 7px;border:1px solid var(--borde);border-radius:4px;font-variant-numeric:tabular-nums;text-align:left;background:var(--fondo-2);color:var(--tinta)}
 .cal .finde .celda{background:transparent;border-style:dashed;border-color:var(--borde-2)}
 .cal .hoy::after{content:"";position:absolute;left:1px;right:1px;bottom:-7px;height:3px;border-radius:2px;background:var(--morado)}
 .cal button.celda{cursor:pointer;border:0}
 .cal .hoy .n{color:var(--morado);font-weight:800}
-.cal button.celda.sel{outline:2px solid var(--morado);outline-offset:2px}
+.cal button.celda.sel{outline:3px solid var(--morado);outline-offset:2px}
 .cal .n{font-size:11.5px;color:var(--tinta-2)}
 .cal .v{font-size:12.5px;font-weight:780;text-align:right;white-space:nowrap}
 .cal-pie{display:flex;justify-content:space-between;gap:12px;margin-top:12px;font-size:13px;color:var(--tinta-2)}
 .cal-pie b{font-variant-numeric:tabular-nums}
 
 /* Mapa de calor sesión x día */
-.mapa{--col-max:16px;display:grid;grid-template-columns:auto repeat(5,minmax(0,1fr));column-gap:7px;row-gap:calc(var(--col-max) + 4px);align-items:stretch}
+.mapa{--col-max:22px;display:grid;grid-template-columns:auto repeat(5,minmax(0,1fr));column-gap:10px;row-gap:calc(var(--col-max) + 4px);align-items:stretch}
 .mapa .cab{font-size:12px;color:var(--tinta-2);text-align:center}
 .mapa .ses{display:flex;font-size:13.5px;font-weight:650}
-.mapa .mc{position:relative;min-width:0;min-height:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:1px solid var(--borde);border-radius:4px;background:var(--fondo-2);font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--tinta-2)}
+.mapa .mc{position:relative;min-width:0;min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:1px solid var(--borde);border-radius:4px;background:var(--fondo-2);font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--tinta-2)}
 .mapa button.mc{cursor:pointer;border:0}
-.mapa button.mc.sel{outline:2px solid var(--morado);outline-offset:2px}
-.mapa .mc b{font-size:13.5px;font-weight:780}
-.mapa .mc small{font-size:11.5px}
+.mapa button.mc.sel{outline:3px solid var(--morado);outline-offset:2px}
+.mapa .mc b{font-size:13.5px;font-weight:780;line-height:1.2}
+.mapa .mc small{font-size:11.5px;line-height:1.2}
 .mapa-ley{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:14px;font-size:12.5px;color:var(--tinta-2)}
 .mapa-ley span{display:inline-flex;align-items:center;gap:6px}
 .mapa-ley i{position:relative;display:inline-block;width:14px;height:12px;border-radius:2px}
@@ -671,7 +671,7 @@ body::after{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-
 .od-sim{display:inline-block;height:1em;line-height:1}
 
 /* Objetivo del mes */
-.hero-chips li.obj{min-width:220px;flex-basis:100%;max-width:340px}
+.hero-chips li.obj{min-width:220px;flex:0 0 auto;width:min(340px,100%);margin-right:calc(100% - min(340px,100%))}
 .obj-cab{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .obj-edit{padding:0;border:0;background:none;font-size:12px;font-weight:650;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .obj-barra{position:relative;display:block;height:14px;margin:7px 0 5px;border-radius:7px;background:rgba(4,1,16,.62);box-shadow:inset 0 2px 0 rgba(0,0,0,.5),0 1px 0 var(--osc-pozo-luz);overflow:hidden}
@@ -718,7 +718,7 @@ body::after{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-
   --placa-arista:rgba(255,255,255,.1);--canto:#04020E;
   --tecla:#261C5E;--tecla-sube:#2E2370;--tecla-borde:#40357F;--tecla-arista:rgba(255,255,255,.14);--tecla-canto:#120B36;--tecla-tinta:#F0ECFF;
   --marca-frente:#6540DC;--marca-sube:#7450EA;--marca-lado:#2B1378;
-  --pierde-suelo:#3A0F1B;--pierde-suelo-tinta:#FF9DA9;
+  --pierde-suelo:#3A0F1B;--pierde-suelo-tinta:#FF9DA9;--pierde-labio:rgba(255,255,255,.13);--pierde-umbra:rgba(0,0,0,.3);
   --neutro-cara:#3A3072;--neutro-frente:#241B55;--neutro-lado:#140D38;
   color-scheme:dark}
 .toast{background:var(--toast-fondo);color:var(--toast-txt)}
@@ -1521,20 +1521,28 @@ html{scroll-padding-top:86px}
 /* ====================================== OBJETOS ====================================== */
 
 /* --- Columna cuya altura es el dinero (calendario y mapa «Cuándo operas mejor»). La pinta el JS así:
-       <button class="celda col3d g|p|z" style="--a:0.25…1">: --a es la fracción de la altura máxima (--col-max del contenedor).
+       <button class="celda col3d g|p|z" style="--a:0.12…1">: --a es la fracción de la altura máxima (--col-max del contenedor).
        g = ganancia: prisma que sube (cara clara arriba, frente y lado). p = pérdida: pozo que se hunde. z = cero: baldosa.
        Falso 3D sin perspectiva: las cifras van en la cara superior y se leen de frente. --- */
-.col3d{--h:calc(var(--a,.25)*var(--col-max,16px));--dx:calc(var(--h)*.36);transition:transform .1s ease-out}
+.col3d{--h:max(3px,calc(var(--a,.25)*var(--col-max,16px)));--dx:calc(var(--h)*var(--col-k,.36));transition:transform .1s ease-out}
+.cal,.mapa{--col-k:.25;--col-ax:14.04deg;--col-ay:75.96deg}    /* desplazamiento lateral = 0,25·altura (ángulos = atan y su complementario): la cara más alta no pisa la casilla vecina */
 .col3d.g{border-radius:2px;background:var(--gana-cara);color:var(--gana-tinta);transform:translate(calc(var(--dx)*-1),calc(var(--h)*-1))}
-.col3d.g::before{content:"";position:absolute;left:0;right:0;top:calc(100% - .5px);height:calc(var(--h) + .5px);background:var(--gana-frente);transform-origin:0 0;transform:skewX(19.8deg);pointer-events:none}
-.col3d.g::after{content:"";position:absolute;top:0;bottom:0;left:calc(100% - .5px);width:calc(var(--dx) + .5px);background:var(--gana-lado);transform-origin:0 0;transform:skewY(70.2deg);pointer-events:none}
+.col3d.g::before{content:"";position:absolute;left:0;right:0;top:calc(100% - .5px);height:calc(var(--h) + .5px);background:var(--gana-frente);transform-origin:0 0;transform:skewX(var(--col-ax,19.8deg));pointer-events:none}
+.col3d.g::after{content:"";position:absolute;top:0;bottom:0;left:calc(100% - .5px);width:calc(var(--dx) + .5px);background:var(--gana-lado);transform-origin:0 0;transform:skewY(var(--col-ay,70.2deg));pointer-events:none}
 .col3d.g:hover{background:#63E2B4}
-.col3d.g:active{--h:calc(var(--a,.25)*var(--col-max,16px)*.45)}
-.col3d.p{border-radius:2px;background:var(--pierde-suelo);color:var(--pierde-suelo-tinta);box-shadow:inset 0 var(--h) 0 var(--pierde-frente),inset var(--dx) 0 0 var(--pierde-lado)}
-.col3d.p:hover{background:color-mix(in srgb,var(--pierde-suelo) 86%,var(--pierde-cara))}
+.col3d.g:active{--h:max(2px,calc(var(--a,.25)*var(--col-max,16px)*.45))}
+/* pozo: pared del fondo y pared izquierda en sombra, la sombra dura que la pared deja en el suelo y el labio iluminado de abajo y de la derecha */
+.col3d.p{border-radius:2px;background:linear-gradient(var(--pierde-umbra),var(--pierde-umbra)) 0 var(--h)/100% 3px no-repeat var(--pierde-suelo);color:var(--pierde-suelo-tinta);
+  box-shadow:inset 0 var(--h) 0 var(--pierde-frente),inset var(--dx) 0 0 var(--pierde-lado),inset 0 -1px 0 var(--pierde-labio),inset -1px 0 0 var(--pierde-labio)}
+.col3d.p:hover{background-color:color-mix(in srgb,var(--pierde-suelo) 86%,var(--pierde-cara))}
 .col3d.z{background:var(--neutro-cara);color:var(--tinta);box-shadow:0 2px 0 var(--neutro-frente)}
 .col3d .n,.col3d .v,.col3d b,.col3d small{color:inherit}
 .col3d .n,.col3d small{opacity:.86}
+/* elegida: la altura es dato y no se aplasta; cerco grueso y el número del día (o las operaciones) encendido. Con foco, el cerco se separa */
+.col3d.sel .n,.col3d.sel small{opacity:1;padding:0 5px;border-radius:4px;background:var(--marca-frente);color:#fff}
+.cal button.celda.sel:focus-visible,.mapa button.mc.sel:focus-visible{outline-offset:5px}
+.cal .col3d .n,.cal .col3d .v{line-height:1.15}     /* interlineado justo: el suelo de un pozo hondo sigue dando para el día y la cifra */
+.cal .col3d .n{align-self:flex-start}
 .cal .col3d.p{padding-top:calc(3px + var(--h));padding-left:calc(6px + var(--dx))}
 .cal .col3d.g{padding:4px 6px 5px}
 .mapa .col3d.p{padding-top:var(--h);padding-left:var(--dx)}
@@ -1582,6 +1590,7 @@ html{scroll-padding-top:86px}
 .aviso-ico,.hoy-ico{box-shadow:inset 0 1px 0 rgba(255,255,255,.28)}
 .hoy-card.rut{flex-wrap:wrap}
 .hoy-card.rut .hoy-txt{flex:1 1 190px}
+.hoy-card .hoy-dato{align-self:flex-start}          /* las cifras de la cuenta, en la misma línea aunque unas lleven medidor y otras no */
 .hoy-barra{height:8px;border-radius:4px}
 .hoy-barra span{border-radius:4px 2px 2px 4px;background:var(--barra-gana)}
 .hoy-barra.obj span{background:var(--barra-marca)}
@@ -1595,6 +1604,13 @@ html{scroll-padding-top:86px}
 .err-comp,.lec-clave{border-left-color:var(--morado)}
 .filtros{background:transparent}
 .coments li{padding:14px 18px}
+#panel-ops{margin-top:23px}                           /* «errores» y «operaciones» son dos placas: que se vea el canto de la de arriba */
+/* calendario y mapa a la par: el mapa reparte el alto del panel entre sus tres filas y deja la leyenda al pie */
+@media (min-width:1061px){
+  .fila.a>.panel{display:flex;flex-direction:column}
+  .fila.a>.panel>.panel-cuerpo{flex:1;display:flex;flex-direction:column}
+  .mapa{flex:1;grid-template-rows:auto;grid-auto-rows:minmax(62px,1fr)}
+}
 
 /* Tabla de operaciones */
 .tabla th{background:transparent;border-bottom:1px solid var(--borde)}
@@ -1725,6 +1741,7 @@ html{scroll-padding-top:86px}
 .cu-d.ko:hover{--k-cara:color-mix(in srgb,var(--pierde-suelo) 84%,var(--pierde-cara))}
 .cu-d.ko:active{transform:translateY(4px)}
 .cu-d.sel,.cu-d[aria-pressed="true"]{transform:translateY(3px);outline:2px solid var(--morado);outline-offset:2px;box-shadow:inset 0 2px 0 rgba(0,0,0,.22),0 1px 0 var(--k-canto)}
+.cu-d.sel:focus-visible,.cu-d[aria-pressed="true"]:focus-visible{outline-width:3px;outline-offset:5px}   /* elegida y con foco: el cerco se separa (antes eran idénticos) */
 .cu-top3 li{padding:5px 0;border-bottom:1px solid var(--borde)}
 .cu-top3 li:last-child{border-bottom:0}
 .cu-top3 b{white-space:nowrap}
@@ -1971,8 +1988,9 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 }
 @media (max-width:640px){
   .hero{margin-bottom:22px}
-  .cal{--col-max:12px;column-gap:4px}
-  .cal-dias{column-gap:4px}
+  .cal,.mapa{--col-k:.36;--col-ax:19.8deg;--col-ay:70.2deg}
+  .cal{--col-max:12px;column-gap:4px;padding-left:0}
+  .cal-dias{column-gap:4px;padding-left:0}
   .cal li{min-height:46px}
   .cal .celda{padding:4px 4px}
   .cal .col3d.g{padding:3px 4px 4px}
@@ -1981,6 +1999,7 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .cal .v{font-size:12px;font-stretch:78%;letter-spacing:-0.01em}
   #calendario.panel-cuerpo{padding:14px 12px 16px}
   .mapa{--col-max:12px;column-gap:5px}
+  .mapa .mc{min-height:54px}
   .mapa .mc b{font-size:12.5px;font-stretch:82%}
   .mapa .mc small{font-size:11.5px;font-stretch:82%}
   #mapa.panel-cuerpo{padding:16px 12px}
@@ -6283,7 +6302,7 @@ function pintarCalendario(){
     const li=`${dow>4?'finde':''}${esHoy?' hoy':''}`;
     if(o){
       /* columna: la altura (--a, fracción de la máxima) es el dinero del día; sube si gana, se hunde si pierde */
-      const alto=(0.25+0.75*Math.abs(o.u)/max).toFixed(2), cl=Math.abs(o.u)<1e-9?'z':(o.u>0?'g':'p');
+      const alto=(0.12+0.88*Math.abs(o.u)/max).toFixed(2), cl=Math.abs(o.u)<1e-9?'z':(o.u>0?'g':'p');
       html+=`<li class="${li}"><button type="button" class="celda col3d ${cl}${filtro.dia===f?' sel':''}" data-accion="filtro-dia" data-fecha="${f}" aria-pressed="${filtro.dia===f}" style="--a:${alto}" aria-label="${d} de ${MESES_L[m]}: ${fmtUSD(o.u)}, ${o.n} ${o.n===1?'operación':'operaciones'}. Ver operaciones de ese día" title="${fmtUSD(o.u)}, ${o.n} ${o.n===1?'operación':'operaciones'}"><span class="n">${d}</span><span class="v ${clase(o.u)}">${fmtCorto(o.u)}</span></button></li>`;
     } else html+=`<li class="${li}"><span class="celda" aria-label="${d} de ${MESES_L[m]}, sin operaciones"><span class="n">${d}</span></span></li>`;
   }
@@ -6301,7 +6320,7 @@ function pintarMapa(ts){
     for(let dw=1; dw<=5; dw++){
       const o=celdas[ses+'|'+dw];
       if(o){
-        const alto=(0.25+0.75*Math.abs(o.u)/max).toFixed(2), cl=Math.abs(o.u)<1e-9?'z':(o.u>0?'g':'p'), sel=filtro.sesion===ses&&filtro.dow===dw;
+        const alto=(0.12+0.88*Math.abs(o.u)/max).toFixed(2), cl=Math.abs(o.u)<1e-9?'z':(o.u>0?'g':'p'), sel=filtro.sesion===ses&&filtro.dow===dw;
         html+=`<button type="button" class="mc col3d ${cl}${sel?' sel':''}" data-accion="filtro-mapa" data-sesion="${ses}" data-dow="${dw}" aria-pressed="${sel}" style="--a:${alto}" aria-label="${ses}, ${DIAS_L[dw]}: ${fmtUSD(o.u)} en ${o.n} ${o.n===1?'operación':'operaciones'}"><b class="${clase(o.u)}">${fmtCorto(o.u)}</b><small>${o.n} ${o.n===1?'op.':'ops.'}</small></button>`;
       } else html+=`<span class="mc" aria-label="${ses}, ${DIAS_L[dw]}: sin operaciones"></span>`;
     }
