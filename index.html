@@ -838,7 +838,7 @@ html.vt-modo::view-transition-new(root){z-index:2}
 .rk-sync.vivo .punto{background:var(--compra)}
 .rk-sync.vivo.aviso .punto{background:var(--venta)}
 .rk-sync.vivo:not(.aviso) .punto::after{content:"";position:absolute;inset:0;border-radius:50%;background:inherit;animation:latido 1.8s ease-out infinite}
-.hero-rank{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:28px;align-items:end}
+.hero-rank{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:28px;align-items:end}   /* dos columnas si caben 300 px cada una; si no, una */
 .rk-izq{display:flex;flex-direction:column;min-width:0;align-self:center}
 .rk-eti{display:inline-flex;align-items:center;gap:8px}
 .rk-eti svg{width:18px;height:18px;color:var(--violeta-claro)}
@@ -855,7 +855,7 @@ html.vt-modo::view-transition-new(root){z-index:2}
 .rk-av{position:relative;flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,var(--a1,#7B52EE),var(--a2,#5B2ED1));color:#fff;font-size:13px;font-weight:750;letter-spacing:.02em}
 .rk-av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 /* podio */
-.rk-podio{--pd-dx:14px;--pd-dy:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:end;min-height:300px;margin-bottom:-28px;padding-right:var(--pd-dx)}
+.rk-podio{--pd-dx:14px;--pd-dy:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:end;width:100%;max-width:540px;min-height:300px;margin:0 auto -28px;padding-right:var(--pd-dx)}
 .rk-pd{position:relative;display:flex;flex-direction:column;align-items:center;min-width:0;text-align:center;--medalla:var(--plata-frente);--medalla-s:var(--plata-lado);--pd-cara:#7C5CE6;--pd-frente:#4B2BB8;--pd-lado:#2A1470;--pd-alto:136px}
 .rk-pd.p1{--medalla:var(--oro-frente);--medalla-s:var(--oro-lado);--pd-cara:#A98FFF;--pd-frente:#6E46E5;--pd-lado:#3A1C93;--pd-alto:172px}
 .rk-pd.p3{--medalla:var(--bronce-frente);--medalla-s:var(--bronce-lado);--pd-alto:108px}
@@ -863,7 +863,7 @@ html.vt-modo::view-transition-new(root){z-index:2}
 .rk-av-pd{left:calc(var(--pd-dx)/2);width:62px;height:62px;margin-bottom:calc(var(--pd-dy)/2 + 7px);font-size:19px;box-shadow:0 0 0 3px var(--medalla),0 4px 0 3px var(--medalla-s),0 10px 0 -2px rgba(8,3,30,.4);animation:rk-aparece .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d) + .35s)}
 .p1 .rk-av-pd{width:78px;height:78px;font-size:23px}
 .libre .rk-av-pd{background:var(--osc-pozo);color:var(--hero-tenue)}
-.rk-corona{position:relative;left:calc(var(--pd-dx)/2);width:28px;height:28px;margin-bottom:3px;color:var(--oro-frente)}
+.rk-corona{position:relative;left:calc(var(--pd-dx)/2);width:32px;height:32px;margin-bottom:2px;color:var(--oro-frente)}
 .rk-corona svg{display:block;width:100%;height:100%}
 .rk-pd-base{position:relative;display:flex;flex-direction:column;align-items:center;width:100%;height:var(--pd-alto);padding:9px 6px 0;background:var(--pd-frente);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 1px 0 0 rgba(8,3,30,.28);transform-origin:bottom;animation:rk-sube .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d)}
 .rk-pd-base::before{content:"";position:absolute;left:0;right:0;bottom:calc(100% - .5px);height:calc(var(--pd-dy) + .5px);background:var(--pd-cara);transform-origin:0 100%;transform:skewX(-54.46deg)}
@@ -947,14 +947,9 @@ html.vt-modo::view-transition-new(root){z-index:2}
 .rk-bases{margin:0;padding:14px 22px 18px;border-top:1px solid var(--borde);font-size:13.5px;color:var(--tinta-2)}
 .rk-bases b{color:var(--tinta)}
 @media (max-width:1060px){
-  .hero-rank,.rk-grid{grid-template-columns:minmax(0,1fr)}
-  .rk-podio{width:100%;max-width:520px;margin:10px auto -28px}
-}
-@media (max-width:640px){
-  .rk-cel{gap:7px}
-  .rk-cel span{flex:1;min-width:0;padding:9px 4px 7px}
-  .rk-cel b{font-size:30px}
-  .rk-podio{--pd-dx:10px;--pd-dy:7px;min-height:250px;margin-bottom:-20px}
+  .rk-grid{grid-template-columns:minmax(0,1fr)}
+  /* podio compacto: en tableta comparte fila con el premio y en el móvil va debajo */
+  .rk-podio{--pd-dx:10px;--pd-dy:7px;min-height:250px;margin-top:6px}
   .rk-pd-base::before{transform:skewX(-55.01deg)}
   .rk-pd-base::after{transform:skewY(-34.99deg)}
   .rk-pd{--pd-alto:122px}
@@ -962,9 +957,16 @@ html.vt-modo::view-transition-new(root){z-index:2}
   .rk-pd.p3{--pd-alto:98px}
   .rk-av-pd{width:50px;height:50px;font-size:16px}
   .p1 .rk-av-pd{width:62px;height:62px;font-size:19px}
+  .rk-corona{width:28px;height:28px}
   .rk-pd-pos{font-size:34px}
   .rk-pd-nom{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:normal;overflow-wrap:anywhere;font-size:13px;font-stretch:84%;line-height:1.15}
   .rk-pd-n{font-size:12px}
+}
+@media (max-width:640px){
+  .rk-cel{gap:7px}
+  .rk-cel span{flex:1;min-width:0;padding:9px 4px 7px}
+  .rk-cel b{font-size:30px}
+  .rk-podio{margin-bottom:-20px}
   .rk-fila{grid-template-columns:30px 34px minmax(0,1fr) 46px;gap:10px;padding:10px 8px}
   .rk-fila .rk-av{width:34px;height:34px}
   .rk-barra{display:none}
@@ -1001,7 +1003,7 @@ html.vt-modo::view-transition-new(root){z-index:2}
 @keyframes carga{to{transform:translateX(194%)}}
 /* velas japonesas con volumen: escena de 320×180 unidades vista de frente, desde arriba y a la derecha; luz de arriba a la izquierda */
 .velas{position:relative;min-height:410px;container-type:inline-size;overflow:hidden;background:#0D0528;box-shadow:inset 0 3px 0 rgba(0,0,0,.42),inset -1px 0 0 rgba(255,255,255,.07)}
-.velas-esc{--u:calc(100cqw / 296);--d:calc(var(--u)*11);position:absolute;left:50%;top:50%;width:calc(var(--u)*320);height:calc(var(--u)*180);margin:calc(var(--u)*-80) 0 0 calc(var(--u)*-160);
+.velas-esc{--u:calc(100cqw / 312);--d:calc(var(--u)*11);position:absolute;left:50%;top:50%;width:calc(var(--u)*320);height:calc(var(--u)*180);margin:calc(var(--u)*-80) 0 0 calc(var(--u)*-160);
   transform-style:preserve-3d;transform:perspective(calc(var(--u)*760)) rotateX(-20deg) rotateY(-28deg)}
 @supports not (width:1cqw){ .velas-esc{--u:1px} }
 .velas-suelo{position:absolute;left:calc(var(--u)*-168);right:calc(var(--u)*-168);top:calc(var(--u)*-8);height:calc(var(--u)*328);transform:rotateX(90deg);
@@ -2155,7 +2157,9 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .nav:has(#nav-alumnos:not([hidden])) b{font-stretch:80%}
 }
 @media (max-width:380px){
+  .nav b{font-stretch:88%}
   .nav:has(#nav-alumnos:not([hidden])) b{font-size:11.5px;font-stretch:76%}
+  .sesion-viva{font-size:12px;font-stretch:86%}          /* la sesión cabe en una línea también a 360 px */
 }
 </style>
 
