@@ -7455,6 +7455,7 @@ document.addEventListener('click',e=>{
   }
 });
 document.addEventListener('keydown',e=>{
+  if(!$('#entrada').hidden) return; // con la pantalla de entrada delante no hay atajos: Ctrl/⌘+K abría las acciones rápidas y «N» el cajón, los dos por debajo y sin verse
   if(!$('#instalar').hidden){ // la hoja de instalar es la capa de más arriba: Escape la cierra, Tab da la vuelta dentro de ella y ningún atajo actúa por debajo
     if(e.key==='Escape'){ e.preventDefault(); cerrarInstalar(); }
     else if(e.key==='Tab'){ const f=$$('#instalar button'), i=f.indexOf(document.activeElement); if(e.shiftKey?i<=0:i<0||i===f.length-1){ e.preventDefault(); f[e.shiftKey?f.length-1:0].focus(); } }
@@ -7554,6 +7555,7 @@ const VELAS=[[115,150,122,22,1],[100,130,108,18,1],[102,130,110,12,0],[85,120,92
 function velas3d(){ return '<div class="velas-esc"><span class="velas-suelo"></span><span class="velas-max"></span>'+VELAS.map(([wt,wb,bt,bh,up],i)=>`<span class="vela${up?'':' b'}" style="--x:${14+i*21};--wt:${wt};--wh:${wb-wt};--bt:${bt};--bh:${bh};--i:${i}"><i></i><span><b></b><b></b><b></b></span></span>`).join('')+'</div>'; }
 function pantallaEntrada(tipo,yo){
   const e=$('#entrada'), c=$('#entrada-caja'), v=$('#velas'); e.hidden=false; document.body.style.overflow='hidden';
+  $('.app').inert=true; // lo que queda tapado detrás no recibe el foco: Tab pasaba por la búsqueda, la navegación y el botón del tema antes de volver a «Entrar con Discord»
   if(v && !v.firstChild) v.innerHTML=velas3d();
   const marca='<p class="entrada-marca"><span class="marca-agx">AGX</span><span>Área de alumnos</span></p>';
   const errorLogin=/[?&]error=login/.test(location.search)?'<p class="entrada-error" role="alert">No se ha podido completar la entrada. Vuelve a intentarlo.</p>':'';
@@ -7564,7 +7566,7 @@ function pantallaEntrada(tipo,yo){
     c.innerHTML=marca+`<h1 id="entrada-t">Hola${yo&&yo.nombre?', '+esc(String(yo.nombre).split(/\s+/)[0]):''}</h1><p>${txt}</p><a class="boton-dc" href="/api/auth/login">${ICO_DC}Volver a comprobar</a><p class="entrada-nota"><a href="/api/auth/salir">Entrar con otra cuenta</a></p>`; return; }
   c.innerHTML=marca+'<h1 id="entrada-t">No hemos podido cargar tu área</h1><p>Revisa tu conexión y vuelve a intentarlo.</p><button type="button" class="boton-dc" onclick="location.reload()">Reintentar</button>';
 }
-function ocultarEntrada(){ $('#entrada').hidden=true; document.body.style.overflow=''; }
+function ocultarEntrada(){ $('#entrada').hidden=true; document.body.style.overflow=''; $('.app').inert=false; }
 function pintarAlumno(){
   if(!YO) return;
   const n=String(YO.nombre||'Alumno'), ini=n.trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase()||'A';
