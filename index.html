@@ -1022,6 +1022,12 @@ html.vt-modo::view-transition-new(root){z-index:2}
   .entrada h1{font-size:29px}
   .entrada p{font-size:16px}
 }
+/* monitores de 2560×1440 y mayores: con el tope de 1180 px la placa volvía a quedarse en una quinta parte de la pantalla; aquí sigue creciendo
+   con la ventana (sin pasar de 1,1 veces su alto, para los ultrapanorámicos) y las velas, que van por el ancho de la placa, con ella */
+@media (min-width:2000px) and (min-height:1000px){
+  .entrada-placa{width:min(max(1180px,min(60vw,110vh)),calc(100% - 64px))}
+  .velas{min-height:clamp(430px,56vh,34vw)}
+}
 @media (prefers-reduced-motion:reduce){ .entrada-carga::after{animation:none!important;left:33%} }
 .avatar{position:relative;overflow:hidden}
 .avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
