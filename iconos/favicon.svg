@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<title>AGX</title>
+<defs><clipPath id="c"><rect width="64" height="59" rx="14"/></clipPath>
+<g id="m" transform="translate(4.46 44.20) scale(0.04500 -0.04500)"><path d="M126 700H275L389 0H279L259 139V137H134L114 0H12ZM246 232 197 578H195L147 232Z"/><path transform="translate(419 0)" d="M33 166V534Q33 619 75.0 664.5Q117 710 197 710Q277 710 319.0 664.5Q361 619 361 534V474H257V541Q257 610 200 610Q143 610 143 541V158Q143 90 200 90Q257 90 257 158V295H202V395H361V166Q361 81 319.0 35.5Q277 -10 197 -10Q117 -10 75.0 35.5Q33 81 33 166Z"/><path transform="translate(817 0)" d="M138 358 17 700H133L207 474H209L285 700H389L268 358L395 0H279L199 244H197L115 0H11Z"/></g></defs>
+<rect width="64" height="64" rx="14" fill="#35188F"/>
+<g clip-path="url(#c)"><rect width="64" height="59" rx="14" fill="#8A63F5"/><rect y="1.5" width="64" height="59" rx="14" fill="#5B2ED1"/></g>
+<use href="#m" y="3.6" fill="#2A1470"/><use href="#m" y="1.6" fill="#C3B2FF"/><use href="#m" fill="#FFF"/>
+</svg>

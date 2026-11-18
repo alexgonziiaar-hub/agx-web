@@ -4,6 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>AGX Área de Alumnos</title>
+<!-- App instalable (sin service worker): manifiesto, iconos y color de la franja del sistema. Ese color es el de la barra lateral, que en el
+     móvil es la cabecera y es la misma en los dos temas: por eso las dos etiquetas llevan el mismo y no cambia al pasar de claro a oscuro. -->
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#1A0E3E">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1A0E3E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AGX">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" sizes="180x180" href="/iconos/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/iconos/favicon-32.png">
+<link rel="icon" type="image/svg+xml" href="/iconos/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Bebas+Neue&display=swap">
