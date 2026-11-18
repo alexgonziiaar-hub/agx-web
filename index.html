@@ -43,7 +43,7 @@
   --hero-1:#3A1C93;
   --hero-2:#150A38;
   --hero-txt:#DCD4FA;
-  --hero-tenue:#A99BD9;
+  --hero-tenue:#BBAFE6;
   --hero-linea:rgba(255,255,255,.07);
   --hero-chip:rgba(255,255,255,.09);
   --hero-borde:rgba(255,255,255,.16);
@@ -63,7 +63,7 @@
   /* ===== Sistema 3D «Profundidad de mercado»: materiales (tema claro). Ver la capa «SISTEMA 3D» al final del CSS ===== */
   --mesa:var(--fondo-pagina);                                /* nivel 0 · mesa */
   --hundido:#EAE6F5;--hundido-borde:#D9D2EB;--hundido-sombra:rgba(46,26,110,.14);--hundido-luz:#FFFFFF;      /* nivel H · pozo */
-  --placa:var(--fondo);--placa-borde:var(--borde);--placa-arista:#FFFFFF;--canto:#CDC5E4;                     /* nivel 1 · placa */
+  --placa:var(--fondo);--placa-borde:var(--borde);--placa-arista:#FFFFFF;--canto:#C6BDE0;                     /* nivel 1 · placa */
   --tecla:#FFFFFF;--tecla-sube:#FBFAFF;--tecla-borde:#C9C0E0;--tecla-arista:#FFFFFF;--tecla-canto:#AFA3D2;--tecla-tinta:#2A2440;   /* nivel 2 · tecla neutra */
   --marca-cara:#8A63F5;--marca-frente:#5B2ED1;--marca-lado:#35188F;--marca-sube:#6A3EE6;--marca-tinta:#FFFFFF;  /* morado: cara (luz), frente, lado (sombra) */
   --gana-cara:#45D6A1;--gana-frente:#13805F;--gana-lado:#0A5740;--gana-tinta:#04261A;                         /* ganancia */
@@ -120,7 +120,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .alumno-txt b{color:var(--blanco);font-size:14px;font-weight:650}
 .alumno-txt span{font-size:12.5px}
 .lema{margin:0;padding-inline:10px;font-size:13px}
-.avatar{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--violeta),var(--morado));color:var(--blanco);font-size:12.5px;font-weight:700;letter-spacing:.02em}
+.avatar{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--marca-frente);box-shadow:inset 0 1px 0 var(--marca-cara),0 2px 0 var(--marca-lado);color:var(--blanco);font-size:12.5px;font-weight:700;letter-spacing:.02em}
 .avatar.peq{width:30px;height:30px;font-size:11.5px}
 
 .principal{min-width:0;padding-block:28px 80px;padding-left:36px;padding-right:max(36px,env(safe-area-inset-right,0px))}
@@ -1267,7 +1267,7 @@ button.etq-falta:hover{background:var(--morado-suave)}
 .r-caja{display:flex;align-items:center;min-height:42px;padding:0 12px;border:1px dashed var(--borde-2);border-radius:10px;background:var(--fondo-2);color:var(--tinta-2);font-size:17px;font-weight:750;font-variant-numeric:tabular-nums}
 .r-caja.pos{color:var(--compra)}
 .r-caja.neg{color:var(--venta)}
-.r-op{display:block;margin-top:2px;font-size:12px;font-weight:650;opacity:.85}
+.r-op{display:block;margin-top:2px;font-size:12px;font-weight:650}
 .det-riesgo{margin:6px 0 0;font-size:13.5px;color:var(--tinta-2);font-variant-numeric:tabular-nums}
 .det-riesgo.falta{color:var(--venta)}
 .pl-checks{display:flex;flex-direction:column;gap:12px}
@@ -1535,6 +1535,10 @@ kbd{border:1px solid var(--tecla-borde);box-shadow:0 2px 0 var(--tecla-canto);ba
 @keyframes toast-m{from{transform:translateY(20px);opacity:0}}
 .tip{border-radius:10px}
 
+/* foco visible también sobre las superficies siempre oscuras */
+.lateral :focus-visible,.hero :focus-visible,.visor :focus-visible{outline-color:var(--violeta-claro)}
+.hero .seg-oscuro button[aria-pressed="true"]:focus-visible,.hero .boton.blanco:focus-visible{outline-color:var(--blanco)}
+
 /* ====================================== MARCO ====================================== */
 html{scroll-padding-top:86px}
 .lateral{border-right:1px solid #0D0528}
@@ -1686,9 +1690,16 @@ html{scroll-padding-top:86px}
   .toast{left:max(16px,env(safe-area-inset-left,0px));bottom:calc(var(--nav-movil) + 20px + env(safe-area-inset-bottom,0px));max-width:calc(100% - 112px);transform:none;animation-name:toast-m}
   .pl-pie{bottom:calc(var(--nav-movil) + env(safe-area-inset-bottom,0px))}
   /* zonas táctiles de 44 px */
-  .boton,.boton.peq{min-height:44px}
+  .boton,.boton.peq,.cab-acc .btn-imp{min-height:44px}
   .boton.peq{padding:0 14px;font-size:14px}
-  .icono-btn,.bs-modo{width:44px;height:44px}
+  .icono-btn,.bs-modo{flex:none;width:44px;height:44px}
+  .campo input:not([type="radio"]):not([type="checkbox"]),.campo textarea{min-height:46px;font-size:16px}
+  .stepper{grid-template-columns:48px minmax(0,1fr) 48px}
+  .stepper button{height:44px}
+  .stepper input:not([type="radio"]):not([type="checkbox"]){min-height:47px}
+  .imp-tz select,.cta-form select{min-height:46px;font-size:16px}
+  #paleta-in{min-height:44px;font-size:16px}
+  .al-buscar{min-height:46px;font-size:16px}
   .seg-oscuro button,.seg-claro button,.sub-tabs a{min-height:44px}
   .radios span{padding:11px 6px}
   .chips-sel span{padding:10px 14px}
@@ -1719,7 +1730,8 @@ html{scroll-padding-top:86px}
   .setups{padding:12px 12px 16px}
   .seg-oscuro{display:flex}
   .seg-oscuro button{flex:1 1 auto;padding-inline:8px;white-space:nowrap}
-  .sesion-viva{gap:2px 6px;padding:5px 11px;font-size:12.5px}
+  .sesion-viva{gap:2px 6px;padding:5px 11px;border-radius:15px;font-size:12.5px}
+  .setup-n b{white-space:normal}
   .barra-sup{gap:6px 10px}
   .bs-dcha{gap:6px}
   .hero-top{align-items:stretch}
