@@ -468,7 +468,7 @@ h1{margin:0;font-size:30px;line-height:1.12;font-weight:740;font-stretch:108%;le
 .navegador{list-style:none;margin:0 0 20px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .nq{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--borde-2);border-radius:10px;background:var(--fondo);color:var(--tinta-2);font-size:13px;font-weight:650;font-variant-numeric:tabular-nums;transition:all .15s}
 button.nq{cursor:pointer}
-button.nq:hover{border-color:var(--morado);transform:translateY(-1px)}
+button.nq:hover{--k-borde:var(--morado);--k-tinta:var(--morado)}
 .nq.resp{background:var(--morado-suave);border-color:var(--morado-suave);color:var(--morado)}
 .nq.bien{background:var(--compra-suave);border-color:var(--compra-suave);color:var(--compra)}
 .nq.mal{background:var(--venta-suave);border-color:var(--venta-suave);color:var(--venta)}
@@ -491,7 +491,7 @@ button.nq:hover{border-color:var(--morado);transform:translateY(-1px)}
 .fp-baj{fill:var(--venta)}
 .opciones{list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
 .opcion{width:100%;display:grid;grid-template-columns:38px minmax(0,1fr) 24px;align-items:center;gap:14px;padding:14px 16px 14px 14px;border:1.5px solid var(--borde-2);border-radius:14px;background:var(--fondo);color:var(--tinta);font-size:16.5px;line-height:1.4;text-align:left;cursor:pointer;transition:border-color .15s,background .15s,transform .15s,box-shadow .2s}
-.opcion:hover:not(:disabled){border-color:var(--morado);transform:translateX(3px);box-shadow:0 6px 16px rgba(29,16,67,.08)}
+.opcion:hover:not(:disabled){--k-borde:var(--morado)}
 .opcion:disabled{cursor:default}
 .letra{width:38px;height:38px;display:grid;place-items:center;border:1.5px solid var(--borde-2);border-radius:10px;font-size:15px;font-weight:780;color:var(--tinta-2);transition:all .15s}
 .opcion:hover:not(:disabled) .letra{border-color:var(--morado);color:var(--morado)}
@@ -645,11 +645,7 @@ body{background:var(--mesa)}
 
 /* Test */
 .q-barra span{position:relative;overflow:hidden;background:linear-gradient(90deg,var(--morado),var(--violeta),var(--orquidea))}
-.q-barra span::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);transform:translateX(-100%);animation:barrido 2.4s ease-in-out infinite}
-@keyframes barrido{to{transform:translateX(100%)}}
-.opcion.elegida{background:linear-gradient(90deg,var(--morado-suave),var(--fondo))}
-.opcion.elegida .letra,.nq.actual{box-shadow:0 0 0 3px rgba(142,108,255,.22)}
-.racha{background:linear-gradient(90deg,var(--morado-suave),rgba(199,125,255,.18))}
+/* (sistema 3D) las opciones, el navegador y la racha se visten en la capa «FORMACIÓN» del final */
 
 /* Paleta de acciones rápidas */
 .paleta-capa{position:fixed;inset:0;z-index:70;display:flex;align-items:flex-start;justify-content:center;
@@ -748,7 +744,6 @@ body::after{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-
   --pierde-suelo:#3A0F1B;--pierde-suelo-tinta:#FF9DA9;
   --neutro-cara:#3A3072;--neutro-frente:#241B55;--neutro-lado:#140D38;
   color-scheme:dark}
-:root[data-modo="oscuro"] .opcion.elegida .letra{color:#140E2E}
 .toast{background:var(--toast-fondo);color:var(--toast-txt)}
 html.vt-modo::view-transition-old(root),html.vt-modo::view-transition-new(root){animation:none;mix-blend-mode:normal}
 html.vt-modo::view-transition-new(root){z-index:2}
@@ -799,7 +794,7 @@ html.vt-modo::view-transition-new(root){z-index:2}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-iteration-count:1!important}
-  .aurora span,.lateral::after,.marca-agx,.h-pulso,.q-barra span::after{animation:none!important}
+  .aurora span,.lateral::after,.marca-agx,.h-pulso{animation:none!important}
   .tk-pista{animation:none!important}
   .tk-marco{overflow-x:auto}
   .tk-grupo[aria-hidden]{display:none}
@@ -1302,7 +1297,7 @@ button.etq-falta:hover{background:var(--morado-suave)}
 .niv-nota{margin:0 18px 6px;font-size:13.5px;color:var(--tinta-2)}
 .lec-lista{margin:0;padding:4px 10px 12px;list-style:none;border-top:1px solid var(--borde)}
 .lec-fila{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;width:100%;padding:10px 10px;border:0;border-radius:12px;background:none;color:var(--tinta);font:inherit;text-align:left;text-decoration:none;cursor:pointer;transition:background .15s}
-a.lec-fila:hover,button.lec-fila:hover{background:var(--fondo-2)}
+a.lec-fila:hover,button.lec-fila:hover{--k-cara:var(--tecla-sube);--k-borde:var(--morado)}
 a.lec-fila:focus-visible,button.lec-fila:focus-visible{outline:2px solid var(--violeta);outline-offset:-2px}
 .lec-fila.sig{background:var(--morado-suave)}
 .lec-fila.cerrada{cursor:default;opacity:.62}
@@ -1791,6 +1786,162 @@ html{scroll-padding-top:86px}
 .inf-acciones{border-left:4px solid var(--morado);border-radius:0 12px 12px 0}
 .inf-viejo{border:1px solid var(--hundido-borde);background:var(--hundido)}
 
+/* ====================================== FORMACIÓN (P2) ====================================== */
+/* --- Hero: pozos del juego oscuro, cifras algo condensadas y sellos --- */
+.f-estado,.ruta-datos li{border:1px solid var(--osc-pozo-borde);background:var(--osc-pozo);box-shadow:inset 0 2px 0 var(--osc-pozo-sombra),0 1px 0 var(--osc-pozo-luz)}
+.f-anillo-txt b{font-stretch:92%;letter-spacing:-0.02em}
+.f-anillo-txt>span{font-size:12.5px}
+.ruta-datos li{align-items:center;padding:11px 16px}
+.ruta-datos b{font-stretch:92%}
+.sello,.sello.no,.sello.nada{background:none}
+.sello{padding:4px 10px 0;border:2px solid currentColor;border-radius:7px;color:var(--pos-claro);font-size:24px;letter-spacing:.06em;transform:rotate(-2deg)}
+.sello.no{color:var(--neg-claro)}
+.sello.nada{border-width:1.5px;border-style:dashed;color:var(--hero-tenue);transform:none}
+.rd-nivel{stroke:rgba(255,255,255,.15)}
+.rd-eje{stroke:rgba(255,255,255,.15);opacity:1}
+.rd-sombra{fill:rgba(5,2,20,.5)}
+.rd-dato{fill-opacity:.6;stroke:#E6DCFF}
+.rd-pt{stroke:var(--orquidea)}
+
+/* --- Ruta en escalera: cada nivel es un peldaño. El material dice el estado: aprobado = placa con canto verde y número en prisma verde;
+       actual = el más alto, con canto de marca y número encendido; abierto = placa; cerrado = hundido y apagado, con candado.
+       El progreso va a la vista: una ficha por lección (levantada al aprobarla) y otra, más estrecha, por el examen. --- */
+.niveles{gap:14px;margin-top:26px}
+.niv{--niv-canto:var(--canto);border-radius:16px}
+.niv,.niv[open]{box-shadow:inset 0 1px 0 var(--placa-arista),0 4px 0 var(--niv-canto)}
+.niv.ok{--niv-canto:var(--gana-frente);border-color:color-mix(in srgb,var(--gana-frente) 50%,var(--placa-borde))}
+.niv.actual,.niv.actual[open]{margin-bottom:2px;border-color:var(--morado);box-shadow:inset 0 1px 0 var(--placa-arista),0 6px 0 var(--marca-lado)}
+.niv.cerr,.niv.prep,.niv.cerr[open],.niv.prep[open]{border-color:var(--hundido-borde);background:var(--hundido);box-shadow:inset 0 3px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
+.niv.prep{border-style:dashed;border-color:var(--borde-2)}
+.niv>summary{grid-template-columns:auto minmax(0,1fr) auto auto auto;gap:6px 16px;padding:14px 16px 15px}
+.niv>summary:focus-visible{outline-color:var(--morado);border-radius:16px}
+.niv-num{width:46px;height:46px;border-radius:12px;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz);color:var(--morado);font-size:17px;font-stretch:88%}
+.niv.ok .niv-num{background:var(--gana-cara);color:var(--gana-tinta);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 0 var(--gana-frente);transform:translateY(-2px)}
+.niv.actual .niv-num{background:var(--marca-frente);color:#fff;box-shadow:inset 0 1px 0 var(--marca-cara),0 4px 0 var(--marca-lado);transform:translateY(-2px)}
+.niv.cerr .niv-num,.niv.prep .niv-num{background:none;box-shadow:none;border:1px dashed var(--borde-2);color:var(--tinta-2)}
+.niv.cerr .niv-tit b,.niv.prep .niv-tit b{color:var(--tinta-2)}
+.niv-barra{position:static;display:flex;align-items:flex-end;gap:4px;height:auto;padding:3px 0;border-radius:0;background:none;box-shadow:none;overflow:visible}
+.niv-barra i{display:block;width:15px;height:10px;border-radius:3px;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
+.niv-barra i.ex{width:9px;margin-left:3px}
+.niv-barra i.ok{background:var(--gana-cara);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 3px 0 var(--gana-frente);transform:translateY(-3px)}
+.niv-barra i.ko{background:var(--pierde-suelo);box-shadow:inset 0 3px 0 var(--pierde-frente)}
+.niv.cerr .niv-barra i,.niv.prep .niv-barra i{box-shadow:inset 0 0 0 1px var(--borde-2)}
+.niv.cerr:not([open])>summary .niv-chev,.niv.prep:not([open])>summary .niv-chev{background:none;box-shadow:inset 0 0 0 0 transparent;border-color:var(--borde-2)}
+.niv-est{min-width:84px;justify-content:center;font-stretch:96%}
+.niv-est.cerr{background:none;box-shadow:inset 0 0 0 1px var(--borde-2)}
+.niv-nota{margin:0 16px 10px}
+.lec-lista{display:flex;flex-direction:column;gap:9px;padding:14px 14px 18px}
+.lec-fila{padding:9px 12px;border-radius:12px;--k-alto:3px;--k-tinta:var(--tinta)}
+.lec-fila.sig{--k-cara:var(--morado-suave);--k-borde:var(--morado);--k-canto:var(--marca-lado);background:var(--morado-suave)}
+.lec-fila.cerrada{opacity:1;border:1px solid var(--hundido-borde);background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz);color:var(--tinta-2)}
+.niv.cerr .lec-fila.cerrada,.niv.prep .lec-fila.cerrada{border-color:var(--borde-2);box-shadow:none}
+.lec-n{border:0;border-radius:9px;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz);font-stretch:90%}
+.lec-fila.ok .lec-n{background:var(--gana-cara);color:var(--gana-tinta);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 2px 0 var(--gana-frente)}
+.lec-fila.sig .lec-n{background:var(--marca-frente);color:#fff;box-shadow:inset 0 1px 0 var(--marca-cara),0 2px 0 var(--marca-lado)}
+.lec-fila.cerrada .lec-n{background:none;box-shadow:none;border:1px dashed var(--borde-2);color:var(--tinta-2)}
+.lec-n.ex{background:var(--hundido);color:var(--morado)}
+.lec-fila.sig .lec-chip.dis{background:var(--marca-frente);color:#fff}
+.lec-chip.prep{background:none;box-shadow:inset 0 0 0 1px var(--borde-2)}
+
+/* --- Lección: lectura larga, plana y cómoda; el lateral con el test y las lecciones vecinas como teclas --- */
+.lec-art{padding:clamp(20px,3vw,36px)}
+.lec-teoria{font-size:16.5px;line-height:1.7}
+.lec-teoria>p:first-child{font-size:18px;line-height:1.6}
+.lec-teoria h3{margin-top:30px}
+.lec-teoria li::marker{color:var(--morado)}
+.lec-clave{border-radius:0 12px 12px 0}
+.figura{border:1px solid var(--hundido-borde);background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
+.lec-test h2{font-size:17px}
+.lec-acc{gap:10px;padding-bottom:4px}
+.lec-nav{gap:10px;padding-bottom:4px}
+.lec-nav>span:empty{display:none}
+.lec-nav a{flex:1 1 0;min-width:0;max-width:none;min-height:44px;padding:7px 12px;border-radius:11px;gap:6px;font-size:13.5px;line-height:1.25;--k-alto:3px;--k-tinta:var(--tinta)}
+.lec-nav a.dcha{justify-content:flex-end}
+.lec-nav a:hover{text-decoration:none;--k-borde:var(--morado);--k-tinta:var(--morado)}
+.lec-bloq-ico{width:58px;height:58px;border-radius:16px;background:var(--hundido);box-shadow:inset 0 3px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
+
+/* --- Test: opciones A/B/C como teclas grandes. Elegida (examen) = abajo con tinte de marca; correcta = verde que se queda abajo;
+       fallada = roja que se queda abajo. Siempre con icono además del color. --- */
+.quiz-titulo h1{font-size:25px}
+.racha{padding:7px 14px;border:1px solid var(--hundido-borde);background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz);font-stretch:94%}
+.q-barra{height:10px;border-radius:5px;margin-bottom:18px;box-shadow:inset 0 1px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz),0 0 0 1px var(--hundido-borde)}
+.q-barra span{border-radius:5px 2px 2px 5px;background:var(--barra-marca);box-shadow:inset -2px 0 0 var(--marca-lado)}
+.navegador{gap:9px 6px;margin-bottom:22px;padding-bottom:4px}
+.nq{width:34px;height:32px;border:1px solid var(--hundido-borde);border-radius:8px;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz);color:var(--tinta-2);font-weight:750;font-stretch:90%}
+span.nq.bien,span.nq.mal{border:0}
+span.nq.bien{background:var(--gana-cara);color:var(--gana-tinta);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 3px 0 var(--gana-frente);transform:translateY(-3px)}
+span.nq.mal{background:var(--pierde-suelo);color:var(--pierde-suelo-tinta);box-shadow:inset 0 3px 0 var(--pierde-frente)}
+span.nq.actual{outline:2px solid var(--morado);outline-offset:2px}
+span.nq.actual:not(.bien):not(.mal){box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz);color:var(--tinta)}
+button.nq{width:36px;height:34px;border-radius:9px;--k-alto:3px;--k-tinta:var(--tinta-2)}
+button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:var(--violeta)}
+.preg-cuerpo{padding:26px 28px 24px}
+.opciones{gap:13px;padding-bottom:5px}
+.opcion{grid-template-columns:40px minmax(0,1fr) 26px;padding:13px 16px 13px 13px;border-radius:14px;--k-alto:5px;--k-tinta:var(--tinta)}
+.opcion:disabled{--k-alto:3px}
+.letra{width:40px;height:40px;border:0;border-radius:10px;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz);font-size:15.5px;font-weight:800;transition:none}
+.opcion .ico{width:26px;height:26px;padding:5px;border-radius:50%;color:#fff}
+.opcion.elegida,.opcion.bien,.opcion.mal{transform:translateY(calc(var(--k-alto) - 1px))}
+.opcion.elegida{border-color:var(--morado);background:var(--morado-suave);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--tecla-canto)}
+.opcion.elegida .letra{background:var(--marca-frente);color:#fff;box-shadow:inset 0 1px 0 var(--marca-cara),0 2px 0 var(--marca-lado)}
+.opcion.bien{border-color:var(--gana-frente);background:var(--compra-suave);box-shadow:inset 0 2px 0 rgba(4,38,26,.14),0 1px 0 var(--gana-lado);animation:tecla-baja .3s cubic-bezier(.2,.8,.2,1)}
+.opcion.bien .letra{background:var(--gana-frente);color:#fff;box-shadow:inset 0 1px 0 var(--gana-cara),0 2px 0 var(--gana-lado)}
+.opcion.bien .ico{background:var(--gana-frente);color:#fff}
+.opcion.mal{border-color:var(--pierde-frente);background:var(--venta-suave);box-shadow:inset 0 2px 0 rgba(61,6,14,.14),0 1px 0 var(--pierde-lado);animation:sacudir-t .45s ease-in-out}
+.opcion.mal .letra{background:var(--pierde-frente);color:#fff;box-shadow:inset 0 1px 0 var(--pierde-cara),0 2px 0 var(--pierde-lado)}
+.opcion.mal .ico{background:var(--pierde-frente);color:#fff}
+@keyframes tecla-baja{from{transform:translateY(0)}}
+@keyframes sacudir-t{0%{transform:translate(0,0)}20%,60%{transform:translate(-6px,2px)}40%,80%{transform:translate(6px,2px)}}
+.veredicto-txt svg{box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.veredicto-txt.pos svg{background:var(--gana-frente)}
+.veredicto-txt.neg svg{background:var(--pierde-frente)}
+/* reloj del examen: un toro dentro de un pozo; con poco tiempo, todo el pozo pasa a rojo */
+.reloj{gap:10px;padding:5px 16px 5px 6px;border:1px solid var(--hundido-borde);border-radius:999px;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
+.reloj .an-pista{stroke:color-mix(in srgb,var(--tinta-2) 24%,var(--hundido))}
+.reloj b{font-size:25px;font-stretch:88%;line-height:1}
+.reloj.poco{border-color:var(--pierde-frente);background:var(--pierde-suelo);box-shadow:inset 0 3px 0 var(--pierde-frente)}
+.reloj.poco b{color:var(--pierde-suelo-tinta)}
+.reloj.poco .an-pista{stroke:color-mix(in srgb,var(--pierde-frente) 34%,var(--pierde-suelo))}
+.reloj.poco .an-valor{stroke:var(--pierde-frente)}
+
+/* --- Resultado: sello que cae sobre la placa (APTO / NO APTO, APROBADA / NO APROBADA) y repaso de fallos --- */
+.res-hero{gap:30px}
+.veredicto{position:relative;display:inline-block;margin:10px 0 6px;padding:11px 18px 2px;border:4px solid currentColor;border-radius:12px;font-size:76px;line-height:.86;letter-spacing:.04em;transform:rotate(-3deg);transform-origin:18% 50%;animation-name:sellar-3d}
+.veredicto::after{content:"";position:absolute;inset:4px;border:1.5px solid currentColor;border-radius:6px;opacity:.6}
+@keyframes sellar-3d{from{transform:rotate(-3deg) scale(1.5);opacity:0}}
+.res-txt .f-titulo{margin-top:8px}
+.fallo{grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:14px 32px;padding:20px 18px}
+.fallo-q{font-size:15.5px;line-height:1.4}
+.fallo-tuya,.fallo-buena{display:flex;align-items:flex-start;gap:8px;margin-top:9px;line-height:1.4}
+.fallo-tuya::before,.fallo-buena::before{content:"";flex:none;width:18px;height:18px;margin-top:1px;border-radius:50%;box-shadow:inset 0 1px 0 rgba(255,255,255,.28);background:var(--pierde-frente) center/10px 10px no-repeat;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'><path d='M5 5l10 10M15 5L5 15'/></svg>")}
+.fallo-buena::before{background-color:var(--gana-frente);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M4 10.5l4 4 8-9'/></svg>")}
+.fallo .exp{border:1px solid var(--hundido-borde);background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
+
+/* --- Repaso libre: tarjetas-tecla, bloques y temas --- */
+.tcard{padding:18px 18px 20px;border-radius:16px;--k-alto:5px;--k-tinta:var(--tinta)}
+.ticono{border-radius:12px;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
+.tcard-ex .ticono{background:var(--osc-pozo);box-shadow:inset 0 2px 0 var(--osc-pozo-sombra),0 1px 0 var(--osc-pozo-luz);color:var(--violeta-claro)}
+.tcard-ex .ir,.ir-sec,.tcard:hover .ir-sec{padding:0;border-radius:0;background:none}
+.tcard-ex .ir{gap:0;color:var(--blanco)}
+.tcard .ir::after,.tcard .ir-sec::after{content:"";width:7px;height:7px;margin-left:8px;border-top:2px solid currentColor;border-right:2px solid currentColor;transform:rotate(45deg)}
+.ir-sec,.tcard:hover .ir-sec{color:var(--morado)}
+.tcard .ir-sec{display:inline-flex;align-items:center}
+.estado{border-radius:7px}
+.est-nue{background:var(--hundido);color:var(--tinta-2)}
+.contador{background:var(--pierde-frente);color:#fff;box-shadow:inset 0 1px 0 var(--pierde-cara),0 2px 0 var(--pierde-lado)}
+.mini-barra{height:8px;border-radius:4px}
+.mini-barra span{border-radius:4px 2px 2px 4px;background:var(--barra-marca)}
+.tcard-pie{font-stretch:94%}
+.modos .tcard{min-height:190px}
+.ruta{gap:12px 10px;padding-bottom:5px}
+.ruta-b{border-radius:13px;overflow:visible;--k-tinta:var(--tinta)}
+.ruta-n{color:var(--morado)}
+.ruta-b .mini-barra{height:7px}
+.ruta-b[aria-pressed="true"] .mini-barra{background:rgba(6,2,24,.36);box-shadow:inset 0 1px 0 rgba(0,0,0,.3)}
+.ruta-b[aria-pressed="true"] .mini-barra span{background:linear-gradient(180deg,#fff 0 38%,#D5C8FF 38% 100%)}
+
 /* ====================================== MÓVIL Y TABLETA ====================================== */
 @media (max-width:900px){
   :root{--nav-movil:68px}
@@ -1889,10 +2040,36 @@ html{scroll-padding-top:86px}
   .cal .v{font-size:11.5px}
 }
 /* ---------- P2 · ajustes de móvil y tableta de Estadísticas, Plan e IA y Formación (van al final: mandan sobre sus reglas base) ---------- */
+@media (max-width:900px){
+  button.nq{width:44px;height:44px;border-radius:10px;font-size:14px}
+  .volver{min-height:44px}
+  .lec-nav a{min-height:48px}
+  .inf summary{min-height:58px}
+}
+@media (max-width:760px){
+  .fallo{grid-template-columns:minmax(0,1fr);gap:12px}     /* rareza 1: en móvil la pregunta ya no queda en una tira estrecha */
+}
 @media (max-width:640px){
   .bv{--alto:176px;--bv-dx:5px;--bv-dy:4px;--bv-ax:-51.34deg;--bv-ay:-38.66deg}
   .bv-barra{width:min(22px,54%)}
   .bv-etqs{font-size:10.5px;font-stretch:86%}
+  .niv>summary{grid-template-columns:auto minmax(0,1fr) auto;gap:10px 12px;padding:13px 13px 14px}
+  .niv-chev{grid-row:1;grid-column:3}
+  .niv-barra{grid-row:2;grid-column:1 / 3;justify-self:start;align-self:center}
+  .niv-est{grid-row:2;grid-column:2 / 4;justify-self:end;min-width:0}
+  .lec-lista{padding:12px 10px 16px}
+  .lec-fila{gap:10px;padding:9px 10px}
+  .lec-teoria{font-size:16px}
+  .lec-teoria>p:first-child{font-size:17px}
+  .preg-cuerpo{padding:20px 14px 20px}
+  .opcion{grid-template-columns:38px minmax(0,1fr) 26px;gap:11px;padding:12px 12px 12px 11px;font-size:16px}
+  .letra{width:38px;height:38px}
+  .quiz-titulo h1{font-size:22px}
+  .navegador.pulsable{flex-wrap:nowrap;gap:7px;margin-inline:-16px;padding:2px 16px 8px;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain}
+  .navegador.pulsable::-webkit-scrollbar{display:none}
+  .navegador.pulsable li{flex:none}
+  .veredicto{padding:9px 14px 1px;border-width:3px;font-size:56px}
+  .fallo{padding:16px 14px}
 }
 </style>
 
@@ -4666,13 +4843,15 @@ function vistaRuta(){
       const ok=lecOk(l.id), ab=!n.preparando && lecAbierta(l), r=estRuta().lec[l.id];
       const chip=n.preparando?'<span class="lec-chip prep">Próximamente</span>':(ok?`<span class="lec-chip ok">${ICO.check}${r.mejor} %</span>`:(ab?'<span class="lec-chip dis">Disponible</span>':`<span class="lec-chip cerr">${ICO.candado}<span class="sr">Bloqueada</span></span>`));
       const cuerpo=`<span class="lec-n">${j+1}</span><span class="lec-t"><b>${esc(l.titulo)}</b><small>${n.preparando?'Con las clases de Alex':(l.min?l.min+' min de lectura · ':'')+(n.preparando?'':'test de '+Math.min(RUTA_N_TEST,poolLec(l).length)+' preguntas')}</small></span>${chip}`;
-      return `<li>${ab?`<a class="lec-fila${sig&&sig.id===l.id?' sig':''}" href="#formacion/l/${l.id}">${cuerpo}</a>`:`<div class="lec-fila cerrada" aria-disabled="true">${cuerpo}</div>`}</li>`;
+      return `<li>${ab?`<a class="lec-fila${ok?' ok':''}${sig&&sig.id===l.id?' sig':''}" href="#formacion/l/${l.id}">${cuerpo}</a>`:`<div class="lec-fila cerrada" aria-disabled="true">${cuerpo}</div>`}</li>`;
     }).join('');
     const nEx=Math.min(RUTA_N_NIVEL,poolNivel(n).length), exAb=examenAbierto(n);
     const filaEx=n.preparando?'':`<li>${exAb?`<button type="button" class="lec-fila ex" data-accion="examen-nivel" data-n="${n.id}">`:'<div class="lec-fila ex cerrada" aria-disabled="true">'}<span class="lec-n ex">${ICO_TEMA.examen||ICO.check}</span><span class="lec-t"><b>Examen del nivel ${k+1}</b><small>${nEx} preguntas, ${nEx} minutos · apruebas con ${maxFallos(nEx)} ${maxFallos(nEx)===1?'fallo':'fallos'} o menos</small></span>${ex?`<span class="lec-chip ${ex.ok?'ok':'ko'}">${ex.ok?ICO.check+'Apto':'No apto · '+ex.fallos+' fallos'}</span>`:(exAb?'<span class="lec-chip dis">Disponible</span>':`<span class="lec-chip cerr">${ICO.candado}<span class="sr">Bloqueado</span></span>`)}${exAb?'</button>':'</div>'}</li>`;
-    return `<details class="niv entra${actual?' actual':''}${n.preparando?' prep':''}" style="animation-delay:${Math.min(k,8)*0.03}s"${actual||k===0&&!pr.ok?' open':''}>
-      <summary><span class="niv-num">${String(k+1).padStart(2,'0')}</span><span class="niv-tit"><b>${esc(n.titulo)}</b><small>${esc(n.desc)}</small></span>${estado}<span class="niv-chev" aria-hidden="true">${ICO.chev}</span>
-        ${n.preparando?'':`<span class="niv-barra" aria-hidden="true"><span style="width:${hechas/n.lecciones.length*100}%"></span></span>`}</summary>
+    /* Peldaño de la escalera (sistema 3D): la clase dice el material (ok = aprobado, actual = levantado e iluminado, cerr = hundido con candado,
+       prep = en preparación) y .niv-barra enseña el progreso con una ficha por lección y otra, más estrecha, por el examen. */
+    const fichas=n.preparando?'':`<span class="niv-barra" aria-hidden="true">${n.lecciones.map(l=>`<i${lecOk(l.id)?' class="ok"':''}></i>`).join('')}<i class="ex${nivOk(n)?' ok':(ex?' ko':'')}"></i></span>`;
+    return `<details class="niv entra${actual?' actual':''}${n.preparando?' prep':''}${nivOk(n)?' ok':''}${!abierto&&!n.preparando?' cerr':''}" style="animation-delay:${Math.min(k,8)*0.03}s"${actual||k===0&&!pr.ok?' open':''}>
+      <summary><span class="niv-num">${String(k+1).padStart(2,'0')}</span><span class="niv-tit"><b>${esc(n.titulo)}</b><small>${esc(n.desc)}</small></span>${fichas}${estado}<span class="niv-chev" aria-hidden="true">${ICO.chev}</span></summary>
       ${n.preparando?'<p class="niv-nota">Estas lecciones salen de las clases en directo de Alex. Aparecerán aquí con su teoría y su test en cuanto estén preparadas.</p>':''}
       <ol class="lec-lista">${filas}${filaEx}</ol></details>`;
   }).join('');
@@ -4718,7 +4897,7 @@ function renderFormacion(){
     if(quiz.hash==null) quiz.hash=location.hash;
     if(quiz.hash!==location.hash){ quiz=null; pararReloj(); }
   }
-  if(quiz){ vista.innerHTML=quiz.fin?vistaResultado():vistaPregunta(); return; }
+  if(quiz){ vista.innerHTML=quiz.fin?vistaResultado():vistaPregunta(); centrarNavegador(); return; }
   if(subForm==='libre'){ vista.innerHTML=vistaFormacion(); const h=$('.cab-modulo',vista); if(h) h.insertAdjacentHTML('afterend',tabsForm()); const pc=Math.round(progresoForm().pct*100); odometro($('#f-pct'),pc+' %','Completado: '+pc+' %'); return; }
   if(lecVista){ vista.innerHTML=vistaLeccion(lecVista); return; }
   vista.innerHTML=vistaRuta(); const pc=Math.round(progresoRuta().pct*100); odometro($('#f-pct'),pc+' %','Completado: '+pc+' %');
@@ -6323,7 +6502,8 @@ function radar(T){
   T.forEach((t,i)=>{ const e=pt(i,R), l=pt(i,R+24), anc=Math.abs(l[0]-cx)<4?'middle':(l[0]<cx?'end':'start');
     s+=`<line class="rd-eje" x1="${cx}" y1="${cy}" x2="${e[0].toFixed(1)}" y2="${e[1].toFixed(1)}"/><text class="rd-txt" y="${l[1].toFixed(1)}" text-anchor="${anc}"><tspan x="${l[0].toFixed(1)}" dy="-0.25em">${t.nombre}</tspan><tspan x="${l[0].toFixed(1)}" dy="1.2em" class="rd-pct">${Math.round(t.v*100)} %</tspan></text>`; });
   const pts=T.map((t,i)=>pt(i,R*Math.max(0.05,t.v)));
-  s+=`<g class="rd-g"><polygon class="rd-dato" points="${pts.map(q=>q.map(n=>n.toFixed(1)).join(',')).join(' ')}"/>${pts.map(q=>`<circle class="rd-pt" cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="4"/>`).join('')}</g>`;
+  const ptsT=pts.map(q=>q.map(n=>n.toFixed(1)).join(',')).join(' ');
+  s+=`<g class="rd-g"><polygon class="rd-sombra" points="${ptsT}" transform="translate(4 5)"/><polygon class="rd-dato" points="${ptsT}"/>${pts.map(q=>`<circle class="rd-pt" cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="4"/>`).join('')}</g>`;
   return s+'</svg>';
 }
 function vistaFormacion(){
@@ -6377,7 +6557,7 @@ function vistaFormacion(){
 }
 function navegador(){
   const practica=esPractica();
-  return '<ol class="navegador" aria-label="Preguntas">'+quiz.items.map((x,i)=>{
+  return '<ol class="navegador'+(!practica && !quiz.fin?' pulsable':'')+'" aria-label="Preguntas">'+quiz.items.map((x,i)=>{
     const cls=['nq']; if(i===quiz.i && !quiz.fin) cls.push('actual');
     if(practica||quiz.fin){ if(x.resp!==null) cls.push(x.resp===0?'bien':'mal'); } else if(x.resp!==null) cls.push('resp');
     const est=x.resp===null?'sin contestar':(practica||quiz.fin?(x.resp===0?'correcta':'incorrecta'):'contestada');
@@ -6386,10 +6566,12 @@ function navegador(){
       : `<li><span class="${cls.join(' ')}" aria-label="Pregunta ${i+1}, ${est}">${i+1}</span></li>`;
   }).join('')+'</ol>';
 }
+/* En el móvil el navegador del examen es una fila que se desplaza: deja a la vista la pregunta actual (solo presentación) */
+function centrarNavegador(){ const nav=$('.navegador.pulsable',vista), a=nav&&nav.querySelector('.actual'); if(a && nav.scrollWidth>nav.clientWidth+1) nav.scrollLeft+=a.getBoundingClientRect().left-nav.getBoundingClientRect().left-(nav.clientWidth-a.offsetWidth)/2; }
 function rachaQuiz(){ let r=0; for(let i=quiz.items.length-1;i>=0;i--){ const x=quiz.items[i]; if(x.resp===null) continue; if(x.resp===0) r++; else break; } return r; }
 function relojHTML(){
   const total=(quiz.minutos||EXAMEN_MIN)*60000, rest=Math.max(0,quiz.limite-Date.now());
-  return `<div class="reloj${rest<120000?' poco':''}" id="reloj">${anillo(rest/total,52,6,'')}<div><b id="reloj-t">${mmss()}</b><span class="sr"> de tiempo restante</span></div></div>`;
+  return `<div class="reloj${rest<120000?' poco':''}" id="reloj">${anillo(rest/total,54,9,'')}<div><b id="reloj-t">${mmss()}</b><span class="sr"> de tiempo restante</span></div></div>`;
 }
 function mmss(){ const s=Math.ceil(Math.max(0,quiz.limite-Date.now())/1000); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
 function vistaPregunta(){
