@@ -942,7 +942,9 @@ html.vt-modo::view-transition-new(root){z-index:2}
 /* ===================== Entrada con Discord (sistema 3D · P3) =====================
    Una placa oscura sobre la mesa: a un lado, una sesión de velas japonesas con volumen (prismas con tres caras iluminadas, CSS 3D estático,
    que pinta velas3d()); al otro, la marca AGX en relieve y la tecla de Discord. Sin aurora, sin vidrio y sin desenfoque. */
-.entrada{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:max(24px,env(safe-area-inset-top,0px)) 16px max(24px,env(safe-area-inset-bottom,0px));overflow:auto;color:var(--hero-txt);background:var(--hero-2)}
+.entrada{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:max(24px,env(safe-area-inset-top,0px)) 16px max(24px,env(safe-area-inset-bottom,0px));overflow:auto;color:var(--hero-txt);
+  /* mesa de la entrada: tono de marca con la luz arriba a la izquierda y la misma rejilla del suelo de las velas (degradado duro, sin desenfoque) */
+  background:linear-gradient(rgba(195,178,255,.045) 1px,transparent 1px) 50% 0/100% 48px,linear-gradient(90deg,rgba(195,178,255,.045) 1px,transparent 1px) 50% 0/48px 100%,linear-gradient(160deg,#2A1470 0%,var(--hero-2) 48%,#0B0426 100%)}
 .entrada-placa{position:relative;display:grid;grid-template-columns:minmax(0,11fr) minmax(0,10fr);width:min(900px,100%);border:1px solid var(--hero-filo);border-radius:22px;overflow:hidden;
   background:linear-gradient(155deg,var(--hero-1) 0%,#22115F 44%,var(--hero-2) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.17),0 5px 0 var(--hero-canto);animation:entra .5s cubic-bezier(.2,.8,.2,1) backwards}
 .entrada-caja{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-width:0;padding:44px 40px 38px}
@@ -989,6 +991,20 @@ html.vt-modo::view-transition-new(root){z-index:2}
   .entrada-marca{margin-bottom:20px}
   .entrada-marca .marca-agx{font-size:66px}
   .entrada h1{font-size:23px}
+}
+/* pantallas bajas (320×568, 360×560…): las velas empujaban la caja fuera; ahí manda que el botón se vea */
+@media (max-width:760px) and (max-height:620px){ .velas{display:none} }
+/* móvil apaisado: la placa cabe entera en 390 px de alto */
+@media (min-width:761px) and (max-height:480px){ .velas{min-height:0} .entrada-caja{padding-block:22px} .entrada-marca{margin-bottom:14px} .entrada-marca .marca-agx{font-size:56px} .entrada p{margin-bottom:16px} }
+/* ventanas grandes: la placa y la sesión de velas crecen con la ventana (antes, una miniatura en un fondo liso) */
+@media (min-width:1200px) and (min-height:700px){
+  .entrada-placa{width:min(1180px,calc(100% - 64px))}
+  .velas{min-height:clamp(430px,56vh,640px)}
+  .entrada-caja{padding:56px 56px 50px}
+  .entrada-marca{margin-bottom:30px}
+  .entrada-marca .marca-agx{font-size:96px}
+  .entrada h1{font-size:29px}
+  .entrada p{font-size:16px}
 }
 @media (prefers-reduced-motion:reduce){ .entrada-carga::after{animation:none!important;left:33%} }
 .avatar{position:relative;overflow:hidden}
