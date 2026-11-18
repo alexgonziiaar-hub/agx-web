@@ -1697,6 +1697,7 @@ html{scroll-padding-top:86px}
 /* solo lectura (revisión del administrador): campos planos, sin pozo */
 .plan-form .campo input:disabled,.plan-form .campo textarea:disabled{border-color:var(--borde);background:var(--fondo-2);box-shadow:none;color:var(--tinta);opacity:1}
 .pl-grupo legend{color:var(--morado)}
+.pl-campos{align-items:end}
 .pl-pie{background:var(--fondo-2);border-top:1px solid var(--borde)}
 /* rareza 5: solo el pie del plan se queda pegado; el de la cuenta va en su sitio, al final de su formulario */
 .cta-form .pl-pie{position:static;margin-top:8px;padding:14px 0 4px;border-radius:0;background:none}
@@ -1842,7 +1843,8 @@ html{scroll-padding-top:86px}
 .lec-fila.sig .lec-n{background:var(--marca-frente);color:#fff;box-shadow:inset 0 1px 0 var(--marca-cara),0 2px 0 var(--marca-lado)}
 .lec-fila.cerrada .lec-n{background:none;box-shadow:none;border:1px dashed var(--borde-2);color:var(--tinta-2)}
 .lec-n.ex{background:var(--hundido);color:var(--morado)}
-.lec-fila.sig .lec-chip.dis{background:var(--marca-frente);color:#fff}
+.lec-chip.dis{padding-inline:4px;background:none}
+.lec-fila.sig .lec-chip.dis{padding-inline:10px;background:var(--marca-frente);color:#fff}
 .lec-chip.prep{background:none;box-shadow:inset 0 0 0 1px var(--borde-2)}
 
 /* --- Lección: lectura larga, plana y cómoda; el lateral con el test y las lecciones vecinas como teclas --- */
@@ -2053,8 +2055,8 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .lec-nav a{min-height:48px}
   .inf summary{min-height:58px}
 }
-@media (max-width:760px){
-  .fallo{grid-template-columns:minmax(0,1fr);gap:12px}     /* rareza 1: en móvil la pregunta ya no queda en una tira estrecha */
+@media (max-width:900px){
+  .fallo{grid-template-columns:minmax(0,1fr);gap:12px}     /* rareza 1: en móvil y tableta la pregunta ya no queda en una tira estrecha */
 }
 @media (max-width:640px){
   .bv{--alto:176px;--bv-dx:5px;--bv-dy:4px;--bv-ax:-51.34deg;--bv-ay:-38.66deg}
@@ -2064,7 +2066,21 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .niv-chev{grid-row:1;grid-column:3}
   .niv-barra{grid-row:2;grid-column:1 / 3;justify-self:start;align-self:center}
   .niv-est{grid-row:2;grid-column:2 / 4;justify-self:end;min-width:0}
-  .ruta-datos li{flex:1 1 130px}
+  .ruta-datos li{flex:1 1 124px;gap:8px;padding:10px 12px}
+  .ruta-datos b{min-width:32px;font-size:22px}
+  /* hero de formación compacto: el anillo a la izquierda y el nivel con su título a la derecha; lo demás, debajo a todo el ancho */
+  .hero-form{grid-template-columns:auto minmax(0,1fr);gap:4px 16px;align-items:center}
+  .hero-form>div:not([class]){display:contents}
+  .hero-form .f-anillo{grid-row:1 / 3;width:104px;height:104px}
+  .hero-form .f-anillo svg{width:100%;height:100%}
+  .hero-form .f-anillo-txt b{font-size:25px}
+  .hero-form .f-anillo-txt>span{margin-top:2px;font-size:11px}
+  .hero-form .hero-saludo{grid-column:2;align-self:end}
+  .hero-form .f-titulo{grid-column:2;align-self:start;margin:0;font-size:22px}
+  .hero-form .hero-sub,.hero-form .f-acc,.hero-form .f-estado,.hero-form .ruta-datos,.hero-form .f-radar{grid-column:1 / -1}
+  .hero-form .hero-sub{margin-top:12px}
+  .hero-form .f-acc{margin-top:12px}
+  .hero-form .ruta-datos{margin-top:14px}
   .lec-lista{padding:12px 10px 16px}
   .lec-fila{gap:10px;padding:9px 10px}
   .lec-teoria{font-size:16px}
