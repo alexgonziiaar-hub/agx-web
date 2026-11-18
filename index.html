@@ -334,7 +334,9 @@ h1{margin:0;font-size:30px;line-height:1.12;font-weight:740;font-stretch:108%;le
 /* si la tabla no cabe (tableta, móvil apaisado, portátil pequeño, vista previa de importar en el móvil) el dinero no se pierde:
    la columna del resultado se queda pegada a la derecha y el resto pasa por debajo */
 .tabla-wrap th:last-child,.tabla-wrap td.fuerte{position:sticky;right:0;background:var(--placa)}
-@media (max-width:1260px){ .tabla-wrap th:last-child,.tabla-wrap td.fuerte{box-shadow:-1px 0 0 var(--borde)} }
+/* un filo y una sombra dura a la izquierda de la columna pegada avisan de que hay columnas debajo (van en un ::before: box-shadow no pinta
+   en las celdas de una tabla con los bordes fundidos, y antes no se veía corte ninguno). Solo en la tabla de operaciones, mientras es tabla */
+@media (min-width:641px) and (max-width:1260px){ .tabla-ops th:last-child::before,.tabla-ops td.fuerte::before{content:"";position:absolute;top:0;bottom:0;right:100%;width:4px;background:linear-gradient(90deg,var(--hundido-sombra) 3px,var(--borde-2) 3px);pointer-events:none} }
 /* y el detalle de la operación abierta mide lo que se ve, no lo que mide la tabla (antes la nota y la captura se cortaban por la derecha) */
 .tabla-wrap{container-type:inline-size}
 @media (min-width:641px){ .tabla-ops tr.detalle .det-grid{position:sticky;left:16px;width:calc(100cqw - 74px)} }
@@ -1140,6 +1142,20 @@ button.etq-falta:hover{background:var(--morado-suave)}
 .imp-cuentas legend{margin-bottom:8px;padding:0;font-size:13px;font-weight:650;color:var(--tinta-2)}
 .imp-tabla{border:1px solid var(--borde);border-radius:12px}
 .imp-tabla .tabla{font-size:13.5px}
+/* en el móvil las seis columnas no caben y, con «Resultado» pegada a la derecha, esta tapaba «Dirección» y «Contr.»: aquí cada operación
+   es una ficha de dos líneas, como en la tabla de operaciones (fecha, hora y resultado · instrumento, dirección y contratos); nada se desplaza */
+@media (max-width:520px){
+  .imp-tabla .tabla,.imp-tabla tbody{display:block}
+  .imp-tabla thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .imp-tabla tbody tr{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:8px;padding:9px 12px;border-bottom:1px solid var(--borde)}
+  .imp-tabla tbody tr:last-child{border-bottom:0}
+  .imp-tabla tbody tr::before{content:"";order:2;flex:0 0 100%;height:0}
+  .imp-tabla .tabla td{position:static;display:block;padding:0;border:0;background:none;box-shadow:none}
+  .imp-tabla .tabla td:nth-child(2),.imp-tabla .tabla td:nth-child(5){color:var(--tinta-2)}
+  .imp-tabla .tabla td:nth-child(6){order:1;margin-left:auto}
+  .imp-tabla .tabla td:nth-child(n+3):nth-child(-n+5){order:3;margin-top:5px}
+  .imp-tabla .tabla td:nth-child(5)::after{content:" contr."}
+}
 
 /* Estadísticas */
 .est-barra{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
