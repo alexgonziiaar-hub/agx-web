@@ -1577,6 +1577,15 @@ html{scroll-padding-top:86px}
 .h-hito{stroke:rgba(14,6,44,.34);stroke-width:1}
 .h-halo{fill:none;stroke:var(--orquidea);stroke-width:7;stroke-linejoin:round;stroke-linecap:round;opacity:.22}
 .h-linea{stroke:#F1EBFF;stroke-width:2.4}
+/* hero sin curva todavía (alumno nuevo, periodo con menos de dos operaciones): el suelo del relieve y una cordillera a trazos, apagada */
+.h-fantasma{position:relative;flex:1;display:grid;place-items:end center;min-height:250px;padding:0 12px 30px}
+.hero-curva:has(.h-fantasma){flex:1;display:flex}        /* ocupa todo el alto de la columna: no queda un rectángulo vacío */
+.hero-curva .h-fantasma svg{position:absolute;inset:0;width:100%;height:100%;cursor:default}
+.h-fantasma line,.h-fantasma path{vector-effect:non-scaling-stroke}
+.hf-muro{fill:rgba(123,87,236,.22)}
+.hf-techo{fill:rgba(195,178,255,.2)}
+.hf-linea{fill:none;stroke:rgba(195,178,255,.7);stroke-width:1.5;stroke-dasharray:5 6;stroke-linejoin:round}
+.h-fantasma .h-vacio{position:relative;max-width:34ch;margin:0;padding:10px 16px;border:1px solid var(--hero-filo);border-radius:12px;background:var(--hero-2);box-shadow:inset 0 2px 0 var(--osc-pozo-sombra),0 1px 0 var(--osc-pozo-luz);color:var(--hero-txt);text-align:center;text-wrap:balance}
 .h-pt{stroke:#1A0C4A;stroke-width:1.5}
 .h-fin{stroke:var(--orquidea)}
 .h-cursor line{stroke:rgba(255,255,255,.5)}
@@ -2057,6 +2066,11 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .tabla-ops tbody tr:last-child,.tabla-ops tbody tr:last-child td{border-bottom:0}
   .chev{width:44px;height:44px;border-radius:10px}
   .mini-cap{width:var(--cap,60px);height:44px}
+  /* pie del cajón: en una fila con los importes habituales (antes pasaba a dos en cuanto había importe y le quitaba 56 px al formulario) */
+  .cajon-pie{gap:8px 10px;padding-inline:16px}
+  .pie-res b{font-size:22px}
+  .pie-acc{gap:8px}
+  .pie-acc .boton{padding-inline:12px}
   .hora-op{display:inline-block}
 }
 @media (max-width:380px){
@@ -6226,7 +6240,16 @@ function pasoTicks(min,max){
 function pintarCurva(ts){
   const el=$('#curva'); if(!el) return;
   const orden=ordenAsc(ts);
-  if(orden.length<2){ el.innerHTML='<p class="h-vacio">Con dos operaciones en el periodo aparece aquí tu curva de resultados.</p>'; curva=null; return; }
+  if(orden.length<2){
+    /* sin curva todavía: el suelo del relieve y una cordillera a trazos, apagada, donde irá. Es decorado (sin eje ni cifras): no son datos */
+    el.innerHTML='<div class="h-fantasma"><svg viewBox="0 0 640 300" preserveAspectRatio="none" aria-hidden="true" focusable="false">'
+      +[50,105,160,215].map(v=>`<line x1="0" x2="640" y1="${v}" y2="${v}" class="h-rejilla"/>`).join('')+'<line x1="0" x2="640" y1="270" y2="270" class="h-cero"/>'
+      +'<path class="hf-techo" d="M40,230 L130,205 L210,222 L300,160 L380,182 L470,110 L550,128 L610,70 L630,56 L570,114 L490,96 L400,168 L320,146 L230,208 L150,191 L60,216 Z"/>'
+      +'<path class="hf-muro" d="M40,270 L40,230 L130,205 L210,222 L300,160 L380,182 L470,110 L550,128 L610,70 L610,270 Z"/>'
+      +'<path class="hf-linea" d="M40,230 L130,205 L210,222 L300,160 L380,182 L470,110 L550,128 L610,70"/></svg>'
+      +'<p class="h-vacio">Con dos operaciones en el periodo aparece aquí tu curva de resultados.</p></div>';
+    curva=null; return;
+  }
   const W=Math.max(280,Math.round(el.clientWidth||640)); anchoCurva=W;
   /* Relieve: la curva se extruye hacia el fondo (DX a la derecha, DY hacia arriba). El SVG no se rota ni se transforma:
      la posición del puntero se sigue convirtiendo a operación con P y x(i), igual que antes. */
