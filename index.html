@@ -1933,8 +1933,8 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .al-buscar{min-height:46px;font-size:16px}
   .seg-oscuro button,.seg-claro button,.sub-tabs a{min-height:44px}
   .radios span{padding:11px 6px}
-  .chips-sel span{padding:10px 14px}
-  .plan-form .chips-sel span{padding:10px 13px}
+  .chips-sel span{padding:11px 14px}
+  .plan-form .chips-sel span{padding:11px 13px}
   .rut-botones span{min-height:46px}
   .tk{min-height:44px}
   .chip-f{min-height:44px;padding:4px 12px 4px 14px}
@@ -1942,6 +1942,9 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .detalle-acc .enlace{min-height:44px}
   .obj-fila input{min-height:44px}
   .pl-check{min-height:44px}
+  .pal-op{padding-block:11px}
+  button.etq-falta{position:relative}
+  button.etq-falta::before{content:"";position:absolute;inset:-10px 0}   /* «Sin setup · completar»: zona de toque de 45 px sin engordar la etiqueta */
 }
 @media (max-width:640px){
   .hero{margin-bottom:22px}
@@ -1967,22 +1970,26 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .bs-dcha{gap:6px}
   .hero-top{align-items:stretch}
   .hero-top .seg-oscuro{width:100%}
-  /* rareza 2: en el móvil cada operación es una ficha y su detalle va debajo, a todo el ancho, sin desplazamiento lateral */
+  /* rareza 2: en el móvil cada operación es una ficha y su detalle va debajo, a todo el ancho, sin desplazamiento lateral.
+     La ficha es una fila flexible que salta de línea: 1.ª fecha + resultado · 2.ª instrumento, dirección, sesión y contratos · 3.ª setup.
+     Solo las dos miniaturas de la izquierda tienen sitio fijo: lo que no cabe en su línea baja a la siguiente, nunca se monta. */
   .tabla-ops{min-width:0;display:block}
   .tabla-ops thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .tabla-ops tbody{display:block}
-  .tabla-ops tr.op{display:grid;grid-template-columns:44px 60px auto auto auto minmax(0,1fr) auto;align-items:center;gap:5px 8px;padding:12px 12px 12px 10px;border-bottom:1px solid var(--borde)}
+  .tabla-ops tr.op{--cap:60px;--sep:8px;position:relative;display:flex;flex-wrap:wrap;align-items:center;column-gap:var(--sep);padding:12px 12px 12px calc(54px + var(--cap) + 2*var(--sep));border-bottom:1px solid var(--borde)}
+  .tabla-ops tr.op::before{content:"";order:3;flex:0 0 100%;height:0}
   .tabla-ops tr.op td{display:block;min-width:0;padding:0;border:0;white-space:normal}
-  .tabla-ops tr.op td:nth-child(1){grid-area:1/1/3/2}
-  .tabla-ops tr.op td:nth-child(2){grid-area:1/2/3/3}
-  .tabla-ops tr.op td:nth-child(3){grid-area:1/3/2/7;font-weight:650;line-height:1.3}
-  .tabla-ops tr.op td:nth-child(9){grid-area:1/7/3/8;text-align:right;font-size:15.5px}
-  .tabla-ops tr.op td:nth-child(5){grid-area:2/3/3/4}
-  .tabla-ops tr.op td:nth-child(6){grid-area:2/4/3/5}
-  .tabla-ops tr.op td:nth-child(4){grid-area:2/5/3/6;color:var(--tinta-2);font-size:13px}
-  .tabla-ops tr.op td:nth-child(8){grid-area:2/6/3/7;color:var(--tinta-2);font-size:13px;text-align:left;white-space:nowrap}
+  .tabla-ops tr.op td:nth-child(1){position:absolute;left:10px;top:12px}
+  .tabla-ops tr.op td:nth-child(2){position:absolute;left:calc(54px + var(--sep));top:12px}
+  .tabla-ops tr.op td:nth-child(3){order:1;flex:1 1 0;align-self:baseline;font-weight:650;line-height:1.3}
+  .tabla-ops tr.op td:nth-child(9){order:2;flex:none;align-self:baseline;text-align:right;font-size:15.5px;white-space:nowrap}
+  .tabla-ops tr.op td:nth-child(n+4):nth-child(-n+8){margin-top:5px}
+  .tabla-ops tr.op td:nth-child(5){order:4}
+  .tabla-ops tr.op td:nth-child(6){order:5}
+  .tabla-ops tr.op td:nth-child(4){order:6;color:var(--tinta-2);font-size:13px}
+  .tabla-ops tr.op td:nth-child(8){order:7;color:var(--tinta-2);font-size:13px;text-align:left;white-space:nowrap}
   .tabla-ops tr.op td:nth-child(8)::after{content:" contr."}
-  .tabla-ops tr.op td:nth-child(7){grid-area:3/2/4/8}
+  .tabla-ops tr.op td:nth-child(7){order:8;flex:0 0 calc(100% + var(--cap) + var(--sep));margin-left:calc(0px - var(--cap) - var(--sep))}
   .tabla-ops tr.destello{animation:destello 1.6s ease-out}
   .tabla-ops tr.destello td{animation:none}
   .tabla-ops tr.op.abierta{border-bottom-color:transparent;background:var(--morado-suave)}
@@ -1991,11 +1998,12 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .tabla-ops tr.detalle td{display:block;padding:4px 14px 20px;border-bottom:1px solid var(--borde)}
   .tabla-ops tbody tr:last-child,.tabla-ops tbody tr:last-child td{border-bottom:0}
   .chev{width:44px;height:44px;border-radius:10px}
-  .mini-cap{width:60px;height:44px}
+  .mini-cap{width:var(--cap,60px);height:44px}
   .hora-op{display:inline-block}
 }
 @media (max-width:380px){
   .cal .v{font-size:11.5px}
+  .tabla-ops tr.op{--cap:50px;--sep:6px;padding-right:10px}   /* a 360 px caben en su línea «MNQ · Corto · Londres · 5 contr.» */
 }
 /* ---------- P2 · ajustes de móvil y tableta de Estadísticas, Plan e IA y Formación (van al final: mandan sobre sus reglas base) ---------- */
 @media (max-width:1200px){
