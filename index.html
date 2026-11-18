@@ -499,14 +499,12 @@ button.nq:hover{--k-borde:var(--morado);--k-tinta:var(--morado)}
 @keyframes pop{from{transform:scale(0)}}
 .opcion.elegida{border-color:var(--morado);background:var(--morado-suave)}
 .opcion.elegida .letra{border-color:var(--morado);background:var(--morado);color:var(--blanco)}
-.opcion.bien{border-color:var(--compra);background:var(--compra-suave);animation:brillo-ok .6s ease-out}
+.opcion.bien{border-color:var(--compra);background:var(--compra-suave)}
 .opcion.bien .letra{border-color:var(--compra);background:var(--compra);color:var(--blanco)}
 .opcion.bien .ico{color:var(--compra)}
-.opcion.mal{border-color:var(--venta);background:var(--venta-suave);animation:sacudir .45s ease-in-out}
+.opcion.mal{border-color:var(--venta);background:var(--venta-suave)}
 .opcion.mal .letra{border-color:var(--venta);background:var(--venta);color:var(--blanco)}
 .opcion.mal .ico{color:var(--venta)}
-@keyframes brillo-ok{0%{box-shadow:0 0 0 0 rgba(19,128,95,.45)}100%{box-shadow:0 0 0 12px rgba(19,128,95,0)}}
-@keyframes sacudir{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 .preg-nav{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:24px;padding-top:18px;border-top:1px solid var(--borde)}
 .atajos{margin:0 0 0 auto;font-size:12.5px;color:var(--tinta-2)}
 kbd{display:inline-block;min-width:20px;padding:1px 6px;border:1px solid var(--borde-2);border-bottom-width:2px;border-radius:5px;background:var(--fondo);font-family:var(--f-ui);font-size:11.5px;font-weight:700;text-align:center;color:var(--tinta)}
@@ -1934,7 +1932,7 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .tcard .ir-sec{display:inline-flex;align-items:center}
 .estado{border-radius:7px}
 .est-nue{background:var(--hundido);color:var(--tinta-2)}
-.contador{background:var(--pierde-frente);color:#fff;box-shadow:inset 0 1px 0 var(--pierde-cara),0 2px 0 var(--pierde-lado)}
+.contador{background:var(--pierde-frente);color:#fff;box-shadow:inset 0 1px 0 var(--pierde-cara)}
 .mini-barra{height:8px;border-radius:4px}
 .mini-barra span{border-radius:4px 2px 2px 4px;background:var(--barra-marca)}
 .tcard-pie{font-stretch:94%}
