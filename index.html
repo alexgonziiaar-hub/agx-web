@@ -2161,6 +2161,36 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .mapa{column-gap:4px}
   #mapa.panel-cuerpo{padding-inline:10px}
 }
+/* ===================== APP INSTALABLE ([APP]) =====================
+   Aviso para llevar la web a la pantalla de inicio. La tarjeta del resumen del Diario es una placa de una línea (solo se pinta en pantallas
+   táctiles: sus teclas miden 44 px en cualquier ancho). La hoja con los pasos del iPhone usa la capa de importar y rutina (.imp-capa > .imp):
+   cada paso es un pozo con su número en una ficha de marca y, a la derecha, el botón de Safari dibujado en una placa. */
+.instalar-d{display:flex;align-items:center;gap:10px;margin-bottom:23px;padding:8px 8px 11px 12px;border-radius:14px}
+.instalar-d p{flex:1;min-width:0;margin:0;font-size:14.5px;line-height:1.25;color:var(--tinta)}
+.instalar-d p b{font-weight:720}
+.instalar-d p span{display:none;margin-top:1px;font-size:13px;color:var(--tinta-2)}
+.instalar-d .boton{flex:none;min-height:44px;padding:0 15px;--k-alto:3px}
+.instalar-d .icono-btn{flex:none;width:44px;height:44px}
+/* el icono de la app en pequeño: la tecla de marca con «AGX» en relieve */
+.instalar-ico{flex:none;display:grid;place-items:center;width:40px;height:37px;margin-bottom:3px;padding-top:2px;border-radius:10px;background:var(--marca-frente);color:var(--blanco);
+  font-family:var(--f-marca);font-size:19px;line-height:1;letter-spacing:.03em;text-shadow:0 1px 0 #C3B2FF,0 2px 0 #2A1470;box-shadow:inset 0 1px 0 var(--marca-cara),0 3px 0 var(--marca-lado)}
+@media (min-width:560px){ .instalar-d{gap:14px;padding-left:16px} .instalar-d p span{display:block} }
+@media (max-width:420px){ .instalar-d{gap:8px;padding-left:10px} .instalar-d p{font-size:14px;font-stretch:94%} .instalar-d .boton{padding:0 13px} .instalar-ico{width:36px;font-size:17px} }
+@media (max-width:380px){ .instalar-d{padding-left:14px} .instalar-d>.instalar-ico{display:none} }          /* a 360 px el rótulo cabe en una línea sin el icono */
+.imp.instalar{width:min(460px,100%)}
+.imp.instalar .icono-btn{flex:none;width:44px;height:44px}
+.imp.instalar .imp-pie{justify-content:flex-end}
+.imp.instalar .imp-pie .boton{min-width:128px;min-height:44px}
+.pasos-app{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.pasos-app li{display:flex;align-items:center;gap:12px;padding:12px 12px 14px 14px;border-radius:14px}
+.paso-n{flex:none;display:grid;place-items:center;width:28px;height:28px;margin-bottom:2px;border-radius:9px;background:var(--marca-frente);color:var(--blanco);font-size:14.5px;font-weight:760;box-shadow:inset 0 1px 0 var(--marca-cara),0 2px 0 var(--marca-lado)}
+.paso-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.paso-txt b{font-size:15.5px;font-weight:720;line-height:1.25}
+.paso-txt small{font-size:13px;line-height:1.35;color:var(--tinta-2)}
+.paso-dib{flex:none;display:grid;place-items:center;width:48px;height:46px;border-radius:12px;color:var(--morado)}
+.paso-dib svg{width:25px;height:25px}
+.paso-dib .instalar-ico{width:34px;height:31px;margin:0 0 2px;border-radius:8px;font-size:16px;box-shadow:inset 0 1px 0 var(--marca-cara),0 2px 0 var(--marca-lado)}
+.instalar-nota{margin:0;font-size:13px;line-height:1.4;color:var(--tinta-2)}
 </style>
 
 </head>
@@ -2281,6 +2311,14 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
       <button type="button" class="icono-btn" data-accion="cerrar-rut" aria-label="Cerrar"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
     <div class="imp-cuerpo" id="rut-cuerpo"></div>
     <div class="imp-pie"><button type="button" class="boton sec" data-accion="cerrar-rut">Cancelar</button><button type="button" class="boton" data-accion="guardar-rut">Guardar</button></div>
+  </div>
+</div>
+<div class="imp-capa" id="instalar" hidden>
+  <div class="imp instalar" role="dialog" aria-modal="true" aria-labelledby="instalar-t" aria-describedby="instalar-sub instalar-cuerpo">
+    <div class="imp-cab"><div><h2 id="instalar-t"></h2><p id="instalar-sub"></p></div>
+      <button type="button" class="icono-btn" data-accion="cerrar-instalar" aria-label="Cerrar"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+    <div class="imp-cuerpo" id="instalar-cuerpo"></div>
+    <div class="imp-pie"><button type="button" class="boton" data-accion="cerrar-instalar">Entendido</button></div>
   </div>
 </div>
 <div id="toast" class="toast" role="status" hidden></div>
@@ -6184,7 +6222,7 @@ function vistaDiario(){
 }
 function pintarDatos(){
   const ts=filtradas();
-  pintarHero(ts); pintarTicker(); pintarCurva(ts); pintarKpis(ts); pintarInsights(ts); pintarCalendario(); pintarMapa(ts); pintarSetups(ts); pintarComentarios(); pintarAviso(); pintarAvisos(); pintarHoy(); pintarErrores(ts); pintarFiltros(); pintarTabla();
+  pintarHero(ts); pintarTicker(); pintarCurva(ts); pintarKpis(ts); pintarInsights(ts); pintarCalendario(); pintarMapa(ts); pintarSetups(ts); pintarComentarios(); pintarAviso(); pintarAvisos(); pintarInstalar(); pintarHoy(); pintarErrores(ts); pintarFiltros(); pintarTabla();
   $$('.seg-oscuro button',vista).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.periodo===state.periodo)));
   pintarLateral();
 }
@@ -6874,6 +6912,7 @@ function accionesPaleta(){
   a.push({g:'Ranking',t:'Ir al ranking de logros',k:'premio discord podio clasificacion logros',f:()=>irRuta('ranking')});
   a.push({g:'Ranking',t:'Ver ranking histórico',k:'todos campeones historico',f:()=>irRuta('ranking',()=>{ rank.periodo='historico'; render(); })});
   if(YO && YO.admin) a.push({g:'Alumnos',t:'Ver las operaciones de los alumnos',k:'admin revisar comentarios alumnos diario',f:()=>irRuta('alumnos')});
+  if(modoInstalar()) a.push({g:'Ajustes',t:'Instalar la app',k:'instalar aplicacion app movil telefono tableta pantalla de inicio android iphone ipad',f:()=>instalarApp(null)});
   if(SERVIDOR && YO) a.push({g:'Ajustes',t:'Cerrar sesión',k:'salir logout desconectar cuenta discord',f:()=>{ location.href='/api/auth/salir'; }});
   a.push({g:'Ajustes',t:document.documentElement.dataset.modo==='oscuro'?'Cambiar a modo claro':'Cambiar a modo oscuro',k:'tema noche oscuro claro',f:()=>cambiarModo($('#bs-modo'))});
   return a;
@@ -6901,6 +6940,65 @@ function pintarPaleta(){
   const act=$('#pal-'+paletaAct); if(act) act.scrollIntoView({block:'nearest'});
 }
 function ejecutarPaleta(i){ const a=paletaItems[i]; if(!a) return; cerrarPaleta(false); if(paletaFoco && document.body.contains(paletaFoco) && paletaFoco!==document.body) paletaFoco.focus({preventScroll:true}); a.f(); }
+
+/* ---------- App instalable: llevar la web a la pantalla de inicio (sin service worker) ----------
+   El aviso solo se ofrece cuando tiene sentido: nunca dentro de la app ya instalada, y solo si (a) el navegador ha lanzado
+   «beforeinstallprompt» (Android, Chrome, Edge: se guarda y «Instalar» abre su diálogo) o (b) es un iPhone o un iPad, donde no hay
+   instalación automática: en Safari se abre una hoja con los dos pasos; en otro navegador o dentro de una app, la hoja pide abrir la web
+   en Safari. En cualquier otro caso (y ante la duda) no aparece nada. Sale en dos sitios: la acción «Instalar la app» de las acciones
+   rápidas y, en pantallas táctiles, una tarjeta en el resumen del Diario que no vuelve tras cerrarla o instalar (localStorage «agx-instalar»). */
+let instalarEv=null, instalarFoco=null, instalarNo=false;
+const ICO_INST={
+  compartir:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11M8 7.5l4-4 4 4"/><path d="M8.5 10.5h-2a2 2 0 00-2 2v6a2 2 0 002 2h11a2 2 0 002-2v-6a2 2 0 00-2-2h-2"/></svg>',
+  anadir:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4.5"/><path d="M12 8.5v7M8.5 12h7"/></svg>',
+  safari:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M15.6 8.4l-2.2 5-5 2.2 2.2-5z"/></svg>'
+};
+function enApp(){ try{ return !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone===true; }catch(e){ return false; } }
+function esIPad(){ const ua=navigator.userAgent||''; return /\biPad\b/.test(ua) || (/\bMacintosh\b/.test(ua) && navigator.maxTouchPoints>1); }
+function navegadorIOS(){ // 'safari' | 'otro' (otro navegador o el de dentro de una app) | null (no es un iPhone ni un iPad, o no está claro)
+  const ua=navigator.userAgent||'', movil=/\b(iPhone|iPad|iPod)\b/.test(ua);
+  if(!(movil || esIPad()) || !/AppleWebKit\//.test(ua)) return null;
+  if(/CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|DuckDuckGo|GSA\/|YaBrowser|FBAN|FBAV|FB_IAB|Instagram|Line\/|MicroMessenger|Snapchat|TikTok|musical_ly|Bytedance|Twitter|LinkedInApp|Pinterest|Discord|Telegram|WhatsApp/i.test(ua)) return 'otro';
+  if(/\bVersion\/[\d.]+/.test(ua) && /\bSafari\/[\d.]+/.test(ua)) return 'safari';
+  if(movil && /\bMobile\/\w+/.test(ua) && !/\bSafari\//.test(ua)) return 'otro'; // vista web de una app: lleva «Mobile/…» pero no «Safari/…»
+  return null;
+}
+function modoInstalar(){ if(enApp()) return null; return instalarEv?'directo':navegadorIOS(); } // 'directo' | 'safari' | 'otro' | null
+function instalarOculto(){ if(instalarNo) return true; try{ return !!localStorage.getItem('agx-instalar'); }catch(e){ return false; } }
+function marcarInstalar(v){ instalarNo=true; try{ localStorage.setItem('agx-instalar',v); }catch(e){} }
+function pintarInstalar(){
+  const vieja=$('#instalar-d'); if(vieja) vieja.remove();
+  const ancla=$('#avisos-diario');
+  if(!ancla || REV || instalarOculto() || !modoInstalar() || !(window.matchMedia && window.matchMedia('(pointer: coarse)').matches)) return;
+  const donde=Math.min(screen.width,screen.height)>=600?'tableta':'móvil';
+  ancla.insertAdjacentHTML('afterend',`<aside class="instalar-d placa" id="instalar-d" aria-label="Instalar la app"><span class="instalar-ico" aria-hidden="true">AGX</span><p><b>Lleva AGX en tu ${donde}</b><span>Como una app: con su icono y a pantalla completa.</span></p><button type="button" class="boton" data-accion="instalar">Instalar</button><button type="button" class="icono-btn" data-accion="instalar-no" aria-label="Ocultar este aviso" title="Ocultar este aviso">${ICO.x}</button></aside>`);
+}
+function instalarApp(origen){
+  const m=modoInstalar(); if(!m) return;
+  if(m!=='directo'){ abrirInstalar(m,origen); return; }
+  const ev=instalarEv; instalarEv=null; // el aviso del navegador solo vale una vez: si se cancela, el navegador lanza otro y la tarjeta vuelve
+  let p; try{ p=ev.prompt(); }catch(e){ pintarInstalar(); return; }
+  Promise.resolve(ev.userChoice||p).then(r=>{ if(r && r.outcome==='accepted') marcarInstalar('instalada'); }).catch(()=>{}).then(pintarInstalar);
+}
+function abrirInstalar(tipo,origen){
+  instalarFoco=origen||document.activeElement;
+  const cosa=esIPad()?'iPad':'iPhone', sitio=esc(location.host);
+  const paso=(n,t,d,dib)=>`<li class="hundido"><span class="paso-n" aria-hidden="true">${n}</span><span class="paso-txt"><b>${t}</b><small>${d}</small></span><span class="paso-dib placa" aria-hidden="true">${dib}</span></li>`;
+  $('#instalar-t').textContent=tipo==='safari'?'Instala AGX en tu '+cosa:'Ábrela en Safari';
+  $('#instalar-sub').textContent=tipo==='safari'?'Son dos pasos, desde Safari.':'En el '+cosa+', la app se instala desde Safari.';
+  $('#instalar-cuerpo').innerHTML=tipo==='safari'
+    ?`<ol class="pasos-app" role="list">${paso(1,'Pulsa «Compartir»','El cuadrado con la flecha hacia arriba. Si no lo ves, pulsa antes los tres puntos.',ICO_INST.compartir)}${paso(2,'Elige «Añadir a pantalla de inicio»','Baja por la lista hasta verlo y confirma con «Añadir».',ICO_INST.anadir)}</ol><p class="instalar-nota">¿No te sale esa opción? Abre ${sitio} directamente en Safari.</p>`
+    :`<ol class="pasos-app" role="list">${paso(1,'Abre esta web en Safari','Busca «Abrir en Safari» en el menú, o escribe '+sitio+' en Safari.',ICO_INST.safari)}${paso(2,'Pulsa «Instalar» allí','Te diremos los dos pasos.','<span class="instalar-ico">AGX</span>')}</ol>`;
+  $('#instalar').hidden=false; document.body.style.overflow='hidden';
+  setTimeout(()=>{ const b=$('#instalar .imp-pie .boton'); if(b) b.focus(); },0);
+}
+function cerrarInstalar(){
+  $('#instalar').hidden=true;
+  if($('#cajon').hidden && $('#visor').hidden && $('#paleta').hidden) document.body.style.overflow='';
+  if(instalarFoco && document.body.contains(instalarFoco)) instalarFoco.focus();
+}
+window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); instalarEv=e; pintarInstalar(); });
+window.addEventListener('appinstalled',()=>{ instalarEv=null; marcarInstalar('instalada'); pintarInstalar(); });
 
 /* ---------- Barra superior: fecha, hora y sesión de futuros en vivo ---------- */
 function partesNY(){ const o={}; new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date()).forEach(p=>{ o[p.type]=p.value; }); return {dia:o.weekday,m:(parseInt(o.hour,10)%24)*60+parseInt(o.minute,10)}; }
@@ -7240,6 +7338,7 @@ document.addEventListener('click',e=>{
   if(e.target.id==='paleta'){ cerrarPaleta(); return; }
   if(e.target.id==='imp'){ cerrarImp(); return; }
   if(e.target.id==='rut'){ cerrarRutina(); return; }
+  if(e.target.id==='instalar'){ cerrarInstalar(); return; }
   const po=e.target.closest('.pal-op'); if(po){ ejecutarPaleta(Number(po.dataset.i)); return; }
   const b=e.target.closest('[data-accion]'); if(!b||b.disabled) return;
   if(REV && ['nueva','editar-obj','borrar','borrar-si','borrar-no','borrar-ejemplos','importar','editar-op','completar-sig','analizar','rutina'].includes(b.dataset.accion)) return;
@@ -7258,6 +7357,9 @@ document.addEventListener('click',e=>{
     case 'plan-dia': diaPlanSel=b.dataset.fecha; pintarCumple(); pintarIA(); { const s=$(`[data-accion="plan-dia"][data-fecha="${diaPlanSel}"]`); if(s) s.focus(); } break;
     case 'analizar': pedirAnalisis(b.dataset.tipo==='semana'?'semana':'dia',b.dataset.fecha||diasOperados().slice(-1)[0]); break;
     case 'paleta': abrirPaleta(); break;
+    case 'instalar': instalarApp(b); break;
+    case 'instalar-no': marcarInstalar('cerrado'); pintarInstalar(); { const s=$('#hoy-fila:not([hidden]) a, #hoy-fila:not([hidden]) button')||$('#t-ins'); if(s){ if(s.id==='t-ins') s.setAttribute('tabindex','-1'); s.focus({preventScroll:true}); } } break;
+    case 'cerrar-instalar': cerrarInstalar(); break;
     case 'modo': cambiarModo(b); break;
     case 'editar-obj': editandoObj=true; pintarChips(); { const i=$('#obj-in'); if(i){ i.focus(); i.select(); } } break;
     case 'insight': { const tp=b.dataset.tipo, v=b.dataset.v; filtro.dia=null; filtro.setup=null; filtro.sesion=null; filtro.dow=null; filtro.dir=null;
@@ -7308,6 +7410,7 @@ document.addEventListener('keydown',e=>{
   if(!$('#paleta').hidden){ if(e.key==='Tab') e.preventDefault(); return; }
   if(!$('#imp').hidden){ if(e.key==='Escape'){ e.preventDefault(); cerrarImp(); } return; }
   if(!$('#rut').hidden){ if(e.key==='Escape'){ e.preventDefault(); cerrarRutina(); } return; }
+  if(!$('#instalar').hidden){ if(e.key==='Escape'){ e.preventDefault(); cerrarInstalar(); } return; }
   if(e.key==='Escape' && e.target && e.target.id==='obj-in'){ editandoObj=false; pintarChips(); const b=$('[data-accion="editar-obj"]'); if(b) b.focus(); return; }
   if(!$('#visor').hidden){ if(e.key==='Escape'||e.key==='Tab'){ e.preventDefault(); if(e.key==='Escape') cerrarVisor(); } return; }
   if(!$('#cajon').hidden){
