@@ -1678,7 +1678,7 @@ html{scroll-padding-top:86px}
 .bv{--alto:204px;--bv-dx:7px;--bv-dy:5px;--bv-ax:-54.46deg;--bv-ay:-35.54deg;padding-right:var(--bv-dx)}
 .bv-area{inset:28px 0 0}
 .bv-area.con-neg{bottom:24px}
-.bv-cero{z-index:1;height:var(--bv-dy);margin-top:calc(var(--bv-dy)*-1);opacity:1;background:var(--neutro-cara);box-shadow:0 1px 0 var(--neutro-lado);transform-origin:0 100%;transform:skewX(var(--bv-ax))}
+.bv-cero{z-index:1;height:calc(var(--bv-dy) + 1px);margin-top:calc(var(--bv-dy)*-1 - 1px);opacity:1;background:var(--neutro-cara);box-shadow:0 1px 0 var(--neutro-lado);transform-origin:0 100%;transform:skewX(var(--bv-ax))}
 .bv-col{border-radius:4px}
 .bv-col:hover,.bv-col:focus-visible{background:color-mix(in srgb,var(--morado-suave) 62%,transparent)}
 .bv-barra{z-index:2;width:min(44px,56%);border-radius:0;--c1:var(--neutro-cara);--c2:var(--neutro-frente);--c3:var(--neutro-lado);background:var(--c2)}
@@ -1694,7 +1694,8 @@ html{scroll-padding-top:86px}
 .bv-etqs{padding-top:2px}
 
 /* ====================================== DIARIO · PLAN E IA (P2) ====================================== */
-.plan-form input:disabled,.plan-form textarea:disabled{background:var(--hundido);color:var(--tinta);opacity:1}
+/* solo lectura (revisión del administrador): campos planos, sin pozo */
+.plan-form .campo input:disabled,.plan-form .campo textarea:disabled{border-color:var(--borde);background:var(--fondo-2);box-shadow:none;color:var(--tinta);opacity:1}
 .pl-grupo legend{color:var(--morado)}
 .pl-pie{background:var(--fondo-2);border-top:1px solid var(--borde)}
 /* rareza 5: solo el pie del plan se queda pegado; el de la cuenta va en su sitio, al final de su formulario */
@@ -1799,14 +1800,15 @@ html{scroll-padding-top:86px}
 .sello.nada{border-width:1.5px;border-style:dashed;color:var(--hero-tenue);transform:none}
 .rd-nivel{stroke:rgba(255,255,255,.15)}
 .rd-eje{stroke:rgba(255,255,255,.15);opacity:1}
-.rd-sombra{fill:rgba(5,2,20,.5)}
+.rd-borde{fill:rgba(6,2,24,.38);stroke:rgba(0,0,0,.36);stroke-width:1.5}
+.rd-sombra{fill:rgba(5,2,20,.55)}
 .rd-dato{fill-opacity:.6;stroke:#E6DCFF}
 .rd-pt{stroke:var(--orquidea)}
 
 /* --- Ruta en escalera: cada nivel es un peldaño. El material dice el estado: aprobado = placa con canto verde y número en prisma verde;
        actual = el más alto, con canto de marca y número encendido; abierto = placa; cerrado = hundido y apagado, con candado.
        El progreso va a la vista: una ficha por lección (levantada al aprobarla) y otra, más estrecha, por el examen. --- */
-.niveles{gap:14px;margin-top:26px}
+.niveles{gap:13px;margin-top:26px}
 .niv{--niv-canto:var(--canto);border-radius:16px}
 .niv,.niv[open]{box-shadow:inset 0 1px 0 var(--placa-arista),0 4px 0 var(--niv-canto)}
 .niv.ok{--niv-canto:var(--gana-frente);border-color:color-mix(in srgb,var(--gana-frente) 50%,var(--placa-borde))}
@@ -1939,6 +1941,7 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .ruta-b{border-radius:13px;overflow:visible;--k-tinta:var(--tinta)}
 .ruta-n{color:var(--morado)}
 .ruta-b .mini-barra{height:7px}
+.ruta-b[aria-pressed="true"] .ruta-pc,.ruta-b[aria-pressed="true"] .ruta-m{color:#F1ECFF}
 .ruta-b[aria-pressed="true"] .mini-barra{background:rgba(6,2,24,.36);box-shadow:inset 0 1px 0 rgba(0,0,0,.3)}
 .ruta-b[aria-pressed="true"] .mini-barra span{background:linear-gradient(180deg,#fff 0 38%,#D5C8FF 38% 100%)}
 
@@ -2040,6 +2043,10 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .cal .v{font-size:11.5px}
 }
 /* ---------- P2 · ajustes de móvil y tableta de Estadísticas, Plan e IA y Formación (van al final: mandan sobre sus reglas base) ---------- */
+@media (max-width:1200px){
+  .ruta-datos{grid-column:1 / -1;flex-direction:row;flex-wrap:wrap}
+  .ruta-datos li{flex:1 1 170px}
+}
 @media (max-width:900px){
   button.nq{width:44px;height:44px;border-radius:10px;font-size:14px}
   .volver{min-height:44px}
@@ -2057,6 +2064,7 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .niv-chev{grid-row:1;grid-column:3}
   .niv-barra{grid-row:2;grid-column:1 / 3;justify-self:start;align-self:center}
   .niv-est{grid-row:2;grid-column:2 / 4;justify-self:end;min-width:0}
+  .ruta-datos li{flex:1 1 130px}
   .lec-lista{padding:12px 10px 16px}
   .lec-fila{gap:10px;padding:9px 10px}
   .lec-teoria{font-size:16px}
@@ -6498,7 +6506,7 @@ function radar(T){
   const W=380,H=286,cx=190,cy=142,R=86,N=T.length;
   const pt=(i,r)=>{ const a=-Math.PI/2+i*2*Math.PI/N; return [cx+r*Math.cos(a),cy+r*Math.sin(a)]; };
   let s=`<svg class="radar" viewBox="0 0 ${W} ${H}" role="img" aria-label="Dominio por bloque: ${T.map(t=>t.nombre+' '+Math.round(t.v*100)+' %').join(', ')}">`;
-  [0.25,0.5,0.75,1].forEach(k=>{ s+=`<polygon class="rd-nivel" points="${T.map((_,i)=>pt(i,R*k).map(n=>n.toFixed(1)).join(',')).join(' ')}"/>`; });
+  [1,0.75,0.5,0.25].forEach(k=>{ s+=`<polygon class="rd-nivel${k===1?' rd-borde':''}" points="${T.map((_,i)=>pt(i,R*k).map(n=>n.toFixed(1)).join(',')).join(' ')}"/>`; });
   T.forEach((t,i)=>{ const e=pt(i,R), l=pt(i,R+24), anc=Math.abs(l[0]-cx)<4?'middle':(l[0]<cx?'end':'start');
     s+=`<line class="rd-eje" x1="${cx}" y1="${cy}" x2="${e[0].toFixed(1)}" y2="${e[1].toFixed(1)}"/><text class="rd-txt" y="${l[1].toFixed(1)}" text-anchor="${anc}"><tspan x="${l[0].toFixed(1)}" dy="-0.25em">${t.nombre}</tspan><tspan x="${l[0].toFixed(1)}" dy="1.2em" class="rd-pct">${Math.round(t.v*100)} %</tspan></text>`; });
   const pts=T.map((t,i)=>pt(i,R*Math.max(0.05,t.v)));
