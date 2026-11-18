@@ -918,7 +918,7 @@ html.vt-modo::view-transition-new(root){z-index:2}
 .rk-ev-tipo{padding:1px 7px;border-radius:6px;font-size:11.5px;font-weight:700}
 .rk-ev-txt{margin-top:4px!important;font-size:13.5px;color:var(--tinta-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .rk-ev-pie{margin-top:5px!important;font-size:12.5px;color:var(--tinta-2)}
-.rk-ev-pie a{display:inline-flex;align-items:center;gap:3px;color:var(--morado);font-weight:650;text-decoration:none}
+.rk-ev-pie a{display:inline-flex;align-items:center;gap:3px;padding:13px 6px;margin:-13px -6px;color:var(--morado);font-weight:650;text-decoration:none}
 .rk-ev-pie a:hover{text-decoration:underline}
 .rk-ev-pie a svg{width:12px;height:12px}
 .rk-camp-i{display:flex;align-items:center;gap:12px;padding:10px}
@@ -989,7 +989,7 @@ html.vt-modo::view-transition-new(root){z-index:2}
 .entrada h1{margin:0 0 10px;font-size:25px;color:var(--blanco);text-wrap:balance}
 .entrada p{margin:0 0 22px;max-width:44ch;font-size:15px;color:var(--hero-txt)}
 .entrada .entrada-nota{margin:18px 0 0;font-size:13px;color:var(--hero-tenue)}
-.entrada .entrada-nota a{color:var(--violeta-claro)}
+.entrada .entrada-nota a{display:inline-flex;align-items:center;min-height:44px;margin-block:-12px;color:var(--violeta-claro)}
 .entrada .entrada-error{align-self:stretch;margin:-8px 0 18px;padding:9px 12px;border:1px solid rgba(255,132,147,.34);border-radius:10px;background:rgba(74,10,26,.6);box-shadow:inset 0 2px 0 rgba(0,0,0,.3);color:#FFD0D6;font-size:14px}
 .boton-dc{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:52px;padding:0 20px;border-radius:13px;font:inherit;font-size:16px;font-weight:750;text-decoration:none;cursor:pointer;--k-alto:5px;--k-cara:var(--blanco);--k-tinta:var(--hero-2);--k-borde:var(--blanco);--k-arista:var(--blanco);--k-canto:#9A88DC}
 .boton-dc:hover{--k-cara:#F1ECFF;--k-borde:#F1ECFF}
@@ -1001,13 +1001,13 @@ html.vt-modo::view-transition-new(root){z-index:2}
 @keyframes carga{to{transform:translateX(194%)}}
 /* velas japonesas con volumen: escena de 320×180 unidades vista de frente, desde arriba y a la derecha; luz de arriba a la izquierda */
 .velas{position:relative;min-height:410px;container-type:inline-size;overflow:hidden;background:#0D0528;box-shadow:inset 0 3px 0 rgba(0,0,0,.42),inset -1px 0 0 rgba(255,255,255,.07)}
-.velas-esc{--u:calc(100cqw / 296);--d:calc(var(--u)*13);position:absolute;left:50%;top:50%;width:calc(var(--u)*320);height:calc(var(--u)*180);margin:calc(var(--u)*-96) 0 0 calc(var(--u)*-160);
+.velas-esc{--u:calc(100cqw / 296);--d:calc(var(--u)*11);position:absolute;left:50%;top:50%;width:calc(var(--u)*320);height:calc(var(--u)*180);margin:calc(var(--u)*-80) 0 0 calc(var(--u)*-160);
   transform-style:preserve-3d;transform:perspective(calc(var(--u)*760)) rotateX(-20deg) rotateY(-28deg)}
 @supports not (width:1cqw){ .velas-esc{--u:1px} }
 .velas-suelo{position:absolute;left:calc(var(--u)*-168);right:calc(var(--u)*-168);top:calc(var(--u)*-8);height:calc(var(--u)*328);transform:rotateX(90deg);
   background-image:linear-gradient(to right,rgba(195,178,255,.17) 1px,transparent 1px),linear-gradient(to bottom,rgba(195,178,255,.17) 1px,transparent 1px);background-size:calc(var(--u)*21) calc(var(--u)*20.5);
   -webkit-mask-image:radial-gradient(closest-side,#000 35%,transparent);mask-image:radial-gradient(closest-side,#000 35%,transparent)}
-.velas-max{position:absolute;left:calc(var(--u)*-30);right:calc(var(--u)*-30);top:calc(var(--u)*26);border-top:1px dashed var(--orquidea);opacity:.7}
+.velas-max{position:absolute;left:calc(var(--u)*-30);right:calc(var(--u)*-30);top:calc(var(--u)*-5);border-top:1px dashed var(--orquidea);opacity:.7}
 .vela{--cf:#22A87C;--cs:#0A5740;--ct:#6BEBB6;position:absolute;top:0;left:calc(var(--u)*var(--x));width:var(--d);height:100%;transform-style:preserve-3d;
   transform-origin:50% calc(var(--u)*156);animation:vela-sube .4s cubic-bezier(.2,.9,.25,1) backwards;animation-delay:calc(var(--i)*14ms + .12s)}
 .vela.b{--cf:#DE5062;--cs:#8E1F2D;--ct:#FFA3AE}
@@ -1021,7 +1021,7 @@ html.vt-modo::view-transition-new(root){z-index:2}
 @media (max-width:760px){
   .entrada{place-items:start center;padding:16px 14px 24px}
   .entrada-placa{grid-template-columns:minmax(0,1fr);width:min(460px,100%);margin-block:auto}
-  .velas{min-height:0;aspect-ratio:16 / 9;box-shadow:inset 0 3px 0 rgba(0,0,0,.42),inset 0 -1px 0 rgba(255,255,255,.07)}
+  .velas{min-height:0;aspect-ratio:3 / 2;box-shadow:inset 0 3px 0 rgba(0,0,0,.42),inset 0 -1px 0 rgba(255,255,255,.07)}
   .entrada-caja{padding:26px 22px 26px}
   .entrada-marca{margin-bottom:20px}
   .entrada-marca .marca-agx{font-size:66px}
@@ -1033,24 +1033,25 @@ html.vt-modo::view-transition-new(root){z-index:2}
 .alumno-txt a.salir{color:var(--violeta-claro);text-decoration:none}
 .alumno-txt a.salir:hover{text-decoration:underline}
 
-/* ===================== Alumnos (revisión de Alex) ===================== */
-.al-buscar{width:min(300px,100%);min-height:42px;padding:0 14px;border:1px solid var(--borde-2);border-radius:12px;background:var(--fondo);color:var(--tinta);font-size:15px}
-.al-buscar:focus{outline:2px solid var(--violeta);outline-offset:1px}
-.al-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.al-card{display:flex;flex-direction:column;gap:14px;min-width:0;padding:18px;border:1px solid var(--borde);border-radius:18px;background:var(--fondo);color:var(--tinta);text-decoration:none;transition:border-color .2s,box-shadow .25s,transform .25s}
-.al-card:hover{border-color:var(--violeta);box-shadow:var(--sombra);transform:translateY(-3px)}
+/* ===================== Alumnos, panel del administrador (sistema 3D · P3) =====================
+   Cada alumno es una tecla grande (se pulsa para entrar en su diario); sus tres cifras del mes van en un pozo; lo pendiente de comentar, en una etiqueta de marca. */
+.al-buscar{width:min(300px,100%);min-height:42px;padding:0 14px;border-radius:11px;color:var(--tinta);font-size:15px;transition:border-color .15s,box-shadow .15s}
+.al-buscar:focus{border-color:var(--morado);outline:none;box-shadow:inset 0 2px 0 var(--hundido-sombra),0 0 0 3px var(--morado-suave)}
+.al-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 16px;padding-bottom:6px}
+.al-card{display:flex;flex-direction:column;gap:12px;min-width:0;padding:16px 16px 18px;border-radius:16px;text-decoration:none;--k-alto:5px;--k-tinta:var(--tinta)}
 .al-top{display:flex;align-items:center;gap:12px;min-width:0}
 .al-top .rk-av{width:46px;height:46px;font-size:15px}
 .al-quien{display:flex;flex-direction:column;min-width:0}
 .al-nom{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:16px;font-weight:720}
 .al-sub{font-size:13px;color:var(--tinta-2)}
-.al-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding-top:12px;border-top:1px solid var(--borde)}
-.al-stats>span{display:flex;flex-direction:column;gap:2px;min-width:0;font-size:12px;color:var(--tinta-2)}
-.al-stats b{font-size:17px;font-weight:750;color:var(--tinta);font-variant-numeric:tabular-nums;white-space:nowrap}
+.al-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:9px 3px 8px;border:1px solid var(--hundido-borde);border-radius:11px;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
+.al-stats>span{display:flex;flex-direction:column;gap:1px;min-width:0;padding:0 9px;font-size:12px;font-stretch:88%;line-height:1.3;color:var(--tinta-2)}
+.al-stats>span+span{border-left:1px solid var(--hundido-borde)}
+.al-stats b{font-size:19px;line-height:1.25;font-weight:780;font-stretch:90%;color:var(--tinta);font-variant-numeric:tabular-nums;white-space:nowrap}
 .al-stats .p b{color:var(--compra)}
 .al-stats .n b{color:var(--venta)}
-.al-pend,.al-ok{align-self:flex-start;padding:4px 10px;border-radius:999px;font-size:12.5px;font-weight:700}
-.al-pend{background:var(--morado-suave);color:var(--morado)}
+.al-pend,.al-ok{align-self:flex-start;margin-top:auto;padding:4px 10px;border-radius:7px;font-size:12.5px;font-weight:700}
+.al-pend{background:var(--marca-frente);box-shadow:inset 0 1px 0 var(--marca-cara);color:#fff}
 .al-ok{background:var(--compra-suave);color:var(--compra)}
 .admin-carga{display:flex;flex-direction:column;align-items:center;gap:12px;padding:60px 20px;text-align:center;color:var(--tinta-2)}
 .admin-carga .entrada-carga{margin:0;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
@@ -1062,12 +1063,19 @@ html.vt-modo::view-transition-new(root){z-index:2}
 .rev-cab .rk-av{width:44px;height:44px;font-size:15px}
 .det-alex.rev{align-items:flex-start}
 .rev-com{flex:1;min-width:0}
-.rev-com textarea{display:block;width:100%;margin-top:6px;padding:10px 12px;border:1px solid var(--borde-2);border-radius:10px;background:var(--fondo);color:var(--tinta);font-size:14.5px;line-height:1.45;resize:vertical}
-.rev-com textarea:focus{outline:2px solid var(--violeta);outline-offset:1px}
-.rev-acc{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:8px}
+.rev-com textarea{display:block;width:100%;margin-top:6px;padding:10px 12px;border-radius:10px;color:var(--tinta);font-size:14.5px;line-height:1.45;resize:vertical;transition:border-color .15s,box-shadow .15s}
+.rev-com textarea:focus{border-color:var(--morado);outline:none;box-shadow:inset 0 2px 0 var(--hundido-sombra),0 0 0 3px var(--morado-suave)}
+.rev-acc{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:10px;padding-bottom:3px}
 .rev-estado{font-size:13px;color:var(--tinta-2)}
 @media (max-width:1060px){ .al-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
-@media (max-width:640px){ .al-grid{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:640px){
+  .al-grid{grid-template-columns:minmax(0,1fr)}
+  .al-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .al-kpis .kcard{gap:6px;padding:14px}
+  .al-kpis .kcard-v{font-size:25px}
+  .al-kpis .kcard-s{font-size:12.5px;line-height:1.35}
+  .rev-com textarea{font-size:16px}
+}
 
 /* ===================== Diario pro: secciones, importar, estadísticas y plan con IA ===================== */
 .cab-acc{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
@@ -1522,7 +1530,7 @@ a.hoy-card:hover{--k-borde:var(--violeta)}
 .hundido,.imp-tz select,.cta-form select,.al-buscar,.rev-com textarea,.sesion-viva,.imp-res>div,.rut-cuenta,.r-caja{
   border:1px solid var(--hundido-borde);background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
 .pista,.hoy-barra,.err-barra,.pista-s,.mini-barra,.q-barra,.rk-barra{background:var(--hundido);box-shadow:inset 0 1px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
-.campo input::placeholder,.campo textarea::placeholder{color:var(--tinta-2);opacity:.78}
+.campo input::placeholder,.campo textarea::placeholder,.al-buscar::placeholder,.rev-com textarea::placeholder,#paleta-in::placeholder{color:var(--tinta-2);opacity:1}
 
 /* ---------- Nivel 1 · placa ---------- */
 .placa,.panel,.kcard,.hoy-card,.aviso-d,.niv,.inf{border:1px solid var(--placa-borde);background:var(--placa);box-shadow:inset 0 1px 0 var(--placa-arista),0 3px 0 var(--canto)}
@@ -2140,6 +2148,14 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .navegador.pulsable li{flex:none}
   .veredicto{padding:9px 14px 1px;border-width:3px;font-size:56px}
   .fallo{padding:16px 14px}
+}
+/* ---------- P3 · repaso general ---------- */
+@media (max-width:900px){
+  /* con las cuatro teclas del administrador, los rótulos de la barra de abajo se condensan para caber */
+  .nav:has(#nav-alumnos:not([hidden])) b{font-stretch:80%}
+}
+@media (max-width:380px){
+  .nav:has(#nav-alumnos:not([hidden])) b{font-size:11.5px;font-stretch:76%}
 }
 </style>
 
@@ -7168,7 +7184,7 @@ function vistaAlumnos(){
   if(!lista.length) return cab+'<div class="panel"><div class="panel-cuerpo"><p class="vacio">Todavía no ha entrado ningún alumno. Cuando entren con su Discord aparecerán aquí.</p></div></div>';
   const tot=lista.reduce((s,x)=>({semana:s.semana+x.r.semana,sinCom:s.sinCom+x.r.sinCom,form:s.form+x.r.form}),{semana:0,sinCom:0,form:0});
   const kc=(t,v,s,i,d)=>`<div class="kcard entra" style="animation-delay:${d}s"><div class="kcard-cab"><p class="kcard-t">${t}</p><span class="kicono">${i}</span></div><p class="kcard-v">${v}</p><p class="kcard-s">${s}</p></div>`;
-  const kpis=`<div class="kpis4">${kc('Alumnos',lista.length,'han entrado al área',ICO_K.barras,0)}${kc('Esta semana',tot.semana,tot.semana===1?'operación registrada':'operaciones registradas',ICO_K.rayo,.05)}${kc('Sin comentar',tot.sinCom,'operaciones esperando tu revisión',ICO_I.alerta,.1)}${kc('Formación media',Math.round(tot.form/lista.length*100)+' %','de las lecciones de la ruta',ICO_K.diana,.15)}</div>`;
+  const kpis=`<div class="kpis4 al-kpis">${kc('Alumnos',lista.length,'han entrado al área',ICO_K.barras,0)}${kc('Esta semana',tot.semana,tot.semana===1?'operación registrada':'operaciones registradas',ICO_K.rayo,.05)}${kc('Sin comentar',tot.sinCom,'operaciones esperando tu revisión',ICO_I.alerta,.1)}${kc('Formación media',Math.round(tot.form/lista.length*100)+' %','de las lecciones de la ruta',ICO_K.diana,.15)}</div>`;
   const cards=lista.map(({a,r},k)=>`<a class="al-card entra" style="animation-delay:${Math.min(k,12)*0.03}s" href="#alumnos/${encodeURIComponent(a.id)}" data-nombre="${esc(a.nombre)}">
       <span class="al-top">${avatarR({discord_id:a.id,nombre:a.nombre,avatar_url:a.avatar})}<span class="al-quien"><b class="al-nom">${esc(a.nombre)}</b><span class="al-sub">${r.ult?'Última operación: '+fechaCorta(r.ult):'Sin operaciones todavía'}</span></span></span>
       <span class="al-stats"><span><b>${r.nMes}</b>ops. este mes</span><span class="${claseO(r.usdMes)}"><b>${r.nMes?fmtUSD(r.usdMes):MENOS}</b>resultado del mes</span><span><b>${Math.round(r.form*100)} %</b>formación</span></span>
@@ -7353,7 +7369,7 @@ pintarBotonModo(); pintarBarra(); setInterval(pintarBarra,20000);
 function iniciarApp(){ prepararForm(); leerRuta(); render(); cargarRanking(true); }
 const ICO_DC='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 016.5 3h7A2.5 2.5 0 0116 5.5v6a2.5 2.5 0 01-2.5 2.5H9l-3.5 3v-3h0A1.5 1.5 0 014 12.5z"/><path d="M8 8.5h.01M12 8.5h.01"/></svg>';
 /* Velas japonesas con volumen de la entrada (CSS 3D estático): [mecha arriba, mecha abajo, cuerpo arriba, alto del cuerpo, alcista] en una escena de 320×180 */
-const VELAS=[[122,150,128,18,1],[110,134,116,14,1],[112,134,118,10,0],[98,126,104,18,1],[86,110,92,14,1],[90,114,94,14,0],[100,120,104,10,0],[82,112,88,20,1],[68,94,74,16,1],[54,80,62,14,1],[58,80,64,10,0],[44,70,50,16,1],[34,58,40,12,1],[26,46,30,12,1]];
+const VELAS=[[115,150,122,22,1],[100,130,108,18,1],[102,130,110,12,0],[85,120,92,22,1],[70,100,78,18,1],[75,105,80,18,0],[88,112,92,12,0],[65,102,72,25,1],[48,80,55,20,1],[30,62,40,18,1],[35,62,42,12,0],[18,50,25,20,1],[5,35,12,15,1],[-5,20,0,15,1]];
 function velas3d(){ return '<div class="velas-esc"><span class="velas-suelo"></span><span class="velas-max"></span>'+VELAS.map(([wt,wb,bt,bh,up],i)=>`<span class="vela${up?'':' b'}" style="--x:${14+i*21};--wt:${wt};--wh:${wb-wt};--bt:${bt};--bh:${bh};--i:${i}"><i></i><span><b></b><b></b><b></b></span></span>`).join('')+'</div>'; }
 function pantallaEntrada(tipo,yo){
   const e=$('#entrada'), c=$('#entrada-caja'), v=$('#velas'); e.hidden=false; document.body.style.overflow='hidden';
