@@ -935,7 +935,7 @@ html.vt-modo::view-transition-new(root){z-index:2}
 /* ===================== Entrada con Discord (sistema 3D · P3) =====================
    Una placa oscura sobre la mesa: a un lado, una sesión de velas japonesas con volumen (prismas con tres caras iluminadas, CSS 3D estático,
    que pinta velas3d()); al otro, la marca AGX en relieve y la tecla de Discord. Sin aurora, sin vidrio y sin desenfoque. */
-.entrada{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px 16px;overflow:auto;color:var(--hero-txt);background:var(--hero-2)}
+.entrada{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:max(24px,env(safe-area-inset-top,0px)) 16px max(24px,env(safe-area-inset-bottom,0px));overflow:auto;color:var(--hero-txt);background:var(--hero-2)}
 .entrada-placa{position:relative;display:grid;grid-template-columns:minmax(0,11fr) minmax(0,10fr);width:min(900px,100%);border:1px solid var(--hero-filo);border-radius:22px;overflow:hidden;
   background:linear-gradient(155deg,var(--hero-1) 0%,#22115F 44%,var(--hero-2) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.17),0 5px 0 var(--hero-canto);animation:entra .5s cubic-bezier(.2,.8,.2,1) backwards}
 .entrada-caja{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-width:0;padding:44px 40px 38px}
@@ -975,7 +975,7 @@ html.vt-modo::view-transition-new(root){z-index:2}
 .vela b:nth-child(3){left:0;top:calc(var(--d)/-2);width:100%;height:var(--d);transform:rotateX(90deg);background:var(--ct)}
 @keyframes vela-sube{from{transform:scaleY(0)}}
 @media (max-width:760px){
-  .entrada{place-items:start center;padding:16px 14px 24px}
+  .entrada{place-items:start center;padding:max(16px,env(safe-area-inset-top,0px)) 14px max(24px,env(safe-area-inset-bottom,0px))}
   .entrada-placa{grid-template-columns:minmax(0,1fr);width:min(460px,100%);margin-block:auto}
   .velas{min-height:0;aspect-ratio:3 / 2;box-shadow:inset 0 3px 0 rgba(0,0,0,.42),inset 0 -1px 0 rgba(255,255,255,.07)}
   .entrada-caja{padding:26px 22px 26px}
@@ -1916,9 +1916,12 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 /* ====================================== MÓVIL Y TABLETA ====================================== */
 @media (max-width:900px){
   :root{--nav-movil:68px}
-  html{scroll-padding-top:72px;scroll-padding-bottom:calc(var(--nav-movil) + 20px)}
+  html{scroll-padding-top:12px;scroll-padding-bottom:calc(var(--nav-movil) + 20px)}
+  /* con la navegación fija abajo, la barra de arriba no se pega: devuelve 100 px de pantalla en el móvil y no tapa el principio de la vista */
+  .barra-sup{position:static;-webkit-backdrop-filter:none;backdrop-filter:none}
+  body::after{background:var(--lateral)}          /* franja de estado (app a pantalla completa): del color de la cabecera, que es lo que tiene debajo */
   .app{grid-template-rows:auto minmax(0,1fr)}     /* rareza 6: la cabecera ya no se estira en las vistas cortas */
-  .lateral{padding-block:10px;border-right:0;border-bottom:1px solid #0D0528}
+  .lateral{padding-block:calc(10px + env(safe-area-inset-top,0px)) 10px;border-right:0;border-bottom:1px solid #0D0528}
   .lateral .marca-agx{margin-bottom:4px;text-shadow:0 1px 0 #C3B2FF,0 2px 0 #8E6CFF,0 3px 0 #4421A8}
   .buscar{min-width:44px;min-height:44px;justify-content:center}
   /* navegación: barra fija abajo, al alcance del pulgar */
@@ -6725,7 +6728,12 @@ function arrancarReloj(){
   },1000);
 }
 function pararReloj(){ if(reloj){ clearInterval(reloj); reloj=null; } }
-function subir(){ const top=vista.getBoundingClientRect().top; if(top<0) window.scrollTo({top:window.scrollY+top-12,behavior:REDUCIR?'auto':'smooth'}); }
+function subir(){ // lleva arriba el principio de la vista; si la barra superior está pegada, lo deja justo debajo de ella (antes lo tapaba)
+  const b=$('.barra-sup'), cs=b?getComputedStyle(b):null;
+  const libre=cs&&cs.position==='sticky'?Math.round(b.getBoundingClientRect().height+(parseFloat(cs.top)||0)+(parseFloat(cs.marginBottom)||0)):12;
+  const top=vista.getBoundingClientRect().top;
+  if(top<libre-12) window.scrollTo({top:Math.max(0,window.scrollY+top-libre),behavior:REDUCIR?'auto':'smooth'});
+}
 function elegir(pos){
   const it=quiz.items[quiz.i], pr=esPractica();
   if(pr && it.resp!==null) return;
