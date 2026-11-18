@@ -635,7 +635,7 @@ body{background:var(--mesa)}
 .kicono svg{width:18px;height:18px}
 .an-valor{stroke:url(#gradMarca)}
 .f-anillo .an-valor{stroke:url(#gradAnillo)}
-.tcard-ex{overflow:hidden;isolation:isolate}
+.tcard-ex{isolation:isolate}          /* sin overflow:hidden (ya no recorta nada): recortaba el relleno que cubre la franja de arriba mientras la tecla está pulsada */
 
 /* Test */
 .q-barra span{position:relative;overflow:hidden}
@@ -1554,13 +1554,15 @@ html{scroll-padding-top:86px}
        <button class="celda col3d g|p|z" style="--a:0.12…1">: --a es la fracción de la altura máxima (--col-max del contenedor).
        g = ganancia: prisma que sube (cara clara arriba, frente y lado). p = pérdida: pozo que se hunde. z = cero: baldosa.
        Falso 3D sin perspectiva: las cifras van en la cara superior y se leen de frente. --- */
-.col3d{--h:max(3px,calc(var(--a,.25)*var(--col-max,16px)));--dx:calc(var(--h)*var(--col-k,.36));transition:transform .1s ease-out}
+.col3d{--h:max(3px,calc(var(--a,.25)*var(--col-max,16px)));--dx:calc(var(--h)*var(--col-k,.36))}
 .cal,.mapa{--col-k:.25;--col-ax:14.04deg;--col-ay:75.96deg}    /* desplazamiento lateral = 0,25·altura (ángulos = atan y su complementario): la cara más alta no pisa la casilla vecina */
 .col3d.g{border-radius:2px;background:var(--gana-cara);color:var(--gana-tinta);transform:translate(calc(var(--dx)*-1),calc(var(--h)*-1))}
 .col3d.g::before{content:"";position:absolute;left:0;right:0;top:calc(100% - .5px);height:calc(var(--h) + .5px);background:var(--gana-frente);transform-origin:0 0;transform:skewX(var(--col-ax,19.8deg));pointer-events:none}
 .col3d.g::after{content:"";position:absolute;top:0;bottom:0;left:calc(100% - .5px);width:calc(var(--dx) + .5px);background:var(--gana-lado);transform-origin:0 0;transform:skewY(var(--col-ay,70.2deg));pointer-events:none}
 .col3d.g:hover{background:#63E2B4}
-.col3d.g:active{--h:max(2px,calc(var(--a,.25)*var(--col-max,16px)*.45))}
+/* pulsada: la cara se oscurece y no baja (la altura es el dato). Si bajara, con ratón el clic se perdía en la franja que deja libre arriba:
+   hasta 12 px en los días que más ganan, justo donde está el número del día; aquí ::before y ::after ya son el frente y el lado */
+.col3d.g:active{background:#37BE8F;box-shadow:inset 0 2px 0 rgba(4,38,26,.26)}
 /* pozo: pared del fondo y pared izquierda en sombra, la sombra dura que la pared deja en el suelo y el labio iluminado de abajo y de la derecha */
 .col3d.p{border-radius:2px;background:linear-gradient(var(--pierde-umbra),var(--pierde-umbra)) 0 var(--h)/100% 3px no-repeat var(--pierde-suelo);color:var(--pierde-suelo-tinta);
   box-shadow:inset 0 var(--h) 0 var(--pierde-frente),inset var(--dx) 0 0 var(--pierde-lado),inset 0 -1px 0 var(--pierde-labio),inset -1px 0 0 var(--pierde-labio)}
