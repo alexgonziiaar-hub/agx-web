@@ -7006,8 +7006,8 @@ function abrirInstalar(tipo,origen){
   $('#instalar-cuerpo').innerHTML=tipo==='safari'
     ?`<ol class="pasos-app" role="list">${paso(1,'Pulsa «Compartir»','El cuadrado con la flecha hacia arriba. Si no lo ves, pulsa antes los tres puntos.',ICO_INST.compartir)}${paso(2,'Elige «Añadir a pantalla de inicio»','Baja por la lista hasta verlo y confirma con «Añadir».',ICO_INST.anadir)}</ol><p class="instalar-nota">¿No te sale esa opción? Abre ${sitio} directamente en Safari.</p>`
     :`<ol class="pasos-app" role="list">${paso(1,'Abre esta web en Safari','Busca «Abrir en Safari» en el menú, o escribe '+sitio+' en Safari.',ICO_INST.safari)}${paso(2,'Pulsa «Instalar» allí','Te diremos los dos pasos.','<span class="instalar-ico">AGX</span>')}</ol>`;
-  $('#instalar').hidden=false; document.body.style.overflow='hidden';
-  setTimeout(()=>{ const b=$('#instalar .imp-pie .boton'); if(b) b.focus(); },0);
+  const capa=$('#instalar'); capa.hidden=false; capa.scrollTop=0; document.body.style.overflow='hidden';
+  setTimeout(()=>{ const b=$('#instalar .imp-pie .boton'); if(b) b.focus({preventScroll:true}); },0); // sin desplazar: en pantallas bajas el título y la X quedaban fuera de la vista
 }
 function cerrarInstalar(){
   $('#instalar').hidden=true;
@@ -7423,11 +7423,16 @@ document.addEventListener('click',e=>{
   }
 });
 document.addEventListener('keydown',e=>{
+  if(!$('#instalar').hidden){ // la hoja de instalar es la capa de más arriba: Escape la cierra, Tab da la vuelta dentro de ella y ningún atajo actúa por debajo
+    if(e.key==='Escape'){ e.preventDefault(); cerrarInstalar(); }
+    else if(e.key==='Tab'){ const f=$$('#instalar button'), i=f.indexOf(document.activeElement); if(e.shiftKey?i<=0:i<0||i===f.length-1){ e.preventDefault(); f[e.shiftKey?f.length-1:0].focus(); } }
+    else if((e.ctrlKey||e.metaKey) && !e.altKey && e.key.toLowerCase()==='k') e.preventDefault();
+    return;
+  }
   if((e.ctrlKey||e.metaKey) && !e.altKey && e.key.toLowerCase()==='k'){ e.preventDefault(); if($('#paleta').hidden) abrirPaleta(); else cerrarPaleta(); return; }
   if(!$('#paleta').hidden){ if(e.key==='Tab') e.preventDefault(); return; }
   if(!$('#imp').hidden){ if(e.key==='Escape'){ e.preventDefault(); cerrarImp(); } return; }
   if(!$('#rut').hidden){ if(e.key==='Escape'){ e.preventDefault(); cerrarRutina(); } return; }
-  if(!$('#instalar').hidden){ if(e.key==='Escape'){ e.preventDefault(); cerrarInstalar(); } return; }
   if(e.key==='Escape' && e.target && e.target.id==='obj-in'){ editandoObj=false; pintarChips(); const b=$('[data-accion="editar-obj"]'); if(b) b.focus(); return; }
   if(!$('#visor').hidden){ if(e.key==='Escape'||e.key==='Tab'){ e.preventDefault(); if(e.key==='Escape') cerrarVisor(); } return; }
   if(!$('#cajon').hidden){
@@ -7493,7 +7498,10 @@ form.addEventListener('submit',e=>{
   if(ruta==='diario'){ refrescarDiario(); if(enPeriodo(t.fecha) && subDiario==='resumen') setTimeout(()=>irAOperacion(id),300); }
   toast(enPeriodo(t.fecha)?'Operación guardada':'Operación guardada. Cambia el periodo para verla.');
 });
-window.addEventListener('hashchange',()=>transicion(()=>{ leerRuta(); render(); if(pendiente){ const f=pendiente; pendiente=null; f(); } }));
+window.addEventListener('hashchange',()=>{
+  if(!$('#instalar').hidden){ if(instalarFoco && vista.contains(instalarFoco)) instalarFoco=null; cerrarInstalar(); } // la hoja de instalar no se queda abierta sobre otra vista (gesto «atrás»); el foco no vuelve a algo que se va a repintar
+  transicion(()=>{ leerRuta(); render(); if(pendiente){ const f=pendiente; pendiente=null; f(); } });
+});
 const pin=$('#paleta-in');
 pin.addEventListener('input',filtrarPaleta);
 pin.addEventListener('keydown',e=>{
