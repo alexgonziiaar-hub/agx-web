@@ -2050,11 +2050,19 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 @media (max-width:900px){
   /* con las cuatro teclas del administrador, los rótulos de la barra de abajo se condensan para caber */
   .nav:has(#nav-alumnos:not([hidden])) b{font-stretch:80%}
+  .chev{width:44px;height:44px;border-radius:10px}       /* tableta: la flecha de cada operación también mide 44 px */
 }
 @media (max-width:380px){
   .nav b{font-stretch:88%}
   .nav:has(#nav-alumnos:not([hidden])) b{font-size:11.5px;font-stretch:76%}
   .sesion-viva{font-size:12px;font-stretch:86%}          /* la sesión cabe en una línea también a 360 px */
+  /* a 360 px las casillas del calendario y del mapa llegan a 44 px de ancho */
+  .cal{--col-max:10px;column-gap:2px}
+  .cal-dias{column-gap:2px}
+  #calendario.panel-cuerpo{padding-inline:3px}
+  .cal-pie{padding-inline:9px}
+  .mapa{column-gap:4px}
+  #mapa.panel-cuerpo{padding-inline:10px}
 }
 </style>
 
