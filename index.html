@@ -2013,7 +2013,7 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 /* ====================================== MÓVIL Y TABLETA ====================================== */
 @media (max-width:900px){
   :root{--nav-movil:68px}
-  html{scroll-padding-top:12px;scroll-padding-bottom:calc(var(--nav-movil) + 20px + env(safe-area-inset-bottom,0px))}
+  html{scroll-padding-top:calc(12px + env(safe-area-inset-top,0px));scroll-padding-bottom:calc(var(--nav-movil) + 20px + env(safe-area-inset-bottom,0px))}
   /* con la navegación fija abajo, la barra de arriba no se pega: devuelve 100 px de pantalla en el móvil y no tapa el principio de la vista */
   .barra-sup{position:static;-webkit-backdrop-filter:none;backdrop-filter:none}
   body::after{background:var(--lateral)}          /* franja de estado (app a pantalla completa): del color de la cabecera, que es lo que tiene debajo */
@@ -6881,7 +6881,8 @@ function arrancarReloj(){
 function pararReloj(){ if(reloj){ clearInterval(reloj); reloj=null; } }
 function subir(){ // lleva arriba el principio de la vista; si la barra superior está pegada, lo deja justo debajo de ella (antes lo tapaba)
   const b=$('.barra-sup'), cs=b?getComputedStyle(b):null;
-  const libre=cs&&cs.position==='sticky'?Math.round(b.getBoundingClientRect().height+(parseFloat(cs.top)||0)+(parseFloat(cs.marginBottom)||0)):12;
+  const franja=parseFloat(getComputedStyle(document.body,'::after').height)||0; // franja de estado de la app a pantalla completa (0 en el navegador): la vista no puede quedar debajo
+  const libre=cs&&cs.position==='sticky'?Math.round(b.getBoundingClientRect().height+(parseFloat(cs.top)||0)+(parseFloat(cs.marginBottom)||0)):12+franja;
   const top=vista.getBoundingClientRect().top;
   if(top<libre-12) window.scrollTo({top:Math.max(0,window.scrollY+top-libre),behavior:REDUCIR?'auto':'smooth'});
 }
@@ -7401,8 +7402,8 @@ document.addEventListener('click',e=>{
     case 'periodo': state.periodo=b.dataset.periodo; guardar(); borrando=null; if(subDiario==='resumen' && $('#hero-neto')) pintarDatos(); else renderDiario(); break;
     case 'nueva': abrirCajon(b); break;
     case 'cerrar-cajon': cerrarCajon(); break;
-    case 'ct-menos': { const i=$('#f-ct'); i.value=Math.max(1,(parseInt(i.value,10)||1)-1); pintarCalculo(); } break;
-    case 'ct-mas': { const i=$('#f-ct'); i.value=(parseInt(i.value,10)||0)+1; pintarCalculo(); } break;
+    case 'ct-menos': { const i=$('#f-ct'); i.value=Math.max(1,(parseInt(i.value,10)||1)-1); alCambiar({target:i}); } break; // como al teclear: recalcula y quita el rojo y el aviso del campo
+    case 'ct-mas': { const i=$('#f-ct'); i.value=(parseInt(i.value,10)||0)+1; alCambiar({target:i}); } break;
     case 'elegir-captura': $('#f-cap').click(); break;
     case 'quitar-captura': capturaForm=null; pintarZona(); { const s=$('[data-accion="elegir-captura"]'); if(s) s.focus(); } break;
     case 'ver-captura': abrirVisor(b.dataset.id,b); break;
