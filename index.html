@@ -4909,8 +4909,10 @@ function guardarRutina(){
   const hoyI=iso(new Date()), R=estRutinas(), r=R[hoyI]||{}, v=n=>{ const x=$(`input[name="${n}"]:checked`); return x?Number(x.value):null; };
   if(rutModo==='pre') r.pre={checks:$$('input[name="rut-check"]:checked').map(i=>i.value),sueno:v('rut-sueno'),animo:v('rut-animo'),nota:$('#rut-nota').value.trim(),hora:new Date().toISOString()};
   else r.post={disciplina:v('rut-disc'),mejora:$('#rut-mejora').value.trim(),nota:$('#rut-nota2').value.trim(),hora:new Date().toISOString()};
+  const pre=rutModo==='pre'; // cerrarRutina() borra rutModo: el aviso se decide con el modo de antes (tras «Preparar» salía «Sesión cerrada»)
   R[hoyI]=r; guardar(); cerrarRutina(); pintarHoy();
-  toast(rutModo==='pre'?'Sesión preparada. Buen trading.':'Sesión cerrada. Mañana, una cosa mejor.');
+  toast(pre?'Sesión preparada. Buen trading.':'Sesión cerrada. Mañana, una cosa mejor.');
+  // Ojo: aquí rutModo ya es null, así que este análisis automático al cerrar la sesión no se pide nunca (igual que en la web publicada). Activarlo (condición !pre) gasta uno de los análisis del día del alumno: pendiente de decidir con el cliente
   if(rutModo==='post' && SERVIDOR && planGuardado(planNormal(state.plan)) && diasOperados().includes(hoyI)) cargarInformes().then(()=>{ if(iaInfo.ia) pedirAnalisis('dia',hoyI,{auto:true}); }).catch(()=>{});
 }
 
