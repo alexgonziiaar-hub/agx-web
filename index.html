@@ -1489,7 +1489,8 @@ a.hoy-card:hover{--k-borde:var(--violeta)}
 .fila,.kpis4,.hoy-fila,.avisos-d,.ins-sec{margin-bottom:23px}
 
 /* ---------- Nivel 2 · tecla: reposo ---------- */
-.tecla,.boton,.icono-btn,.fab,.buscar,.nav a,.sub-tabs a,.seg-oscuro button,.seg-claro button,.stepper button,.radios span,.chips-sel span,.rut-botones span,.tk,.insight,.setup-fila,a.aviso-d,a.hoy-card,.tcard,.al-card,.ruta-b,.chev,.detalle-acc .enlace{
+.tecla,.boton,.icono-btn,.fab,.buscar,.nav a,.sub-tabs a,.seg-oscuro button,.seg-claro button,.stepper button,.radios span,.chips-sel span,.rut-botones span,.tk,.insight,.setup-fila,a.aviso-d,a.hoy-card,.tcard,.al-card,.ruta-b,.chev,.detalle-acc .enlace,
+.cu-d,.opcion,button.nq,a.lec-fila,button.lec-fila,.lec-nav a{
   border:1px solid var(--k-borde,var(--tecla-borde));background:var(--k-cara,var(--tecla));color:var(--k-tinta,var(--tecla-tinta));
   box-shadow:inset 0 1px 0 var(--k-arista,var(--tecla-arista)),0 var(--k-alto,4px) 0 var(--k-canto,var(--tecla-canto));
   transition:transform .1s ease-out,box-shadow .1s ease-out,background-color .15s,color .15s,border-color .15s;
@@ -1504,13 +1505,15 @@ a.hoy-card:hover{--k-borde:var(--violeta)}
 
 /* ---------- Tecla pulsada: cede (el canto se acorta) ---------- */
 .tecla:active,.boton:active,.icono-btn:active,.fab:active,.buscar:active,.nav a:active,.sub-tabs a:active,.seg-oscuro button:active,.seg-claro button:active,.stepper button:active,
-.radios label:active span,.chips-sel label:active span,.rut-botones label:active span,.tk:active,.insight:active,.setup-fila:active,a.aviso-d:active,a.hoy-card:active,.tcard:active,.al-card:active,.ruta-b:active,.chev:active,.detalle-acc .enlace:active{
+.radios label:active span,.chips-sel label:active span,.rut-botones label:active span,.tk:active,.insight:active,.setup-fila:active,a.aviso-d:active,a.hoy-card:active,.tcard:active,.al-card:active,.ruta-b:active,.chev:active,.detalle-acc .enlace:active,
+.cu-d:active,.opcion:not(:disabled):active,button.nq:active,a.lec-fila:active,button.lec-fila:active,.lec-nav a:active{
   transform:translateY(calc(var(--k-alto,4px) - 1px));
   box-shadow:inset 0 1px 0 var(--k-arista,var(--tecla-arista)),0 1px 0 var(--k-canto,var(--tecla-canto))}
 
 /* ---------- Tecla elegida: se queda abajo y se enciende ---------- */
 .tecla[aria-pressed="true"],.tecla[aria-current="page"],.nav a[aria-current="page"],.sub-tabs a[aria-current="page"],.seg-oscuro button[aria-pressed="true"],.seg-claro button[aria-pressed="true"],
-.radios input:checked+span,.chips-sel input:checked+span,.rut-botones input:checked+span,.ruta-b[aria-pressed="true"]{
+.radios input:checked+span,.chips-sel input:checked+span,.rut-botones input:checked+span,.ruta-b[aria-pressed="true"],
+.cu-d[aria-pressed="true"],button.nq.actual{
   transform:translateY(calc(var(--k-alto,4px) - 1px));
   border-color:var(--k-lit-borde,var(--marca-lado));background:var(--k-lit,var(--marca-frente));color:var(--k-lit-tinta,#fff);
   box-shadow:inset 0 2px 0 rgba(0,0,0,.22),0 1px 0 var(--k-canto,var(--tecla-canto))}
@@ -1669,6 +1672,125 @@ html{scroll-padding-top:86px}
 /* Rareza 7 (modo oscuro): la etiqueta de «margen justo» ya no lleva colores claros fijos */
 .cta-aviso .cta-etq{background:color-mix(in srgb,var(--ambar) 20%,var(--fondo));color:color-mix(in srgb,var(--ambar) 46%,var(--tinta))}
 
+/* ====================================== DIARIO · ESTADÍSTICAS (P2) ====================================== */
+#est>.panel{margin-bottom:23px}
+.est-per{font-stretch:96%}
+.nd dd{font-stretch:92%}
+.est-rut-etq{border-radius:7px;background:var(--hundido);box-shadow:inset 0 1px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz);color:var(--tinta)}
+/* --- Columnas con base en cero (barrasV). .bv-barra = frente del prisma; ::before = cara superior; ::after = lado derecho.
+       .bv-cero = repisa del cero: las ganancias se apoyan encima (z 2) y las pérdidas cuelgan por debajo (z 0, la repisa tapa su arranque).
+       La profundidad (--bv-dx, --bv-dy) no toca la altura del frente, que sigue siendo exactamente el valor. --- */
+.bv{--alto:204px;--bv-dx:7px;--bv-dy:5px;--bv-ax:-54.46deg;--bv-ay:-35.54deg;padding-right:var(--bv-dx)}
+.bv-area{inset:28px 0 0}
+.bv-area.con-neg{bottom:24px}
+.bv-cero{z-index:1;height:var(--bv-dy);margin-top:calc(var(--bv-dy)*-1);opacity:1;background:var(--neutro-cara);box-shadow:0 1px 0 var(--neutro-lado);transform-origin:0 100%;transform:skewX(var(--bv-ax))}
+.bv-col{border-radius:4px}
+.bv-col:hover,.bv-col:focus-visible{background:color-mix(in srgb,var(--morado-suave) 62%,transparent)}
+.bv-barra{z-index:2;width:min(44px,56%);border-radius:0;--c1:var(--neutro-cara);--c2:var(--neutro-frente);--c3:var(--neutro-lado);background:var(--c2)}
+.bv-barra::before{content:"";position:absolute;left:0;right:0;bottom:calc(100% - .5px);height:calc(var(--bv-dy) + .5px);background:var(--c1);transform-origin:0 100%;transform:skewX(var(--bv-ax))}
+.bv-barra::after{content:"";position:absolute;top:0;bottom:0;left:calc(100% - .5px);width:calc(var(--bv-dx) + .5px);background:var(--c3);transform-origin:0 100%;transform:skewY(var(--bv-ay))}
+.bv-barra.g{--c1:var(--gana-cara);--c2:var(--gana-frente);--c3:var(--gana-lado);background:var(--c2)}
+.bv-barra.p{--c1:var(--pierde-cara);--c2:var(--pierde-frente);--c3:var(--pierde-lado);background:var(--c2)}
+.bv-barra.z{background:var(--c2)}
+.bv-barra.abajo{z-index:0;border-radius:0;box-shadow:inset 0 4px 0 rgba(0,0,0,.22)}
+.bv-barra.abajo::before{display:none}
+.bv-val{font-stretch:90%;font-weight:750}
+.bv-val.arr{margin-bottom:var(--bv-dy);margin-left:calc(var(--bv-dx)/2)}
+.bv-etqs{padding-top:2px}
+
+/* ====================================== DIARIO · PLAN E IA (P2) ====================================== */
+.plan-form input:disabled,.plan-form textarea:disabled{background:var(--hundido);color:var(--tinta);opacity:1}
+.pl-grupo legend{color:var(--morado)}
+.pl-pie{background:var(--fondo-2);border-top:1px solid var(--borde)}
+/* rareza 5: solo el pie del plan se queda pegado; el de la cuenta va en su sitio, al final de su formulario */
+.cta-form .pl-pie{position:static;margin-top:8px;padding:14px 0 4px;border-radius:0;background:none}
+.cta-form .pl-check{margin:16px 0 6px}
+
+/* --- Cuenta de fondeo: medidor con suelo, pico y posición (lo pinta medidorCuenta()).
+       .cta-pista = canal hundido; ::before = el suelo (prisma rojo: ahí se acaba la cuenta); >span = relleno con volumen hasta la posición;
+       .cta-m.pos = aguja de la posición; .cta-m.pico = banderín del pico (o del inicio) desde el que se mide el drawdown;
+       .cta-m.dev = lo devuelto desde el pico (rayado). Variante .mini para la tarjeta del resumen. --- */
+.cta-res{gap:14px;margin-bottom:18px;padding:0 0 18px;border:0;border-bottom:1px solid var(--borde);border-radius:0;background:none}
+.cta-res:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}
+.cta-pnl{font-size:24px;font-stretch:92%;line-height:1.1}
+.cta-gauge{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"pista pista" "suelo pico";gap:9px 12px;padding-top:9px;font-size:12.5px;white-space:normal;font-variant-numeric:tabular-nums}
+.cta-gauge .cta-pista{grid-area:pista}
+.cta-suelo{grid-area:suelo}
+.cta-pico{grid-area:pico;text-align:right}
+.cta-suelo::before{content:"";display:inline-block;width:6px;height:11px;margin-right:7px;vertical-align:-1px;border-radius:1px;background:var(--pierde-frente);box-shadow:1.5px 0 0 var(--pierde-lado)}
+.cta-pico::before{content:"";display:inline-block;width:10px;height:12px;margin-right:6px;vertical-align:-2px;background:var(--morado);clip-path:polygon(100% 0,100% 100%,80% 100%,80% 66%,0 33%,80% 0)}
+.cta-pista{position:relative;display:block;height:16px;margin:0 4px 0 3px;border-radius:3px;overflow:visible;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
+.cta-pista>span{position:relative;display:block;height:100%;min-width:4px;border-radius:2px;background:var(--barra-gana);box-shadow:inset -2px 0 0 var(--gana-lado)}
+.cta-pista::before{content:"";position:absolute;z-index:1;left:-3px;top:-6px;bottom:-4px;width:6px;border-radius:1px;background:linear-gradient(180deg,var(--pierde-cara) 0 4px,var(--pierde-frente) 4px 100%);box-shadow:2px 0 0 var(--pierde-lado)}
+.cta-m{position:absolute;display:block;pointer-events:none}
+.cta-m.dev{left:var(--pos);width:calc(var(--pico) - var(--pos));top:2px;bottom:0;background:repeating-linear-gradient(135deg,transparent 0 3px,color-mix(in srgb,var(--tinta-2) 46%,transparent) 3px 4.5px)}
+.cta-m.pico{left:var(--pico);top:-10px;bottom:0;width:2px;margin-left:-1px;background:var(--morado)}
+.cta-m.pico::before{content:"";position:absolute;right:2px;top:0;border-right:8px solid var(--morado);border-top:4.5px solid transparent;border-bottom:4.5px solid transparent}
+.cta-m.pos{left:var(--pos);top:-4px;bottom:-4px;width:4px;margin-left:-2px;border-radius:2px;background:var(--tinta);box-shadow:0 0 0 1.5px var(--placa)}
+.cta-aviso .cta-pista>span{background:linear-gradient(180deg,#F3C267 0 38%,var(--ambar) 38% 100%);box-shadow:inset -2px 0 0 #9A6A12}
+.cta-peligro .cta-pista>span,.cta-quemada .cta-pista>span,.cta-limite .cta-pista>span{background:var(--barra-pierde);box-shadow:inset -2px 0 0 var(--pierde-lado)}
+.cta-pista.mini{height:10px;margin:9px 4px 3px 3px}
+.cta-pista.mini::before{top:-4px;bottom:-3px;width:5px;background:linear-gradient(180deg,var(--pierde-cara) 0 3px,var(--pierde-frente) 3px 100%)}
+.cta-pista.mini .cta-m.pico{top:-7px}
+.cta-pista.mini .cta-m.pico::before{border-right-width:6px;border-top-width:3.5px;border-bottom-width:3.5px}
+.cta-pista.mini .cta-m.pos{top:-3px;bottom:-3px;width:3px;margin-left:-1.5px}
+.cta-pista.mini .cta-m.dev{top:1px}
+.hoy-card .hoy-barra.obj span{background:var(--barra-marca)}
+.cta-datos{gap:12px 10px}
+.cta-datos dd{font-stretch:92%}
+.cta-etq{border-radius:7px}
+
+/* --- Cumplimiento: cada día operado es una ficha que se pulsa. Cumplido = ficha verde levantada; plan roto = ficha roja hundida.
+       La elegida se enciende y lleva un cerco de marca. --- */
+.cu-top{gap:18px}
+.cu-v{font-stretch:92%;line-height:1.2}
+.cu-dias{gap:10px 7px;padding-bottom:6px}
+.cu-d{width:44px;height:46px;border-radius:10px;font-size:13px;font-weight:750;font-stretch:92%}
+.cu-d.ok{--k-cara:var(--gana-cara);--k-tinta:var(--gana-tinta);--k-borde:var(--gana-frente);--k-arista:rgba(255,255,255,.5);--k-canto:var(--gana-frente);--k-lit:var(--gana-frente);--k-lit-borde:var(--gana-lado)}
+.cu-d.ok,.cu-d.ko{background:var(--k-cara);color:var(--k-tinta)}
+.cu-d.ok[aria-pressed="true"],.cu-d.ko[aria-pressed="true"]{background:var(--k-lit);color:#fff}
+.cu-d.ok:hover{--k-cara:#63E2B4}
+.cu-d.ko{--k-alto:2px;--k-cara:var(--pierde-suelo);--k-tinta:var(--pierde-suelo-tinta);--k-borde:var(--pierde-frente);--k-arista:transparent;--k-canto:var(--pierde-lado);--k-lit:var(--pierde-frente);--k-lit-borde:var(--pierde-lado);
+  transform:translateY(3px);box-shadow:inset 0 3px 0 var(--pierde-frente),0 1px 0 var(--hundido-luz)}
+.cu-d.ko:hover{--k-cara:color-mix(in srgb,var(--pierde-suelo) 84%,var(--pierde-cara))}
+.cu-d.ko:active{transform:translateY(4px)}
+.cu-d.sel,.cu-d[aria-pressed="true"]{transform:translateY(3px);outline:2px solid var(--morado);outline-offset:2px;box-shadow:inset 0 2px 0 rgba(0,0,0,.22),0 1px 0 var(--k-canto)}
+.cu-top3 li{padding:5px 0;border-bottom:1px solid var(--borde)}
+.cu-top3 li:last-child{border-bottom:0}
+.cu-top3 b{white-space:nowrap}
+.reglas .ok .r-ico{background:var(--gana-frente);color:#fff}
+.reglas .ko .r-ico{background:var(--pierde-frente);color:#fff}
+.r-ico{box-shadow:inset 0 1px 0 rgba(255,255,255,.28)}
+
+/* --- Agente de IA: espera en un pozo, informes como placas con flecha-tecla y la nota como dial --- */
+.panel-ia .panel-cab{background:none}
+.ia-cargando{border:1px solid var(--hundido-borde);background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz)}
+.ia-cargando p{color:var(--tinta)}
+.ia-orbe{width:32px;height:32px;background:conic-gradient(from 0deg,var(--marca-lado),var(--marca-frente) 40%,var(--marca-cara) 78%,#E6DCFF 96%,var(--marca-lado));-webkit-mask:radial-gradient(circle,transparent 8.5px,#000 9.5px);mask:radial-gradient(circle,transparent 8.5px,#000 9.5px)}
+.inf summary{padding:12px 14px 13px}
+.inf[open]{border-color:var(--placa-borde)}
+.inf.ej{border-style:dashed;border-color:var(--borde-2)}
+.inf-chev,.niv-chev{flex:none;display:grid;place-items:center;width:30px;height:30px;border:1px solid var(--tecla-borde);border-radius:8px;background:var(--tecla);color:var(--tinta-2);
+  box-shadow:inset 0 1px 0 var(--tecla-arista),0 2px 0 var(--tecla-canto);transition:transform .1s ease-out,box-shadow .1s ease-out,background-color .15s,color .15s}
+.inf-chev svg,.niv-chev svg{width:14px;height:14px;transform:rotate(90deg);transition:transform .2s}
+.inf[open]>summary .inf-chev svg,.niv[open]>summary .niv-chev svg{transform:rotate(-90deg)}
+.inf>summary:hover .inf-chev,.niv>summary:hover .niv-chev{border-color:var(--morado);color:var(--morado)}
+.inf>summary:active .inf-chev,.niv>summary:active .niv-chev{transform:translateY(1px);box-shadow:inset 0 1px 0 var(--tecla-arista),0 1px 0 var(--tecla-canto)}
+.inf[open]>summary .inf-chev,.niv[open]>summary .niv-chev{transform:translateY(1px);border-color:var(--marca-lado);background:var(--marca-frente);color:#fff;box-shadow:inset 0 2px 0 rgba(0,0,0,.22),0 1px 0 var(--tecla-canto)}
+.inf-res{font-size:14px;font-stretch:92%}
+.inf-nota{display:inline-flex;align-items:center;padding:3px 10px 3px 4px;white-space:nowrap;border:1px solid var(--hundido-borde);border-radius:999px;background:var(--hundido);box-shadow:inset 0 1px 0 var(--hundido-sombra);color:var(--tinta);--nc:var(--gana-frente)}
+.inf-nota.alta,.inf-nota.media,.inf-nota.baja{background:var(--hundido);color:var(--tinta)}
+.inf-nota.media{--nc:var(--ambar)}
+.inf-nota.baja{--nc:var(--pierde-frente)}
+.inf-nota::before{content:"";flex:none;width:22px;height:22px;margin-right:6px;border-radius:50%;background:conic-gradient(var(--nc) calc(var(--n,0)*36deg),var(--neutro-frente) 0);-webkit-mask:radial-gradient(circle,transparent 5.5px,#000 6.5px);mask:radial-gradient(circle,transparent 5.5px,#000 6.5px)}
+.inf-bloque.bien li>span{background:var(--gana-frente);color:#fff}
+.inf-bloque.mal li>span{background:var(--pierde-frente);color:#fff}
+.inf-caps .ok span{background:var(--gana-frente);color:#fff}
+.inf-caps .ko span{background:var(--pierde-frente);color:#fff}
+.inf-bloque.pat li{border-left-color:var(--morado)}
+.inf-acciones{border-left:4px solid var(--morado);border-radius:0 12px 12px 0}
+.inf-viejo{border:1px solid var(--hundido-borde);background:var(--hundido)}
+
 /* ====================================== MÓVIL Y TABLETA ====================================== */
 @media (max-width:900px){
   :root{--nav-movil:68px}
@@ -1765,6 +1887,12 @@ html{scroll-padding-top:86px}
 }
 @media (max-width:380px){
   .cal .v{font-size:11.5px}
+}
+/* ---------- P2 · ajustes de móvil y tableta de Estadísticas, Plan e IA y Formación (van al final: mandan sobre sus reglas base) ---------- */
+@media (max-width:640px){
+  .bv{--alto:176px;--bv-dx:5px;--bv-dy:4px;--bv-ax:-51.34deg;--bv-ay:-38.66deg}
+  .bv-barra{width:min(22px,54%)}
+  .bv-etqs{font-size:10.5px;font-stretch:86%}
 }
 </style>
 
@@ -4372,17 +4500,23 @@ function cuentaEstado(st){ return evaluarCuenta((st||state).cuenta,(st||state).t
 function estRutinas(){ if(!state.rutinas || typeof state.rutinas!=='object') state.rutinas={}; return state.rutinas; }
 const ESTADO_TXT={ok:'Cuenta sana',aviso:'Margen justo',peligro:'Margen crítico',quemada:'Drawdown superado',objetivo:'Objetivo conseguido',limite:'Límite diario superado'};
 
+/* --- Medidor de la cuenta de fondeo (sistema 3D): un canal que va del suelo (el drawdown, a la izquierda) al máximo entre el pico y la posición.
+   El relleno llega hasta donde está la cuenta (--pos) y el banderín marca el pico o el inicio desde el que se mide el drawdown (--pico).
+   Solo presentación: los datos salen de evaluarCuenta(). --- */
+function medidorCuenta(ev,cls){
+  const lo=ev.suelo, hi=Math.max(ev.pico,ev.pnl,lo+ev.c.ddMax), rg=(hi-lo)||1, pc=x=>Math.max(0,Math.min(100,(x-lo)/rg*100)).toFixed(1);
+  return `<span class="cta-pista${cls?' '+cls:''}" style="--pos:${pc(ev.pnl)}%;--pico:${pc(ev.pico)}%"><span style="width:${pc(ev.pnl)}%"></span><i class="cta-m dev"></i><i class="cta-m pico"></i><i class="cta-m pos"></i></span>`;
+}
 /* --- Franja de hoy: cuenta y rutina en el resumen --- */
 function pintarHoy(){
   const el=$('#hoy-fila'); if(!el) return;
   const ev=cuentaEstado(), hoyI=iso(new Date()), r=rutinaNormal(estRutinas()[hoyI]);
   let cuenta='';
   if(ev){
-    const pct=Math.round(ev.pctMargen*100);
     cuenta=`<a class="hoy-card cta-${ev.estado}" href="${hrefSub('plan')}" aria-label="Cuenta de fondeo: ${ESTADO_TXT[ev.estado]}, margen ${fmtValor(Math.round(ev.margen))}">
       <span class="hoy-ico">${ICO.escudo}</span>
       <span class="hoy-txt"><b>${ESTADO_TXT[ev.estado]}</b><small>${ev.c.firma?esc(ev.c.firma)+' · ':''}${ev.c.fase==='fondeada'?'fondeada':'evaluación'} · ${fmtUSD(ev.pnl)} acumulado</small></span>
-      <span class="hoy-dato"><b>${fmtValor(Math.round(ev.margen))}</b><small>margen hasta el drawdown</small><span class="hoy-barra"><span style="width:${pct}%"></span></span></span>
+      <span class="hoy-dato"><b>${fmtValor(Math.round(ev.margen))}</b><small>margen hasta el drawdown</small>${medidorCuenta(ev,'mini')}</span>
       ${ev.objetivo?`<span class="hoy-dato"><b>${Math.round(ev.objetivo.pct*100)} %</b><small>del objetivo${ev.objetivo.falta?' · faltan '+fmtValor(Math.round(ev.objetivo.falta)):''}</small><span class="hoy-barra obj"><span style="width:${Math.round(ev.objetivo.pct*100)}%"></span></span></span>`:''}
       ${ev.limiteHoy?`<span class="hoy-dato${ev.limiteHoy.roto?' mal':''}"><b>${fmtUSD(ev.hoyPnl)}</b><small>hoy · límite ${fmtValor(ev.limiteHoy.limite)}</small></span>`:''}</a>`;
   } else if(!REV) cuenta=`<a class="hoy-card cta-vacia" href="${hrefSub('plan')}"><span class="hoy-ico">${ICO.escudo}</span><span class="hoy-txt"><b>Configura tu cuenta de fondeo</b><small>Drawdown, límite diario y objetivo. El diario te dirá cuánto margen te queda cada día.</small></span><span class="hoy-ir">Configurar${ICO.chev}</span></a>`;
@@ -4442,7 +4576,7 @@ function panelCuenta(){
   const num=(id,lab,val,suf,ph)=>`<div class="campo pl-num"><label for="${id}">${lab}</label><div class="dinero"><input type="text" inputmode="decimal" id="${id}" value="${val==null?'':String(val).replace('.',',')}" autocomplete="off" placeholder="${ph||''}"${dis}><span aria-hidden="true">${suf}</span></div></div>`;
   const resumen=ev?`<div class="cta-res cta-${ev.estado}">
       <div class="cta-fila"><span class="cta-etq">${ESTADO_TXT[ev.estado]}</span><span class="cta-pnl ${clase(ev.pnl)}">${fmtUSD(ev.pnl)}</span></div>
-      <div class="cta-gauge" role="img" aria-label="Margen ${Math.round(ev.pctMargen*100)} % del drawdown"><span class="cta-suelo">Drawdown ${fmtUSD(ev.suelo)}</span><span class="cta-pista"><span style="width:${Math.round(ev.pctMargen*100)}%"></span></span><span class="cta-pico">${ev.c.ddTipo==='estatico'?'Inicio':'Pico '+fmtUSD(ev.pico)}</span></div>
+      <div class="cta-gauge" role="img" aria-label="Margen ${Math.round(ev.pctMargen*100)} % del drawdown"><span class="cta-suelo">Drawdown ${fmtUSD(ev.suelo)}</span>${medidorCuenta(ev)}<span class="cta-pico">${ev.c.ddTipo==='estatico'?'Inicio':'Pico '+fmtUSD(ev.pico)}</span></div>
       <dl class="cta-datos"><div><dt>Margen</dt><dd>${fmtValor(Math.round(ev.margen))}</dd></div><div><dt>Peor margen</dt><dd>${fmtValor(Math.round(ev.peorMargen))}</dd></div>${ev.objetivo?`<div><dt>Objetivo</dt><dd>${Math.round(ev.objetivo.pct*100)} %</dd></div>`:''}${ev.limiteHoy?`<div><dt>Hoy</dt><dd class="${clase(ev.hoyPnl)}">${fmtUSD(ev.hoyPnl)}</dd></div>`:''}<div><dt>Riesgo razonable</dt><dd>${fmtValor(ev.riesgoSugerido)}</dd></div><div><dt>Días operados</dt><dd>${ev.nDias}</dd></div></dl>
       <p class="ayuda">Calculado con tus operaciones desde ${c.desde?fechaCorta(c.desde):'el principio'}. Las reglas exactas son las de tu firma: esto es tu copiloto, no su panel.</p></div>`:'';
   return `<section class="panel entra" aria-labelledby="t-cta"><div class="panel-cab"><h2 id="t-cta">${ICO.escudo}${ro?'Su cuenta de fondeo':'Tu cuenta de fondeo'}</h2><span class="panel-meta">${c.actualizado?'Actualizada el '+fechaLarga(c.actualizado):'Sin configurar'}</span></div>
@@ -5169,7 +5303,9 @@ function grupoDe(ts,clave){
   const m=new Map(); ts.forEach(t=>{ const k=clave(t), c=calc(t).usd, x=m.get(k)||{k,n:0,w:0,u:0}; x.n++; if(c>0) x.w++; x.u+=c; m.set(k,x); });
   return Array.from(m.values());
 }
-/* Columnas desde una línea base en 0: verde si gana, rojo si pierde. Valor en el máximo y el mínimo; el resto en la ayuda al pasar el ratón */
+/* Columnas desde una línea base en 0: verde si gana, rojo si pierde. Valor en el máximo y el mínimo; el resto en la ayuda al pasar el ratón.
+   Sistema 3D: cada .bv-barra es el frente de un prisma (el CSS le pone cara superior y lado); .bv-cero es la repisa del cero:
+   las ganancias se apoyan encima y las pérdidas cuelgan por debajo. La altura del frente sigue siendo exactamente el valor. */
 function barrasV(items,opc){
   opc=opc||{};
   if(!items.length) return '';
@@ -5179,8 +5315,8 @@ function barrasV(items,opc){
   return `<div class="bv" style="--n:${items.length}"><div class="bv-zona"><div class="bv-area${min<0?' con-neg':''}"><span class="bv-cero" style="top:${cero}%"></span>${items.map((it,k)=>{
       const h=Math.abs(it.v)/rango*100, pos=it.v>=0, cls=it.cls||(it.v>0?'g':(it.v<0?'p':'z'));
       const est=pos?`bottom:${100-cero}%;height:${Math.max(h,it.v?1.5:0)}%`:`top:${cero}%;height:${Math.max(h,1.5)}%`;
-      const val=(k===iMax||k===iMin)&&it.v?`<span class="bv-val" style="${pos?`bottom:calc(${100-cero+h}% + 4px)`:`top:calc(${cero+h}% + 4px)`}">${fmt(it.v)}</span>`:'';
-      return `<div class="bv-col" tabindex="0" role="img" aria-label="${esc(it.aria)}" data-tip="${esc(it.tip)}"><span class="bv-barra ${cls}${pos?'':' abajo'}" style="${est};animation-delay:${k*0.03}s"></span>${val}</div>`;
+      const val=(k===iMax||k===iMin)&&it.v?`<span class="bv-val ${pos?'arr':'abj'}" style="${pos?`bottom:calc(${100-cero+h}% + 4px)`:`top:calc(${cero+h}% + 4px)`}">${fmt(it.v)}</span>`:'';
+      return `<div class="bv-col" tabindex="0" role="img" aria-label="${esc(it.aria)}" data-tip="${esc(it.tip)}">${it.v?`<span class="bv-barra ${cls}${pos?'':' abajo'}" style="${est};animation-delay:${k*0.03}s"></span>`:''}${val}</div>`;
     }).join('')}</div></div><div class="bv-etqs">${items.map(it=>`<span>${esc(it.etq)}</span>`).join('')}</div></div>`;
 }
 function tablaGrupo(titulo,filas){
@@ -5386,7 +5522,7 @@ async function cargarInformes(){
 function tarjetaInforme(inf,abierto){
   const ia=inf.ia, viejo=!inf.ejemplo && huellaCliente(inf.tipo,inf.hasta)!==inf.huella;
   const titulo=inf.tipo==='semana'?`Semana del ${fechaCorta(inf.desde)} al ${fechaCorta(inf.hasta)}`:`Parte del ${fechaTabla(inf.hasta)}`;
-  const nota=ia&&ia.puntuacion!=null?`<span class="inf-nota ${ia.puntuacion>=8?'alta':ia.puntuacion>=5?'media':'baja'}"><b>${ia.puntuacion}</b>/10<span class="sr"> de disciplina</span></span>`:'';
+  const nota=ia&&ia.puntuacion!=null?`<span class="inf-nota ${ia.puntuacion>=8?'alta':ia.puntuacion>=5?'media':'baja'}" style="--n:${Math.max(0,Math.min(10,Number(ia.puntuacion)||0))}"><b>${ia.puntuacion}</b>/10<span class="sr"> de disciplina</span></span>`:'';
   const lista=(t,arr,cls,fn)=>arr&&arr.length?`<div class="inf-bloque ${cls}"><p class="inf-sub">${t}</p><ul>${arr.map(fn).join('')}</ul></div>`:'';
   const rotas=(inf.detalle||[]).flatMap(d=>d.reglas.filter(r=>!r.ok).map(r=>({d:d.fecha,r})));
   const cuerpo=ia?`<p class="inf-titular">${esc(ia.titular)}</p><p class="inf-resumen">${esc(ia.resumen)}</p>
@@ -5398,7 +5534,7 @@ function tarjetaInforme(inf,abierto){
     :`<p class="inf-resumen">${inf.dias===inf.diasOk?'Plan cumplido todos los días analizados.':`Plan cumplido ${inf.diasOk} de ${inf.dias} ${inf.dias===1?'día':'días'}.`}</p>
       ${rotas.length?`<div class="inf-bloque mal"><p class="inf-sub">Reglas rotas</p><ul>${rotas.slice(0,8).map(x=>`<li><span aria-hidden="true">${ICO.cruz}</span><div><b>${x.r.nombre}</b> ${esc(x.r.detalle)}</div></li>`).join('')}</ul></div>`:''}
       <p class="ayuda">El agente de IA todavía no está activado, así que este informe solo comprueba tus reglas.</p>`;
-  return `<details class="inf${inf.ejemplo?' ej':''}"${abierto?' open':''}><summary><span class="inf-cab"><span class="inf-tipo">${inf.ejemplo?'Ejemplo':(inf.origen==='auto'?'Parte automático':'Pedido por '+(REV?'el alumno':'ti'))}</span><span class="inf-t">${titulo}</span></span><span class="inf-dcha">${nota}<span class="inf-res ${clase(inf.neto)}">${fmtUSD(inf.neto)}</span>${ICO.chev}</span></summary>
+  return `<details class="inf${inf.ejemplo?' ej':''}"${abierto?' open':''}><summary><span class="inf-cab"><span class="inf-tipo">${inf.ejemplo?'Ejemplo':(inf.origen==='auto'?'Parte automático':'Pedido por '+(REV?'el alumno':'ti'))}</span><span class="inf-t">${titulo}</span></span><span class="inf-dcha">${nota}<span class="inf-res ${clase(inf.neto)}">${fmtUSD(inf.neto)}</span><span class="inf-chev" aria-hidden="true">${ICO.chev}</span></span></summary>
     <div class="inf-cuerpo">${viejo&&!REV?`<p class="inf-viejo">Has cambiado operaciones o el plan desde este análisis. <button type="button" class="enlace" data-accion="analizar" data-tipo="${inf.tipo}" data-fecha="${inf.hasta}">Volver a analizar</button></p>`:''}${cuerpo}</div></details>`;
 }
 function pintarIA(){
