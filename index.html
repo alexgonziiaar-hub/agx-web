@@ -6916,12 +6916,12 @@ function pintarTicker(){
 }
 
 /* ---------- Transiciones y navegación ---------- */
-let pendiente=null;
+let pendiente=null, pedida=null; // pedida: adónde se ha pedido ir con un enlace o con irRuta (h) y si ha sido desde la navegación principal (nav). Con «atrás/adelante» del navegador no hay nada pedido
 function transicion(fn){ if(document.startViewTransition && !REDUCIR){ try{ const vt=document.startViewTransition(fn); if(vt && vt.ready) vt.ready.catch(()=>{}); return; }catch(e){} } fn(); }
 function irRuta(r,despues){
   const actual=location.hash.replace(/^#/,'')||'diario';
   if(actual===r || (r==='diario' && ruta==='diario' && subDiario==='resumen' && !REV)){ if(despues) despues(); return; }
-  pendiente=despues||null; location.hash='#'+r;
+  pendiente=despues||null; location.hash='#'+r; pedida={h:location.hash};
 }
 
 /* ---------- Acciones rápidas (Ctrl+K) ---------- */
@@ -7373,6 +7373,7 @@ function render(){
   pintarLateral();
 }
 document.addEventListener('click',e=>{
+  { const en=e.target.closest('a[href^="#"]'); if(en) pedida={h:en.hash,nav:!!en.closest('.nav')}; }
   if(e.target.id==='capa'){ cerrarCajon(); return; }
   if(e.target.id==='visor'){ cerrarVisor(); return; }
   if(e.target.id==='paleta'){ cerrarPaleta(); return; }
@@ -7437,7 +7438,7 @@ document.addEventListener('click',e=>{
     case 'repetir': { const m=quiz.modo, a=quiz.tema||quiz.bloque||quiz.lec||quiz.nivel; empezar(m,a); } break;
     case 'test-leccion': empezar('leccion',b.dataset.l); break;
     case 'examen-nivel': { if(quiz){ quiz=null; pararReloj(); } if(ruta!=='formacion' || lecVista || subForm!=='ruta'){ irRuta('formacion',()=>empezar('nivel',b.dataset.n)); } else empezar('nivel',b.dataset.n); } break;
-    case 'ir-leccion': quiz=null; pararReloj(); location.hash='#formacion/l/'+b.dataset.l; break;
+    case 'ir-leccion': quiz=null; pararReloj(); location.hash='#formacion/l/'+b.dataset.l; pedida={h:location.hash}; break;
     case 'bloque': state.bloque=BLOQUES.some(x=>x.id===b.dataset.b)?b.dataset.b:'of'; guardar(); transicion(()=>{ render(); const s=$('[data-accion="bloque"][aria-pressed="true"]'); if(s) s.focus({preventScroll:true}); }); break;
     case 'rapido': empezar('rapido',b.dataset.b||null); break;
     case 'fallos': empezar('fallos'); break;
@@ -7523,7 +7524,10 @@ form.addEventListener('submit',e=>{
 });
 window.addEventListener('hashchange',()=>{
   if(!$('#instalar').hidden){ if(instalarFoco && vista.contains(instalarFoco)) instalarFoco=null; cerrarInstalar(); } // la hoja de instalar no se queda abierta sobre otra vista (gesto «atrás»); el foco no vuelve a algo que se va a repintar
-  transicion(()=>{ leerRuta(); render(); if(pendiente){ const f=pendiente; pendiente=null; f(); } });
+  const p=pedida && pedida.h===location.hash?pedida:null, antes=[ruta,lecVista,revId].join(); pedida=null;
+  transicion(()=>{ leerRuta(); render();
+    if(p && (p.nav || antes!==[ruta,lecVista,revId].join())) window.scrollTo(0,0); // otra vista (módulo, lección o alumno) empieza arriba: antes se quedaba a la altura de la anterior. Las pestañas de dentro de una vista y «atrás/adelante» siguen como estaban
+    if(pendiente){ const f=pendiente; pendiente=null; f(); } });
 });
 const pin=$('#paleta-in');
 pin.addEventListener('input',filtrarPaleta);
