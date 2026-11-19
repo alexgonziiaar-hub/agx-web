@@ -2236,6 +2236,113 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .paso-dib svg{width:25px;height:25px}
 .paso-dib .instalar-ico{width:34px;height:31px;margin:0 0 2px;border-radius:8px;font-size:16px;box-shadow:inset 0 1px 0 var(--marca-cara),0 2px 0 var(--marca-lado)}
 .instalar-nota{margin:0;font-size:13px;line-height:1.4;color:var(--tinta-2)}
+/* ===================== TESTS DE LOS DIRECTOS ([D]) =====================
+   Tercera pestaña de Formación. Portada: la placa oscura con el anillo-toro en dos tonos (aciertos en verde y, a continuación, fallos en rojo;
+   la pista que queda es lo que falta) y, debajo, los clips de cada categoría como tarjetas-tecla (.tecla.dir-card). La ficha de la izquierda
+   dice el estado con icono y con material: hueco = sin responder, verde levantada = acertado, roja hundida = fallado, de marca = el siguiente.
+   Test de un clip (.dir-test): la pregunta con las teclas .opcion de siempre y, al lado (debajo en móvil y tableta), la pantalla del clip:
+   apagada (un pozo oscuro con la proporción del vídeo ya reservada) hasta que se responde; después, el vídeo. Sus ajustes de móvil van aquí dentro. */
+.nuevo-chip{text-transform:uppercase}
+.dir-anillo .anillo{position:absolute;inset:0;width:100%;height:100%}
+.dir-anillo .anillo+.anillo .an-pista,.dir-anillo .anillo+.anillo .an-pista-s{display:none}
+.dir-anillo .an-valor[data-t="ok"]{stroke:var(--gana-cara)}
+.dir-anillo .an-valor[data-t="ok"] .an-lado{stroke:var(--gana-lado)}
+.dir-anillo .an-valor[data-t="ko"]{stroke:var(--pierde-cara)}
+.dir-anillo .an-valor[data-t="ko"] .an-lado{stroke:var(--pierde-lado)}
+.dir-anillo .f-anillo-txt b small{font-size:.52em;font-weight:760;color:var(--hero-tenue)}
+.dir-hero .ruta-datos li.g b{color:var(--pos-claro)}
+.dir-hero .ruta-datos li.p b{color:var(--neg-claro)}
+.dir-cat{margin-top:30px}
+.dir-cat .ins-cab{align-items:flex-end;margin-bottom:13px}
+.dir-cat-d{margin:3px 0 0;font-size:13.5px;color:var(--tinta-2)}
+.dir-prog{display:flex;align-items:center;gap:11px;margin:0;font-size:13px;font-weight:650;color:var(--tinta-2);font-variant-numeric:tabular-nums}
+.dir-barra{flex:none;display:flex;width:132px}
+.dir-barra span{flex:none}
+.dir-barra .g{background:var(--barra-gana)}
+.dir-barra .p{background:var(--barra-pierde)}
+.dir-barra .g+.p{border-radius:0 2px 2px 0}
+.dir-lista{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px 12px;margin:0;padding:0 0 5px;list-style:none}
+.dir-lista li{display:flex;min-width:0}
+.dir-card{position:relative;flex:1;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px;min-width:0;min-height:66px;padding:10px 14px 11px 11px;border-radius:14px;text-decoration:none;--k-tinta:var(--tinta)}
+.dir-card:hover{--k-borde:var(--morado)}
+.dir-ico{display:grid;place-items:center;width:40px;height:40px;border-radius:11px;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz);color:var(--tinta-2)}
+.dir-ico svg{width:18px;height:18px}
+.dir-card.ok .dir-ico{background:var(--gana-cara);color:var(--gana-tinta);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 3px 0 var(--gana-frente);transform:translateY(-2px)}
+.dir-card.ko .dir-ico{background:var(--pierde-suelo);color:var(--pierde-suelo-tinta);box-shadow:inset 0 3px 0 var(--pierde-frente)}
+.dir-card.sig{--k-cara:var(--morado-suave);--k-borde:var(--morado);--k-canto:var(--marca-lado)}
+.dir-card.sig .dir-ico{background:var(--marca-frente);color:#fff;box-shadow:inset 0 1px 0 var(--marca-cara),0 3px 0 var(--marca-lado);transform:translateY(-2px)}
+.dir-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+.dir-meta{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.dir-meta small{min-width:0;font-size:12.5px;font-weight:650;color:var(--tinta-2);font-variant-numeric:tabular-nums;font-stretch:96%}
+.dir-est{flex:none;font-style:normal;font-size:12.5px;font-weight:750}
+.dir-est.ok{color:var(--compra)}
+.dir-est.ko{color:var(--venta)}
+.dir-txt b{font-size:15px;font-weight:690;line-height:1.28;text-wrap:pretty}
+.dir-card.pend .dir-txt b{font-weight:600;color:var(--tinta-2)}
+.dir-card.sig .dir-txt b{color:var(--morado)}
+/* --- el test de un clip --- */
+.dir-rep{color:var(--tinta-2);font-weight:650}
+.dir-test{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,7fr);grid-template-areas:"preg clip" "exp clip" "nav clip";grid-template-rows:auto auto 1fr;gap:18px 20px;align-items:start}
+.dir-test.fresco{grid-template-areas:"preg clip" "nav clip";grid-template-rows:auto 1fr}
+.dir-preg{grid-area:preg}
+.dir-clip{grid-area:clip;position:sticky;top:86px}
+.dir-exp{grid-area:exp}
+.dir-nav{grid-area:nav;display:flex;flex-wrap:wrap;align-items:center;gap:12px 10px;padding-bottom:6px}
+.dir-nav .atajos{margin-left:auto}
+.dir-preg .enunciado{max-width:none;font-size:20px;line-height:1.38;font-weight:660}
+.dir-res{display:flex;flex-direction:column;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--borde)}
+.dir-res p{margin:0}
+.dir-res .veredicto-txt{outline:0}
+.dir-res .fallo-buena{font-size:14.5px}
+.dir-clip .panel-cuerpo,.dir-exp .panel-cuerpo{display:flex;flex-direction:column;gap:12px;padding:20px}
+.dir-exp .panel-cuerpo{padding:22px 28px 24px}
+.dir-clip p,.dir-clip h2,.dir-exp p,.dir-exp h2{margin:0}
+.dir-exp .explicacion{font-size:16px;line-height:1.58}
+.dir-kicker{display:flex;align-items:center;gap:8px;color:var(--morado);font-size:12.5px;font-weight:800;letter-spacing:.06em;line-height:1.3;text-transform:uppercase}
+.dir-kicker svg{flex:none;width:17px;height:17px}
+.dir-titulo{font-size:22px;line-height:1.2;font-weight:760;letter-spacing:-0.012em;text-wrap:balance}
+.dir-clave{font-size:15px;line-height:1.5;color:var(--tinta-2)}
+.dir-pantalla{position:relative;aspect-ratio:16 / 9;margin-top:2px;border:1px solid #05030C;border-radius:12px;overflow:hidden;background:#0B0719;box-shadow:0 1px 0 var(--hundido-luz)}
+.dir-pantalla video{display:block;width:100%;height:100%;object-fit:contain;background:#0B0719}
+.dir-pantalla.apagada{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px;text-align:center;color:#BBAFE6;box-shadow:inset 0 4px 0 rgba(0,0,0,.55),0 1px 0 var(--hundido-luz);
+  background:#0B0719 linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/100% 25%}
+.dir-pantalla.apagada p{font-size:15.5px;font-weight:700;color:#F0ECFF}
+.dir-pantalla.apagada small{font-size:13px;font-variant-numeric:tabular-nums}
+.dir-apagada-ico{display:grid;place-items:center;width:46px;height:46px;margin-bottom:4px;border:1px solid rgba(255,255,255,.16);border-radius:50%;color:#BBAFE6}
+.dir-apagada-ico svg{width:22px;height:22px}
+.dir-error{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:11px 14px;border-radius:10px;background:var(--venta-suave);color:var(--venta);font-size:14.5px;font-weight:650}
+.dir-error .enlace{color:inherit;font-weight:750}
+@media (max-width:1060px){
+  .dir-test,.dir-test.fresco{grid-template-columns:minmax(0,1fr);grid-template-areas:"preg" "clip" "exp" "nav";grid-template-rows:none}
+  .dir-test.fresco{grid-template-areas:"preg" "clip" "nav"}
+  .dir-clip{position:static}
+  .dir-lista{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dir-nav.sola{display:none}
+}
+@media (max-width:900px){
+  .dir-error .enlace{min-height:44px}
+}
+@media (max-width:640px){
+  /* las tres pestañas caben a 360 px: cada rótulo en dos líneas */
+  .sub-tabs.tres{gap:5px}
+  .sub-tabs.tres a{flex:1 1 0;min-width:0;flex-wrap:wrap;gap:3px 6px;padding:6px 5px;white-space:normal;text-align:center;font-size:13.5px;font-stretch:94%;line-height:1.15}
+  .dir-cat{margin-top:26px}
+  .dir-cat .ins-cab{align-items:flex-start;flex-direction:column;gap:9px}
+  .dir-prog{width:100%;justify-content:space-between}
+  .dir-lista{grid-template-columns:minmax(0,1fr);gap:11px}
+  .dir-card{padding:9px 12px 10px 10px;gap:11px}
+  .dir-preg .enunciado{font-size:18px;line-height:1.4}
+  .dir-clip .panel-cuerpo,.dir-exp .panel-cuerpo{padding:18px 14px 14px}
+  .dir-exp .panel-cuerpo{padding-bottom:18px}
+  .dir-titulo{font-size:20px}
+  /* el vídeo, a todo el ancho de la placa */
+  .dir-pantalla{margin:2px -14px 0;border-inline:0;border-radius:0}
+  .dir-clip .dir-pantalla:last-child,.dir-clip .dir-pantalla:has(+[hidden]:last-child){margin-bottom:-14px;border-bottom:0;border-radius:0 0 15px 15px;box-shadow:none}
+  .dir-pantalla.apagada{margin-bottom:0}
+  .dir-nav{gap:14px 10px}
+  .dir-nav .boton{flex:1 1 auto}
+  .dir-nav .boton[data-accion="dir-sig"]{flex-basis:100%}
+}
 </style>
 
 </head>
@@ -5002,7 +5109,7 @@ function progresoRuta(st){ const r=(st||state).ruta||{}, lec=r.lec||{}; const ok
 function siguienteLec(){ for(const n of RUTA_ACTIVOS){ for(const l of n.lecciones){ if(!lecOk(l.id)) return lecAbierta(l)?l:null; } if(!nivOk(n)) return null; } return null; }
 function nivelActual(){ return RUTA_ACTIVOS.find(n=>!nivOk(n)) || RUTA_ACTIVOS[RUTA_ACTIVOS.length-1]; }
 function horas(min){ const h=Math.floor(min/60), m=min%60; return h?(h+' h'+(m?' '+m+' min':'')):m+' min'; }
-function tabsForm(){ return `<nav class="sub-tabs entra" aria-label="Secciones de la formación"><a href="#formacion"${subForm!=='libre'?' aria-current="page"':''}>Ruta por niveles</a><a href="#formacion/libre"${subForm==='libre'?' aria-current="page"':''}>Repaso libre y examen</a></nav>`; }
+function tabsForm(){ return `<nav class="sub-tabs tres entra" aria-label="Secciones de la formación"><a href="#formacion"${subForm==='ruta'?' aria-current="page"':''}>Ruta por niveles</a><a href="#formacion/libre"${subForm==='libre'?' aria-current="page"':''}>Repaso libre y examen</a><a href="#formacion/directos"${subForm==='directos'?' aria-current="page"':''}>Directos${dirNuevo()?'<span class="ia-chip nuevo-chip">Nuevo</span>':''}</a></nav>`; }
 
 function vistaRuta(){
   const pr=progresoRuta(), sig=siguienteLec(), na=nivelActual(), iNa=RUTA_ACTIVOS.indexOf(na);
@@ -5073,6 +5180,7 @@ function renderFormacion(){
     if(quiz.hash!==location.hash){ quiz=null; pararReloj(); }
   }
   if(quiz){ vista.innerHTML=quiz.fin?vistaResultado():vistaPregunta(); centrarNavegador(); return; }
+  if(subForm==='directos'){ dirVisto(); vista.innerHTML=dirVista?vistaDirecto(dirVista):vistaDirectos(); trasDirectos(); return; }
   if(subForm==='libre'){ vista.innerHTML=vistaFormacion(); const h=$('.cab-modulo',vista); if(h) h.insertAdjacentHTML('afterend',tabsForm()); const pc=Math.round(progresoForm().pct*100); odometro($('#f-pct'),pc+' %','Completado: '+pc+' %'); return; }
   if(lecVista){ vista.innerHTML=vistaLeccion(lecVista); return; }
   vista.innerHTML=vistaRuta(); const pc=Math.round(progresoRuta().pct*100); odometro($('#f-pct'),pc+' %','Completado: '+pc+' %');
@@ -5145,6 +5253,148 @@ function dirPendiente(desde){ const n=DIRECTOS.length; for(let k=0;k<n;k++){ con
 function dirFallados(){ return DIRECTOS.filter(d=>dirOk(d)===false); }
 function dirNum(n){ return String(n).padStart(2,'0'); }
 function dirDur(s){ return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+let dirVista=null, dirDeNuevo=null, dirRep=null;   // dirVista: número del clip abierto (sale de la dirección) · dirDeNuevo: id del clip que se responde otra vez («Repetir» o repaso de fallos) · dirRep: {cola:[ids]}, el repaso de fallos en curso. Los dos últimos solo viven en memoria
+function dirNuevo(){ if(DIRECTOS.some(d=>dirResp(d))) return false; try{ return localStorage.getItem('agx-directos')!=='visto'; }catch(e){ return true; } }   // distintivo «Nuevo»: hasta que el alumno entra por primera vez (si ya ha respondido algo en otro dispositivo, tampoco sale)
+function dirVisto(){ try{ localStorage.setItem('agx-directos','visto'); }catch(e){} }
+function dirActual(){ return ruta==='formacion' && subForm==='directos' && dirVista ? DIRECTOS[dirVista-1]||null : null; }
+function dirLimpia(){ const d=dirActual(); if(dirDeNuevo && (!d || d.id!==dirDeNuevo)) dirDeNuevo=null; if(dirRep && (!d || !dirRep.cola.includes(d.id))) dirRep=null; }   // al salir del clip, «Repetir» y el repaso de fallos se olvidan
+function pararClip(){ const v=$('#dir-video'); if(v){ try{ v.pause(); }catch(e){} } }   // un vídeo quitado de la página puede seguir sonando: se para antes de repintar
+function plural(n,uno,varios){ return n+' '+(n===1?uno:varios); }
+/* Anillo de la portada: aciertos en verde y, a continuación, fallos en rojo; la pista que queda es lo que falta por responder */
+function anilloDirectos(p){
+  return `<div class="f-anillo dir-anillo" role="img" aria-label="${p.resp} de ${p.total} clips respondidos: ${plural(p.ok,'acierto','aciertos')} y ${plural(p.ko,'fallo','fallos')}">${anillo(p.resp/p.total,156,14,'','data-t="ko"')}${anillo(p.ok/p.total,156,14,'','data-t="ok"')}<div class="f-anillo-txt"><b>${p.resp}<small>/${p.total}</small></b><span>respondidos</span></div></div>`;
+}
+function vistaDirectos(){
+  const p=progresoDirectos(), T=p.total, sig=dirPendiente(0), nFal=p.ko, quedan=T-p.resp;
+  const marca=`${plural(p.ok,'acierto','aciertos')} y ${plural(p.ko,'fallo','fallos')}`;
+  const tit=!p.resp?`${T} clips de los directos de Alex`:(quedan?`${p.resp} de ${T} clips respondidos`:`Los ${T} clips respondidos`);
+  const sub=!p.resp?'Cada pregunta sale de un momento real de un directo: decides qué harías tú y, al responder, ves el clip en el que Alex lo explica.'
+    :(quedan?`${cap(marca)}. Te ${quedan===1?'queda 1 clip':'quedan '+quedan+' clips'} por responder.`
+    :(nFal?`${cap(marca)}. Repasa los que fallaste hasta dejarlos todos en verde.`:`Los ${T} acertados. Puedes volver a ver cualquier clip cuando quieras.`));
+  const cta=(sig?`<a class="boton blanco" href="#formacion/directos/${sig}">${p.resp?'Continuar: clip '+dirNum(sig):'Empezar'}</a>`:'')
+    +(nFal?`<button type="button" class="boton ${sig?'fantasma':'blanco'}" data-accion="dir-fallos">Repasar fallos (${nFal})</button>`:'');
+  const cats=Object.keys(DIR_CAT).map((c,k)=>{
+    const pc=progresoDirectos(null,c), nom=DIR_CAT[c].nombre;
+    const cards=DIRECTOS.map((d,i)=>{ if(d.cat!==c) return ''; const n=i+1, a=dirOk(d);
+      return `<li><a class="tecla dir-card ${a===null?'pend':(a?'ok':'ko')}${n===sig?' sig':''}" href="#formacion/directos/${n}"><span class="dir-ico" aria-hidden="true">${a===null?ICO.play:(a?ICO.check:ICO.cruz)}</span><span class="dir-txt"><span class="dir-meta"><small>Clip ${dirNum(n)} · ${nom} · ${dirDur(d.seg)}</small>${a===null?'':`<em class="dir-est ${a?'ok':'ko'}">${a?'Acertado':'Fallado'}</em>`}</span><b>${a===null?'Sin responder':esc(d.titulo)}</b></span></a></li>`; }).join('');
+    return `<section class="dir-cat entra" style="animation-delay:${0.05+k*0.04}s" aria-labelledby="dc-${c}">
+      <div class="ins-cab"><div class="ins-tit"><h2 id="dc-${c}">${nom}</h2><p class="dir-cat-d">${DIR_CAT[c].desc}</p></div>
+        <p class="dir-prog"><span>${pc.resp} de ${pc.total} respondidos${pc.resp?' · '+plural(pc.ok,'acierto','aciertos'):''}</span><span class="mini-barra dir-barra" aria-hidden="true">${pc.ok?`<span class="g" style="width:${pc.ok/pc.total*100}%"></span>`:''}${pc.ko?`<span class="p" style="width:${pc.ko/pc.total*100}%"></span>`:''}</span></p></div>
+      <ul class="dir-lista">${cards}</ul></section>`;
+  }).join('');
+  return `<header class="cab-modulo entra"><div><h1>Formación AGX</h1><p class="sub">Tests sacados de los directos de Alex: ${T} momentos reales de mercado, cada uno con su pregunta. Al responder ves el clip, con su explicación.</p></div></header>
+  ${tabsForm()}
+  <section class="hero hero-form dir-hero entra" aria-labelledby="d-tit">
+    ${anilloDirectos(p)}
+    <div><p class="hero-saludo">Tests de los directos</p><p class="f-titulo" id="d-tit">${tit}</p>
+      <p class="hero-sub">${sub}</p>
+      ${cta?`<div class="f-acc">${cta}</div>`:''}</div>
+    <ul class="ruta-datos"><li class="g"><b>${p.ok}</b><span>${p.ok===1?'acierto':'aciertos'}</span></li><li class="p"><b>${p.ko}</b><span>${p.ko===1?'fallo':'fallos'}</span></li><li><b>${quedan}</b><span>sin responder</span></li></ul>
+  </section>
+  ${cats}`;
+}
+/* El test de un clip. «fresco» = todavía no hay respuesta a la vista (sin responder, o respondiendo otra vez): ni el título, ni la clave, ni el vídeo
+   se pintan. Con respuesta: la opción correcta y la fallada marcadas, la explicación y el clip (modo repaso si el clip ya estaba respondido). */
+function vistaDirecto(n){
+  const d=DIRECTOS[n-1];
+  if(!d) return `<div class="admin-carga"><p>No encuentro ese clip.</p><a class="boton sec" href="#formacion/directos">Volver a los tests de los directos</a></div>`;
+  const T=DIRECTOS.length, cat=DIR_CAT[d.cat].nombre, r=dirResp(d), fresco=!r||dirDeNuevo===d.id, ok=!fresco&&r.o===d.correcta, p=progresoDirectos();
+  const iRep=dirRep?dirRep.cola.indexOf(d.id):-1;
+  const opciones=d.opciones.map((t,i)=>{
+    const cls=['opcion']; let ico='<span></span>', sr='';
+    if(!fresco){ if(i===d.correcta){ cls.push('bien'); ico=ICO.ok; sr=i===r.o?' (tu respuesta, correcta)':' (la correcta)'; } else if(i===r.o){ cls.push('mal'); ico=ICO.ko; sr=' (tu respuesta, incorrecta)'; } }
+    return `<li><button type="button" class="${cls.join(' ')}" data-accion="dir-opcion" data-o="${i}" aria-pressed="${!fresco&&i===r.o}"${fresco?'':' disabled'}><span class="letra">${'ABCD'[i]}</span><span>${esc(t)}${sr?`<span class="sr">${sr}</span>`:''}</span>${ico}</button></li>`;
+  }).join('');
+  const res=fresco?'':`<div class="dir-res" id="d-res">
+        <p class="veredicto-txt ${ok?'pos':'neg'}" id="d-ver" tabindex="-1">${ok?ICO.check+'Correcto':ICO.cruz+`Incorrecto, era la ${'ABCD'[d.correcta]}`}</p>
+        ${ok?'':`<p class="fallo-buena">Correcta: ${esc(d.opciones[d.correcta])}</p>`}
+      </div>`;
+  const exp=fresco?'':`<section class="panel dir-exp entra-lado" aria-labelledby="d-exp-t"><div class="panel-cuerpo">
+        <h2 class="dir-kicker" id="d-exp-t">Explicación</h2>
+        <div class="autor"><span class="avatar peq" aria-hidden="true">AG</span><span><b>Alex</b>, Método AGX</span></div>
+        <p class="explicacion">${esc(d.explicacion)}</p>
+      </div></section>`;
+  const clip=fresco
+    ?`<section class="panel dir-clip" aria-labelledby="d-clip-t"><div class="panel-cuerpo">
+        <h2 class="dir-kicker" id="d-clip-t">${ICO.video}El clip del directo</h2>
+        <div class="dir-pantalla apagada"><span class="dir-apagada-ico" aria-hidden="true">${ICO.candado}</span><p>Responde para ver el clip</p><small>Dura ${dirDur(d.seg)}</small></div>
+        <p class="aviso-txt">Elige una respuesta y aquí verás el momento del directo en el que Alex lo explica.</p>
+      </div></section>`
+    :`<section class="panel dir-clip entra-lado" aria-labelledby="d-clip-t"><div class="panel-cuerpo">
+        <p class="dir-kicker">${ICO.video}Así lo explica Alex en el directo</p>
+        <h2 class="dir-titulo" id="d-clip-t">${esc(d.titulo)}</h2>
+        <p class="dir-clave">${esc(d.clave)}</p>
+        <div class="dir-pantalla"><video id="dir-video" controls playsinline preload="none" poster="clips/${d.id}.jpg" src="clips/${d.id}.mp4" aria-label="Clip del directo: ${esc(d.titulo)}"></video></div>
+        <p class="dir-error" id="dir-error" role="alert" hidden><span>No se ha podido cargar el clip. Revisa tu conexión.</span><button type="button" class="enlace" data-accion="dir-reintentar">Reintentar</button></p>
+      </div></section>`;
+  let nav='';
+  if(!fresco){
+    if(iRep>=0) nav=`<button type="button" class="boton grande" data-accion="dir-sig">${iRep<dirRep.cola.length-1?'Siguiente clip':'Terminar el repaso'}</button>`;
+    else nav=`<button type="button" class="boton grande" data-accion="dir-sig">${dirPendiente(n)?'Siguiente clip':'Ver el resumen'}</button><button type="button" class="boton sec grande" data-accion="dir-repetir">Repetir</button>`;
+    if(iRep>=0 || dirPendiente(n)) nav+='<a class="boton sec grande" href="#formacion/directos">Volver</a>';
+  }
+  nav+=`<p class="atajos">Atajos: <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> para responder, <kbd>Intro</kbd> para seguir</p>`;
+  return `<header class="quiz-cab">
+    <div class="quiz-titulo"><a class="volver" href="#formacion/directos">${ICO.izq}Tests de los directos</a>
+      <h1>Clip ${dirNum(n)} de ${T} · ${cat}</h1></div>
+    <span class="racha dir-rep">${iRep>=0?`Repaso de fallos · ${iRep+1} de ${dirRep.cola.length}`:`${p.resp} de ${T} respondidos`}</span>
+  </header>
+  <div class="dir-test${fresco?' fresco':''}">
+    <section class="panel dir-preg" aria-labelledby="d-preg"><div class="preg-cuerpo">
+      <p class="p-num">Pregunta · clip de ${dirDur(d.seg)}</p>
+      <p class="enunciado" id="d-preg">${esc(d.pregunta)}</p>
+      <ol class="opciones">${opciones}</ol>
+      ${res}
+    </div></section>
+    ${clip}
+    ${exp}
+    <div class="dir-nav${fresco?' sola':''}">${nav}</div>
+  </div>`;
+}
+function trasDirectos(){
+  const v=$('#dir-video',vista); if(!v) return;
+  v.addEventListener('error',()=>{ const e=$('#dir-error'); if(e) e.hidden=false; });        // el error de un <video> no burbujea: se escucha en él
+  v.addEventListener('playing',()=>{ const e=$('#dir-error'); if(e) e.hidden=true; });
+}
+/* Tras responder: la respuesta, la explicación y el clip a la vista con el menor desplazamiento posible. Si no cabe todo, manda el veredicto arriba. */
+function dirALaVista(){
+  const ver=$('#d-ver'), clip=$('.dir-clip',vista), exp=$('.dir-exp',vista); if(!ver || !clip || !exp) return;
+  ver.focus({preventScroll:true});
+  const cs=getComputedStyle(document.documentElement), arriba=parseFloat(cs.scrollPaddingTop)||12, abajo=parseFloat(cs.scrollPaddingBottom)||12;
+  const una=clip.getBoundingClientRect().top>=ver.getBoundingClientRect().bottom-1;   // una columna: el clip va debajo de la pregunta y la explicación, detrás
+  const t=ver.getBoundingClientRect().top-arriba, b=(una?clip:exp).getBoundingClientRect().bottom-(window.innerHeight-abajo);
+  const dy=b>0?Math.min(b,Math.max(0,t)):(t<0?t:0);
+  if(Math.abs(dy)>1) window.scrollBy({top:dy,behavior:REDUCIR?'auto':'smooth'});
+}
+function elegirDirecto(o){
+  const d=dirActual(); if(!d || REV || !(o>=0 && o<d.opciones.length)) return;
+  if(dirResp(d) && dirDeNuevo!==d.id) return;      // ya respondido: no se cambia sin pasar por «Repetir»
+  const antes=progresoDirectos().resp;
+  if(!state.directos || typeof state.directos!=='object' || Array.isArray(state.directos)) state.directos={};
+  state.directos[d.id]={o,ok:o===d.correcta,f:iso(new Date())};
+  dirDeNuevo=null; guardar(); render(); dirALaVista();
+  if(antes<DIRECTOS.length && progresoDirectos().resp===DIRECTOS.length) setTimeout(confeti,250);
+}
+function dirSiguiente(){
+  const d=dirActual(); if(!d) return;
+  if(dirRep){
+    const cola=dirRep.cola, sig=cola[cola.indexOf(d.id)+1];
+    if(sig){ dirDeNuevo=sig; irRuta('formacion/directos/'+(DIRECTOS.findIndex(x=>x.id===sig)+1)); return; }
+    const bien=DIRECTOS.filter(x=>cola.includes(x.id) && dirOk(x)===true).length, nc=cola.length;
+    dirRep=null; irRuta('formacion/directos',()=>toast(`Repaso terminado: ${bien} de ${nc} ${nc===1?'acertado':'acertados'}`)); return;
+  }
+  const n=dirPendiente(dirVista); irRuta(n?'formacion/directos/'+n:'formacion/directos');
+}
+function dirRepetir(){
+  const d=dirActual(); if(!d || REV) return;
+  dirDeNuevo=d.id; render(); subir();
+  const b=$('[data-accion="dir-opcion"]',vista); if(b) b.focus({preventScroll:true});
+}
+function dirRepasar(){
+  const f=dirFallados(); if(REV) return;
+  if(!f.length){ toast('No tienes fallos pendientes'); return; }
+  dirRep={cola:f.map(d=>d.id)}; dirDeNuevo=f[0].id; irRuta('formacion/directos/'+(DIRECTOS.indexOf(f[0])+1));
+}
 
 const EXAMEN_N=30, EXAMEN_MIN=30, EXAMEN_FALLOS=3;
 
@@ -7432,8 +7682,9 @@ function trasAlumnos(){
 }
 
 /* ---------- Render y eventos ---------- */
-function leerRuta(){ const hs=location.hash, sub=s=>['estadisticas','plan'].includes(s)?s:'resumen'; if(/^#alumnos(\/|$)/.test(hs) && YO && YO.admin){ const pz=hs.split('/'); ruta='alumnos'; revId=pz[1]?decodeURIComponent(pz[1]):null; subDiario=sub(pz[2]); return; } revId=null; const m=/^#diario\/(\w+)$/.exec(hs); subDiario=sub(m&&m[1]); const mf=/^#formacion(?:\/(libre|l\/([\w-]+)))?$/.exec(hs); subForm=mf&&mf[1]==='libre'?'libre':'ruta'; lecVista=mf&&mf[2]?mf[2]:null; ruta=mf?'formacion':(hs==='#ranking'?'ranking':'diario'); }
+function leerRuta(){ const hs=location.hash, sub=s=>['estadisticas','plan'].includes(s)?s:'resumen'; if(/^#alumnos(\/|$)/.test(hs) && YO && YO.admin){ const pz=hs.split('/'); ruta='alumnos'; revId=pz[1]?decodeURIComponent(pz[1]):null; subDiario=sub(pz[2]); return; } revId=null; const m=/^#diario\/(\w+)$/.exec(hs); subDiario=sub(m&&m[1]); const mf=/^#formacion(?:\/(libre|directos(?:\/(\d{1,3}))?|l\/([\w-]+)))?$/.exec(hs); subForm=mf&&mf[1]==='libre'?'libre':(mf&&/^directos/.test(mf[1]||'')?'directos':'ruta'); lecVista=mf&&mf[3]?mf[3]:null; dirVista=mf&&mf[2]?Number(mf[2]):null; ruta=mf?'formacion':(hs==='#ranking'?'ranking':'diario'); }
 function render(){
+  pararClip(); dirLimpia();
   $$('.nav a').forEach(a=>{ if(a.dataset.ruta===ruta) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
   if(ro){ ro.disconnect(); ro=null; }
   if(!(ruta==='alumnos' && revId && REV && REV.id===revId)) salirRevision();
@@ -7518,6 +7769,11 @@ document.addEventListener('click',e=>{
     case 'bloque': state.bloque=BLOQUES.some(x=>x.id===b.dataset.b)?b.dataset.b:'of'; guardar(); transicion(()=>{ render(); const s=$('[data-accion="bloque"][aria-pressed="true"]'); if(s) s.focus({preventScroll:true}); }); break;
     case 'rapido': empezar('rapido',b.dataset.b||null); break;
     case 'fallos': empezar('fallos'); break;
+    case 'dir-opcion': elegirDirecto(Number(b.dataset.o)); break;
+    case 'dir-sig': dirSiguiente(); break;
+    case 'dir-repetir': dirRepetir(); break;
+    case 'dir-fallos': dirRepasar(); break;
+    case 'dir-reintentar': { const v=$('#dir-video'), er=$('#dir-error'); if(v){ if(er) er.hidden=true; v.load(); const pr=v.play(); if(pr && pr.catch) pr.catch(()=>{}); v.focus({preventScroll:true}); } } break;
     case 'rk-periodo': rank.periodo=b.dataset.p==='historico'?'historico':'mes'; { const l=$('#rk-lista'); if(l) l.innerHTML=filasRanking(datosRanking()); $$('[data-accion="rk-periodo"]').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.p===rank.periodo))); $$('.rk-av img',vista).forEach(i=>i.addEventListener('error',()=>i.remove(),{once:true})); } break;
     case 'reset-progreso': state.temas={}; state.examen=null; state.progresoEjemplo=false; guardar(); render(); toast('Progreso borrado'); break;
   }
@@ -7548,6 +7804,15 @@ document.addEventListener('keydown',e=>{
   }
   { const tg=(document.activeElement && document.activeElement.tagName)||'';
     if(e.key.toLowerCase()==='n' && !e.metaKey && !e.ctrlKey && !e.altKey && ruta==='diario' && tg!=='INPUT' && tg!=='TEXTAREA'){ e.preventDefault(); abrirCajon(null); return; } }
+  /* Atajos de los tests de los directos: A, B, C, D (o 1, 2, 3, 4) para responder; Intro o flecha derecha para seguir. Con el foco en el vídeo, las teclas son suyas */
+  if(ruta==='formacion' && !quiz && subForm==='directos' && dirVista){
+    const d=dirActual(), tg=(document.activeElement && document.activeElement.tagName)||'';
+    if(!d || e.metaKey || e.ctrlKey || e.altKey || tg==='INPUT' || tg==='TEXTAREA' || tg==='VIDEO') return;
+    const k=e.key.toLowerCase(), mapa={a:0,b:1,c:2,d:3,'1':0,'2':1,'3':2,'4':3}, fresco=!dirResp(d) || dirDeNuevo===d.id;
+    if(k in mapa){ if(fresco){ e.preventDefault(); elegirDirecto(mapa[k]); } }
+    else if((k==='enter'||k==='arrowright') && !fresco){ if((tg==='BUTTON'||tg==='A') && k==='enter') return; e.preventDefault(); dirSiguiente(); }
+    return;
+  }
   /* Atajos del test: A, B, C (o 1, 2, 3) para responder; Intro o flecha derecha para seguir */
   if(ruta!=='formacion' || !quiz || quiz.fin || e.metaKey || e.ctrlKey || e.altKey) return;
   const tag=(document.activeElement && document.activeElement.tagName)||'';
@@ -7601,9 +7866,9 @@ form.addEventListener('submit',e=>{
 });
 window.addEventListener('hashchange',()=>{
   if(!$('#instalar').hidden){ if(instalarFoco && vista.contains(instalarFoco)) instalarFoco=null; cerrarInstalar(); } // la hoja de instalar no se queda abierta sobre otra vista (gesto «atrás»); el foco no vuelve a algo que se va a repintar
-  const p=pedida && pedida.h===location.hash?pedida:null, antes=[ruta,lecVista,revId].join(); pedida=null;
+  const p=pedida && pedida.h===location.hash?pedida:null, antes=[ruta,lecVista,revId,dirVista].join(); pedida=null;
   transicion(()=>{ leerRuta(); render();
-    if(p && (p.nav || antes!==[ruta,lecVista,revId].join())) window.scrollTo(0,0); // otra vista (módulo, lección o alumno) empieza arriba: antes se quedaba a la altura de la anterior. Las pestañas de dentro de una vista y «atrás/adelante» siguen como estaban
+    if(p && (p.nav || antes!==[ruta,lecVista,revId,dirVista].join())) window.scrollTo(0,0); // otra vista (módulo, lección o alumno) empieza arriba: antes se quedaba a la altura de la anterior. Las pestañas de dentro de una vista y «atrás/adelante» siguen como estaban
     if(pendiente){ const f=pendiente; pendiente=null; f(); } });
 });
 const pin=$('#paleta-in');
