@@ -10,3 +10,16 @@
   [headers.values]
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
+
+# Clips de los tests de los directos: una semana de caché y fuera de los buscadores
+[[headers]]
+  for = "/clips/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+    X-Robots-Tag = "noindex"
+
+# El manifiesto de la app instalable con su tipo (sin esto sale como octet-stream)
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json; charset=utf-8"
