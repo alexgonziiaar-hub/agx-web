@@ -2321,6 +2321,11 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .dir-clave{font-size:15px;line-height:1.5;color:var(--tinta-2)}
 .dir-pantalla{position:relative;aspect-ratio:16 / 9;margin-top:2px;border:1px solid #05030C;border-radius:12px;overflow:hidden;background:#0B0719;box-shadow:0 1px 0 var(--hundido-luz)}
 .dir-pantalla video{display:block;width:100%;height:100%;object-fit:contain;background:#0B0719}
+@supports not (aspect-ratio:1){   /* navegadores sin aspect-ratio (iOS 14 y anteriores): la misma proporción con relleno */
+  .dir-pantalla:not(.apagada){height:0;padding-top:56.25%}
+  .dir-pantalla:not(.apagada) video{position:absolute;top:0;left:0}
+  .dir-pantalla.apagada{min-height:180px}
+}
 .dir-pantalla.apagada{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px;text-align:center;color:#BBAFE6;box-shadow:inset 0 4px 0 rgba(0,0,0,.55),0 1px 0 var(--hundido-luz);
   background:#0B0719 linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/100% 25%}
 .dir-pantalla.apagada p{font-size:15.5px;font-weight:700;color:#F0ECFF}
