@@ -2252,6 +2252,19 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .dir-anillo .f-anillo-txt b small{font-size:.52em;font-weight:760;color:var(--hero-tenue)}
 .dir-hero .ruta-datos li.g b{color:var(--pos-claro)}
 .dir-hero .ruta-datos li.p b{color:var(--neg-claro)}
+.dir-banda{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:6px 14px;padding:12px 16px 13px 12px;border-radius:16px;text-decoration:none;--k-alto:5px;--k-tinta:var(--tinta)}
+.dir-banda:hover{--k-borde:var(--morado)}
+.dir-banda-ico{display:grid;place-items:center;width:46px;height:46px;border-radius:13px;background:var(--marca-frente);color:#fff;box-shadow:inset 0 1px 0 var(--marca-cara),0 3px 0 var(--marca-lado);transform:translateY(-1px)}
+.dir-banda-ico svg{width:21px;height:21px}
+.dir-banda-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.dir-banda-txt b{display:flex;flex-wrap:wrap;align-items:center;gap:4px 9px;font-size:16.5px;font-weight:740;line-height:1.25}
+.dir-banda-txt small{font-size:13.5px;line-height:1.4;color:var(--tinta-2)}
+.dir-banda-n{padding:4px 11px;border-radius:999px;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz);color:var(--tinta-2);font-size:12.5px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.dir-banda-ir{display:grid;place-items:center;color:var(--morado)}
+.dir-banda-ir svg{width:16px;height:16px}
+.rev-dir{display:flex;align-items:center;gap:8px;margin:8px 0 0;font-size:14px;color:var(--tinta-2)}
+.rev-dir svg{flex:none;width:17px;height:17px;color:var(--morado)}
+.rev-dir b{color:var(--tinta);font-weight:700}
 .dir-cat{margin-top:30px}
 .dir-cat .ins-cab{align-items:flex-end;margin-bottom:13px}
 .dir-cat-d{margin:3px 0 0;font-size:13.5px;color:var(--tinta-2)}
@@ -2326,6 +2339,9 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   /* las tres pestañas caben a 360 px: cada rótulo en dos líneas */
   .sub-tabs.tres{gap:5px}
   .sub-tabs.tres a{flex:1 1 0;min-width:0;flex-wrap:wrap;gap:3px 6px;padding:6px 5px;white-space:normal;text-align:center;font-size:13.5px;font-stretch:94%;line-height:1.15}
+  .dir-banda{grid-template-columns:auto minmax(0,1fr) auto;padding:11px 12px 12px 11px}
+  .dir-banda-n{grid-column:2;grid-row:2;justify-self:start}
+  .dir-banda-ir{grid-column:3;grid-row:1 / 3}
   .dir-cat{margin-top:26px}
   .dir-cat .ins-cab{align-items:flex-start;flex-direction:column;gap:9px}
   .dir-prog{width:100%;justify-content:space-between}
@@ -5146,6 +5162,7 @@ function vistaRuta(){
       <div class="f-acc">${cta}<a class="boton fantasma" href="#formacion/libre">Repaso libre y examen final</a></div></div>
     <ul class="ruta-datos"><li><b>${RUTA_ACTIVOS.filter(nivOk).length}</b><span>niveles aprobados</span></li><li><b>${pr.ok}</b><span>lecciones aprobadas</span></li><li><b>${nPreg}</b><span>preguntas en la ruta</span></li></ul>
   </section>
+  ${bandaDirectos()}
   <div class="niveles">${niveles}</div>`;
 }
 
@@ -5260,6 +5277,11 @@ function dirActual(){ return ruta==='formacion' && subForm==='directos' && dirVi
 function dirLimpia(){ const d=dirActual(); if(dirDeNuevo && (!d || d.id!==dirDeNuevo)) dirDeNuevo=null; if(dirRep && (!d || !dirRep.cola.includes(d.id))) dirRep=null; }   // al salir del clip, «Repetir» y el repaso de fallos se olvidan
 function pararClip(){ const v=$('#dir-video'); if(v){ try{ v.pause(); }catch(e){} } }   // un vídeo quitado de la página puede seguir sonando: se para antes de repintar
 function plural(n,uno,varios){ return n+' '+(n===1?uno:varios); }
+/* Acceso desde la ruta por niveles: una banda-tecla entre la cabecera y los niveles */
+function bandaDirectos(){
+  const p=progresoDirectos();
+  return `<a class="tecla dir-banda entra" href="#formacion/directos"><span class="dir-banda-ico" aria-hidden="true">${ICO.play}</span><span class="dir-banda-txt"><b>Tests de los directos${dirNuevo()?'<span class="ia-chip nuevo-chip">Nuevo</span>':''}</b><small>${p.total} preguntas sacadas de los directos de Alex. Respondes y ves el clip en el que lo explica.</small></span><span class="dir-banda-n">${p.resp?p.resp+' de '+p.total:p.total+' clips'}</span><span class="dir-banda-ir" aria-hidden="true">${ICO.chev}</span></a>`;
+}
 /* Anillo de la portada: aciertos en verde y, a continuación, fallos en rojo; la pista que queda es lo que falta por responder */
 function anilloDirectos(p){
   return `<div class="f-anillo dir-anillo" role="img" aria-label="${p.resp} de ${p.total} clips respondidos: ${plural(p.ok,'acierto','aciertos')} y ${plural(p.ko,'fallo','fallos')}">${anillo(p.resp/p.total,156,14,'','data-t="ko"')}${anillo(p.ok/p.total,156,14,'','data-t="ok"')}<div class="f-anillo-txt"><b>${p.resp}<small>/${p.total}</small></b><span>respondidos</span></div></div>`;
@@ -5390,6 +5412,7 @@ function dirRepetir(){
   dirDeNuevo=d.id; render(); subir();
   const b=$('[data-accion="dir-opcion"]',vista); if(b) b.focus({preventScroll:true});
 }
+function revDirectos(){ const p=progresoDirectos(); return `<p class="rev-dir">${ICO.video}<span>Tests de los directos: ${p.resp?`<b>${p.resp} de ${p.total}</b> respondidos · ${plural(p.ok,'acierto','aciertos')} y ${plural(p.ko,'fallo','fallos')}`:'sin empezar'}</span></p>`; }   // lo ve el administrador en el diario de un alumno (solo lectura)
 function dirRepasar(){
   const f=dirFallados(); if(REV) return;
   if(!f.length){ toast('No tienes fallos pendientes'); return; }
@@ -5819,7 +5842,7 @@ async function asegurarGuardado(){ if(SERVIDOR && tGuardar){ clearTimeout(tGuard
 function cabDiario(){
   const tabs=[['resumen','Resumen'],['estadisticas','Estadísticas'],['plan','Plan e IA']];
   return `<header class="cab-modulo entra">
-    ${REV?`<div><a class="volver" href="#alumnos">${ICO.izq}Todos los alumnos</a><div class="rev-cab">${avatarR({discord_id:REV.id,nombre:REV.nombre,avatar_url:REV.avatar})}<h1>Diario de ${esc(REV.nombre)}</h1></div><p class="sub">Sus operaciones con la captura de ATAS, sus números y su plan. Abre una operación para dejarle tu comentario.</p></div>`
+    ${REV?`<div><a class="volver" href="#alumnos">${ICO.izq}Todos los alumnos</a><div class="rev-cab">${avatarR({discord_id:REV.id,nombre:REV.nombre,avatar_url:REV.avatar})}<h1>Diario de ${esc(REV.nombre)}</h1></div><p class="sub">Sus operaciones con la captura de ATAS, sus números y su plan. Abre una operación para dejarle tu comentario.</p>${revDirectos()}</div>`
     :`<div><h1>Diario de trading</h1><p class="sub">Cada operación con su captura de ATAS, su setup, su stop y su riesgo. Tus números y tu plan, revisado cada día por la IA.</p></div>
     <div class="cab-acc"><button type="button" class="boton sec btn-imp" data-accion="importar">${ICO.importar}Importar de ATAS</button><button type="button" class="boton grande" data-accion="nueva" aria-keyshortcuts="N">${ICO.mas}Nueva operación<kbd class="kbd-b" aria-hidden="true">N</kbd></button></div>`}
   </header>
@@ -7272,6 +7295,7 @@ function accionesPaleta(){
   a.push({g:'Formación',t:'Empezar examen final',k:'test dgt aprobar',f:()=>irRuta('formacion',()=>empezar('examen'))});
   a.push({g:'Formación',t:'Test rápido de 10 preguntas',k:'rapido aleatorio azar',f:()=>irRuta('formacion',()=>empezar('rapido',null))});
   a.push({g:'Formación',t:'Repasar mis fallos',k:'errores repaso',f:()=>irRuta('formacion',()=>empezar('fallos'))});
+  a.push({g:'Formación',t:'Tests de los directos',k:'clip clips video videos extracto alex preguntas',f:()=>irRuta('formacion/directos',()=>{ if(quiz){ quiz=null; pararReloj(); render(); } })});
   BLOQUES.forEach(bq=>a.push({g:'Formación',t:'Ver temario de '+bq.nombre,k:'bloque opciones order flow gex gamma',f:()=>irRuta('formacion/libre',()=>{ quiz=null; pararReloj(); state.bloque=bq.id; guardar(); render(); })}));
   TEMAS.forEach((t,i)=>a.push({g:'Formación',t:`Practicar tema ${i+1}: ${t.nombre}`,k:'test practica',f:()=>irRuta('formacion/libre',()=>empezar('practica',t.id))}));
   RUTA_ACTIVOS.forEach(n=>n.lecciones.forEach(l=>{ if(lecAbierta(l)) a.push({g:'Lecciones',t:l.titulo,k:'leccion teoria '+n.titulo,f:()=>irRuta('formacion/l/'+l.id)}); }));
@@ -7653,7 +7677,7 @@ function resumenAlumno(a){
   const temas=(a.datos && a.datos.temas)||{}; let dom=0;
   TEMAS.forEach(t=>{ const pr=temas[t.id]; if(pr) dom+=Math.min(pr.mejor,nTema(t.id)); });
   return { n:ts.length, nMes:mes.length, usdMes:mes.reduce((s,t)=>s+calc(t).usd,0), semana:ts.filter(t=>enSemana(t.fecha)).length,
-    sinCom:ts.filter(t=>!t.comentario).length, ult:ts.reduce((m,t)=>t.fecha>m?t.fecha:m,''), form:progresoRuta(a.datos||{}).pct, plan:resumenPlan(a), cuenta:evaluarCuenta(a.datos&&a.datos.cuenta,(a.datos&&a.datos.trades)||[],iso(new Date())) };
+    sinCom:ts.filter(t=>!t.comentario).length, ult:ts.reduce((m,t)=>t.fecha>m?t.fecha:m,''), form:progresoRuta(a.datos||{}).pct, dir:progresoDirectos(a.datos||{}), plan:resumenPlan(a), cuenta:evaluarCuenta(a.datos&&a.datos.cuenta,(a.datos&&a.datos.trades)||[],iso(new Date())) };
 }
 function vistaAlumnos(){
   const cab=`<header class="cab-modulo entra"><div><h1>Alumnos</h1><p class="sub">Las operaciones de cada alumno con su captura de ATAS. Entra en uno para revisar su diario y dejarle comentarios.</p></div>${adminLista?'<input type="search" class="al-buscar" id="al-buscar" placeholder="Buscar alumno" aria-label="Buscar alumno">':''}</header>`;
@@ -7672,6 +7696,7 @@ function vistaAlumnos(){
       <span class="al-stats"><span><b>${r.nMes}</b>ops. este mes</span><span class="${claseO(r.usdMes)}"><b>${r.nMes?fmtUSD(r.usdMes):MENOS}</b>resultado del mes</span><span><b>${Math.round(r.form*100)} %</b>formación</span></span>
       ${r.cuenta?`<span class="al-cta">${ESTADO_TXT[r.cuenta.estado]} · margen <b>${fmtValor(Math.round(r.cuenta.margen))}</b>${r.cuenta.objetivo?' · objetivo <b>'+Math.round(r.cuenta.objetivo.pct*100)+' %</b>':''}</span>`:''}
       <span class="al-plan">${r.plan?(r.plan.dias?`Plan cumplido <b>${r.plan.ok} de ${r.plan.dias}</b> días`:'Plan creado, sin días operados'):'Sin plan de trading'}${a.ultimoInforme&&a.ultimoInforme.puntuacion!=null?` · IA <b>${a.ultimoInforme.puntuacion}/10</b>`:''}</span>
+      ${r.dir.resp?`<span class="al-plan">Tests de los directos <b>${r.dir.resp} de ${r.dir.total}</b> · ${plural(r.dir.ok,'acierto','aciertos')}</span>`:''}
       ${r.sinCom?`<span class="al-pend">${r.sinCom} ${r.sinCom===1?'operación sin comentar':'operaciones sin comentar'}</span>`:(r.n?'<span class="al-ok">Todo revisado</span>':'')}
     </a>`).join('');
   return cab+kpis+`<div class="al-grid" id="al-grid">${cards}</div>`;
