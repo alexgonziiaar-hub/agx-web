@@ -5197,7 +5197,7 @@ function renderFormacion(){
     if(quiz.hash!==location.hash){ quiz=null; pararReloj(); }
   }
   if(quiz){ vista.innerHTML=quiz.fin?vistaResultado():vistaPregunta(); centrarNavegador(); return; }
-  if(subForm==='directos'){ dirVisto(); vista.innerHTML=dirVista?vistaDirecto(dirVista):vistaDirectos(); trasDirectos(); return; }
+  if(subForm==='directos'){ dirVisto(); vista.innerHTML=dirVista!=null?vistaDirecto(dirVista):vistaDirectos(); trasDirectos(); return; }
   if(subForm==='libre'){ vista.innerHTML=vistaFormacion(); const h=$('.cab-modulo',vista); if(h) h.insertAdjacentHTML('afterend',tabsForm()); const pc=Math.round(progresoForm().pct*100); odometro($('#f-pct'),pc+' %','Completado: '+pc+' %'); return; }
   if(lecVista){ vista.innerHTML=vistaLeccion(lecVista); return; }
   vista.innerHTML=vistaRuta(); const pc=Math.round(progresoRuta().pct*100); odometro($('#f-pct'),pc+' %','Completado: '+pc+' %');
@@ -7707,7 +7707,7 @@ function trasAlumnos(){
 }
 
 /* ---------- Render y eventos ---------- */
-function leerRuta(){ const hs=location.hash, sub=s=>['estadisticas','plan'].includes(s)?s:'resumen'; if(/^#alumnos(\/|$)/.test(hs) && YO && YO.admin){ const pz=hs.split('/'); ruta='alumnos'; revId=pz[1]?decodeURIComponent(pz[1]):null; subDiario=sub(pz[2]); return; } revId=null; const m=/^#diario\/(\w+)$/.exec(hs); subDiario=sub(m&&m[1]); const mf=/^#formacion(?:\/(libre|directos(?:\/(\d{1,3}))?|l\/([\w-]+)))?$/.exec(hs); subForm=mf&&mf[1]==='libre'?'libre':(mf&&/^directos/.test(mf[1]||'')?'directos':'ruta'); lecVista=mf&&mf[3]?mf[3]:null; dirVista=mf&&mf[2]?Number(mf[2]):null; ruta=mf?'formacion':(hs==='#ranking'?'ranking':'diario'); }
+function leerRuta(){ const hs=location.hash, sub=s=>['estadisticas','plan'].includes(s)?s:'resumen'; if(/^#alumnos(\/|$)/.test(hs) && YO && YO.admin){ const pz=hs.split('/'); ruta='alumnos'; revId=pz[1]?decodeURIComponent(pz[1]):null; subDiario=sub(pz[2]); return; } revId=null; const m=/^#diario\/(\w+)$/.exec(hs); subDiario=sub(m&&m[1]); const mf=/^#formacion(?:\/(libre|directos(?:\/(\d{1,3}))?|l\/([\w-]+)))?$/.exec(hs); subForm=mf&&mf[1]==='libre'?'libre':(mf&&/^directos/.test(mf[1]||'')?'directos':'ruta'); lecVista=mf&&mf[3]?mf[3]:null; dirVista=mf&&mf[2]!=null?Number(mf[2]):null; ruta=mf?'formacion':(hs==='#ranking'?'ranking':'diario'); }
 function render(){
   pararClip(); dirLimpia();
   $$('.nav a').forEach(a=>{ if(a.dataset.ruta===ruta) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
@@ -7830,7 +7830,7 @@ document.addEventListener('keydown',e=>{
   { const tg=(document.activeElement && document.activeElement.tagName)||'';
     if(e.key.toLowerCase()==='n' && !e.metaKey && !e.ctrlKey && !e.altKey && ruta==='diario' && tg!=='INPUT' && tg!=='TEXTAREA'){ e.preventDefault(); abrirCajon(null); return; } }
   /* Atajos de los tests de los directos: A, B, C, D (o 1, 2, 3, 4) para responder; Intro o flecha derecha para seguir. Con el foco en el vídeo, las teclas son suyas */
-  if(ruta==='formacion' && !quiz && subForm==='directos' && dirVista){
+  if(ruta==='formacion' && !quiz && subForm==='directos' && dirVista!=null){
     const d=dirActual(), tg=(document.activeElement && document.activeElement.tagName)||'';
     if(!d || e.metaKey || e.ctrlKey || e.altKey || tg==='INPUT' || tg==='TEXTAREA' || tg==='VIDEO') return;
     const k=e.key.toLowerCase(), mapa={a:0,b:1,c:2,d:3,'1':0,'2':1,'3':2,'4':3}, fresco=!dirResp(d) || dirDeNuevo===d.id;
