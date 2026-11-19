@@ -2295,20 +2295,16 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .dir-card.sig .dir-txt b{color:var(--morado)}
 /* --- el test de un clip --- */
 .dir-rep{color:var(--tinta-2);font-weight:650}
-.dir-test{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,7fr);grid-template-areas:"preg clip" "exp clip" "nav clip";grid-template-rows:auto auto 1fr;gap:18px 20px;align-items:start}
-.dir-test.fresco{grid-template-areas:"preg clip" "nav clip";grid-template-rows:auto 1fr}
+.dir-test{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,7fr);grid-template-areas:"preg lado" "nav lado";grid-template-rows:auto 1fr;gap:18px 20px;align-items:start}
 .dir-preg{grid-area:preg}
-.dir-clip{grid-area:clip;position:sticky;top:86px}
-.dir-exp{grid-area:exp}
+.dir-lado{grid-area:lado;display:flex;flex-direction:column;gap:18px;min-width:0}
 .dir-nav{grid-area:nav;display:flex;flex-wrap:wrap;align-items:center;gap:12px 10px;padding-bottom:6px}
-.dir-nav .atajos{margin-left:auto}
-.dir-preg .enunciado{max-width:none;font-size:20px;line-height:1.38;font-weight:660}
-.dir-res{display:flex;flex-direction:column;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--borde)}
-.dir-res p{margin:0}
+.dir-nav .atajos{flex:1 0 100%;margin:0}
+.dir-preg .enunciado{max-width:none;font-size:20px;line-height:1.4;font-weight:640}
+.dir-res{display:flex;flex-direction:column;gap:9px;margin-bottom:4px;padding-bottom:16px;border-bottom:1px solid var(--borde)}
 .dir-res .veredicto-txt{outline:0}
 .dir-res .fallo-buena{font-size:14.5px}
 .dir-clip .panel-cuerpo,.dir-exp .panel-cuerpo{display:flex;flex-direction:column;gap:12px;padding:20px}
-.dir-exp .panel-cuerpo{padding:22px 28px 24px}
 .dir-clip p,.dir-clip h2,.dir-exp p,.dir-exp h2{margin:0}
 .dir-exp .explicacion{font-size:16px;line-height:1.58}
 .dir-kicker{display:flex;align-items:center;gap:8px;color:var(--morado);font-size:12.5px;font-weight:800;letter-spacing:.06em;line-height:1.3;text-transform:uppercase}
@@ -2326,9 +2322,7 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .dir-error{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:11px 14px;border-radius:10px;background:var(--venta-suave);color:var(--venta);font-size:14.5px;font-weight:650}
 .dir-error .enlace{color:inherit;font-weight:750}
 @media (max-width:1060px){
-  .dir-test,.dir-test.fresco{grid-template-columns:minmax(0,1fr);grid-template-areas:"preg" "clip" "exp" "nav";grid-template-rows:none}
-  .dir-test.fresco{grid-template-areas:"preg" "clip" "nav"}
-  .dir-clip{position:static}
+  .dir-test{grid-template-columns:minmax(0,1fr);grid-template-areas:"preg" "lado" "nav";grid-template-rows:none}
   .dir-lista{grid-template-columns:repeat(2,minmax(0,1fr))}
   .dir-nav.sola{display:none}
 }
@@ -2345,6 +2339,8 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .dir-cat{margin-top:26px}
   .dir-cat .ins-cab{align-items:flex-start;flex-direction:column;gap:9px}
   .dir-prog{width:100%;justify-content:space-between}
+  .dir-prog>span:first-child{white-space:nowrap}
+  .dir-barra{flex:0 1 132px;width:auto;min-width:48px}
   .dir-lista{grid-template-columns:minmax(0,1fr);gap:11px}
   .dir-card{padding:9px 12px 10px 10px;gap:11px}
   .dir-preg .enunciado{font-size:18px;line-height:1.4}
@@ -5289,10 +5285,9 @@ function anilloDirectos(p){
 function vistaDirectos(){
   const p=progresoDirectos(), T=p.total, sig=dirPendiente(0), nFal=p.ko, quedan=T-p.resp;
   const marca=`${plural(p.ok,'acierto','aciertos')} y ${plural(p.ko,'fallo','fallos')}`;
-  const tit=!p.resp?`${T} clips de los directos de Alex`:(quedan?`${p.resp} de ${T} clips respondidos`:`Los ${T} clips respondidos`);
-  const sub=!p.resp?'Cada pregunta sale de un momento real de un directo: decides qué harías tú y, al responder, ves el clip en el que Alex lo explica.'
-    :(quedan?`${cap(marca)}. Te ${quedan===1?'queda 1 clip':'quedan '+quedan+' clips'} por responder.`
-    :(nFal?`${cap(marca)}. Repasa los que fallaste hasta dejarlos todos en verde.`:`Los ${T} acertados. Puedes volver a ver cualquier clip cuando quieras.`));
+  const tit=!p.resp?`${T} clips de los directos de Alex`:(quedan?`Te ${quedan===1?'queda 1 clip':'quedan '+quedan+' clips'} por responder`:`Los ${T} clips respondidos`);
+  const sub=quedan?'Cada pregunta sale de un momento real de un directo: decides qué harías tú y, al responder, ves el clip en el que Alex lo explica.'
+    :(nFal?`${cap(marca)}. Repasa los que fallaste hasta dejarlos todos en verde.`:`Los ${T} acertados. Puedes volver a ver cualquier clip cuando quieras.`);
   const cta=(sig?`<a class="boton blanco" href="#formacion/directos/${sig}">${p.resp?'Continuar: clip '+dirNum(sig):'Empezar'}</a>`:'')
     +(nFal?`<button type="button" class="boton ${sig?'fantasma':'blanco'}" data-accion="dir-fallos">Repasar fallos (${nFal})</button>`:'');
   const cats=Object.keys(DIR_CAT).map((c,k)=>{
@@ -5316,7 +5311,8 @@ function vistaDirectos(){
   ${cats}`;
 }
 /* El test de un clip. «fresco» = todavía no hay respuesta a la vista (sin responder, o respondiendo otra vez): ni el título, ni la clave, ni el vídeo
-   se pintan. Con respuesta: la opción correcta y la fallada marcadas, la explicación y el clip (modo repaso si el clip ya estaba respondido). */
+   se pintan. Con respuesta: la opción correcta y la fallada marcadas y, al lado (debajo en móvil y tableta), el veredicto con el clip y la explicación
+   (modo repaso si el clip ya estaba respondido). */
 function vistaDirecto(n){
   const d=DIRECTOS[n-1];
   if(!d) return `<div class="admin-carga"><p>No encuentro ese clip.</p><a class="boton sec" href="#formacion/directos">Volver a los tests de los directos</a></div>`;
@@ -5343,6 +5339,7 @@ function vistaDirecto(n){
         <p class="aviso-txt">Elige una respuesta y aquí verás el momento del directo en el que Alex lo explica.</p>
       </div></section>`
     :`<section class="panel dir-clip entra-lado" aria-labelledby="d-clip-t"><div class="panel-cuerpo">
+        ${res}
         <p class="dir-kicker">${ICO.video}Así lo explica Alex en el directo</p>
         <h2 class="dir-titulo" id="d-clip-t">${esc(d.titulo)}</h2>
         <p class="dir-clave">${esc(d.clave)}</p>
@@ -5366,10 +5363,8 @@ function vistaDirecto(n){
       <p class="p-num">Pregunta · clip de ${dirDur(d.seg)}</p>
       <p class="enunciado" id="d-preg">${esc(d.pregunta)}</p>
       <ol class="opciones">${opciones}</ol>
-      ${res}
     </div></section>
-    ${clip}
-    ${exp}
+    <div class="dir-lado">${clip}${exp}</div>
     <div class="dir-nav${fresco?' sola':''}">${nav}</div>
   </div>`;
 }
@@ -5378,13 +5373,13 @@ function trasDirectos(){
   v.addEventListener('error',()=>{ const e=$('#dir-error'); if(e) e.hidden=false; });        // el error de un <video> no burbujea: se escucha en él
   v.addEventListener('playing',()=>{ const e=$('#dir-error'); if(e) e.hidden=true; });
 }
-/* Tras responder: la respuesta, la explicación y el clip a la vista con el menor desplazamiento posible. Si no cabe todo, manda el veredicto arriba. */
+/* Tras responder: la placa del clip (veredicto arriba, vídeo abajo) entera a la vista con el menor desplazamiento posible; si no cabe, manda el veredicto.
+   En ordenador va al lado de la pregunta y casi nunca hay que mover nada; en el móvil queda justo debajo de las opciones. */
 function dirALaVista(){
-  const ver=$('#d-ver'), clip=$('.dir-clip',vista), exp=$('.dir-exp',vista); if(!ver || !clip || !exp) return;
+  const ver=$('#d-ver'), clip=$('.dir-clip',vista); if(!ver || !clip) return;
   ver.focus({preventScroll:true});
-  const cs=getComputedStyle(document.documentElement), arriba=parseFloat(cs.scrollPaddingTop)||12, abajo=parseFloat(cs.scrollPaddingBottom)||12;
-  const una=clip.getBoundingClientRect().top>=ver.getBoundingClientRect().bottom-1;   // una columna: el clip va debajo de la pregunta y la explicación, detrás
-  const t=ver.getBoundingClientRect().top-arriba, b=(una?clip:exp).getBoundingClientRect().bottom-(window.innerHeight-abajo);
+  const cs=getComputedStyle(document.documentElement), arriba=parseFloat(cs.scrollPaddingTop)||12, abajo=parseFloat(cs.scrollPaddingBottom)||12, r=clip.getBoundingClientRect();
+  const t=r.top-arriba, b=r.bottom-(window.innerHeight-abajo);
   const dy=b>0?Math.min(b,Math.max(0,t)):(t<0?t:0);
   if(Math.abs(dy)>1) window.scrollBy({top:dy,behavior:REDUCIR?'auto':'smooth'});
 }
