@@ -2294,13 +2294,21 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .dir-card.pend .dir-txt b{font-weight:600;color:var(--tinta-2)}
 .dir-card.sig .dir-txt b{color:var(--morado)}
 /* --- el test de un clip --- */
-.dir-rep{color:var(--tinta-2);font-weight:650}
+.dir-cab{display:block}
+.dir-cab-fila{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;margin-bottom:8px}
+.dir-cab .volver{margin-bottom:0}
+.dir-cab h1{font-size:25px}
+.dir-rep{padding:5px 12px;color:var(--tinta-2);font-size:13.5px;font-weight:650}
 .dir-test{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,7fr);grid-template-areas:"preg lado" "nav lado";grid-template-rows:auto 1fr;gap:18px 20px;align-items:start}
 .dir-preg{grid-area:preg}
 .dir-lado{grid-area:lado;display:flex;flex-direction:column;gap:18px;min-width:0}
 .dir-nav{grid-area:nav;display:flex;flex-wrap:wrap;align-items:center;gap:12px 10px;padding-bottom:6px}
 .dir-nav .atajos{flex:1 0 100%;margin:0}
-.dir-preg .enunciado{max-width:none;font-size:20px;line-height:1.4;font-weight:640}
+.dir-preg .preg-cuerpo{padding:22px 24px 22px}
+.dir-preg .p-num{margin-bottom:8px}
+.dir-preg .enunciado{max-width:none;font-size:19.5px;line-height:1.4;font-weight:640}
+.dir-preg .opciones{gap:11px;margin-top:20px}
+.dir-preg .opcion{padding-block:11px}
 .dir-res{display:flex;flex-direction:column;gap:9px;margin-bottom:4px;padding-bottom:16px;border-bottom:1px solid var(--borde)}
 .dir-res .veredicto-txt{outline:0}
 .dir-res .fallo-buena{font-size:14.5px}
@@ -2316,7 +2324,7 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .dir-pantalla.apagada{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px;text-align:center;color:#BBAFE6;box-shadow:inset 0 4px 0 rgba(0,0,0,.55),0 1px 0 var(--hundido-luz);
   background:#0B0719 linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 0/100% 25%}
 .dir-pantalla.apagada p{font-size:15.5px;font-weight:700;color:#F0ECFF}
-.dir-pantalla.apagada small{font-size:13px;font-variant-numeric:tabular-nums}
+.dir-pantalla.apagada small{max-width:34ch;font-size:13px;line-height:1.4;font-variant-numeric:tabular-nums;text-wrap:balance}
 .dir-apagada-ico{display:grid;place-items:center;width:46px;height:46px;margin-bottom:4px;border:1px solid rgba(255,255,255,.16);border-radius:50%;color:#BBAFE6}
 .dir-apagada-ico svg{width:22px;height:22px}
 .dir-error{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:11px 14px;border-radius:10px;background:var(--venta-suave);color:var(--venta);font-size:14.5px;font-weight:650}
@@ -2343,17 +2351,29 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .dir-barra{flex:0 1 132px;width:auto;min-width:48px}
   .dir-lista{grid-template-columns:minmax(0,1fr);gap:11px}
   .dir-card{padding:9px 12px 10px 10px;gap:11px}
+  .dir-cab h1{font-size:22px}
+  .dir-rep{padding:4px 10px;font-size:13px}
+  .dir-preg .preg-cuerpo{padding:18px 14px 18px}
   .dir-preg .enunciado{font-size:18px;line-height:1.4}
+  .dir-preg .opciones{gap:12px}
+  .dir-preg .opcion{padding-block:12px}
   .dir-clip .panel-cuerpo,.dir-exp .panel-cuerpo{padding:18px 14px 14px}
   .dir-exp .panel-cuerpo{padding-bottom:18px}
   .dir-titulo{font-size:20px}
   /* el vídeo, a todo el ancho de la placa */
   .dir-pantalla{margin:2px -14px 0;border-inline:0;border-radius:0}
   .dir-clip .dir-pantalla:last-child,.dir-clip .dir-pantalla:has(+[hidden]:last-child){margin-bottom:-14px;border-bottom:0;border-radius:0 0 15px 15px;box-shadow:none}
-  .dir-pantalla.apagada{margin-bottom:0}
   .dir-nav{gap:14px 10px}
   .dir-nav .boton{flex:1 1 auto}
   .dir-nav .boton[data-accion="dir-sig"]{flex-basis:100%}
+}
+@media (max-width:380px){
+  .dir-cab .volver,.dir-rep{font-stretch:88%}
+  /* a 360 px las opciones ganan un 10 % de ancho de texto: menos líneas por opción */
+  .dir-preg .preg-cuerpo{padding-inline:10px}
+  .dir-preg .opcion{grid-template-columns:34px minmax(0,1fr) 24px;gap:9px;padding-inline:9px 10px;font-size:15.5px}
+  .dir-preg .letra{width:34px;height:34px}
+  .dir-preg .opcion .ico{width:24px;height:24px}
 }
 </style>
 
@@ -5335,8 +5355,7 @@ function vistaDirecto(n){
   const clip=fresco
     ?`<section class="panel dir-clip" aria-labelledby="d-clip-t"><div class="panel-cuerpo">
         <h2 class="dir-kicker" id="d-clip-t">${ICO.video}El clip del directo</h2>
-        <div class="dir-pantalla apagada"><span class="dir-apagada-ico" aria-hidden="true">${ICO.candado}</span><p>Responde para ver el clip</p><small>Dura ${dirDur(d.seg)}</small></div>
-        <p class="aviso-txt">Elige una respuesta y aquí verás el momento del directo en el que Alex lo explica.</p>
+        <div class="dir-pantalla apagada"><span class="dir-apagada-ico" aria-hidden="true">${ICO.candado}</span><p>Responde para ver el clip</p><small>El momento del directo en el que Alex lo explica · ${dirDur(d.seg)}</small></div>
       </div></section>`
     :`<section class="panel dir-clip entra-lado" aria-labelledby="d-clip-t"><div class="panel-cuerpo">
         ${res}
@@ -5353,10 +5372,9 @@ function vistaDirecto(n){
     if(iRep>=0 || dirPendiente(n)) nav+='<a class="boton sec grande" href="#formacion/directos">Volver</a>';
   }
   nav+=`<p class="atajos">Atajos: <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> para responder, <kbd>Intro</kbd> para seguir</p>`;
-  return `<header class="quiz-cab">
-    <div class="quiz-titulo"><a class="volver" href="#formacion/directos">${ICO.izq}Tests de los directos</a>
-      <h1>Clip ${dirNum(n)} de ${T} · ${cat}</h1></div>
-    <span class="racha dir-rep">${iRep>=0?`Repaso de fallos · ${iRep+1} de ${dirRep.cola.length}`:`${p.resp} de ${T} respondidos`}</span>
+  return `<header class="quiz-cab dir-cab">
+    <div class="dir-cab-fila"><a class="volver" href="#formacion/directos">${ICO.izq}Tests de los directos</a><span class="racha dir-rep">${iRep>=0?`Repaso de fallos · ${iRep+1} de ${dirRep.cola.length}`:`${p.resp} de ${T} respondidos`}</span></div>
+    <h1>Clip ${dirNum(n)} de ${T} · ${cat}</h1>
   </header>
   <div class="dir-test${fresco?' fresco':''}">
     <section class="panel dir-preg" aria-labelledby="d-preg"><div class="preg-cuerpo">
