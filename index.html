@@ -2294,6 +2294,7 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .dir-lista li{display:flex;min-width:0}
 .dir-card{position:relative;flex:1;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px;min-width:0;min-height:66px;padding:10px 14px 12px 11px;border-radius:14px;text-decoration:none;--k-tinta:var(--tinta)}
 .dir-card:hover{--k-borde:var(--morado)}
+@media (min-width:641px){ .dir-card{align-items:start} }   /* en rejilla, las tarjetas de una fila miden lo que la más alta: todo arriba, para que «Pregunta NN» y el nombre empiecen a la misma altura */
 .dir-ico{display:grid;place-items:center;width:40px;height:40px;border-radius:11px;background:var(--hundido);box-shadow:inset 0 2px 0 var(--hundido-sombra),0 1px 0 var(--hundido-luz);color:var(--tinta-2)}
 .dir-ico svg{width:18px;height:18px}
 .dir-card.ok .dir-ico{background:var(--gana-cara);color:var(--gana-tinta);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 3px 0 var(--gana-frente);transform:translateY(-2px)}
