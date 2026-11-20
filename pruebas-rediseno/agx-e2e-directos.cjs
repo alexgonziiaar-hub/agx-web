@@ -25,12 +25,15 @@
  *   - OJO: este Chromium no trae H.264/AAC: no puede reproducir los clips. Se comprueba todo menos la reproducción.
  *
  * GANCHOS de los que depende (sin selectores de clase):
- *   - Rutas: #formacion/directos (portada) y #formacion/directos/<número> (clip 1…TOTAL). Enlaces <a href> a esas rutas.
+ *   - Rutas: #formacion/directos (portada) y #formacion/directos/<número> (pregunta 1…TOTAL). Enlaces <a href> a esas rutas.
+ *   - La unidad es la PREGUNTA («Pregunta 07», «Siguiente pregunta»); «clip» es solo el vídeo. Cada pregunta tiene un «nombre» (DIRECTOS[i].nombre) que se
+ *     enseña antes de responder; el título del clip (DIRECTOS[i].titulo), no.
  *   - <nav aria-label="Secciones de la formación"> con el enlace «Directos» (aria-current="page" cuando toca).
  *   - Portada: #d-tit, un role="img" con el resumen del anillo, [data-accion="dir-fallos"] y una <section aria-labelledby="dc-C|E|G|P"> por categoría
- *     con un <details data-c="C|E|G|P"> plegable dentro (su <summary> es la cabecera: nombre, descripción y «n de m»; dentro, la lista de clips).
+ *     con un <details data-c="C|E|G|P"> plegable dentro (su <summary> es la cabecera: nombre, descripción y «n de m»; dentro, primero la lista de las
+ *     pendientes y, si hay respondidas, otro <details> sin data-c con su <summary> «Ver las N respondidas» y la lista de las respondidas).
  *     Lo que el alumno abre o cierra se apunta en localStorage «agx-directos-cats» = {"C":1,"E":0…} (no en su estado).
- *   - Test: #d-preg (pregunta), [data-accion="dir-opcion"][data-o="0…3"] (aria-pressed, disabled), #d-ver (veredicto),
+ *   - Test: <h1> = nombre de la pregunta, con «Pregunta NN de TOTAL · Categoría» en el elemento justo antes; #d-preg (enunciado), [data-accion="dir-opcion"][data-o="0…3"] (aria-pressed, disabled), #d-ver (veredicto),
  *     #d-clip-t (título del clip o rótulo de la pantalla apagada), #dir-video, #dir-error (role="alert"),
  *     [data-accion="dir-sig"], [data-accion="dir-repetir"], [data-accion="dir-reintentar"], [data-accion="dir-ant"] («Anterior», al repasar con
  *     todo respondido).
@@ -218,9 +221,9 @@ async function sembrar(page, estado, url) { // deja un estado guardado (modo eje
 async function estadoClip(page) {
   return page.evaluate(() => {
     const v = document.getElementById('vista'), q = document.getElementById('d-preg'); if (!q) return null;
-    const t = v.querySelector('h1'), m = /Clip (\d+) de (\d+) · (.+)/.exec(t ? t.textContent : '') || [];
+    const t = v.querySelector('h1'), c = t && t.previousElementSibling, m = /^Pregunta (\d+) de (\d+) · (.+)$/.exec(c ? c.textContent.replace(/\s+/g, ' ').trim() : '') || [];
     const ver = document.getElementById('d-ver'), vid = document.getElementById('dir-video');
-    return { n: Number(m[1]), total: Number(m[2]), cat: m[3], q: q.textContent,
+    return { n: Number(m[1]), total: Number(m[2]), cat: m[3], nombre: t ? t.textContent.replace(/\s+/g, ' ').trim() : null, q: q.textContent,
       ops: Array.from(v.querySelectorAll('[data-accion="dir-opcion"]')).map((b) => ({ o: Number(b.dataset.o), t: b.textContent, pulsada: b.getAttribute('aria-pressed') === 'true', off: b.disabled })),
       ver: ver ? ver.textContent : null, video: !!vid, videos: document.querySelectorAll('video').length };
   });
@@ -236,18 +239,26 @@ const CLAVE_CATS = 'agx-directos-cats';
 const abiertas = (page) => page.evaluate(() => Array.from(document.querySelectorAll('#vista details[data-c]')).filter((d) => d.open).map((d) => d.dataset.c).join(''));
 const apuntadas = (page) => page.evaluate((k) => localStorage.getItem(k), CLAVE_CATS);
 const cabecera = (page, c) => page.locator(`#vista details[data-c="${c}"] > summary`);
-async function tarjeta(page, n) {
+async function tarjeta(page, n) { // abre, como el alumno (pulsando su <summary>), la categoría y, si es una respondida, su plegable «Ver las N respondidas»
   const a = page.locator(`#vista ul a[href="#formacion/directos/${n}"]`);
-  const cerrada = await a.evaluate((e) => { const d = e.closest('details'); return d && !d.open ? d.dataset.c : null; });
-  if (cerrada) { await cabecera(page, cerrada).click(); await a.waitFor({ state: 'visible' }); }
+  for (let k = 0; k < 3; k++) {
+    const hay = await a.evaluate((e) => { const ds = []; for (let d = e.closest('details'); d; d = d.parentElement.closest('details')) ds.unshift(d); const c = ds.find((d) => !d.open); if (c) c.setAttribute('data-prueba-abrir', ''); return !!c; });
+    if (!hay) break;
+    await page.locator('#vista details[data-prueba-abrir] > summary').click();
+    await page.evaluate(() => document.querySelectorAll('[data-prueba-abrir]').forEach((d) => d.removeAttribute('data-prueba-abrir')));
+  }
+  await a.waitFor({ state: 'visible' });
   return a;
 }
+const cabTest = (page) => page.locator('#vista h1').locator('xpath=preceding-sibling::*[1]'); // «Pregunta NN de TOTAL · Categoría»
+const hechas = (page, c) => page.locator(`#vista details[data-c="${c}"] details > summary`); // «Ver las N respondidas» de una categoría
+const escHtml = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const catDe = (n) => { let a = 0; for (const [c, , k] of REPARTO) { a += k; if (n <= a) return c; } return null; }; // categoría del clip número n
-/* Nada de lo que regala la respuesta puede estar en la vista: ni el título, ni el id (es el título en minúsculas), ni la clave, ni la explicación */
+/* Nada de lo que regala la respuesta puede estar en la vista: ni el título (ni en el texto ni en ningún atributo), ni el id (es el título en minúsculas), ni la clave, ni la explicación */
 async function fugas(page, ds) {
   const { html, texto } = await page.evaluate(() => { const v = document.getElementById('vista'); return { html: v.innerHTML, texto: v.textContent }; });
   const t = norm(texto), out = [];
-  ds.forEach((d) => { if (t.includes(norm(d.titulo))) out.push('título de ' + d.id); if (html.includes(d.id)) out.push('id ' + d.id); if (t.includes(norm(d.clave))) out.push('clave de ' + d.id); if (t.includes(norm(d.explicacion))) out.push('explicación de ' + d.id); });
+  ds.forEach((d) => { if (t.includes(norm(d.titulo))) out.push('título de ' + d.id); if (html.includes(d.titulo) || html.includes(escHtml(d.titulo))) out.push('título (en el HTML) de ' + d.id); if (html.includes(d.id)) out.push('id ' + d.id); if (t.includes(norm(d.clave))) out.push('clave de ' + d.id); if (t.includes(norm(d.explicacion))) out.push('explicación de ' + d.id); });
   return out;
 }
 async function medir(page, ancho) {
@@ -347,13 +358,22 @@ async function gDatos(g, env) {
     g.ok('Por categoría: ' + REPARTO.map(([, nom, n]) => `${nom} ${n}`).join(', '), REPARTO.every(([c, , n]) => por(c) === n), REPARTO.map(([c]) => `${c} ${por(c)}`).join(', '));
     g.ok('Las categorías, con su nombre y en su orden', igualJSON(Object.keys(env.CATS), REPARTO.map((r) => r[0])) && REPARTO.every(([c, nom]) => env.CATS[c].nombre === nom), JSON.stringify(env.CATS));
     g.ok('Van agrupados por categoría y en el orden ' + REPARTO.map((r) => r[0]).join(', '), D.map((d) => d.cat).join('') === REPARTO.map(([c, , n]) => c.repeat(n)).join(''), D.map((d) => d.cat).join(''));
-    const campos = ['id', 'cat', 'tema', 'titulo', 'pregunta', 'opciones', 'correcta', 'explicacion', 'clave', 'seg'];
-    const malos = D.filter((d) => !igualJSON(Object.keys(d).sort(), campos.slice().sort()) || !/^[CEGP]\d\d_[a-z0-9-]+$/.test(d.id) || d.id[0] !== d.cat || d.tema !== d.id.slice(0, 3)
+    const campos = ['id', 'cat', 'tema', 'titulo', 'nombre', 'pregunta', 'opciones', 'correcta', 'explicacion', 'clave', 'seg'];
+    const malos = D.filter((d) => !igualJSON(Object.keys(d), campos) || !/^[CEGP]\d\d_[a-z0-9-]+$/.test(d.id) || d.id[0] !== d.cat || d.tema !== d.id.slice(0, 3)
       || !Array.isArray(d.opciones) || d.opciones.length !== 4 || d.opciones.some((o) => typeof o !== 'string' || o.length < 10) || new Set(d.opciones).size !== 4
       || !Number.isInteger(d.correcta) || d.correcta < 0 || d.correcta > 3 || !Number.isInteger(d.seg) || d.seg < 5 || d.seg > 600
       || [d.titulo, d.pregunta, d.explicacion, d.clave].some((t) => typeof t !== 'string' || t.length < 15) || !/^En el clip: /.test(d.clave));
-    g.ok('Cada una con sus diez campos, cuatro opciones distintas, la correcta entre 0 y 3 y la clave «En el clip: …»', malos.length === 0, malos.map((d) => d.id).join(', '));
+    g.ok('Cada una con sus once campos (en su orden), cuatro opciones distintas, la correcta entre 0 y 3 y la clave «En el clip: …»', malos.length === 0, malos.map((d) => d.id).join(', '));
     g.ok('Ids sin repetir', new Set(D.map((d) => d.id)).size === D.length);
+    const malN = D.filter((d) => typeof d.nombre !== 'string' || d.nombre !== d.nombre.trim() || d.nombre.length < 10 || d.nombre.length > 50);
+    g.ok(`Los ${TOTAL} tienen nombre de pregunta, de 10 a 50 caracteres`, malN.length === 0, malN.map((d) => `${d.id}: «${d.nombre}»`).slice(0, 4).join(', '));
+    g.ok('…sin repetir', new Set(D.map((d) => String(d.nombre).toLowerCase())).size === D.length);
+    const igualT = D.filter((d) => norm(d.nombre).toLowerCase() === norm(d.titulo).toLowerCase() || norm(d.titulo).toLowerCase().includes(norm(d.nombre).toLowerCase()));
+    g.ok('…ninguno igual a su título (ni contenido en él: el título es la respuesta)', igualT.length === 0, igualT.map((d) => d.id).slice(0, 4).join(', '));
+    const conT = D.filter((d) => D.some((e) => norm(d.nombre).toLowerCase().includes(norm(e.titulo).toLowerCase())));
+    g.ok('…y ninguno contiene el título de ningún clip', conT.length === 0, conT.map((d) => d.id).slice(0, 4).join(', '));
+    const conClip = D.filter((d) => /clip|gonci|[<>]/i.test(d.nombre));
+    g.ok('…sin «clip», «gonci» ni HTML', conClip.length === 0, conClip.map((d) => `«${d.nombre}»`).slice(0, 4).join(', '));
     g.ok('Sin «gonci» en los textos (siempre «Patrón Gonzi»)', !D.some((d) => /gonci/i.test([d.titulo, d.pregunta, d.explicacion, d.clave].concat(d.opciones).join(' '))));
     g.ok('…ni en los id, ni en ninguna otra parte de DIRECTOS', !/gonci/i.test(JSON.stringify(D)), D.filter((d) => /gonci/i.test(JSON.stringify(d))).map((d) => d.id).join(', '));
     g.ok('Ordenados por id', igualJSON(D.map((d) => d.id), D.map((d) => d.id).sort()));
@@ -435,7 +455,8 @@ async function gEjemplo(g, env) {
     await g.txt('La tercera es «Directos» y lleva el distintivo «Nuevo»', tab, 'DirectosNuevo');
     const banda = page.locator('#vista > a[href="#formacion/directos"]');
     await g.cuenta('En la ruta hay un acceso a los tests de los directos (además de la pestaña)', banda, 1);
-    await g.partes('…que dice qué son, con el distintivo «Nuevo»', banda, ['Tests de los directos', 'Nuevo', `${TOTAL} preguntas sacadas de los directos de Alex.`, `${TOTAL} clips`]);
+    await g.partes('…que dice qué son, con el distintivo «Nuevo» y cuántas preguntas hay', banda, ['Tests de los directos', 'Nuevo', 'Preguntas sacadas de momentos reales de los directos de Alex.', `${TOTAL} preguntas`]);
+    g.ok('…sin «clip» como unidad', !/\b\d+ clips?\b/i.test(norm(await banda.textContent())), norm(await banda.textContent()));
     g.ok('La ruta no pinta ningún título ni id de clip', (await fugas(page, D)).length === 0, (await fugas(page, D)).slice(0, 3).join(', '));
     await tab.click();
     await g.igual('Pulsar la pestaña: URL', () => hashDe(page), '#formacion/directos');
@@ -446,32 +467,36 @@ async function gEjemplo(g, env) {
     await g.igual('…y queda apuntado en el dispositivo', () => page.evaluate(() => localStorage.getItem('agx-directos')), 'visto');
     await tabs(page).getByRole('link', { name: 'Ruta por niveles' }).click();
     await g.igual('Volver a la ruta: URL', () => hashDe(page), '#formacion');
-    await g.cumple('…y el acceso de la ruta ya no dice «Nuevo»', async () => norm(await page.locator('#vista > a[href="#formacion/directos"]').textContent()), (t) => t.startsWith(`Tests de los directos${TOTAL} preguntas`));
+    await g.cumple('…y el acceso de la ruta ya no dice «Nuevo»', async () => norm(await page.locator('#vista > a[href="#formacion/directos"]').textContent()), (t) => t.startsWith('Tests de los directosPreguntas sacadas'));
     await page.goBack();
     await g.igual('Atrás del navegador vuelve a la portada de los directos', () => hashDe(page), '#formacion/directos');
     await g.attr('…con su pestaña marcada', tabs(page).locator('a[href="#formacion/directos"]'), 'aria-current', 'page');
   });
 
   await g.seccion('Portada sin nada respondido', async () => {
-    await g.txt('Rótulo de la placa', page.locator('#d-tit'), `${TOTAL} clips de los directos de Alex`);
-    await g.cuenta('Anillo de progreso con su resumen', v.getByRole('img', { name: `0 de ${TOTAL} clips respondidos: 0 aciertos y 0 fallos` }), 1);
-    await g.partes('Cifras: aciertos, fallos y sin responder', v.locator('section[aria-labelledby="d-tit"]'), [`0/${TOTAL}`, 'respondidos', 'Tests de los directos', '0', 'aciertos', '0', 'fallos', `${TOTAL}`, 'sin responder']);
+    await g.txt('Rótulo de la placa', page.locator('#d-tit'), `${TOTAL} preguntas de los directos de Alex`);
+    await g.cuenta('Anillo de progreso con su resumen', v.getByRole('img', { name: `0 de ${TOTAL} preguntas respondidas: 0 aciertos y 0 fallos` }), 1);
+    await g.partes('Cifras: aciertos, fallos y sin responder', v.locator('section[aria-labelledby="d-tit"]'), [`0/${TOTAL}`, 'respondidas', 'Tests de los directos', '0', 'aciertos', '0', 'fallos', `${TOTAL}`, 'sin responder']);
     const emp = v.getByRole('link', { name: 'Empezar', exact: true });
-    await g.attr('Botón «Empezar» hacia el primer clip', emp, 'href', '#formacion/directos/1');
+    await g.attr('Botón «Empezar» hacia la primera pregunta', emp, 'href', '#formacion/directos/1');
     await g.cuenta('Sin «Continuar» todavía', v.getByRole('link', { name: /^Continuar/ }), 0);
     await g.cuenta('Sin «Repasar fallos»', v.locator('[data-accion="dir-fallos"]'), 0);
-    await g.cuenta(`${TOTAL} tarjetas de clip`, tarjetas, TOTAL);
+    await g.cuenta(`${TOTAL} tarjetas de pregunta`, tarjetas, TOTAL);
     for (const [c, nombre, n] of REPARTO) {
       const sec = v.locator(`section[aria-labelledby="dc-${c}"]`);
       await g.txt(`Categoría ${nombre}: título`, sec.getByRole('heading', { level: 2 }), nombre);
-      await g.cuenta(`…con ${n} clips`, sec.locator('a[href^="#formacion/directos/"]'), n);
-      await g.partes('…y su progreso', sec, [`0 de ${n} respondidos`]);
+      await g.cuenta(`…con ${n} preguntas`, sec.locator('a[href^="#formacion/directos/"]'), n);
+      await g.partes('…y su progreso', sec, [`0 de ${n} respondidas`]);
+      await g.cuenta('…sin plegable de respondidas (no hay ninguna)', sec.locator('details details'), 0);
     }
     const textos = await tarjetas.evaluateAll((a) => a.map((x) => [x.getAttribute('href'), x.textContent.replace(/\s+/g, ' ').trim()]));
-    const esperado = D.map((d, i) => [`#formacion/directos/${i + 1}`, `Clip ${num2(i + 1)} · ${env.CATS[d.cat].nombre} · ${dur(d.seg)}Sin responder`]);
-    g.ok('Cada tarjeta: «Clip NN · Categoría · m:ss» y «Sin responder», en orden y con su enlace por número', igualJSON(textos, esperado), JSON.stringify(textos.find((t, i) => !igualJSON(t, esperado[i]))) + ' ≠ ' + JSON.stringify(esperado[textos.findIndex((t, i) => !igualJSON(t, esperado[i]))]));
+    const esperado = D.map((d, i) => [`#formacion/directos/${i + 1}`, `Pregunta ${num2(i + 1)} · ${env.CATS[d.cat].nombre} · sin responder${d.nombre}`]);
+    g.ok('Cada tarjeta: «Pregunta NN» (más categoría y «sin responder» para lectores de pantalla) y el nombre de la pregunta, en orden y con su enlace por número', igualJSON(textos, esperado), JSON.stringify(textos.find((t, i) => !igualJSON(t, esperado[i]))) + ' ≠ ' + JSON.stringify(esperado[textos.findIndex((t, i) => !igualJSON(t, esperado[i]))]));
+    const conDur = textos.filter((t, i) => t[1].includes(dur(D[i].seg)) || /· \d{1,2}:\d\d/.test(t[1]));
+    g.ok('…sin la duración del vídeo', conDur.length === 0, JSON.stringify(conDur.slice(0, 2)));
+    g.ok('…y sin «Clip NN» como unidad', !/\bClips? \d/.test(norm(await v.innerText())) && !textos.some((t) => /\bclip\b/i.test(t[1])));
     const f = await fugas(page, D);
-    g.ok('La portada no pinta ningún título, id, clave ni explicación', f.length === 0, f.slice(0, 4).join(', '));
+    g.ok('La portada no pinta ningún título (ni en atributos), id, clave ni explicación', f.length === 0, f.slice(0, 4).join(', '));
     g.ok('…ni pide nada de /clips/', red.clips.length === 0, red.clips.slice(0, 3).join(', '));
     await g.cuenta('…ni lleva ningún <video> ni imagen de clip', page.locator('video, img[src*="clips/"]'), 0);
   });
@@ -485,7 +510,7 @@ async function gEjemplo(g, env) {
     const antes = JSON.stringify(await guardado(page));
     await cabecera(page, c2).click();
     await g.igual(`Pulsar la cabecera de ${nom2} la abre`, () => abiertas(page), c2);
-    await g.cuenta(`…con sus ${n2} clips a la vista`, v.locator(`details[data-c="${c2}"] ul a:visible`), n2);
+    await g.cuenta(`…con sus ${n2} preguntas a la vista`, v.locator(`details[data-c="${c2}"] ul a:visible`), n2);
     await g.igual('…y queda apuntado en el dispositivo', () => apuntadas(page), JSON.stringify({ [c2]: 1 }));
     g.ok('…no en el estado del alumno (abrir y cerrar no guarda nada)', JSON.stringify(await guardado(page)) === antes, JSON.stringify(await guardado(page)).slice(0, 160));
     await cargar(page, BASE + '#formacion/directos');
@@ -493,13 +518,13 @@ async function gEjemplo(g, env) {
     await cabecera(page, c1).focus();
     await page.keyboard.press('Enter');
     await g.igual('Con el teclado (Intro en la cabecera) se abre otra', () => abiertas(page), c1 + c2);
-    await g.cuenta('…y ya están a la vista los clips de las dos', v.locator('ul a[href^="#formacion/directos/"]:visible'), n1 + n2);
+    await g.cuenta('…y ya están a la vista las preguntas de las dos', v.locator('ul a[href^="#formacion/directos/"]:visible'), n1 + n2);
     await cabecera(page, c2).click();
     await g.igual('Pulsar otra vez la cierra', () => abiertas(page), c1);
     await g.igual('…y también se apunta', async () => JSON.stringify(ordenar(JSON.parse(await apuntadas(page)))), JSON.stringify(ordenar({ [c1]: 1, [c2]: 0 })));
     await cargar(page, BASE + '#formacion/directos');
     await g.igual('…y así sigue al volver', () => abiertas(page), c1);
-    await g.cuenta(`Los ${TOTAL} clips siguen en la página aunque su categoría esté cerrada (solo no se ven)`, tarjetas, TOTAL);
+    await g.cuenta(`Las ${TOTAL} preguntas siguen en la página aunque su categoría esté cerrada (solo no se ven)`, tarjetas, TOTAL);
     g.ok('Sigue sin pedirse nada de /clips/', red.clips.length === 0, red.clips.slice(0, 3).join(', '));
     for (const raro of ['x', '[1]', 'null', JSON.stringify({ [c1]: 'si', Z: 1, [c2]: 2 })]) {
       await page.evaluate(({ k, x }) => localStorage.setItem(k, x), { k: CLAVE_CATS, x: raro });
@@ -513,12 +538,16 @@ async function gEjemplo(g, env) {
   });
 
   const d7 = D[6], d8 = D[7];
-  await g.seccion('Enlace directo a un clip sin responder', async () => {
+  await g.seccion('Enlace directo a una pregunta sin responder', async () => {
     await cargar(page, BASE + '#formacion/directos/7');
     const st = await esperaClip(page, 7, false);
-    await g.txt(`Cabecera «Clip 07 de ${TOTAL} · ${REPARTO[0][1]}»`, h1(page), `Clip 07 de ${TOTAL} · ${env.CATS[d7.cat].nombre}`);
-    g.ok('La pregunta del clip', norm(st.q) === norm(d7.pregunta), norm(st.q).slice(0, 120));
-    await g.partes('Sobre la pregunta: cuántas opciones hay y cuánto dura el clip', v, [`Pregunta · 4 opciones · clip de ${dur(d7.seg)}`]);
+    await g.txt(`Cabecera «Pregunta 07 de ${TOTAL} · ${REPARTO[0][1]}»`, cabTest(page), `Pregunta 07 de ${TOTAL} · ${env.CATS[d7.cat].nombre}`);
+    await g.txt('Título de la pantalla (h1): el nombre de la pregunta, ya antes de responder', h1(page), d7.nombre);
+    g.ok('El enunciado', norm(st.q) === norm(d7.pregunta), norm(st.q).slice(0, 120));
+    await g.partes('En este orden: «Pregunta 07 de 90 · Categoría», el nombre, el enunciado y las opciones', v, [`Pregunta 07 de ${TOTAL}`, d7.nombre, d7.pregunta, 'A', d7.opciones[0]]);
+    g.ok('Sin «Clip NN» como unidad en la pantalla', !/\bClips? \d/.test(norm(await v.innerText())), norm(await v.innerText()).slice(0, 200));
+    const pagina = await page.evaluate(() => { const c = document.documentElement.cloneNode(true); c.querySelectorAll('script').forEach((x) => x.remove()); return c.outerHTML; }); // todo lo pintado (sin el código, que lleva los datos)
+    g.ok('El título del clip no está ni en el texto ni en ningún atributo de la página', !pagina.includes(d7.titulo) && !pagina.includes(escHtml(d7.titulo)) && !(await page.title()).includes(d7.titulo));
     g.ok('Cuatro opciones A–D con su texto, sin marcar y activas', igualJSON(st.ops.map((o) => norm(o.t)), d7.opciones.map((t, i) => norm('ABCD'[i] + t))) && st.ops.every((o) => !o.pulsada && !o.off), JSON.stringify(st.ops).slice(0, 300));
     await g.attr('Pestañas: en el test no se pintan, pero el menú sigue en Formación', page.locator('a[data-ruta="formacion"]'), 'aria-current', 'page');
     g.ok('Sin responder no hay <video> en la página', st.videos === 0, `vídeos: ${st.videos}`);
@@ -527,7 +556,7 @@ async function gEjemplo(g, env) {
     g.ok('…ni el título, el id, la clave o la explicación en la vista', f.length === 0, f.slice(0, 4).join(', '));
     g.ok('…ni se ha pedido nada de /clips/', red.clips.length === 0, red.clips.slice(0, 3).join(', '));
     await g.partes('La pantalla del clip está apagada y dice cuánto dura', v, ['El clip del directo', 'Responde para ver el clip', `El momento del directo en el que Alex lo explica · ${dur(d7.seg)}`]);
-    await g.cuenta('Todavía sin «Siguiente clip» ni «Repetir»', v.locator('[data-accion="dir-sig"], [data-accion="dir-repetir"]'), 0);
+    await g.cuenta('Todavía sin «Siguiente pregunta» ni «Repetir»', v.locator('[data-accion="dir-sig"], [data-accion="dir-repetir"]'), 0);
     await g.attr('Enlace para volver a la portada', v.locator('a[href="#formacion/directos"]').first(), 'href', '#formacion/directos');
     g.ok('Todavía no se ha guardado ninguna respuesta', !((await guardado(page)) || {}).directos, JSON.stringify(((await guardado(page)) || {}).directos));
   });
@@ -563,8 +592,9 @@ async function gEjemplo(g, env) {
     g.ok('El vídeo no se pide hasta que el alumno le da a reproducir', !red.clips.some((c) => /\.mp4$/.test(c)), red.clips.join(', '));
     g.ok('Solo se ha pedido la portada de este clip', igualJSON(Array.from(new Set(red.clips)), [`/clips/${d7.id}.jpg`]), red.clips.join(', '));
     await g.oculto('Sin aviso de error de carga', page.locator('#dir-error'));
-    await g.txt('Botón «Siguiente clip»', sig, 'Siguiente clip');
+    await g.txt('Botón «Siguiente pregunta»', sig, 'Siguiente pregunta');
     await g.txt('Botón «Repetir»', repetir, 'Repetir');
+    await g.txt('Tras responder, la cabecera sigue igual (el nombre como título)', h1(page), d7.nombre);
     await g.cuenta('Botón «Volver»', v.getByRole('link', { name: 'Volver', exact: true }), 1);
     const s = await guardado(page);
     g.ok('Guardado en state.directos con la forma { o, ok, f }', !!s && igualJSON(s.directos, { [d7.id]: { o: d7.correcta, ok: true, f: HOY } }), JSON.stringify(s && s.directos));
@@ -586,15 +616,16 @@ async function gEjemplo(g, env) {
     await g.visible('…y si sigue sin cargar, el aviso vuelve', err, 8000);
   });
 
-  await g.seccion('«Siguiente clip», fallar y atajos de teclado', async () => {
+  await g.seccion('«Siguiente pregunta», fallar y atajos de teclado', async () => {
     await page.evaluate(() => { window.__pausas = 0; const p = HTMLMediaElement.prototype.pause; HTMLMediaElement.prototype.pause = function () { window.__pausas++; return p.apply(this, arguments); }; });
     await sig.click();
-    await g.igual('«Siguiente clip» lleva al siguiente sin responder', () => hashDe(page), '#formacion/directos/8');
+    await g.igual('«Siguiente pregunta» lleva a la siguiente sin responder', () => hashDe(page), '#formacion/directos/8');
     let st = await esperaClip(page, 8, false);
     g.ok('Al salir de un clip respondido, su vídeo se para antes de quitarlo de la página (si no, podría seguir sonando)', (await page.evaluate(() => window.__pausas)) >= 1, `llamadas a pause(): ${await page.evaluate(() => window.__pausas)}`);
     g.ok('…que se abre como pregunta nueva, sin vídeo', st.videos === 0 && st.ops.every((o) => !o.off));
     await g.igual('…y empieza arriba', () => page.evaluate(() => Math.round(window.scrollY)), 0);
     g.ok('…sin título, id, clave ni explicación del clip nuevo', (await fugas(page, [d8])).length === 0, (await fugas(page, [d8])).join(', '));
+    g.ok('…y con su nombre como título', st.nombre === d8.nombre, st.nombre);
     const mal = otra(d8);
     await page.keyboard.press('abcd'[mal]);
     st = await esperaClip(page, 8, true);
@@ -612,7 +643,7 @@ async function gEjemplo(g, env) {
     s = await guardado(page);
     g.ok('Ya respondido, las teclas no cambian la respuesta', s.directos[d8.id].o === mal, JSON.stringify(s.directos[d8.id]));
     await page.keyboard.press('Enter');
-    await g.igual('Intro: siguiente clip', () => hashDe(page), '#formacion/directos/9');
+    await g.igual('Intro: siguiente pregunta', () => hashDe(page), '#formacion/directos/9');
     await esperaClip(page, 9, false);
     await page.keyboard.press('Enter');
     await pausa(250);
@@ -621,7 +652,7 @@ async function gEjemplo(g, env) {
     st = await esperaClip(page, 9, true);
     g.ok(`Tecla «${D[8].correcta + 1}»: responde la opción ${'ABCD'[D[8].correcta]}`, st.ops.filter((o) => o.pulsada).map((o) => o.o).join() === String(D[8].correcta) && norm(st.ver) === 'Correcto', JSON.stringify(st.ops.map((o) => o.pulsada)));
     await page.keyboard.press('ArrowRight');
-    await g.igual('Flecha derecha: siguiente clip', () => hashDe(page), '#formacion/directos/10');
+    await g.igual('Flecha derecha: siguiente pregunta', () => hashDe(page), '#formacion/directos/10');
     await esperaClip(page, 10, false);
     for (const [tecla, o] of [['4', 3], ['d', 3]]) { // la D y el 4, que los tests de tres opciones no tienen
       if (tecla === 'd') { await page.locator('[data-accion="dir-repetir"]').click(); await esperaClip(page, 10, false); }
@@ -649,28 +680,38 @@ async function gEjemplo(g, env) {
     await page.reload();
     const st2 = await esperaClip(page, 10, true);
     g.ok('Recargar en un clip respondido: sigue respondido', st2.video && st2.ops.filter((o) => o.pulsada).map((o) => o.o).join() === '3');
-    await g.txt('…con su cabecera', h1(page), `Clip 10 de ${TOTAL} · ${env.CATS[D[9].cat].nombre}`);
+    await g.txt('…con su cabecera', cabTest(page), `Pregunta 10 de ${TOTAL} · ${env.CATS[D[9].cat].nombre}`);
+    await g.txt('…y su nombre', h1(page), D[9].nombre);
   });
 
   await g.seccion('Portada con progreso tras recargar', async () => {
     await cargar(page, BASE + '#formacion/directos');
     const okD10 = D[9].correcta === 3; // clips 7 (bien), 8 (mal), 9 (bien) y 10 (opción D)
     const ac = 2 + (okD10 ? 1 : 0), fa = 1 + (okD10 ? 0 : 1);
-    await g.txt('Rótulo: lo que queda', page.locator('#d-tit'), `Te quedan ${TOTAL - 4} clips por responder`);
-    await g.cuenta('Anillo con el resumen', v.getByRole('img', { name: `4 de ${TOTAL} clips respondidos: ${ac} ${ac === 1 ? 'acierto' : 'aciertos'} y ${fa} ${fa === 1 ? 'fallo' : 'fallos'}` }), 1);
+    await g.txt('Rótulo: lo que queda', page.locator('#d-tit'), `Te quedan ${TOTAL - 4} preguntas por responder`);
+    await g.cuenta('Anillo con el resumen', v.getByRole('img', { name: `4 de ${TOTAL} preguntas respondidas: ${ac} ${ac === 1 ? 'acierto' : 'aciertos'} y ${fa} ${fa === 1 ? 'fallo' : 'fallos'}` }), 1);
     await g.partes('Cifras', v.locator('section[aria-labelledby="d-tit"]'), [`4/${TOTAL}`, `${ac}`, 'aciertos', `${fa}`, fa === 1 ? 'fallo' : 'fallos', `${TOTAL - 4}`, 'sin responder']);
-    await g.attr('«Continuar» va al primer clip sin responder', v.getByRole('link', { name: /^Continuar/ }), 'href', '#formacion/directos/1');
-    await g.txt('…y dice cuál', v.getByRole('link', { name: /^Continuar/ }), 'Continuar: clip 01');
+    await g.attr('«Continuar» va a la primera pregunta sin responder', v.getByRole('link', { name: /^Continuar/ }), 'href', '#formacion/directos/1');
+    await g.txt('…y dice cuál', v.getByRole('link', { name: /^Continuar/ }), 'Continuar: pregunta 01');
     await g.cuenta('Ya no hay «Empezar»', v.getByRole('link', { name: 'Empezar', exact: true }), 0);
     await g.txt('«Repasar fallos (n)»', v.locator('[data-accion="dir-fallos"]'), `Repasar fallos (${fa})`);
-    await g.txt('Tarjeta acertada: título a la vista y «Acertado»', v.locator('a[href="#formacion/directos/7"]'), `Clip 07 · ${env.CATS[d7.cat].nombre} · ${dur(d7.seg)}Acertado${d7.titulo}`);
-    await g.txt('Tarjeta fallada: título a la vista y «Fallado»', v.locator('a[href="#formacion/directos/8"]'), `Clip 08 · ${env.CATS[d8.cat].nombre} · ${dur(d8.seg)}Fallado${d8.titulo}`);
-    await g.cuenta('…cada estado con su icono', v.locator('a[href="#formacion/directos/7"] svg, a[href="#formacion/directos/8"] svg, a[href="#formacion/directos/1"] svg'), 3);
+    await g.txt('Tarjeta acertada: «Pregunta 07», «Acertada», el nombre y el título del clip', v.locator('a[href="#formacion/directos/7"]'), `Pregunta 07 · ${env.CATS[d7.cat].nombre}Acertada${d7.nombre}${d7.titulo}`);
+    await g.txt('Tarjeta fallada: «Pregunta 08», «Fallada», el nombre y el título del clip', v.locator('a[href="#formacion/directos/8"]'), `Pregunta 08 · ${env.CATS[d8.cat].nombre}Fallada${d8.nombre}${d8.titulo}`);
+    await g.cuenta('…cada estado con su icono (además del color)', v.locator('a[href="#formacion/directos/7"] > span[aria-hidden="true"] svg, a[href="#formacion/directos/8"] > span[aria-hidden="true"] svg, a[href="#formacion/directos/1"] > span[aria-hidden="true"] svg'), 3);
+    await g.cuenta('…y el título del clip con el icono de vídeo (solo en las respondidas)', v.locator('a[href="#formacion/directos/7"] svg, a[href="#formacion/directos/8"] svg, a[href="#formacion/directos/1"] svg'), 5);
+    await g.igual('Las respondidas van recogidas tras «Ver las 4 respondidas», cerrado mientras queden pendientes en la categoría', async () => { const sm = hechas(page, 'C'); return `${await sm.count()} ${norm(await sm.innerText())} ${await sm.evaluate((e) => e.parentElement.open)}`; }, '1 Ver las 4 respondidas false');
+    g.ok('…después de las pendientes', await page.evaluate(() => { const cat = document.querySelector('#vista details[data-c="C"]'), s = cat.querySelector(':scope details > summary'), p = cat.querySelector('a[href="#formacion/directos/1"]'); return !!(p.compareDocumentPosition(s) & Node.DOCUMENT_POSITION_FOLLOWING); }));
+    await g.igual('…y las pendientes a la vista, sin las respondidas', () => v.locator('details[data-c="C"] a[href^="#formacion/directos/"]:visible').count(), CAT1 - 4);
+    await hechas(page, 'C').click();
+    await g.igual('Pulsar «Ver las 4 respondidas» las enseña', () => v.locator('details[data-c="C"] a[href^="#formacion/directos/"]:visible').count(), CAT1);
+    await g.igual('…y el rótulo pasa a «Ocultar las 4 respondidas»', async () => norm(await hechas(page, 'C').innerText()), 'Ocultar las 4 respondidas');
+    await hechas(page, 'C').click();
+    await g.igual('…y volver a pulsarlo las recoge', () => v.locator('details[data-c="C"] a[href^="#formacion/directos/"]:visible').count(), CAT1 - 4);
     const resp = new Set([6, 7, 8, 9]);
     const f = await fugas(page, D.filter((d, i) => !resp.has(i)));
     g.ok('Los títulos de los clips sin responder siguen sin aparecer', f.length === 0, f.slice(0, 4).join(', '));
-    await g.partes('Progreso de la categoría', v.locator('section[aria-labelledby="dc-C"]'), [`4 de ${CAT1} respondidos`, `${ac} ${ac === 1 ? 'acierto' : 'aciertos'}`]);
-    await g.igual('Con algo respondido, está abierta la categoría del siguiente clip sin responder (y solo esa)', () => abiertas(page), REPARTO[0][0]);
+    await g.partes('Progreso de la categoría', v.locator('section[aria-labelledby="dc-C"]'), [`4 de ${CAT1} respondidas`, `${ac} ${ac === 1 ? 'acierto' : 'aciertos'}`]);
+    await g.igual('Con algo respondido, está abierta la categoría de la siguiente pregunta sin responder (y solo esa)', () => abiertas(page), REPARTO[0][0]);
     g.ok('…sin que eso se apunte como elección del alumno', (await apuntadas(page)) === null, String(await apuntadas(page)));
     await v.getByRole('link', { name: /^Continuar/ }).click();
     await g.igual('Pulsar «Continuar»: URL', () => hashDe(page), '#formacion/directos/1');
@@ -680,9 +721,9 @@ async function gEjemplo(g, env) {
   await g.seccion('Modo repaso, «Repetir» y «Volver»', async () => {
     await v.locator('a[href="#formacion/directos"]').first().click();
     await g.igual('El enlace de arriba vuelve a la portada', () => hashDe(page), '#formacion/directos');
-    await v.locator('a[href="#formacion/directos/8"]').click();
+    await (await tarjeta(page, 8)).click();
     let st = await esperaClip(page, 8, true);
-    g.ok('Un clip ya respondido se abre en modo repaso: respuesta marcada, veredicto y vídeo', st.video && st.ops.every((o) => o.off) && /^Incorrecto/.test(norm(st.ver)));
+    g.ok('Una pregunta ya respondida se abre en modo repaso: respuesta marcada, veredicto y vídeo', st.video && st.ops.every((o) => o.off) && /^Incorrecto/.test(norm(st.ver)));
     await g.partes('…con su explicación y su clip', v, [d8.titulo, d8.clave, d8.explicacion]);
     await repetir.click();
     st = await esperaClip(page, 8, false);
@@ -697,30 +738,30 @@ async function gEjemplo(g, env) {
     await esperaClip(page, 8, false);
     await v.locator('a[href="#formacion/directos"]').first().click();
     await g.igual('Salir a medias de «Repetir»', () => hashDe(page), '#formacion/directos');
-    await v.locator('a[href="#formacion/directos/8"]').click();
+    await (await tarjeta(page, 8)).click();
     st = await esperaClip(page, 8, true);
     g.ok('…y al volver a abrirlo está en modo repaso con la respuesta guardada', st.video && norm(st.ver) === 'Correcto');
     await v.getByRole('link', { name: 'Volver', exact: true }).click();
     await g.igual('«Volver» lleva a la portada', () => hashDe(page), '#formacion/directos');
-    await g.txt('…con el resumen', page.locator('#d-tit'), `Te quedan ${TOTAL - 4} clips por responder`);
-    await g.cumple('…y deja a la vista y con el foco la tarjeta del clip del que se viene', () => page.evaluate(() => { const a = document.querySelector('#vista a[href="#formacion/directos/8"]'), r = a.getBoundingClientRect(); return { foco: document.activeElement === a, top: Math.round(r.top), bottom: Math.round(r.bottom), h: innerHeight }; }), (m) => m.foco && m.top >= 0 && m.bottom <= m.h, 3000);
+    await g.txt('…con el resumen', page.locator('#d-tit'), `Te quedan ${TOTAL - 4} preguntas por responder`);
+    await g.cumple('…y deja a la vista y con el foco la tarjeta de la pregunta de la que se viene (abre su plegable de respondidas)', () => page.evaluate(() => { const a = document.querySelector('#vista a[href="#formacion/directos/8"]'), r = a.getBoundingClientRect(); return { foco: document.activeElement === a, top: Math.round(r.top), bottom: Math.round(r.bottom), h: innerHeight }; }), (m) => m.foco && m.top >= 0 && m.bottom <= m.h, 3000);
   });
 
-  await g.seccion('Clip que no existe y acción rápida', async () => {
+  await g.seccion('Pregunta que no existe y acción rápida', async () => {
     for (const mala of ['0', String(TOTAL + 1), '999']) {
       await cargar(page, BASE + '#formacion/directos/' + mala);
-      await g.partes(`#formacion/directos/${mala}: «No encuentro ese clip»`, v, ['No encuentro ese clip.', 'Volver a los tests de los directos']);
+      await g.partes(`#formacion/directos/${mala}: «No encuentro esa pregunta»`, v, ['No encuentro esa pregunta.', 'Volver a los tests de los directos']);
     }
     for (const mala of ['abc', '-1', '1000', '7?x=1', '7/8', D[6].id, '%3Cimg%20src=x%20onerror=window.__xss=1%3E']) { // lo que cuelga de «directos/» y no es un número de clip
       await cargar(page, BASE + '#formacion/directos/' + mala);
-      await g.partes(`#formacion/directos/${mala.slice(0, 24)}: «No encuentro ese clip» (y no el Diario)`, v, ['No encuentro ese clip.', 'Volver a los tests de los directos']);
+      await g.partes(`#formacion/directos/${mala.slice(0, 24)}: «No encuentro esa pregunta» (y no el Diario)`, v, ['No encuentro esa pregunta.', 'Volver a los tests de los directos']);
     }
     await g.attr('…con «Formación» marcada en el menú', page.locator('a[data-ruta="formacion"]'), 'aria-current', 'page');
     g.ok('…y sin ejecutar nada de lo que venga en la dirección', (await page.evaluate(() => window.__xss)) === undefined);
     await cargar(page, BASE + '#formacion/directos/7/');
-    g.ok('Con una barra de más al final (…/directos/7/) se abre el clip 7', (await esperaClip(page, 7)).n === 7);
+    g.ok('Con una barra de más al final (…/directos/7/) se abre la pregunta 7', (await esperaClip(page, 7)).n === 7);
     await cargar(page, BASE + '#formacion/directos/');
-    await g.txt('«#formacion/directos/» (sin número) es la portada', page.locator('#d-tit'), `Te quedan ${TOTAL - 4} clips por responder`);
+    await g.txt('«#formacion/directos/» (sin número) es la portada', page.locator('#d-tit'), `Te quedan ${TOTAL - 4} preguntas por responder`);
     await cargar(page, BASE + '#formacion/directosX');
     await g.txt('Lo que no es de este apartado sigue cayendo en el Diario, como cualquier dirección desconocida', h1(page), 'Diario de trading');
     await page.keyboard.press('Control+k');
@@ -731,7 +772,7 @@ async function gEjemplo(g, env) {
     await g.cuenta('…una sola acción con ese nombre', page.locator('#paleta-lista [role="option"]'), 1);
     await page.keyboard.press('Enter');
     await g.igual('…que lleva a la portada', () => hashDe(page), '#formacion/directos');
-    await g.txt('…ya pintada', page.locator('#d-tit'), `Te quedan ${TOTAL - 4} clips por responder`);
+    await g.txt('…ya pintada', page.locator('#d-tit'), `Te quedan ${TOTAL - 4} preguntas por responder`);
     await page.locator('a[data-ruta="formacion"]').click();
     await g.igual('El menú «Formación» sigue llevando a la ruta por niveles', () => hashDe(page), '#formacion');
     await g.partes('…cuyo acceso a los directos enseña el progreso', page.locator('#vista > a[href="#formacion/directos"]'), ['Tests de los directos', `4 de ${TOTAL}`]);
@@ -751,8 +792,8 @@ async function gEstado(g, env) {
   await g.seccion('Estado antiguo (sin la clave «directos»)', async () => {
     const viejo = estadoAntiguo();
     await sembrar(page, viejo, BASE + '#formacion/directos');
-    await g.txt('La portada se pinta a cero', page.locator('#d-tit'), `${TOTAL} clips de los directos de Alex`);
-    await g.cuenta(`…con sus ${TOTAL} clips`, v.locator('ul a[href^="#formacion/directos/"]'), TOTAL);
+    await g.txt('La portada se pinta a cero', page.locator('#d-tit'), `${TOTAL} preguntas de los directos de Alex`);
+    await g.cuenta(`…con sus ${TOTAL} preguntas`, v.locator('ul a[href^="#formacion/directos/"]'), TOTAL);
     g.ok('Entrar y mirar no guarda nada', igualJSON(await guardado(page), viejo), JSON.stringify(await guardado(page)).slice(0, 200));
     await (await tarjeta(page, 3)).click();
     await esperaClip(page, 3, false);
@@ -773,7 +814,7 @@ async function gEstado(g, env) {
     const raros = [null, [], 'x', 7, { [D[0].id]: null, [D[1].id]: { o: 9, ok: true }, [D[2].id]: { o: '1', ok: true }, [D[3].id]: { ok: true }, [D[4].id]: 'si', 'clip-que-ya-no-existe': { o: 0, ok: true, f: '2026-01-01' } }];
     for (const [i, r] of raros.entries()) {
       await sembrar(page, Object.assign(estadoAntiguo(), { directos: r }), BASE + '#formacion/directos');
-      await g.txt(`directos = ${JSON.stringify(r).slice(0, 34)}…: portada a cero`, page.locator('#d-tit'), `${TOTAL} clips de los directos de Alex`);
+      await g.txt(`directos = ${JSON.stringify(r).slice(0, 34)}…: portada a cero`, page.locator('#d-tit'), `${TOTAL} preguntas de los directos de Alex`);
       if (i === raros.length - 1) {
         await (await tarjeta(page, 2)).click();
         const st = await esperaClip(page, 2, false);
@@ -790,7 +831,7 @@ async function gEstado(g, env) {
     await esperaClip(page, 1, true);
     g.ok('Con «directos» estropeado, responder lo deja con la forma correcta', igualJSON((await guardado(page)).directos, { [D[0].id]: { o: otra(D[0]), ok: false, f: HOY } }), JSON.stringify((await guardado(page)).directos));
     await sembrar(page, Object.assign(estadoAntiguo(), { directos: { [D[0].id]: { o: D[0].correcta, ok: false, f: '2026-10-01' } } }), BASE + '#formacion/directos');
-    await g.cuenta('El acierto se decide con la opción guardada y la clave, no con el «ok» guardado', v.getByRole('img', { name: `1 de ${TOTAL} clips respondidos: 1 acierto y 0 fallos` }), 1);
+    await g.cuenta('El acierto se decide con la opción guardada y la clave, no con el «ok» guardado', v.getByRole('img', { name: `1 de ${TOTAL} preguntas respondidas: 1 acierto y 0 fallos` }), 1);
   });
 
   await g.seccion('«Repasar fallos» recorre los fallados como preguntas nuevas', async () => {
@@ -808,10 +849,10 @@ async function gEstado(g, env) {
     await opcion(page, D[1].correcta).click();
     st = await esperaClip(page, 2, true);
     g.ok('Acertarlo ahora lo deja acertado', norm(st.ver) === 'Correcto' && (await guardado(page)).directos[D[1].id].ok === true);
-    await g.txt('Botón «Siguiente clip»', sig, 'Siguiente clip');
+    await g.txt('Botón «Siguiente pregunta»', sig, 'Siguiente pregunta');
     await g.cuenta('En el repaso no hay «Repetir»', v.locator('[data-accion="dir-repetir"]'), 0);
     await sig.click();
-    await g.igual('«Siguiente clip» salta al siguiente FALLADO (no al siguiente sin responder)', () => hashDe(page), '#formacion/directos/4');
+    await g.igual('«Siguiente pregunta» salta a la siguiente FALLADA (no al siguiente sin responder)', () => hashDe(page), '#formacion/directos/4');
     st = await esperaClip(page, 4, false);
     g.ok('…también como pregunta nueva', st.videos === 0 && st.ops.every((o) => !o.off));
     await g.partes('…2 de 2', v, ['Repaso de fallos · 2 de 2']);
@@ -833,8 +874,8 @@ async function gEstado(g, env) {
     await g.txt('En el último, el botón es «Terminar el repaso»', sig, 'Terminar el repaso');
     await sig.click();
     await g.igual('…y vuelve a la portada', () => hashDe(page), '#formacion/directos');
-    await g.toast(page, 'Repaso terminado: 0 de 1 acertado', 'Con un aviso del resultado del repaso');
-    await g.txt('…con el resumen', page.locator('#d-tit'), `Te quedan ${TOTAL - 5} clips por responder`);
+    await g.toast(page, 'Repaso terminado: 0 de 1 acertada', 'Con un aviso del resultado del repaso');
+    await g.txt('…con el resumen', page.locator('#d-tit'), `Te quedan ${TOTAL - 5} preguntas por responder`);
     await g.txt('…y el fallo sigue pendiente', v.locator('[data-accion="dir-fallos"]'), 'Repasar fallos (1)');
   });
 
@@ -843,38 +884,41 @@ async function gEstado(g, env) {
     await esperaClip(page, TOTAL, false);
     await opcion(page, D[TOTAL - 1].correcta).click();
     await esperaClip(page, TOTAL, true);
-    await g.txt('En el último clip, con otros pendientes, el botón sigue siendo «Siguiente clip»', sig, 'Siguiente clip');
+    await g.txt('En la última pregunta, con otras pendientes, el botón sigue siendo «Siguiente pregunta»', sig, 'Siguiente pregunta');
     await sig.click();
     await g.igual('…y da la vuelta: lleva al primero sin responder', () => hashDe(page), '#formacion/directos/1');
     await esperaClip(page, 1, false);
     const dir = {}; D.forEach((d, i) => { if (i !== TOTAL - 1) dir[d.id] = respuesta(d, i !== 20); }); // falta el último; fallado el 21
     await sembrar(page, Object.assign(estadoAntiguo(), { directos: dir }), BASE + '#formacion/directos');
-    await g.txt(`${TOTAL - 1} de ${TOTAL}: queda uno`, page.locator('#d-tit'), 'Te queda 1 clip por responder');
-    await g.txt('«Continuar» apunta al único que falta', v.getByRole('link', { name: /^Continuar/ }), `Continuar: clip ${num2(TOTAL)}`);
+    await g.txt(`${TOTAL - 1} de ${TOTAL}: queda una`, page.locator('#d-tit'), 'Te queda 1 pregunta por responder');
+    await g.txt('«Continuar» apunta al único que falta', v.getByRole('link', { name: /^Continuar/ }), `Continuar: pregunta ${num2(TOTAL)}`);
     await v.getByRole('link', { name: /^Continuar/ }).click();
     await esperaClip(page, TOTAL, false);
     await opcion(page, D[TOTAL - 1].correcta).click();
     await esperaClip(page, TOTAL, true);
-    await g.txt('Sin clips por responder, el botón es «Ver el resumen»', sig, 'Ver el resumen');
+    await g.txt('Sin preguntas por responder, el botón es «Ver el resumen»', sig, 'Ver el resumen');
     await g.cuenta(`Confeti al completar los ${TOTAL}`, page.locator('canvas'), 1, 3000);
     await sig.click();
     await g.igual('…y lleva a la portada', () => hashDe(page), '#formacion/directos');
-    await g.txt('Portada con todo respondido', page.locator('#d-tit'), `Los ${TOTAL} clips respondidos`);
-    await g.cuenta(`Anillo: ${TOTAL} de ${TOTAL}`, v.getByRole('img', { name: `${TOTAL} de ${TOTAL} clips respondidos: ${TOTAL - 1} aciertos y 1 fallo` }), 1);
+    await g.txt('Portada con todo respondido', page.locator('#d-tit'), `Las ${TOTAL} preguntas respondidas`);
+    await g.cuenta(`Anillo: ${TOTAL} de ${TOTAL}`, v.getByRole('img', { name: `${TOTAL} de ${TOTAL} preguntas respondidas: ${TOTAL - 1} aciertos y 1 fallo` }), 1);
     await g.cuenta('Sin «Empezar» ni «Continuar»', v.getByRole('link', { name: /^(Empezar|Continuar)/ }), 0);
     await g.txt('«Repasar fallos (1)» como botón principal', v.locator('[data-accion="dir-fallos"]'), 'Repasar fallos (1)');
     const titulos = await v.locator('ul a[href^="#formacion/directos/"]').evaluateAll((a) => a.map((x) => x.textContent));
+    const cuerposT = await v.locator('details[data-c]').evaluateAll((ds) => ds.map((d) => { const h = d.querySelector('details'); return [d.querySelectorAll(':scope > div > ul').length, h ? h.open : null, h ? Array.from(h.querySelector('summary').children).filter((e) => getComputedStyle(e).display !== 'none' && e.textContent.trim()).map((e) => e.textContent.trim()).join(' ') : '']; }));
+    g.ok('Con todo respondido, en cada categoría el plegable de respondidas viene abierto («Ocultar las N respondidas») y no hay lista de pendientes', igualJSON(cuerposT, REPARTO.map(([, , n]) => [0, true, `Ocultar las ${n} respondidas`])), JSON.stringify(cuerposT));
+    g.ok(`Las ${TOTAL} tarjetas enseñan ya su nombre y el título del clip`, D.every((d, i) => norm(titulos[i]).endsWith(norm(d.nombre + d.titulo))), 'falta en ' + D.filter((d, i) => !norm(titulos[i] || '').endsWith(norm(d.nombre + d.titulo))).map((d) => d.id).slice(0, 3).join(', '));
     g.ok(`Las ${TOTAL} tarjetas enseñan ya su título`, D.every((d, i) => norm(titulos[i]).endsWith(norm(d.titulo))), 'falta en ' + D.filter((d, i) => !norm(titulos[i] || '').endsWith(norm(d.titulo))).map((d) => d.id).slice(0, 3).join(', '));
     const ant = v.locator('[data-accion="dir-ant"]'), volver = v.getByRole('link', { name: 'Volver', exact: true });
     await g.igual('Con todo respondido, las cuatro categorías van cerradas', () => abiertas(page), '');
     await (await tarjeta(page, 12)).click();
     await esperaClip(page, 12, true);
-    await g.txt('Abrir un clip para repasarlo con todo respondido: el botón principal es «Siguiente clip» (el que sigue por orden)', sig, 'Siguiente clip');
+    await g.txt('Abrir una pregunta para repasarla con todo respondido: el botón principal es «Siguiente pregunta» (la que sigue por orden)', sig, 'Siguiente pregunta');
     await g.txt('…con «Anterior»', ant, 'Anterior');
     await g.cuenta('…«Repetir»', v.locator('[data-accion="dir-repetir"]'), 1);
     await g.cuenta('…y «Volver»', volver, 1);
     await page.keyboard.press('Enter');
-    await g.igual('Intro: al clip siguiente', () => hashDe(page), '#formacion/directos/13');
+    await g.igual('Intro: a la pregunta siguiente', () => hashDe(page), '#formacion/directos/13');
     let rv = await esperaClip(page, 13, true);
     g.ok('…que se abre también en modo repaso', rv.video && rv.ops.every((o) => o.off));
     await ant.click();
@@ -896,9 +940,9 @@ async function gEstado(g, env) {
     await g.igual('…que empieza arriba, con el anillo a la vista', () => page.evaluate(() => Math.round(window.scrollY)), 0);
     const todo = {}; D.forEach((d) => { todo[d.id] = respuesta(d, true); });
     await sembrar(page, Object.assign(estadoAntiguo(), { directos: todo }), BASE + '#formacion/directos');
-    await g.txt(`Con los ${TOTAL} acertados`, page.locator('#d-tit'), `Los ${TOTAL} clips respondidos`);
+    await g.txt(`Con los ${TOTAL} acertados`, page.locator('#d-tit'), `Las ${TOTAL} preguntas respondidas`);
     await g.cuenta('…no queda nada que repasar', v.locator('[data-accion="dir-fallos"]'), 0);
-    await g.partes('…y lo dice', v.locator('section[aria-labelledby="d-tit"]'), [`Los ${TOTAL} acertados.`]);
+    await g.partes('…y lo dice', v.locator('section[aria-labelledby="d-tit"]'), [`Las ${TOTAL} acertadas.`]);
     g.ok('Con algo respondido ya no sale «Nuevo» en la pestaña', norm(await tabs(page).locator('a[href="#formacion/directos"]').textContent()) === 'Directos');
   });
 
@@ -912,26 +956,27 @@ async function gEstado(g, env) {
     await sembrar(page, Object.assign(estadoAntiguo(), { directos: hasta_(n1 + 2) }), BASE + '#formacion/directos');
     await page.locator('#d-tit').waitFor();
     await g.igual(`Con ${nom1} completa y dos de ${nom2}: abierta ${nom2} y ${nom1} plegada`, () => abiertas(page), c2);
-    await g.partes(`…y la cabecera de ${nom1} sigue diciendo cómo va`, cabecera(page, c1), [nom1, `${n1} de ${n1} respondidos`, 'aciertos']);
-    await g.txt('«Continuar» apunta al siguiente', v.getByRole('link', { name: /^Continuar/ }), `Continuar: clip ${num2(n1 + 3)}`);
+    await g.partes(`…y la cabecera de ${nom1} sigue diciendo cómo va`, cabecera(page, c1), [nom1, `${n1} de ${n1} respondidas`, 'aciertos']);
+    await g.txt('«Continuar» apunta al siguiente', v.getByRole('link', { name: /^Continuar/ }), `Continuar: pregunta ${num2(n1 + 3)}`);
     await g.cuenta('…y su tarjeta está a la vista', v.locator(`ul a[href="#formacion/directos/${n1 + 3}"]:visible`), 1);
     await cabecera(page, cU).click();
     await g.igual('El alumno abre la última categoría', () => abiertas(page), c2 + cU);
     await cabecera(page, c2).click();
     await g.igual('…y cierra la que estaba abierta por defecto', () => abiertas(page), cU);
     // el navegador avisa del plegado (evento «toggle») un instante después del clic: se espera a que quede apuntado antes de recargar
-    await page.waitForFunction(({ k, c }) => { try { return JSON.parse(localStorage.getItem(k) || '{}')[c] === 0; } catch (e) { return false; } }, { k: CLAVE_CATS, c: c2 }, { timeout: 4000 }).catch(() => {});
+    await page.waitForFunction(({ k, c }) => { try { return JSON.parse(localStorage.getItem(k) || '{}')[c] === 2; } catch (e) { return false; } }, { k: CLAVE_CATS, c: c2 }, { timeout: 4000 }).catch(() => {});
     await cargar(page, BASE + '#formacion/directos'); await page.locator('#d-tit').waitFor();
     await g.igual('Al volver, todo sigue como lo dejó', () => abiertas(page), cU);
     const apunte = await apuntadas(page);
-    g.ok('…porque está apuntado', igualJSON(JSON.parse(apunte), { [cU]: 1, [c2]: 0 }), apunte);
+    g.ok('…porque está apuntado (2 = la cerró cuando ya era la del siguiente pendiente)', igualJSON(JSON.parse(apunte), { [cU]: 1, [c2]: 2 }), apunte);
     await v.getByRole('link', { name: /^Continuar/ }).click();
     await esperaClip(page, n1 + 3, false);
     await opcion(page, D[n1 + 2].correcta).click();
     await esperaClip(page, n1 + 3, true);
     await v.getByRole('link', { name: 'Volver', exact: true }).click();
     await page.locator('#d-tit').waitFor();
-    await g.cumple(`«Volver» desde un clip de una categoría cerrada la abre para enseñar su tarjeta, con el foco`, () => page.evaluate((n) => { const a = document.querySelector(`#vista a[href="#formacion/directos/${n}"]`), r = a.getBoundingClientRect(); return { foco: document.activeElement === a, alto: Math.round(r.height), top: Math.round(r.top), bottom: Math.round(r.bottom), h: innerHeight }; }, n1 + 3), (m) => m.foco && m.alto > 30 && m.top >= 0 && m.bottom <= m.h, 3000);
+    // B1 de la revisión [DN]: la recién respondida ya está en el plegable de respondidas, al final; «Volver» lleva a la siguiente pendiente, no al fondo
+    await g.cumple(`«Volver» tras responder, desde una categoría cerrada: la abre y deja a la vista y con el foco la siguiente pendiente (${num2(n1 + 4)}), con las respondidas plegadas`, () => page.evaluate((n) => { const a = document.querySelector(`#vista a.dir-card[href="#formacion/directos/${n}"]`), r = a.getBoundingClientRect(), h = a.closest('.dir-cuerpo').querySelector('.dir-hechas'); return { foco: document.activeElement === a, pend: a.classList.contains('pend'), alto: Math.round(r.height), top: Math.round(r.top), bottom: Math.round(r.bottom), h: innerHeight, hechasCerrado: !!h && !h.open }; }, n1 + 4), (m) => m.foco && m.pend && m.hechasCerrado && m.alto > 30 && m.top >= 0 && m.bottom <= m.h, 3000);
     await g.igual('…junto a la que el alumno tenía abierta', () => abiertas(page), c2 + cU);
     g.ok('…sin cambiar lo apuntado (no lo ha pedido el alumno)', (await apuntadas(page)) === apunte, String(await apuntadas(page)));
     await cargar(page, BASE + '#formacion/directos'); await page.locator('#d-tit').waitFor();
@@ -947,10 +992,24 @@ async function gEstado(g, env) {
     await g.igual(`Al responder el último clip de ${nom1}, su apunte se olvida (lo demás no)`, () => apuntadas(page), JSON.stringify({ [cU]: 1 }));
     await cargar(page, BASE + '#formacion/directos'); await page.locator('#d-tit').waitFor();
     await g.igual(`…y en la portada ${nom1} queda plegada y ${nom2}, que es la siguiente, abierta`, () => abiertas(page), c2 + cU);
+    // B-4: una categoría cerrada a mano ANTES de ser la del siguiente pendiente se vuelve a abrir sola cuando pasa a serlo
+    await sembrar(page, Object.assign(estadoAntiguo(), { directos: hasta_(n1 - 1) }), BASE + '#formacion/directos');
+    await page.locator('#d-tit').waitFor();
+    await cabecera(page, c2).click(); await cabecera(page, c2).click();
+    await page.waitForFunction(({ k, c }) => { try { return JSON.parse(localStorage.getItem(k) || '{}')[c] === 0; } catch (e) { return false; } }, { k: CLAVE_CATS, c: c2 }, { timeout: 4000 }).catch(() => {});
+    g.ok(`El alumno abre y cierra ${nom2} cuando todavía no le toca (se apunta 0)`, igualJSON(JSON.parse(await apuntadas(page) || '{}'), { [c2]: 0 }), String(await apuntadas(page)));
+    await cargar(page, BASE + '#formacion/directos/' + n1); await esperaClip(page, n1, false);
+    await opcion(page, D[n1 - 1].correcta).click(); await esperaClip(page, n1, true);
+    await cargar(page, BASE + '#formacion/directos'); await page.locator('#d-tit').waitFor();
+    await g.igual(`…al completar ${nom1}, ${nom2} pasa a ser la del siguiente pendiente y se abre sola`, () => abiertas(page), c2);
+    await cabecera(page, c2).click();
+    await page.waitForFunction(({ k, c }) => { try { return JSON.parse(localStorage.getItem(k) || '{}')[c] === 2; } catch (e) { return false; } }, { k: CLAVE_CATS, c: c2 }, { timeout: 4000 }).catch(() => {});
+    await cargar(page, BASE + '#formacion/directos'); await page.locator('#d-tit').waitFor();
+    await g.igual('…y si la cierra ahora, que ya le toca, se queda cerrada', () => abiertas(page), '');
     await limpia();
   });
 
-  await g.seccion(`Ninguno de los ${TOTAL} clips enseña su título antes de responder`, async () => {
+  await g.seccion(`Ninguna de las ${TOTAL} preguntas enseña el título de su clip antes de responder (y todas enseñan su nombre)`, async () => {
     await sembrar(page, estadoAntiguo(), BASE + '#formacion/directos/1');
     await esperaClip(page, 1, false);
     const pedidas = red.clips.length, mal = [];
@@ -959,9 +1018,9 @@ async function gEstado(g, env) {
       const st = await esperaClip(page, n, false);
       const f = await fugas(page, [D[n - 1]]);
       const medios = await page.locator('video, [poster], img[src*="clips"]').count();
-      if (f.length || medios || st.videos || norm(st.q) !== norm(D[n - 1].pregunta) || document_title_tiene(await page.title(), D[n - 1])) mal.push(`clip ${n}: ${f.join(', ') || (medios ? 'hay vídeo o imagen' : 'otra pregunta o título en la pestaña')}`);
+      if (f.length || medios || st.videos || norm(st.q) !== norm(D[n - 1].pregunta) || st.nombre !== D[n - 1].nombre || st.total !== TOTAL || document_title_tiene(await page.title(), D[n - 1])) mal.push(`pregunta ${n}: ${f.join(', ') || (medios ? 'hay vídeo o imagen' : 'otra pregunta, otro nombre o título en la pestaña')}`);
     }
-    g.ok(`En los ${TOTAL}: ni el título, ni el id, ni la clave, ni la explicación, ni vídeo o imagen del clip (tampoco en el título de la pestaña)`, mal.length === 0, mal.slice(0, 4).join(' | '));
+    g.ok(`En las ${TOTAL}: su nombre como título de la pantalla; ni el título del clip (ni en atributos), ni el id, ni la clave, ni la explicación, ni vídeo o imagen del clip (tampoco en el título de la pestaña)`, mal.length === 0, mal.slice(0, 4).join(' | '));
     g.ok('…y sin pedir nada de /clips/', red.clips.length === pedidas, red.clips.slice(pedidas, pedidas + 3).join(', '));
     await cargar(page, BASE + '#formacion/directos'); await page.locator('#d-tit').waitFor();
     for (const [c] of REPARTO) await cabecera(page, c).click();
@@ -991,8 +1050,8 @@ async function gServidor(g, env) {
     await g.txt('La pestaña «Directos» con «Nuevo»', tabs(page).locator('a[href="#formacion/directos"]'), 'DirectosNuevo');
     await tabs(page).locator('a[href="#formacion/directos"]').click();
     await g.igual('URL', () => hashDe(page), '#formacion/directos');
-    await g.txt('Portada a cero', page.locator('#d-tit'), `${TOTAL} clips de los directos de Alex`);
-    await g.cuenta(`Los ${TOTAL} clips están abiertos (son enlaces), aunque tenga lecciones bloqueadas`, v.locator('ul a[href^="#formacion/directos/"]'), TOTAL);
+    await g.txt('Portada a cero', page.locator('#d-tit'), `${TOTAL} preguntas de los directos de Alex`);
+    await g.cuenta(`Las ${TOTAL} preguntas están abiertas (son enlaces), aunque tenga lecciones bloqueadas`, v.locator('ul a[href^="#formacion/directos/"]'), TOTAL);
     await g.cuenta('…y ninguno aparece bloqueado', v.locator('[aria-disabled="true"]'), 0);
     await cabecera(page, REPARTO[1][0]).click();
     await g.igual('Abre una categoría', () => abiertas(page), REPARTO[1][0]);
@@ -1034,17 +1093,17 @@ async function gServidor(g, env) {
 
   await g.seccion('Al volver a entrar, el progreso viene del servidor', async () => {
     await cargar(page, URL_SRV + '#formacion/directos');
-    await g.txt('Portada', page.locator('#d-tit'), `Te quedan ${TOTAL - 2} clips por responder`);
-    await g.cuenta('Anillo', v.getByRole('img', { name: `2 de ${TOTAL} clips respondidos: 1 acierto y 1 fallo` }), 1);
-    await g.txt('Tarjeta del fallado', v.locator('a[href="#formacion/directos/30"]'), `Clip 30 · ${env.CATS[D[29].cat].nombre} · ${dur(D[29].seg)}Fallado${D[29].titulo}`);
-    await g.igual('Abierta, la categoría del siguiente clip sin responder', () => abiertas(page), REPARTO[0][0]);
-    await g.txt('«Continuar» al primero sin responder', v.getByRole('link', { name: /^Continuar/ }), 'Continuar: clip 01');
+    await g.txt('Portada', page.locator('#d-tit'), `Te quedan ${TOTAL - 2} preguntas por responder`);
+    await g.cuenta('Anillo', v.getByRole('img', { name: `2 de ${TOTAL} preguntas respondidas: 1 acierto y 1 fallo` }), 1);
+    await g.txt('Tarjeta del fallado', v.locator('a[href="#formacion/directos/30"]'), `Pregunta 30 · ${env.CATS[D[29].cat].nombre}Fallada${D[29].nombre}${D[29].titulo}`);
+    await g.igual('Abierta, la categoría de la siguiente pregunta sin responder', () => abiertas(page), REPARTO[0][0]);
+    await g.txt('«Continuar» a la primera sin responder', v.getByRole('link', { name: /^Continuar/ }), 'Continuar: pregunta 01');
     await page.locator('a[data-ruta="formacion"]').click();
     await g.cumple('La ruta por niveles sigue con sus bloqueos', () => v.locator('[aria-disabled="true"]').count(), (n) => n > 20);
     await g.partes('…y su acceso a los directos con el progreso', page.locator('#vista > a[href="#formacion/directos"]'), ['Tests de los directos', `2 de ${TOTAL}`]);
   });
 
-  await g.seccion(`Con los ${TOTAL} clips respondidos, lo que se envía sigue siendo pequeño`, async () => {
+  await g.seccion(`Con las ${TOTAL} preguntas respondidas, lo que se envía sigue siendo pequeño`, async () => {
     const casi = {}; D.forEach((d, i) => { if (i !== 6) casi[d.id] = respuesta(d, i % 4 !== 1); });
     s.datos = { status: 200, body: { datos: Object.assign(datosLucia(), { directos: casi }) } }; s.reg.put.length = 0;
     await cargar(page, URL_SRV + '#formacion/directos/7');
@@ -1071,7 +1130,7 @@ async function gServidor(g, env) {
     g.ok('Un alumno sin datos guardados responde y se guarda', r.ok && igualJSON(r.v.directos, { [D[0].id]: { o: D[0].correcta, ok: true, f: HOY } }) && Array.isArray(r.v.trades) && r.v.trades.length === 0, JSON.stringify(r.v).slice(0, 200));
     s.datos = { status: 200, body: { datos: Object.assign(datosLucia(), { directos: null }) } };
     await cargar(page, URL_SRV + '#formacion/directos');
-    await g.txt('Con directos = null en el servidor, portada a cero y sin errores', page.locator('#d-tit'), `${TOTAL} clips de los directos de Alex`);
+    await g.txt('Con directos = null en el servidor, portada a cero y sin errores', page.locator('#d-tit'), `${TOTAL} preguntas de los directos de Alex`);
   });
 
   await g.seccion('Administrador: ve el progreso del alumno y no lo cambia', async () => {
@@ -1086,7 +1145,7 @@ async function gServidor(g, env) {
     await g.cumple('La de quien no ha empezado no dice nada de los directos', async () => norm(await v.locator('a[href="#alumnos/222"]').textContent()), (t) => t.includes('Diego Ramírez') && !/directos/i.test(t));
     await v.locator('a[href="#alumnos/111"]').click();
     await g.txt('Diario de la alumna', h1(page), 'Diario de Lucía Ferrer');
-    await g.partes('…con su progreso en los directos', v, ['Tests de los directos:', `3 de ${TOTAL}`, 'respondidos', '2 aciertos y 1 fallo']);
+    await g.partes('…con su progreso en los directos', v, ['Tests de los directos:', `3 de ${TOTAL}`, 'preguntas respondidas', '2 aciertos y 1 fallo']);
     await g.cuenta('Mirando a un alumno no hay nada que responder de los directos', v.locator('[data-accion^="dir-"]'), 0);
     for (const k of ['a', '1', 'Enter']) await page.keyboard.press(k);
     await page.goto(URL_SRV + '#alumnos/222');
@@ -1095,7 +1154,7 @@ async function gServidor(g, env) {
     await pausa(1200);
     g.ok('Revisando alumnos no se guarda nada en /api/datos', s.reg.put.length === 0, `PUT: ${s.reg.put.length}`);
     await page.goto(URL_SRV + '#formacion/directos');
-    await g.txt('Los directos del administrador son los suyos, no los del alumno', page.locator('#d-tit'), `${TOTAL} clips de los directos de Alex`);
+    await g.txt('Los directos del administrador son los suyos, no los del alumno', page.locator('#d-tit'), `${TOTAL} preguntas de los directos de Alex`);
     await page.goto(URL_SRV + '#formacion/directos/13');
     const st = await esperaClip(page, 13, false);
     g.ok('…el clip que la alumna falló está sin responder para él', st.videos === 0 && st.ops.every((o) => !o.off));
@@ -1117,7 +1176,9 @@ async function gTamanos(g, env) {
   const D = env.D;
   const sembrados = [0, 1, 2, 3, 12, 13, 29, 38];
   const dir = {}; sembrados.forEach((i, k) => { dir[D[i].id] = respuesta(D[i], k % 3 !== 1); });
-  const largo = D.map((d, i) => [d.pregunta.length + d.opciones.join('').length, i]).filter((x) => !sembrados.includes(x[1])).sort((a, b) => b[0] - a[0])[0][1] + 1; // el clip sin responder con más texto
+  const largo = D.map((d, i) => [d.pregunta.length + d.opciones.join('').length, i]).filter((x) => !sembrados.includes(x[1])).sort((a, b) => b[0] - a[0])[0][1] + 1; // la pregunta sin responder con más texto
+  const nomLargo = D.map((d, i) => [d.nombre.length, i]).filter((x) => !sembrados.includes(x[1])).sort((a, b) => b[0] - a[0])[0][1] + 1; // la pregunta sin responder con el nombre más largo
+  const sinClipNN = async (page) => !/\bClips? \d/.test(norm(await page.locator('#vista').innerText()));
   const TAM = [[360, 740, true], [390, 844, true], [820, 1180, true], [1440, 900, false]];
   for (const [w, h, movil] of TAM) for (const oscuro of [false, true]) {
     const et = `${w}px ${oscuro ? 'oscuro' : 'claro'}`;
@@ -1135,6 +1196,19 @@ async function gTamanos(g, env) {
       await page.locator('#d-tit').waitFor();
       await sinDesborde(g, page, w, `${et} · portada con progreso`);
       if (movil) await tactiles(g, page, `${et} · portada`);
+      g.ok(`${et} · en la portada no queda «Clip NN» como unidad`, await sinClipNN(page));
+      // las cuatro categorías y sus plegables de respondidas abiertos: los 90 nombres a la vista, también los más largos
+      await page.evaluate(() => document.querySelectorAll('#vista details').forEach((d) => { d.dataset.ab = '1'; d.open = true; }));
+      await sinDesborde(g, page, w, `${et} · portada con las ${TOTAL} tarjetas a la vista (los nombres más largos)`);
+      const cortados = await page.evaluate(() => Array.from(document.querySelectorAll('#vista ul a[href^="#formacion/directos/"]')).map((a) => { const b = a.querySelector('b'), c = getComputedStyle(b), lh = parseFloat(c.lineHeight) || 20; return { n: a.getAttribute('href').split('/').pop(), lineas: Math.round(b.getBoundingClientRect().height / lh), corta: b.scrollWidth > b.clientWidth + 1 || b.scrollHeight > b.clientHeight + 1 || c.textOverflow === 'ellipsis', ah: a.getBoundingClientRect().height }; }).filter((x) => x.corta || x.lineas > (innerWidth <= 380 ? 3 : 2) || x.ah < 44));
+      g.ok(`${et} · ningún nombre de pregunta se corta ni pasa de dos líneas${w <= 380 ? ' (tres a 360 px)' : ''}, y cada tarjeta mide 44 px o más`, cortados.length === 0, JSON.stringify(cortados.slice(0, 4)));
+      if (movil) await tactiles(g, page, `${et} · portada con todo abierto`);
+      await page.goto(BASE + '#formacion/directos/' + nomLargo);
+      await esperaClip(page, nomLargo, false);
+      await sinDesborde(g, page, w, `${et} · test de la pregunta con el nombre más largo (${nomLargo})`);
+      const op = await page.evaluate(() => { const o = document.querySelector('#vista [data-accion="dir-opcion"]').getBoundingClientRect(); return { top: Math.round(o.top), h: innerHeight }; });
+      g.ok(`${et} · …y su nombre no empuja la primera opción fuera de la primera pantalla`, op.top < op.h - 60, JSON.stringify(op));
+      g.ok(`${et} · en el test no queda «Clip NN» como unidad`, await sinClipNN(page));
       const fondo = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
       g.ok(`${et} · el fondo es el del tema`, oscuro ? /rgb\(10, 6, 28\)/.test(fondo) : /rgb\(243, 240, 250\)/.test(fondo), fondo);
       await page.goto(BASE + '#formacion/directos/' + largo);
@@ -1173,10 +1247,10 @@ async function gTamanos(g, env) {
     const dd = await page.evaluate(() => Array.from(document.querySelectorAll('#vista *')).map((e) => getComputedStyle(e)).reduce((mx, c) => Math.max(mx, ...String(c.animationDuration).split(',').map((x) => parseFloat(x) * (/ms$/.test(x.trim()) ? 1 : 1000)), ...String(c.transitionDuration).split(',').map((x) => parseFloat(x) * (/ms$/.test(x.trim()) ? 1 : 1000))), 0));
     g.ok('…y ninguna animación ni transición dura más de 0,01 ms', dd <= 0.011, `máximo ${dd} ms`);
     const y0 = await page.evaluate(() => { document.querySelector('[data-accion="dir-sig"]').scrollIntoView({ block: 'end' }); return Math.round(window.scrollY); });
-    g.ok('(en el móvil, «Siguiente clip» queda más abajo: la página está desplazada)', y0 > 100, `scrollY ${y0}`);
+    g.ok('(en el móvil, «Siguiente pregunta» queda más abajo: la página está desplazada)', y0 > 100, `scrollY ${y0}`);
     await page.locator('[data-accion="dir-sig"]').click();
     await esperaClip(page, 6, false);
-    await g.igual('«Siguiente clip» en el móvil: el clip nuevo empieza arriba', () => page.evaluate(() => Math.round(window.scrollY)), 0);
+    await g.igual('«Siguiente pregunta» en el móvil: la nueva empieza arriba', () => page.evaluate(() => Math.round(window.scrollY)), 0);
     await ctx.close();
   });
   cierre(g);
@@ -1363,7 +1437,7 @@ async function gDosDispositivos(g, env) {
       const b = r.ok ? r.v.cuerpo : {};
       g.ok('Lo que sube es SU estado: su respuesta y ninguna operación (las de la alumna no)', r.ok && igualJSON(b.directos, { [id(13)]: { o: D[12].correcta, ok: true, f: HOY } }) && Array.isArray(b.trades) && b.trades.length === 0, JSON.stringify(b).slice(0, 240));
       await irA(page, '#alumnos/111/estadisticas'); await pausa(300); await irA(page, '#alumnos/111'); await page.locator('#hero-neto').waitFor();
-      await g.partes('…y el diario de la alumna, al repintarse, sigue con sus respuestas y no con las de él', page.locator('#vista'), ['Tests de los directos:', `3 de ${TOTAL}`, 'respondidos', '2 aciertos y 1 fallo']);
+      await g.partes('…y el diario de la alumna, al repintarse, sigue con sus respuestas y no con las de él', page.locator('#vista'), ['Tests de los directos:', `3 de ${TOTAL}`, 'preguntas respondidas', '2 aciertos y 1 fallo']);
       for (const k of ['a', '1', 'Enter', 'ArrowRight']) await page.keyboard.press(k);
       await page.locator('#vista [data-accion="periodo"][data-periodo="semana"]').first().click().catch(() => {});
       await pausa(1300);
@@ -1371,7 +1445,7 @@ async function gDosDispositivos(g, env) {
       g.ok('Mirando a la alumna no se escribe nada más (un solo PUT en total, el suyo)', escrituras.length === 1, s.orden(n0).join(', '));
       await g.cuenta('…ni hay nada que responder en su diario', page.locator('#vista [data-accion^="dir-"]'), 0);
       await irA(page, '#formacion/directos');
-      await g.cuenta('Al volver a sus tests, su progreso es el suyo (1 clip), no el de la alumna (3)', page.locator('#vista').getByRole('img', { name: `1 de ${TOTAL} clips respondidos: 1 acierto y 0 fallos` }), 1);
+      await g.cuenta('Al volver a sus tests, su progreso es el suyo (1 clip), no el de la alumna (3)', page.locator('#vista').getByRole('img', { name: `1 de ${TOTAL} preguntas respondidas: 1 acierto y 0 fallos` }), 1);
       g.ok('Ninguna petición a rutas que no existen', s.otras.length === 0, s.otras.join(', '));
       await ctx.close();
     });
@@ -1401,7 +1475,14 @@ function normalizaLog(log) {
 async function recorrido(g, nav, s, quien) {
   const { ctx, page } = await contextoReal(g, nav, { nombre: quien, semilla: true });
   const v = page.locator('#vista'), toast = page.locator('#toast');
-  const put = async (fn) => { const n = s.puts().length; await fn(); const r = await hasta(() => s.puts().length, (k) => k > n, 6000); if (!r.ok) throw new Error(`[${quien}] el guardado no llega al servidor`); await pausa(250); };
+  // Cada tramo espera a que el servidor deje de recibir guardados (900 ms sin ninguno nuevo) y apunta dónde acaba: con la máquina cargada, un guardado
+  // retrasado caía en el tramo siguiente y la comparación escritura a escritura daba un FALLO falso (hallazgo A-1 de la revisión [DN]).
+  s.marcas = [];
+  const put = async (fn) => {
+    const n = s.puts().length; await fn(); const r = await hasta(() => s.puts().length, (k) => k > n, 6000); if (!r.ok) throw new Error(`[${quien}] el guardado no llega al servidor`);
+    let k = s.puts().length, quieto = Date.now(); while (Date.now() - quieto < 900) { await pausa(100); if (s.puts().length !== k) { k = s.puts().length; quieto = Date.now(); } }
+    s.marcas.push(s.log.length);
+  };
   await page.goto(s.url); await page.locator('#hero-neto').waitFor(); await pausa(800);
   await put(() => v.locator('[data-accion="periodo"][data-periodo="semana"]').first().click());                       // Diario · periodo
   await put(() => nuevaOperacion(page, 'Recorrido: entrada tarde, «con comillas» y ñ'));                               // Diario · operación nueva
@@ -1454,17 +1535,24 @@ async function gRestoIgual(g, env) {
       const a = normalizaLog(sMain.log), b = normalizaLog(sRama.log);
       const putsRama = sRama.puts();
       g.ok('El recorrido guarda de verdad (periodo, operación nueva, edición, objetivo, plan, lección, práctica y salida)', sMain.puts().length >= 9 && putsRama.length >= 9, `PUT publicada: ${sMain.puts().length}, ahora: ${putsRama.length}`);
-      g.ok('En la web de ahora, lo único nuevo en cada guardado es la clave «directos», vacía', putsRama.every((e) => igualJSON(e.cuerpo.directos, {})) && sMain.puts().every((e) => !('directos' in e.cuerpo)), JSON.stringify(putsRama.map((e) => e.cuerpo.directos)).slice(0, 200));
-      b.forEach((e) => { if (e.cuerpo && typeof e.cuerpo === 'object') delete e.cuerpo.directos; });
+      g.ok('Cada guardado lleva la clave «directos» vacía (en la publicada, la lleva también o aún no existe)', putsRama.every((e) => igualJSON(e.cuerpo.directos, {})) && sMain.puts().every((e) => !('directos' in e.cuerpo) || igualJSON(e.cuerpo.directos, {})), JSON.stringify(putsRama.map((e) => e.cuerpo.directos)).slice(0, 200));
+      a.concat(b).forEach((e) => { if (e.cuerpo && typeof e.cuerpo === 'object') delete e.cuerpo.directos; });
       // Las lecturas que el navegador lanza a la vez (las capturas de las operaciones) llegan en un orden que cambia de una pasada a otra: se comparan
       // como conjunto con repeticiones. Todo lo que escribe (PUT, POST, DELETE) se compara en su orden y con su contenido.
       const lee = (l) => l.filter((e) => e.m === 'GET').map((e) => e.p).sort(), escribe = (l) => l.filter((e) => e.m !== 'GET');
       g.ok(`Las mismas lecturas /api/* (${lee(a).length} GET, las mismas direcciones las mismas veces)`, igualJSON(lee(a), lee(b)), `publicada: ${lee(a).join(', ').slice(0, 400)} | ahora: ${lee(b).join(', ').slice(0, 400)}`);
       g.ok('…empezando igual: /api/yo y después /api/datos', igualJSON(a.slice(0, 2).map((e) => e.m + ' ' + e.p), ['GET /api/yo', 'GET /api/datos']) && igualJSON(b.slice(0, 2).map((e) => e.m + ' ' + e.p), ['GET /api/yo', 'GET /api/datos']));
-      const ea = escribe(a), eb = escribe(b);
-      g.ok(`Las mismas escrituras, en el mismo orden (${ea.length}: ${Array.from(new Set(ea.map((e) => e.m + ' ' + e.p))).join(', ')})`, igualJSON(ea.map((e) => e.m + ' ' + e.p), eb.map((e) => e.m + ' ' + e.p)), `publicada: ${ea.map((e) => e.m + ' ' + e.p).join(', ').slice(0, 400)} | ahora: ${eb.map((e) => e.m + ' ' + e.p).join(', ').slice(0, 400)}`);
-      const dif = ea.findIndex((e, i) => !igualJSON(e, eb[i]));
-      g.ok('…y con el mismo contenido en cada guardado (salvo esa clave)', dif < 0 && ea.length === eb.length, dif >= 0 ? `la escritura ${dif + 1} (${ea[dif].m} ${ea[dif].p}) difiere: ${JSON.stringify(ea[dif]).slice(0, 220)} ≠ ${JSON.stringify(eb[dif]).slice(0, 220)}` : '');
+      // Por tramos (cada acción del recorrido): varias escrituras seguidas a la misma dirección dentro de un tramo cuentan como un grupo, y de cada grupo
+      // se compara la última (la que deja el estado). Cuántos PUT intermedios agrupa el navegador depende de los tiempos de la máquina, no de la web.
+      const grupos = (l, marcas) => { const cortes = [0].concat(marcas, [l.length]), out = [];
+        for (let t = 0; t + 1 < cortes.length; t++) { const tr = escribe(l.slice(cortes[t], cortes[t + 1])), gs = [];
+          tr.forEach((e) => { const k = e.m + ' ' + e.p; if (gs.length && gs[gs.length - 1].k === k) gs[gs.length - 1].e = e; else gs.push({ t: t + 1, k, e }); }); out.push(...gs); }
+        return out; };
+      const ga = grupos(a, sMain.marcas), gb = grupos(b, sRama.marcas);
+      const clave = (gs) => gs.map((x) => `${x.t}:${x.k}`);
+      g.ok(`Las mismas escrituras, en el mismo orden y en el mismo tramo (${ga.length} grupos en ${sMain.marcas.length + 1} tramos: ${Array.from(new Set(ga.map((x) => x.k))).join(', ')})`, sMain.marcas.length === sRama.marcas.length && igualJSON(clave(ga), clave(gb)), `publicada: ${clave(ga).join(', ').slice(0, 400)} | ahora: ${clave(gb).join(', ').slice(0, 400)}`);
+      const dif = ga.findIndex((x, i) => !gb[i] || !igualJSON(x.e, gb[i].e));
+      g.ok('…y con el mismo contenido en el último guardado de cada grupo (salvo esa clave)', dif < 0 && ga.length === gb.length, dif >= 0 ? `tramo ${ga[dif].t}, ${ga[dif].k} difiere: ${JSON.stringify(ga[dif].e).slice(0, 220)} ≠ ${JSON.stringify((gb[dif] || {}).e).slice(0, 220)}` : '');
       g.ok('El guardado de salida llega en las dos (el último PUT lleva el periodo que se cambió justo antes de salir)', (sMain.puts().pop() || { cuerpo: {} }).cuerpo.periodo === 'todo' && (putsRama[putsRama.length - 1] || { cuerpo: {} }).cuerpo.periodo === 'todo');
       g.ok('Ningún GET de más a /api/datos: fuera de los tests de los directos, el estado solo se lee al abrir', sRama.log.filter((e) => e.m === 'GET' && e.p === '/api/datos').length === 1 && sMain.log.filter((e) => e.m === 'GET' && e.p === '/api/datos').length === 1);
       g.ok('Ninguna petición a rutas que no existen', sMain.otras.length === 0 && sRama.otras.length === 0, sMain.otras.concat(sRama.otras).join(', '));
@@ -1492,7 +1580,7 @@ async function gPantallas(g, env) {
   const quieto = async (page) => { let a = -1; for (let i = 0; i < 25; i++) { const y = await page.evaluate(() => Math.round(scrollY)); if (y === a) return; a = y; await pausa(120); } };
 
   for (const [w, h] of [[1280, 720], [1366, 657], [1280, 890], [1440, 900]]) {
-    await g.seccion(`Ordenador ${w}×${h}: las cuatro opciones y «Siguiente clip», sin desplazar`, async () => {
+    await g.seccion(`Ordenador ${w}×${h}: las cuatro opciones y «Siguiente pregunta», sin desplazar`, async () => {
       const { ctx, page } = await contexto(g, env, { nombre: `${w}×${h}`, viewport: { width: w, height: h }, reducir: true });
       await page.goto(BASE + '#formacion/directos/1');
       const fuera = [];
@@ -1502,17 +1590,17 @@ async function gPantallas(g, env) {
         const m = await page.evaluate(() => { window.scrollTo(0, 0); const o = Array.from(document.querySelectorAll('#vista [data-accion="dir-opcion"]')).map((b) => b.getBoundingClientRect()); return { d: Math.round(o[3].bottom), h: innerHeight }; });
         if (m.d > m.h) fuera.push(`${n} (+${m.d - m.h} px)`);
       }
-      g.ok(`${w}×${h} · en los ${TOTAL} clips la opción D se ve entera sin desplazar`, fuera.length === 0, `no cabe en: ${fuera.slice(0, 12).join(', ')}`);
+      g.ok(`${w}×${h} · en las ${TOTAL} preguntas (con su nombre encima) la opción D se ve entera sin desplazar`, fuera.length === 0, `no cabe en: ${fuera.slice(0, 12).join(', ')}`);
       if (h < 900) {
         const mal = [];
-        for (const n of [1, 8, 20, 30]) {
+        for (const n of (w === 1280 && h === 720 ? D.map((d, i) => i + 1) : [1, 8, 20, 30])) { // a 1280×720, las 90 (B-2: antes se quedaba bajo el pliegue en unas cuantas)
           await page.evaluate((x) => { location.hash = '#formacion/directos/' + x; }, n);
           await esperaClip(page, n, false);
           await opcion(page, otra(D[n - 1])).click(); await esperaClip(page, n, true); await quieto(page);
           const m = { sig: await page.evaluate(enVista, '#vista [data-accion="dir-sig"]'), video: await page.evaluate(enVista, '#dir-video'), ver: await page.evaluate(enVista, '#d-ver') };
-          if (!(m.sig.entero && m.video.entero && m.ver.entero)) mal.push(`clip ${n}: ${JSON.stringify(m)}`);
+          if (!(m.sig.entero && m.video.entero && m.ver.entero)) mal.push(`pregunta ${n}: ${JSON.stringify(m)}`);
         }
-        g.ok(`${w}×${h} · tras responder (fallando), el veredicto, el vídeo entero y «Siguiente clip» quedan a la vista a la vez`, mal.length === 0, mal.slice(0, 2).join(' | '));
+        g.ok(`${w}×${h} · tras responder (fallando)${w === 1280 && h === 720 ? ` cada una de las ${TOTAL}` : ''}, el veredicto, el vídeo entero y «Siguiente pregunta» quedan a la vista a la vez`, mal.length === 0, mal.slice(0, 2).join(' | '));
         await sinDesborde(g, page, w, `${w}×${h} · test respondido`);
         await page.goto(BASE + '#formacion/directos'); await page.locator('#d-tit').waitFor();
         await g.cuenta(`${w}×${h} · en ordenador las categorías también son plegables: cuatro cabeceras a la vista`, page.locator('#vista details[data-c] > summary:visible'), REPARTO.length);
@@ -1529,7 +1617,7 @@ async function gPantallas(g, env) {
       await page.goto(BASE + '#formacion/directos/' + n); await esperaClip(page, n, false);
       await opcion(page, ok ? D[n - 1].correcta : otra(D[n - 1])).click(); await esperaClip(page, n, true); await quieto(page);
       const v = await page.evaluate(enVista, '#dir-video'), ver = await page.evaluate(enVista, '#d-ver');
-      g.ok(`Clip ${n} ${ok ? 'acertado' : 'fallado'} · el vídeo entero cabe en lo que deja libre la barra de abajo y se ve nada más responder`, v.entero && v.h <= v.tope - 20 && v.w >= 380, JSON.stringify(v));
+      g.ok(`Pregunta ${n} ${ok ? 'acertada' : 'fallada'} · el vídeo entero cabe en lo que deja libre la barra de abajo y se ve nada más responder`, v.entero && v.h <= v.tope - 20 && v.w >= 380, JSON.stringify(v));
       g.ok('…junto con el veredicto', ver.entero, JSON.stringify(ver));
       g.ok('…y guarda la proporción 16:9', Math.abs(v.w / v.h - 16 / 9) < 0.03, JSON.stringify(v));
     }
@@ -1543,7 +1631,7 @@ async function gPantallas(g, env) {
   });
 
   for (const [w, h] of [[390, 844], [360, 740]]) {
-    await g.seccion(`Repasar un clip en el móvil (${w}×${h})`, async () => {
+    await g.seccion(`Repasar una pregunta en el móvil (${w}×${h})`, async () => {
       const { ctx, page } = await contexto(g, env, { nombre: `repaso ${w}`, viewport: { width: w, height: h }, dpr: 2, movil: true, reducir: true, cortarVideo: true, tolera: [/clips\/.*\.mp4/, /net::ERR_FAILED/] });
       const v = page.locator('#vista');
       await sembrar(page, Object.assign(estadoAntiguo(), { directos: todo }), BASE + '#formacion/directos');
@@ -1552,7 +1640,7 @@ async function gPantallas(g, env) {
       await t30.scrollIntoViewIfNeeded(); await t30.click();
       await esperaClip(page, 30, true); await quieto(page);
       const vid = await page.evaluate(enVista, '#dir-video'), ver = await page.evaluate(enVista, '#d-ver');
-      g.ok(`${w} px · un clip ya respondido se abre por su placa: el vídeo entero a la vista`, vid.entero && vid.y > 100, JSON.stringify(vid));
+      g.ok(`${w} px · una pregunta ya respondida se abre por la placa del clip: el vídeo entero a la vista`, vid.entero && vid.y > 100, JSON.stringify(vid));
       g.ok(`${w} px · …con su veredicto, si cabe`, ver.entero || vid.bottom - ver.top > vid.tope - 12, JSON.stringify(ver));
       await page.locator('#dir-video').evaluate((e) => { const p = e.play(); if (p && p.catch) p.catch(() => {}); });
       await g.visible(`${w} px · si el vídeo no carga, el aviso sale`, page.locator('#dir-error'), 8000);
@@ -1563,12 +1651,12 @@ async function gPantallas(g, env) {
         await loc.click();
         await page.locator('#d-tit').waitFor(); await quieto(page);
         const t = await page.evaluate(enVista, '#vista a[href="#formacion/directos/30"]'), foco = await page.evaluate(() => document.activeElement && document.activeElement.getAttribute('href'));
-        g.ok(`${w} px · ${nombre} vuelve a la portada con la tarjeta del clip a la vista y con el foco (antes, arriba del todo)`, t.entero && t.y > 500 && foco === '#formacion/directos/30', JSON.stringify(t) + ' foco ' + foco);
+        g.ok(`${w} px · ${nombre} vuelve a la portada con la tarjeta de la pregunta a la vista y con el foco (antes, arriba del todo)`, t.entero && t.y > 500 && foco === '#formacion/directos/30', JSON.stringify(t) + ' foco ' + foco);
         await t30.click(); await esperaClip(page, 30, true); await quieto(page);
       }
       await v.locator('[data-accion="dir-sig"]').scrollIntoViewIfNeeded(); await v.locator('[data-accion="dir-sig"]').click();
       await esperaClip(page, 31, true); await quieto(page);
-      g.ok(`${w} px · «Siguiente clip» con todo respondido: el clip 31, también por su placa`, (await page.evaluate(enVista, '#dir-video')).entero, JSON.stringify(await page.evaluate(enVista, '#dir-video')));
+      g.ok(`${w} px · «Siguiente pregunta» con todo respondido: la 31, también por la placa del clip`, (await page.evaluate(enVista, '#dir-video')).entero, JSON.stringify(await page.evaluate(enVista, '#dir-video')));
       await sinDesborde(g, page, w, `${w} px · clip en repaso (cuatro botones)`);
       await tactiles(g, page, `${w} px · clip en repaso`);
       // con clips pendientes, uno sin responder sigue empezando arriba
@@ -1577,39 +1665,52 @@ async function gPantallas(g, env) {
       const t22 = await tarjeta(page, 22);
       await t22.scrollIntoViewIfNeeded(); await t22.click();
       await esperaClip(page, 22, false); await quieto(page);
-      await g.igual(`${w} px · un clip sin responder se abre arriba, por la pregunta`, () => page.evaluate(() => Math.round(window.scrollY)), 0);
+      await g.igual(`${w} px · una pregunta sin responder se abre arriba, por su nombre`, () => page.evaluate(() => Math.round(window.scrollY)), 0);
       await ctx.close();
     });
 
     await g.seccion(`La portada en el móvil (${w}×${h})`, async () => {
       const { ctx, page } = await contexto(g, env, { nombre: `portada ${w}`, viewport: { width: w, height: h }, dpr: 2, movil: true, reducir: true });
       const v = page.locator('#vista'), cabs = v.locator('details[data-c] > summary');
-      await sembrar(page, Object.assign(estadoAntiguo(), { directos: veinte }), BASE + '#formacion/directos');
+      await sembrar(page, Object.assign(estadoAntiguo(), { directos: veinte }), BASE + '#formacion');
+      const banda = page.locator('#vista > a[href="#formacion/directos"]');
+      const yB = await banda.evaluate((a) => { window.scrollTo(0, a.getBoundingClientRect().top + scrollY - 200); return Math.round(scrollY); });
+      await banda.click(); await page.locator('#d-tit').waitFor(); await quieto(page);
+      g.ok(`${w} px · entrando por el acceso de la ruta (con la ruta desplazada ${yB} px), la portada empieza arriba (B-3)`, yB > 100 && (await page.evaluate(() => Math.round(window.scrollY))) === 0, `scrollY ${await page.evaluate(() => Math.round(window.scrollY))}`);
       await page.locator('#d-tit').waitFor();
       await g.cuenta(`${w} px · bajo la placa, una cabecera por categoría`, cabs, REPARTO.length);
       const esperado = REPARTO.map(([c, nom, n], k) => { const antes = REPARTO.slice(0, k).reduce((a, r) => a + r[2], 0); return [c, nom, `${Math.max(0, Math.min(n, 20 - antes))} de ${n}`]; });
       const cabsTxt = await v.locator('details[data-c]').evaluateAll((ds) => ds.map((d) => [d.dataset.c, d.querySelector('summary').textContent.replace(/\s+/g, ' ').trim()]));
       g.ok(`${w} px · …con su nombre y su «n de m»`, cabsTxt.length === esperado.length && esperado.every(([c, nom, nm], k) => cabsTxt[k][0] === c && cabsTxt[k][1].startsWith(nom) && cabsTxt[k][1].includes(nm)), JSON.stringify(cabsTxt).slice(0, 400));
       let acum = 0, p1 = 0; for (const r of REPARTO) { const ini = Math.max(acum, 20) + 1; if (!p1 && acum + r[2] - ini >= 2) p1 = ini; acum += r[2]; } // el primer clip sin responder de una categoría a la que le quedan tres o más (con 20 respondidos)
-      await g.igual(`${w} px · abierta solo la categoría del siguiente clip sin responder`, () => abiertas(page), catDe(21));
+      await g.igual(`${w} px · abierta solo la categoría de la siguiente pregunta sin responder`, () => abiertas(page), catDe(21));
       await tarjeta(page, p1);
-      const m = await page.evaluate((p) => { const r = (n) => { const a = document.querySelector(`#vista ul a[href="#formacion/directos/${n}"]`), b = a.getBoundingClientRect(), t = a.querySelector('b').getBoundingClientRect(); return { top: Math.round(b.top + scrollY), left: Math.round(b.left), w: Math.round(b.width), h: Math.round(b.height), titulo: Math.round(t.width) }; };
-        const ul = document.querySelector('#vista ul a[href="#formacion/directos/1"]').closest('ul'), cs = getComputedStyle(ul);
-        return { r1: r(1), r2: r(2), p21: r(p), p22: r(p + 1), p23: r(p + 2), ancho: ul.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), vista: document.getElementById('vista').getBoundingClientRect().width, alto: document.documentElement.scrollHeight }; }, p1);
-      g.ok(`${w} px · los clips sin responder van de dos en dos`, m.p21.top === m.p22.top && m.p22.left > m.p21.left + 100 && m.p23.top > m.p21.top && m.p23.left === m.p21.left, JSON.stringify([m.p21, m.p22, m.p23]));
-      g.ok(`${w} px · …compactos (sin repetir a la vista «Sin responder»; el texto sigue para los lectores de pantalla)`, m.p21.h <= 64 && m.p21.titulo <= 2, JSON.stringify(m.p21));
-      g.ok(`${w} px · los ya respondidos, con su título, a todo el ancho de su placa y uno debajo de otro`, m.r1.w >= m.ancho - 4 && m.ancho >= m.vista - 40 && m.r2.top > m.r1.top && m.r1.titulo > 100, JSON.stringify([m.r1, m.r2, m.ancho, m.vista]));
-      await g.txt(`${w} px · una tarjeta compacta conserva su texto completo`, v.locator(`ul a[href="#formacion/directos/${p1 + 1}"]`), `Clip ${num2(p1 + 1)} · ${env.CATS[D[p1].cat].nombre} · ${dur(D[p1].seg)}Sin responder`);
-      const cortos = await page.evaluate(() => Array.from(document.querySelectorAll('#vista ul a[href^="#formacion/directos/"]')).filter((a) => a.getBoundingClientRect().height > 0 && /Sin responder$/.test(a.textContent.trim())).map((a) => { const sm = a.querySelector('small'); return { n: a.getAttribute('href'), cabe: sm.scrollWidth <= sm.clientWidth + 1 && sm.getBoundingClientRect().height < 30 }; }).filter((x) => !x.cabe).map((x) => x.n));
-      g.ok(`${w} px · «Clip NN · m:ss» cabe en una línea en todas las tarjetas compactas`, cortos.length === 0, cortos.slice(0, 5).join(', '));
+      const caja = (n) => { const a = document.querySelector(`#vista ul a[href="#formacion/directos/${n}"]`), b = a.getBoundingClientRect(), t = a.querySelector('b'), tb = t.getBoundingClientRect(), vid = a.querySelector('b + span'), vb = vid ? vid.getBoundingClientRect() : null;
+        return { top: Math.round(b.top + scrollY), left: Math.round(b.left), w: Math.round(b.width), h: Math.round(b.height), nombre: Math.round(tb.height), lineas: Math.round(tb.height / (parseFloat(getComputedStyle(t).lineHeight) || 20)), vis: a.checkVisibility(), tit: vb ? Math.round(vb.height) : null }; };
+      const mide = (p) => page.evaluate(({ p, caja }) => { const f = new Function('return ' + caja)(); const ul = document.querySelector(`#vista ul a[href="#formacion/directos/${p}"]`).closest('ul');
+        return { p21: f(p), p22: f(p + 1), p23: f(p + 2), r1: f(1), r2: f(2), ancho: ul.clientWidth, vista: document.getElementById('vista').getBoundingClientRect().width, alto: document.documentElement.scrollHeight }; }, { p, caja: caja.toString() });
+      let m = await mide(p1);
+      g.ok(`${w} px · las preguntas sin responder van una por fila, a todo el ancho`, m.p22.top >= m.p21.top + m.p21.h && m.p22.left === m.p21.left && m.p23.top > m.p22.top && m.p21.w >= m.ancho - 4 && m.ancho >= m.vista - 60, JSON.stringify([m.p21, m.p22, m.p23, m.ancho, m.vista]));
+      g.ok(`${w} px · …compactas: «Pregunta NN» y el nombre en dos líneas como mucho (entre 44 y 84 px de alto)`, [m.p21, m.p22, m.p23].every((x) => x.h >= 44 && x.h <= 84 && x.lineas <= 2), JSON.stringify([m.p21, m.p22, m.p23]));
+      await g.txt(`${w} px · una tarjeta sin responder: «Pregunta NN» y su nombre (categoría y estado, para lectores de pantalla)`, v.locator(`ul a[href="#formacion/directos/${p1 + 1}"]`), `Pregunta ${num2(p1 + 1)} · ${env.CATS[D[p1].cat].nombre} · sin responder${D[p1].nombre}`);
+      const cortos = await page.evaluate(() => Array.from(document.querySelectorAll('#vista ul a[href^="#formacion/directos/"]')).filter((a) => a.getBoundingClientRect().height > 0).map((a) => { const sm = a.querySelector('small'); return { n: a.getAttribute('href'), cabe: sm.getBoundingClientRect().height < 24 }; }).filter((x) => !x.cabe).map((x) => x.n));
+      g.ok(`${w} px · «Pregunta NN» cabe en una línea en todas las tarjetas`, cortos.length === 0, cortos.slice(0, 5).join(', '));
+      g.ok(`${w} px · las 20 respondidas, recogidas: ninguna a la vista`, !m.r1.vis && !m.r2.vis, JSON.stringify([m.r1, m.r2]));
+      await g.igual(`${w} px · …tras «Ver las 20 respondidas», debajo de las pendientes`, async () => norm(await hechas(page, catDe(21)).innerText()), 'Ver las 20 respondidas');
+      g.ok(`${w} px · con 20 respondidas y una categoría abierta, la portada mide ${m.alto} px`, m.alto <= 1700 + (REPARTO[0][2] - 20) * 100, `${m.alto} px`);
+      await tarjeta(page, 1);
+      m = await mide(p1);
+      g.ok(`${w} px · al abrirlo, las respondidas a todo el ancho y una debajo de otra`, m.r1.vis && m.r1.w >= m.ancho - 4 && m.r2.top > m.r1.top, JSON.stringify([m.r1, m.r2, m.ancho]));
+      g.ok(`${w} px · …con el título del clip en una sola línea (sin que la tarjeta pase de 120 px)`, m.r1.tit > 0 && m.r1.tit < 24 && m.r1.h <= 120 && m.r2.h <= 120, JSON.stringify([m.r1, m.r2]));
+      await g.txt(`${w} px · …y su texto completo: «Pregunta 01», el estado, el nombre y el título del clip`, v.locator('ul a[href="#formacion/directos/1"]'), `Pregunta 01 · ${env.CATS[D[0].cat].nombre}${respuesta(D[0], true).o === D[0].correcta ? 'Acertada' : 'Fallada'}${D[0].nombre}${D[0].titulo}`);
+      await tactiles(g, page, `${w} px · portada con las respondidas a la vista`);
       await sinDesborde(g, page, w, `${w} px · portada a medias`);
       await tactiles(g, page, `${w} px · portada a medias`);
-      g.ok(`${w} px · con 20 respondidos y una categoría abierta, la portada mide ${m.alto} px (con las cuatro abiertas eran más de 5.000)`, m.alto <= 1500 + REPARTO[0][2] * 100, `${m.alto} px`);
       const ult = REPARTO[REPARTO.length - 1];
       await cabs.last().scrollIntoViewIfNeeded();
       const y0 = await page.evaluate((c) => Math.round(document.querySelector(`#vista details[data-c="${c}"] > summary`).getBoundingClientRect().top), ult[0]);
       await cabs.last().click();
-      await g.cuenta(`${w} px · pulsar la cabecera de la última categoría la abre: sus ${ult[2]} clips, a la vista`, v.locator(`details[data-c="${ult[0]}"] ul a:visible`), ult[2]);
+      await g.cuenta(`${w} px · pulsar la cabecera de la última categoría la abre: sus ${ult[2]} preguntas, a la vista`, v.locator(`details[data-c="${ult[0]}"] ul a:visible`), ult[2]);
       const y1 = await page.evaluate((c) => Math.round(document.querySelector(`#vista details[data-c="${c}"] > summary`).getBoundingClientRect().top), ult[0]);
       g.ok(`${w} px · …sin que la cabecera se mueva de donde se ha pulsado`, Math.abs(y1 - y0) <= 2, `${y0} → ${y1}`);
       await sinDesborde(g, page, w, `${w} px · portada con dos categorías abiertas`);

@@ -231,7 +231,7 @@ let INDEX_HTML = null;
 /* ---------- Tests de los directos: la clave se lee del propio index.html (const DIRECTOS=[…], una línea JSON por clip) ---------- */
 let DIRECTOS = [];
 function leerDirectos(html) { const a = html.indexOf('const DIRECTOS=['), b = html.indexOf('\n];', a); if (a < 0 || b < 0) return []; try { return JSON.parse(html.slice(a + 15, b + 2)); } catch (e) { return []; } }
-// Respuestas guardadas de los clips «nums» (1…45); los de «fallados» con una opción equivocada
+// Respuestas guardadas de las preguntas «nums» (1…90); los de «fallados» con una opción equivocada
 function respuestasDirectos(nums, fallados) {
   const o = {};
   nums.forEach((n) => { const d = DIRECTOS[n - 1]; if (d) { const mal = (fallados || []).includes(n); o[d.id] = { o: mal ? (d.correcta + 1) % 4 : d.correcta, ok: !mal, f: '2026-10-29' }; } });
@@ -743,7 +743,17 @@ escena('directos', ['43', '44', '45', '46', '47', '48', '49'], async (S) => {
   if (!S.alguna('47', '48', '49')) return;
   await sembrarDirectos(S, [1, 2, 3, 4, 5, 6, 7, 8, 13, 14, 15, 16, 17, 18, 19, 30, 31, 39], [3, 7, 14, 17, 31], '#formacion/directos');
   await page.waitForSelector('.dir-hero');
-  await S.shot('47', { arriba: true, espera: 1300, expect: ['.dir-card.ok', '.dir-card.ko', '.dir-card.sig', '[data-accion="dir-fallos"]', '.dir-barra .g', '.dir-barra .p'] });
+  await S.shot('47', { arriba: true, espera: 1300, expect: ['.dir-hechas > summary', '.dir-card.sig', '.dir-card.pend', '[data-accion="dir-fallos"]', '.dir-barra .g', '.dir-barra .p'] });
+  // «-respondidas»: la misma portada con el plegable «Ver las N respondidas» de la categoría abierta desplegado (tarjetas con estado y título del clip)
+  if (S.quiere('47')) {
+    const nombre = `${S.tag}-47-${CAT['47']}-respondidas`;
+    try {
+      await page.click('details.dir-cat[open] .dir-hechas > summary');
+      await S.fuera(); await S.sinTransicion(); await page.waitForTimeout(500);
+      for (const sel of ['.dir-hechas[open] .dir-card.ok', '.dir-hechas[open] .dir-card.ko', '.dir-hechas[open] .dir-vid']) if (!(await page.locator(sel).first().isVisible())) throw new Error('no se ve «' + sel + '»');
+      await S.foto(nombre, true);
+    } catch (e) { problemas.push(`${nombre}: ${String(e.message).split('\n')[0]}`); }
+  }
   if (S.quiere('48')) {
     await page.click('[data-accion="dir-fallos"]');
     await page.waitForSelector('.dir-test.fresco .opcion');

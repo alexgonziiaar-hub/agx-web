@@ -267,3 +267,110 @@ Scripts propios de este paso en `…/agx/tmp/d90/`. Orden de trabajo: 1 clips ·
   B-4 (categoría cerrada a mano no se reabre sola). Límite de fondo sin cambios: el guardado sube el estado entero (dos dispositivos: gana el último).
 - Verificación final sobre 386e8e6: `agx-e2e.cjs` OK (1.054), `agx-e2e-directos.cjs` OK (612), capturas del apartado sin errores. En vivo
   (`…/scratchpad/vivo-directos2.sh`): index idéntico, 90 de 90 clips con video/mp4, tamaño exacto, 206 en peticiones parciales y portada; manifiesto con su tipo.
+
+---
+
+# Nombre de la pregunta en lugar de «Clip NN · duración» (commits `[DN]`, rama `tests-directos`, sin tocar `main`)
+
+Encargo del cliente (tras verlo en su móvil): «No entiendo que salga clip y los segundos» · «Yo pondría nombre de una pregunta en vez de clip».
+Scripts propios de este paso en `…/agx/tmp/dn/` (`nombres.py`, `parche.py` + `p1…p6.py`, `pt1…pt5.py` para la prueba, `commit.sh`, `ver.cjs`, `b2.cjs`, `b3.cjs`, `cap/`, logs).
+
+## Qué ve el alumno ahora
+- **Portada:** cada tarjeta dice «Pregunta 02» (pequeño) y, como texto principal, el NOMBRE de la pregunta (hasta dos líneas, sin cortar). Sin duración.
+  Respondida: además «Acertada» / «Fallada» (con icono en la ficha, no solo color) y, debajo, una línea secundaria con el icono de vídeo y el título del clip
+  (en el móvil, una sola línea con puntos suspensivos; en ordenador hasta dos). En el móvil, una tarjeta por fila a todo el ancho (56–84 px).
+- **Dentro de cada categoría:** primero las pendientes; las respondidas, recogidas tras «Ver las N respondidas» (`<details class="dir-hechas">`, bandeja hundida
+  con la flecha-tecla `.niv-chev`; abierto dice «Ocultar las N respondidas»). Abierto de entrada solo cuando ya no queda nada pendiente en la categoría. No se recuerda.
+- **Unidad «pregunta»:** placa («90 preguntas de los directos de Alex» / «Te quedan 72 preguntas por responder» / «Las 90 preguntas respondidas» / «Las 90 acertadas»),
+  anillo («18 de 90 preguntas respondidas…», «respondidas» bajo la cifra), «Continuar: pregunta 09», cabeceras de categoría («n de m respondidas» para lectores),
+  banda de la ruta («Preguntas sacadas de momentos reales…» + «90 preguntas» / «9 de 90»), aviso del repaso («2 de 3 acertadas»), administrador
+  («Tests de los directos: 3 de 90 preguntas respondidas · …»). «Clip» queda para el vídeo: «Así lo explica Alex en el directo», «El clip del directo»,
+  «Responde para ver el clip», «No se ha podido cargar el clip», «la lección del clip», «Clip del directo: …» (nombre accesible del vídeo), «En el clip: …».
+- **Test:** «Pregunta 07 de 90 · Conceptos» como antetítulo (`.dir-cab-num`) y el nombre como `<h1>`; fuera la línea «Pregunta · 4 opciones · clip de m:ss»
+  (la duración sigue en la pantalla apagada). «Siguiente pregunta», «Anterior», «Repetir», «Volver», «Ver el resumen», «Terminar el repaso»; «No encuentro esa pregunta».
+  El `<title>` de la web es fijo («AGX Área de Alumnos»): no cambia.
+
+## Datos
+- `nombre` justo después de `titulo` en las 90 líneas de `DIRECTOS` (de `…/clips/nombres-90.json`); `preguntas-90.json` regenerado con el mismo orden de campos.
+  `tmp/dn/nombres.py` comprueba antes que la web y el JSON coincidían, valida (≤ 50, únicos, ≠ título, sin «clip»/«gonci»/HTML) y escribe los dos. Comprobado
+  después: el bloque de la web, leído como JSON, es igual al archivo; quitando `nombre`, igual que antes (copia en `tmp/dn/preguntas-90.antes.json`).
+
+## Decisiones
+- La categoría ya no se ve en la tarjeta (es la del encabezado): va en un `.sr`, con «sin responder» para lectores en las pendientes.
+- El plegable de respondidas no se recuerda (es por categoría y cambia con cada respuesta); el de la categoría sí, como antes.
+- B-4: `agx-directos-cats` admite un valor nuevo, 2 = «cerrada cuando ya era la del siguiente pendiente» (se respeta). Un 0 (cerrada cuando no lo era, y los 0
+  que ya tengan los alumnos) se ignora en cuanto la categoría pasa a ser la del siguiente pendiente. No viaja al servidor; `state.directos` no cambia.
+- B-3: la clave que decide si una navegación empieza arriba (`hashchange`) incluye ahora «estoy en los tests de los directos»: entrar o salir del apartado con un
+  enlace o un botón empieza arriba (también con la pestaña «Directos» desde otra pestaña de Formación; atrás/adelante, igual que antes).
+- B-2: `dirALaVista()` en ordenador cuenta también con «Siguiente pregunta» si cabe junto con la placa del clip. A 1280×720: 17 de 90 bajo el pliegue → 0.
+- `dirTrasNavegar()` abre todos los `<details>` que contienen la tarjeta de la que se vuelve (categoría y plegable de respondidas).
+- Arte (una ronda): en rejilla (≥ 641 px) la tarjeta alinea arriba para que «Pregunta NN» y el nombre empiecen a la misma altura en una fila.
+
+## Pruebas
+- `agx-e2e-directos.cjs` (copia de antes en `tmp/dn/agx-e2e-directos.antes-de-dn.cjs`): textos nuevos y comprobaciones nuevas: los 90 nombres (once campos en orden,
+  10–50 caracteres, únicos, ninguno igual a su título ni contenido en él, ni con el título de otro clip, sin «clip»/«gonci»); tarjeta sin responder = «Pregunta NN»
+  + nombre, sin duración ni título; respondida = nombre + estado + título; «Ver las N respondidas» (cerrado, después de las pendientes, abrir/cerrar, abierto con todo
+  respondido); el test con el nombre como h1 antes de responder; `fugas()` mira ahora también el título dentro del HTML (atributos); en el test se compara el
+  documento entero sin los `<script>`; sin «Clip NN» en portada y test en los ocho tamaños; portada con todo abierto a 360 px sin desbordamiento ni nombres cortados;
+  test de la pregunta del nombre más largo; B-4, B-3 (en el móvil; en ordenador la portada sin empezar es más baja que la ventana y no lo distingue) y B-2 (las 90 a
+  1280×720). B-3 y B-2 comprobados contra la versión sin el arreglo: las dos dan FALLO.
+- «El resto guarda igual» compara con `origin/main`, que YA lleva los directos publicados: la comprobación «lo único nuevo es `directos:{}`» pasa a «cada guardado
+  lleva `directos:{}` (en la publicada también, o aún no existe)» y se quita la clave de las dos antes de comparar.
+- Verificación final sobre c07ec31: `agx-e2e.cjs` RESULTADO: OK (1.054; la primera pasada dio la carrera conocida de Mayús+Tab, repetida pasa); `agx-e2e-directos.cjs` RESULTADO: OK (708); capturas en `…/agx/dn/` sin problemas ni errores de página.
+- `agx-shots.cjs`: la 47 espera el plegable en vez de tarjetas respondidas a la vista y añade la variante «-respondidas» (plegable abierto).
+
+## Queda
+- 1100×700 (ordenador estrecho y bajo): la D se corta en 40 de 90 y «Siguiente pregunta» no cabe con la placa; igual en lo publicado (no lo empeora este paso).
+- La reproducción en iPhone/Android sigue sin verse en un dispositivo real.
+
+---
+
+# Revisión del paso [DN] (commits `[DNR]`, rama `tests-directos`, sin tocar `main`)
+
+Scripts de este paso en `…/agx/tmp/dnr/` (`renombrar.py`, `b1.py`, `sin-b1.py`, `commit.sh`, `alto.cjs`, `mut-b1/`, copias `*.antes*.json`, `agx-e2e-directos.antes-de-dnr.cjs`, logs).
+Commits: `ada0a24` (nombres N1–N11) y `b330492` (B1). Todo subido.
+
+## Hallazgos y estado
+- **N1–N11 (nombres que daban pistas o se confundían) — HECHO** (`ada0a24`). Comprobados uno a uno leyendo nombre + opciones sin el enunciado: los once eran reales.
+  Nombres nuevos (≤ 50, únicos, sin «clip», ninguno contenido en su título), iguales en `DIRECTOS`, `preguntas-90.json` y `nombres-90.json`:
+  10 «Por fin te sale el Patrón Gonzi» · 14 «Un imbalance de compra sobre una zona rota» · 37 «Esperas un Patrón Gonzi de venta en el rebote» ·
+  40 «Tenías pensada una venta en el Call Wall» · 62 «Día bajista y una zona de venta marcada arriba» · 64 «Venta grande en el gráfico de 30 segundos» ·
+  68 «Con un corto abierto, el precio en los 29.000» · 77 «Qué trabajar tras una entrada que no hiciste» · 79 «Un compañero te enseña su compra en el Put Wall» ·
+  87 «Llevas 400 $ en un día de noticias fuertes» · 88 «Tras la apertura, un imbalance encima del precio».
+  Cambié tres propuestas de la revisión: la 10 («Sale el Patrón Gonzi que estabas esperando» se parecía a la nueva 37), la 64 y la 68 (las dos propuestas
+  empezaban por «Vas corto y…», igual que la 61 «Vas corto y la operación no te convence», las tres en Gestión).
+- **B1 («Volver» tras responder deja al alumno al fondo, entre las respondidas) — HECHO** (`b330492`). Reproducido con `dn-b/volver.cjs` (tarjeta 4 a −2431 px).
+  `dirTrasNavegar(deClip, recien)`: si se vuelve de una pregunta recién respondida (`dirReciente`, sin repaso de fallos en curso) y su tarjeta está en el plegable
+  de respondidas, va a la siguiente pendiente de la categoría (la primera con número mayor; si no, la primera), con foco y centrada, y el plegable sigue cerrado.
+  Volver de un repaso, de volver a ver una ya respondida, de una sin responder o de una categoría ya sin pendientes: como antes (su tarjeta). Ahora: 390×844 tarjeta 4
+  a 344..403 px con el foco; 1440×900 a 440..525 px. No toca lo que se guarda.
+- **A-1 (FALLO falso de «El resto guarda igual» con la máquina cargada) — HECHO en la prueba** (no es de la web). `recorrido()` espera ahora a que el servidor
+  pase 900 ms sin recibir guardados antes de seguir y marca dónde acaba cada tramo; la comparación agrupa, dentro de cada tramo, las escrituras seguidas a la
+  misma dirección y compara la última de cada grupo (orden, tramo y contenido). Sigue comparando todas las lecturas y el guardado de salida.
+- **B2 (portada más larga en el móvil a mitad de categoría: empeora B-1) — PENDIENTE, decisión del cliente.** Real: con 2 respondidas de Conceptos, 390×844
+  pasa de 3,23 a 5,02 pantallas y 360×740 de 3,84 a 5,89 (con 30 repartidas: 3,75 → 4,21 y 4,43 → 4,94). Las tarjetas ya están compactas (59–78 px); recortando
+  relleno se gana poco (unas décimas de pantalla), y volver a dos por fila parte los nombres en 3–4 líneas. Lo que lo arreglaría de verdad es enseñar solo las
+  próximas N pendientes de cada categoría y recoger el resto en «Ver las N siguientes» (la misma bandeja que las respondidas); es un cambio de interacción
+  que el cliente no ha visto, así que no lo he hecho sin preguntar. En el uso normal (Continuar / Siguiente pregunta / Volver, que ahora lleva a la siguiente
+  pendiente) el alumno no recorre la lista entera.
+
+## Prueba nueva (`agx-e2e-directos.cjs`, 708 comprobaciones)
+- B1: la comprobación de «Volver» desde una categoría cerrada espera ahora la siguiente pendiente (con foco, a la vista, `pend`) y el plegable de respondidas cerrado.
+  Contra la web sin el arreglo (`tmp/dnr/mut-b1`) da FALLO en esa línea. (Ojo: el selector es `a.dir-card[...]`, porque «Continuar» de la placa lleva el mismo href.)
+- A-1: como arriba.
+
+## Verificación final (b330492)
+- `agx-e2e.cjs`: RESULTADO: OK (1.054). `agx-e2e-directos.cjs`: RESULTADO: OK (708). Capturas del apartado en `…/agx/dnr/`: sin problemas ni errores de página.
+
+## Queda
+- B2 (arriba): que decida el cliente.
+- Lo de antes: 1100×700, reproducción en iPhone/Android sin ver en un dispositivo real.
+
+# Publicación de los nombres de pregunta (20 nov 2026, 15:16 UTC)
+
+- `main` = `576374f` (un solo commit sobre `59005a3`, con el árbol de `tests-directos` `b330492`; solo cambia `index.html`). Vuelta atrás: `59005a3`.
+- Comprobado por mí antes de publicar sobre `b330492`: `agx-e2e.cjs` OK (1.054), `agx-e2e-directos.cjs` OK (708), capturas 43–49 en `…/agx/pub2/`
+  sin problemas; `DIRECTOS` = `preguntas-90.json` (mismo orden e ids que lo publicado; solo se añade «nombre»).
+- En vivo: index md5 `1976bc43c908cf5ce211463e60bce4aa` = repo; `vivo-directos2.sh` → RESULTADO EN VIVO: OK (90/90 clips); `vivo-check.cjs` sin errores.
+- El último arreglo (`b330492`, «Volver») no tuvo segunda revisión independiente; lo leí yo (solo interfaz, no toca lo guardado).
+- Queda por decidir con el cliente: B2 (portada larga en el móvil; opción «Ver las N siguientes»). Sin probar: reproducción en iPhone/Android real.

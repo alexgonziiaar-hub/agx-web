@@ -4,6 +4,7 @@
   "cat": "C",
   "tema": "C01",
   "titulo": "Plan de apertura: el imbalance y una divergencia con big trades en mecha",
+  "nombre": "Incorporarte al alza antes de la apertura",
   "pregunta": "Minutos antes de la apertura el NQ viene subiendo y quieres incorporarte al alza. Por debajo del precio tienes marcado un imbalance. ¿Cómo planteas la entrada?",
   "opciones": [
    "Comprando a mercado en cuanto abra: si esperas un retroceso con el precio subiendo, te quedas fuera",
@@ -21,6 +22,7 @@
   "cat": "C",
   "tema": "C01",
   "titulo": "Plan de apertura: imbalance, Put Wall y validación con el cluster",
+  "nombre": "Apertura con caída del 1,5 % y delta positivo",
   "pregunta": "Antes de la apertura el NQ cae cerca de un 1,5 %, pero el delta de la sesión es bastante positivo. Junto al precio tienes un imbalance y el Put Wall, y por debajo el libro enseña órdenes grandes de compra. ¿Qué plan llevas a la apertura?",
   "opciones": [
    "Solo ventas: con una caída así el día es bajista, y vendes en cuanto el precio pierda el Put Wall",
@@ -38,6 +40,7 @@
   "cat": "C",
   "tema": "C01",
   "titulo": "Planteamiento: cierre del VWAP en Renko y el Put Wall",
+  "nombre": "Dónde entrar si esperas un giro al alza",
   "pregunta": "El NQ rechazó ayer los 30.000 con una mecha grande y ha caído con fuerza. Antes de la apertura está, en Renko, en el cierre del VWAP, y esperas un giro al alza. Más abajo quedan el Put Wall, órdenes límite de compra y un cluster. ¿Dónde piensas la entrada?",
   "opciones": [
    "Aquí mismo: ya estás en zona de rechazo y, si esperas más abajo, puedes quedarte sin entrada",
@@ -55,6 +58,7 @@
   "cat": "C",
   "tema": "C01",
   "titulo": "Planteamiento tras una caída fuerte: el nivel de 29.000",
+  "nombre": "Plantear el día tras perder los 29.000",
   "pregunta": "Antes de la apertura el NQ cae un 1,45 % tras unos malos resultados: ha perdido los 29.000 y cotiza en la desviación inferior del VWAP. En 29.000 coinciden el max pain y el zero gamma, y cerca hay órdenes grandes de venta. ¿Cómo planteas el día?",
   "opciones": [
    "Vendes a mercado en la apertura: con resultados malos y esa caída, lo lógico es que siga bajando",
@@ -72,6 +76,7 @@
   "cat": "C",
   "tema": "C01",
   "titulo": "Single print y cierre del VWAP: dónde puede girar el precio",
+  "nombre": "Cómo leer una zona con single print y VWAP",
   "pregunta": "El NQ sube poco, un 0,26 %, y está en el VAH. Acaba de llegar a un single print de 30 minutos y, por encima, le queda el cierre del VWAP. El delta no es claramente vendedor. ¿Cómo lees esa zona?",
   "opciones": [
    "Zona de rechazo donde el precio puede girar; con ese delta la vigilas y no vendes todavía",
@@ -89,6 +94,7 @@
   "cat": "C",
   "tema": "C01",
   "titulo": "Zonas sin rellenar, gap de Asia y falsa ruptura en el máximo",
+  "nombre": "Qué plan hacer con el máximo del día",
   "pregunta": "El perfil de la sesión anterior dejó virgen todo un tramo por encima del precio. Hoy el NQ sube un 0,8 %, se acerca al máximo y ya cotiza en la desviación superior del VWAP. ¿Qué plan haces con ese máximo?",
   "opciones": [
    "Comprar la ruptura a mercado: un tramo virgen es un hueco que el precio cruza de un tirón",
@@ -106,6 +112,7 @@
   "cat": "C",
   "tema": "C02",
   "titulo": "Absorción: el precio cae y salen brotes verdes",
+  "nombre": "El precio vuelve una y otra vez a mínimos",
   "pregunta": "El NQ cae y vuelve una y otra vez a una zona de mínimos. Si la pierde, crees que la romperá con fuerza, y te planteas vender. Pero en cada llegada deja mecha por abajo y el delta, que no era del todo vendedor, se va volviendo comprador. ¿Qué te dice el flujo?",
   "opciones": [
    "Absorción: los compradores absorben a los vendedores en la zona; cuidado con una falsa ruptura",
@@ -123,6 +130,7 @@
   "cat": "C",
   "tema": "C02",
   "titulo": "Buena zona, pero no pongas la orden directamente en ella",
+  "nombre": "La orden a pocos minutos de la apertura",
   "pregunta": "Queda muy poco para la apertura. Tienes marcado un imbalance que te gusta para incorporarte al alza, y el precio baja ya a testearlo. ¿Qué haces con la orden?",
   "opciones": [
    "La dejas ya en el imbalance, como compra límite: si el nivel es bueno, que te recoja cuanto antes",
@@ -140,6 +148,7 @@
   "cat": "C",
   "tema": "C02",
   "titulo": "Call Wall y Put Wall: lo clave del día",
+  "nombre": "Preparar la sesión entre Call Wall y Put Wall",
   "pregunta": "Preparas la sesión: el NQ cotiza a mitad de camino entre el Call Wall, por arriba, y el Put Wall, por abajo, junto al VAH de un perfil semanal que, al ser martes, aún se está construyendo. ¿En qué centras el plan?",
   "opciones": [
    "En ver qué hace el precio cuando testee el Call Wall o el Put Wall, y decidir con esa reacción",
@@ -157,6 +166,7 @@
   "cat": "C",
   "tema": "C02",
   "titulo": "Patrón Gonzi en tierra de nadie",
+  "nombre": "Por fin te sale el Patrón Gonzi",
   "pregunta": "Esperas a ver si el Patrón Gonzi se apila junto a un imbalance de Renko que tienes marcado. El patrón acaba saliendo, pero lejos del nodo de volumen, del POC y del VWAP, que quedan en otra zona del gráfico. ¿Qué haces con él?",
   "opciones": [
    "Entras con tu stop habitual: el patrón está completo y es un setup que tienes en tu plan",
@@ -174,6 +184,7 @@
   "cat": "C",
   "tema": "C02",
   "titulo": "Perfil en forma de D: día de rango",
+  "nombre": "Dónde operar con el POC en el centro del perfil",
   "pregunta": "El perfil de hoy, en 5 minutos y en una hora, tiene el POC en el medio y el volumen repartido a ambos lados. Arriba queda el Call Wall; abajo, el max pain con un imbalance; y el Put Wall está a muy pocos ticks del Call Wall. ¿Dónde buscas las operaciones?",
   "opciones": [
    "En los extremos: buscas el rechazo y el tramo entre el Call Wall y el max pain, sin pedir más",
@@ -191,6 +202,7 @@
   "cat": "C",
   "tema": "C02",
   "titulo": "Qué valida la entrada en el imbalance",
+  "nombre": "Dar por validada una compra en el imbalance",
   "pregunta": "El precio cae hasta un imbalance que tenías marcado como zona clave para comprar. A la vela de 5 minutos le quedan unos segundos y la siguiente ya es la de la apertura. ¿Qué tiene que dejarte esa vela para dar la entrada por validada?",
   "opciones": [
    "Nada más: que el precio toque la zona ya valida la entrada, porque el imbalance marca compra agresiva",
@@ -208,6 +220,7 @@
   "cat": "C",
   "tema": "C02",
   "titulo": "Vela divergente de volumen sin volumen suficiente",
+  "nombre": "Antes de fiarte de una vela de reversión",
   "pregunta": "El delta de la sesión lo dominan los compradores. En 5 minutos el gráfico te marca una vela de reversión por divergencia y en 1 hora ves otra parecida. Antes de plantearte la entrada, ¿qué compruebas para dar esa señal por buena?",
   "opciones": [
    "La coincidencia entre temporalidades: si sale igual en 5 minutos y en 1 hora, la señal ya es doblemente fiable",
@@ -225,6 +238,7 @@
   "cat": "C",
   "tema": "C03",
   "titulo": "Imbalance demasiado cerca de la zona de ruptura",
+  "nombre": "Un imbalance de compra sobre una zona rota",
   "pregunta": "El NQ rompió al alza una zona y, pocos puntos por encima de ella, tienes marcado un imbalance de compra. El precio cae ahora hacia él después de que otro imbalance, más arriba, lo haya rechazado. ¿Cómo tratas el imbalance marcado?",
   "opciones": [
    "Con reservas: tan cerca de la zona de ruptura, es fácil que el precio no lo respete y siga hasta ella",
@@ -242,6 +256,7 @@
   "cat": "C",
   "tema": "C03",
   "titulo": "Las zonas son para tenerlas presentes, no para disparar",
+  "nombre": "¿Venderás cuando el precio llegue a la zona?",
   "pregunta": "El NQ se desploma en la apertura y ahora rebota. Por arriba quedan, en el mismo strike, el Put Wall y el máximo volumen de calls y de puts, y algo más abajo dos imbalances de venta. Un compañero pregunta si venderás cuando llegue. ¿Qué le dices?",
   "opciones": [
    "Que sí: con dos imbalances y el Put Wall juntos dejas ya la venta límite; ahí el rechazo es casi seguro",
@@ -259,6 +274,7 @@
   "cat": "C",
   "tema": "C03",
   "titulo": "Los cuadraditos del stops tracker: importa dónde salen",
+  "nombre": "Un cuadradito del stops tracker antes de abrir",
   "pregunta": "Poco antes de la apertura, el precio sube hacia una zona que tienes marcada y el stops tracker pinta un cuadradito en la vela en curso. Un compañero pregunta de qué color es, para saber si la señal es buena o mala. ¿En qué te fijas tú?",
   "opciones": [
    "En el color: el verde son stops de vendidos, que empujan arriba, y el rojo, de comprados, que empujan abajo",
@@ -276,6 +292,7 @@
   "cat": "C",
   "tema": "C03",
   "titulo": "Por qué rechaza la zona: el cluster aceptado y saber cuándo entrar",
+  "nombre": "Entra venta fuerte y el precio no cae",
   "pregunta": "Una vela muy fuerte, con mucho delta, dejó su cluster y un big trade en la parte baja; ahí coinciden imbalance de 1 hora y de 5 minutos, POC y VWAP. A cinco minutos de la apertura entra venta fuerte en esa zona y el precio no cae. ¿Cómo lo lees y qué haces?",
   "opciones": [
    "Zona a punto de ceder: tanta venta acabará rompiéndola, así que preparas la venta para la apertura",
@@ -293,6 +310,7 @@
   "cat": "C",
   "tema": "C03",
   "titulo": "Qué cluster importa y cómo afina la entrada",
+  "nombre": "Cómo usar el cluster dentro del nodo de volumen",
   "pregunta": "En el gráfico de 1 hora marcas un nodo de volumen ancho, la «barriga» del perfil, por si el precio cae hasta ahí y da compra. Dentro, unos 40 ticks bajo el borde alto, está el cluster de la vela de la que salió un movimiento fuerte. ¿Cómo usas ese cluster?",
   "opciones": [
    "No lo usas: dentro del nodo todo el volumen pesa igual y compras en cuanto el precio toque el borde",
@@ -310,6 +328,7 @@
   "cat": "C",
   "tema": "C03",
   "titulo": "Tres resistencias juntas: el acompañamiento para el Patrón Gonzi",
+  "nombre": "Tu zona de compra, traspasada con venta agresiva",
   "pregunta": "El precio está en el máximo de ayer. Por debajo, el VWAP ha ido subiendo hasta la altura del Put Wall, donde te quedaría el Patrón Gonzi: tres niveles juntos, tu zona de compra. Pero el precio llega con venta agresiva y la traspasa. ¿Cómo la tratas ahora?",
   "opciones": [
    "Igual que antes: tres niveles juntos acaban devolviendo el precio, así que compras y promedias más abajo",
@@ -327,6 +346,7 @@
   "cat": "C",
   "tema": "C03",
   "titulo": "Un imbalance en mecha no se toma al pie de la letra",
+  "nombre": "Vender en un imbalance que quedó en la mecha",
   "pregunta": "Una vela deja un imbalance en su mecha superior y te planteas vender justo ahí. Pero el precio está en el POC, dentro de un nodo de volumen, y unos puntos por encima del imbalance el libro enseña mucha más liquidez vendedora. ¿Qué haces?",
   "opciones": [
    "Vendes a mercado ya: un imbalance colgado en la mecha es señal suficiente para ponerte corto",
@@ -344,6 +364,7 @@
   "cat": "C",
   "tema": "C03",
   "titulo": "Una buena zona: imbalance de una hora en mecha",
+  "nombre": "Plan tras una vela de 1 hora que recupera",
   "pregunta": "Tras la apertura, la vela de 1 hora cae con un delta muy vendedor, pero recupera y deja una mecha inferior larga, con un imbalance y big trades dentro. El perfil del día es de rango y el precio ronda el VWAP de la sesión americana. ¿Qué plan ves?",
   "opciones": [
    "Vender en el VWAP: con un delta tan vendedor en 1 hora, lo lógico es que el precio vuelva a por el mínimo",
@@ -361,6 +382,7 @@
   "cat": "C",
   "tema": "C03",
   "titulo": "Vela de reversión: el cluster más abajo y el contexto",
+  "nombre": "Requisitos de una vela de reversión alcista",
   "pregunta": "El NQ viene alcista. Tras la apertura, una vela cae, deja una mecha inferior larga y cierra arriba: huele a agotamiento de vendedores. ¿Qué le pides para tratarla como vela de reversión alcista con todas las letras?",
   "opciones": [
    "Que sea verde y más grande que la anterior: con un cierre así, el giro ya queda confirmado",
@@ -378,6 +400,7 @@
   "cat": "C",
   "tema": "C04",
   "titulo": "Big trades en mecha: vendedores atrapados",
+  "nombre": "Vas largo y entran big trades de venta",
   "pregunta": "Vas largo en el NQ. La vela en curso ha caído con fuerza y en ella han entrado big trades de venta. Ahora el precio rebota y quedan dos minutos para el cierre de la vela. ¿Qué lectura haces de esos big trades?",
   "opciones": [
    "Los grandes están vendiendo: cierras el largo y te pones corto con ellos, que el dinero grande acierta",
@@ -395,6 +418,7 @@
   "cat": "C",
   "tema": "C04",
   "titulo": "Big trades que perforan una orden de vendedores",
+  "nombre": "Big trades de compra contra una orden de venta",
   "pregunta": "En el heatmap del NQ hay una orden límite de venta grande. El precio la ataca con big trades de compra que suman bastante más que la orden, y la orden desaparece. Por debajo quedan los dos VWAP, el POC y un nodo de volumen. ¿Cómo lo lees?",
   "opciones": [
    "Compradores grandes atrapados contra el muro: buscas el corto de inmediato, en ese mismo precio",
@@ -412,6 +436,7 @@
   "cat": "C",
   "tema": "C04",
   "titulo": "Heatmap: una orden grande que hace de imán",
+  "nombre": "El papel de una orden grande lejos del precio",
   "pregunta": "Te planteas una compra en el NQ: el heatmap enseña tres líneas de órdenes de compra bajo el precio. Bastante más arriba hay una orden de venta grande y en el DOM ves que es una sola orden de unos cien contratos. ¿Qué papel le das a esa orden?",
   "opciones": [
    "De techo inmediato: descartas la compra, porque con esa venta encima el precio ya no puede subir",
@@ -429,6 +454,7 @@
   "cat": "C",
   "tema": "C04",
   "titulo": "No todos los cuadraditos valen: solo en tus zonas",
+  "nombre": "A qué cuadraditos del stops tracker hacer caso",
   "pregunta": "Tienes el stops tracker con un mínimo de 10 contratos. Cuando el precio llega a un Call Wall, la pantalla se llena de cuadraditos; y a lo largo de la sesión salen muchos más, repartidos por todo el gráfico. ¿A cuáles les haces caso?",
   "opciones": [
    "A todos: cada cuadradito es un salto de stops, y cada salto de stops es un giro que se puede operar",
@@ -446,6 +472,7 @@
   "cat": "C",
   "tema": "C04",
   "titulo": "Sin vía libre no hay compra",
+  "nombre": "Comprar en un imbalance que quedó más abajo",
   "pregunta": "Un compañero propone comprar si el precio retrocede hasta un imbalance que quedó más abajo. Pero para llegar ahí el precio habrá perdido un VWAP, el POC y el VAH, que quedarían justo encima de la entrada. ¿Qué haces?",
   "opciones": [
    "Compras igual: si el imbalance es bueno, el precio acabará atravesando lo que tenga por delante",
@@ -463,6 +490,7 @@
   "cat": "C",
   "tema": "C04",
   "titulo": "Stops dentro del cuerpo: gasolina para el precio",
+  "nombre": "El precio traspasa el Call Wall en la apertura",
   "pregunta": "En la apertura, el precio sube y traspasa el Call Wall. El stops tracker marca muchos stop runs de compra en esa vela, y quedan dentro del cuerpo, no en la mecha. En 1 hora hay volumen y VWAP por debajo y el delta no enseña agresión vendedora. ¿Cómo lo lees?",
   "opciones": [
    "Ruptura con gasolina: son stops de vendidos, compras que empujan; buscas el largo sobre el Call Wall",
@@ -480,6 +508,7 @@
   "cat": "C",
   "tema": "C05",
   "titulo": "Área de valor estrecha: espera lateralidad",
+  "nombre": "Qué esperar con un área de valor estrecha",
   "pregunta": "El área de valor de hoy en el NQ es estrecha: unos 300 ticks del VAL al VAH, la mitad que en una sesión con movimiento, y el precio sigue dentro. ¿Qué esperas mientras siga ahí y cómo lo operas?",
   "opciones": [
    "Lateralidad: no hay fuerza para tomar dirección; si sale un patrón, disparas, coges el tramo y cierras",
@@ -497,6 +526,7 @@
   "cat": "C",
   "tema": "C05",
   "titulo": "Call Wall y max put: para qué usa cada uno",
+  "nombre": "El max put cuando vas corto desde el Call Wall",
   "pregunta": "Vas corto desde el Call Wall y el precio cae hasta el max put, el strike con más volumen de puts, que también es zona de rechazo. Un compañero lo confunde con el Put Wall y pregunta si ahí buscas otra entrada. ¿Qué papel le das a ese nivel?",
   "opciones": [
    "De salida: las operaciones las buscas en el Call Wall; el max put te sirve de referencia para cerrarlas",
@@ -514,6 +544,7 @@
   "cat": "C",
   "tema": "C05",
   "titulo": "El imbalance de la apertura y el cluster que se apila",
+  "nombre": "Comprar en el retroceso hasta el VWAP",
   "pregunta": "En la apertura, un imbalance de Renko marca el giro al alza y el precio sube con fuerza. Ahora retrocede hasta el VWAP y te planteas comprar ahí. ¿Qué tiene que pasar para que le hagas caso al VWAP?",
   "opciones": [
    "Nada más: el VWAP es el nivel que mira todo el mercado, así que compras con límite en cuanto lo toque",
@@ -531,6 +562,7 @@
   "cat": "C",
   "tema": "C06",
   "titulo": "Cuándo sería una vela de reversión bajista",
+  "nombre": "Requisitos de una vela de reversión bajista",
   "pregunta": "Tras una subida fuerte en la apertura, una vela marca un máximo nuevo, deja una mecha superior larga y cierra en su parte baja. ¿Qué tiene que cumplir para que la trates como vela de reversión bajista?",
   "opciones": [
    "Nada más: una mecha superior tan larga tras un máximo nuevo ya es por sí sola una reversión",
@@ -548,6 +580,7 @@
   "cat": "E",
   "tema": "E01",
   "titulo": "Absorción del big trade con el imbalance y el nivel mental de 29.000",
+  "nombre": "Big trade vendedor cerca de los 29.000",
   "pregunta": "El NQ está cerca del nivel mental de 29.000, con un imbalance que coincide en Renko y en una hora. Entra un big trade vendedor, pero al precio le cuesta seguir cayendo y el delta es muy positivo. ¿Cómo lo lees y cómo entras?",
   "opciones": [
    "Absorción: buscas la compra, con la orden por encima del precio para que te recoja si se confirma",
@@ -565,6 +598,7 @@
   "cat": "E",
   "tema": "E01",
   "titulo": "Compra en el giro del Renko con los vendedores atrapados en la mecha",
+  "nombre": "La compra con Renko tras una caída al imbalance",
   "pregunta": "El NQ cae hasta un imbalance de compradores y los vendedores se quedan en la mecha: el precio deja de bajar y el delta empieza a pasar a positivo. Buscas la compra con el gráfico Renko. ¿Cuál es la entrada?",
   "opciones": [
    "No comprar: con tanta venta en el mínimo, lo que toca es vender en el siguiente rebote del precio",
@@ -582,6 +616,7 @@
   "cat": "E",
   "tema": "E01",
   "titulo": "Compra en el Put Wall sin esperar al cluster de una hora",
+  "nombre": "Un trade rápido al llegar al Put Wall",
   "pregunta": "El NQ llega al Put Wall, donde también pasa el VWAP, y en el gráfico de 30 segundos entran órdenes agresivas de compra. Te planteas incorporarte ya, con un trade rápido. ¿Cómo valoras esa entrada?",
   "opciones": [
    "Segura: con el Put Wall, el VWAP y la agresión juntos, el nivel tiene que aguantar",
@@ -599,6 +634,7 @@
   "cat": "E",
   "tema": "E01",
   "titulo": "Dejar que barra: no vender por ego",
+  "nombre": "El precio cae con fuerza sin recoger tu compra",
   "pregunta": "Quieres comprar a la altura del Put Wall y de un cluster de una hora, con la orden por encima del precio. El NQ cae con fuerza sin recogerte, pero el delta sigue positivo y en el cluster quedan cientos de compradores. ¿Qué haces?",
   "opciones": [
    "Dejas que barra: no estás expuesto y, para vender, como mucho esperarías a un Patrón Gonzi",
@@ -616,6 +652,7 @@
   "cat": "E",
   "tema": "E01",
   "titulo": "Patrón Gonzi con órdenes límite, y cuando las retiran",
+  "nombre": "Esperas un Patrón Gonzi de venta en el rebote",
   "pregunta": "El NQ cae con muchos big trades y en el libro aparecen órdenes límite de venta por encima del precio: si en el rebote te sale ahí un Patrón Gonzi, será muy buena venta. Antes de que salga, las órdenes ya no están y la vela trae volumen comprador. ¿Qué haces?",
   "opciones": [
    "Dejas ya una venta límite a esa altura: el nivel estaba marcado y el precio lo respetará igual",
@@ -633,6 +670,7 @@
   "cat": "E",
   "tema": "E01",
   "titulo": "Imbalance de una hora: esperar el retroceso para entrar",
+  "nombre": "Dónde comprar tras marcar nuevos mínimos",
   "pregunta": "Tras una caída fuerte, el NQ marca nuevos mínimos y ahí mismo empieza a entrar agresión compradora. Algo más arriba, la vela de una hora, aún sin cerrar, ha dejado un cluster con imbalance y compradores dentro. ¿Dónde buscas la compra?",
   "opciones": [
    "A mercado ya, en el mínimo: si la agresión compradora entra ahora, cada segundo es peor precio",
@@ -650,6 +688,7 @@
   "cat": "E",
   "tema": "E01",
   "titulo": "La entrada tras la apertura y la gestión con el Put Wall",
+  "nombre": "El stop de una compra nada más abrir",
   "pregunta": "Compras nada más abrir, justo por encima del Put Wall, buscando un movimiento fuerte. Tu idea es ir ahorcando el stop por donde se asiente el cluster, pero la vela acaba de empezar y el cluster todavía se está formando. ¿Dónde dejas el stop de momento?",
   "opciones": [
    "Pegado a la entrada, por encima del Put Wall: tras la apertura hay que arriesgar lo mínimo",
@@ -667,6 +706,7 @@
   "cat": "E",
   "tema": "E01",
   "titulo": "No basta con llegar al Call Wall: quedarse quieto",
+  "nombre": "Tenías pensada una venta en el Call Wall",
   "pregunta": "En la apertura el NQ sube con fuerza y llega al Call Wall, donde tenías pensado buscar una venta. De momento, lo único que tienes es que el precio ha tocado el nivel. ¿Qué haces con la venta?",
   "opciones": [
    "La lanzas a mercado: el Call Wall frena el precio y hay que adelantarse antes de que gire",
@@ -684,6 +724,7 @@
   "cat": "E",
   "tema": "E01",
   "titulo": "Rechazo de apertura sobre una orden grande de compradores",
+  "nombre": "Comprar un rechazo de apertura: qué te falta",
   "pregunta": "Justo antes de la apertura americana el NQ rompe a la baja hacia una orden muy grande de compradores que se ve en el libro. Quieres tomar un rechazo de apertura. ¿Qué te hace falta para comprar?",
   "opciones": [
    "Ver en el footprint la falsa ruptura: el precio recupera y deja la caída en mecha; stop muy cerca",
@@ -701,6 +742,7 @@
   "cat": "E",
   "tema": "E01",
   "titulo": "Venta en el retroceso: big trades e imbalance colgados en la mecha",
+  "nombre": "Dónde buscar la venta tras una subida",
   "pregunta": "El NQ sube con muchos compradores arriba, pero en 5 minutos deja dos big trades colgados en la mecha y un imbalance colgado, con el delta de la sesión en negativo. Quieres vender. ¿Dónde buscas la entrada?",
   "opciones": [
    "En el mínimo de la sesión, cuando el precio llegue hasta allí y la caída ya esté confirmada",
@@ -718,6 +760,7 @@
   "cat": "E",
   "tema": "E02",
   "titulo": "Cambio de idea: el Patrón Gonzi a favor de las compras",
+  "nombre": "Esperabas vender y aparece agresión compradora",
   "pregunta": "Tras una caída fuerte esperabas un Patrón Gonzi para vender. Antes de que salga empieza a entrar agresión compradora: big trades de compradores y toda una zona de compras bajo el precio, con el VWAP aún por encima. ¿Qué haces con tu idea?",
   "opciones": [
    "La mantienes: en plena caída esa agresión compradora es ruido, y el plan era vender el patrón",
@@ -735,6 +778,7 @@
   "cat": "E",
   "tema": "E02",
   "titulo": "Compra apoyada en el cluster de 154 compradores",
+  "nombre": "Qué sostiene una compra apoyada en un cluster",
   "pregunta": "En la apertura la vela se asienta por encima del VWAP y del POC, y en el footprint ves un cluster con 154 compradores en la zona. Compras apoyándote en él. ¿Qué es lo que sostiene la idea del trade?",
   "opciones": [
    "El VWAP y el POC: mientras el precio siga por encima de ambos, el cluster ya es lo de menos",
@@ -752,6 +796,7 @@
   "cat": "E",
   "tema": "E02",
   "titulo": "El Patrón Gonzi y la orden que desaparece",
+  "nombre": "La orden grande del libro se esfuma",
   "pregunta": "Compras con un Patrón Gonzi y dejas el promedio previsto por encima de una orden grande del libro, que no sabes si aguantará. La orden se esfuma y, a la vez, entran big trades de compradores en la zona. ¿En qué apoyas ahora la operación?",
   "opciones": [
    "En el hueco que deja la orden: sin nadie enfrente, puedes cargar más contratos sin miedo",
@@ -769,6 +814,7 @@
   "cat": "E",
   "tema": "E02",
   "titulo": "Patrón Gonzi a la altura del VWAP",
+  "nombre": "Un Patrón Gonzi que nace a la altura del VWAP",
   "pregunta": "El precio barre hacia abajo y deja una mecha grande, pero no es capaz de traspasar el VWAP: justo a su altura nace el Patrón Gonzi, con el cluster y el POC por debajo. Por arriba queda un imbalance. ¿Qué haces?",
   "opciones": [
    "Lo compras: nace apoyado en un VWAP que no han podido traspasar, y vigilas el imbalance de arriba",
@@ -786,6 +832,7 @@
   "cat": "E",
   "tema": "E02",
   "titulo": "Patrón Gonzi con nodo de volumen y POC",
+  "nombre": "El precio se dispara sin recoger tus órdenes",
   "pregunta": "Te sale un Patrón Gonzi de compra con el nodo de volumen y el POC a favor, y dejas tus órdenes en el sitio del patrón. El precio se dispara al alza sin llegar a recogerlas, por muy poco. ¿Qué haces?",
   "opciones": [
    "Das el patrón por anulado y retiras las órdenes: era buena entrada, pero no te ha recogido",
@@ -803,6 +850,7 @@
   "cat": "E",
   "tema": "E02",
   "titulo": "Venta con el Patrón Gonzi: medio contrato y promedio",
+  "nombre": "Con cuánta carga entrar en un Patrón Gonzi",
   "pregunta": "Te va a salir un Patrón Gonzi de venta, con el VWAP jugando a favor de los vendedores. Sabes de antemano que querrás hacer una segunda entrada algo más abajo, en un nivel que ya tienes marcado. ¿Con cuánta carga entras en el patrón?",
   "opciones": [
    "Con toda: el patrón es la mejor entrada, y la segunda orden va aparte, como otra operación",
@@ -820,6 +868,7 @@
   "cat": "E",
   "tema": "E02",
   "titulo": "Venta en el mínimo de Renko con poca carga para promediar",
+  "nombre": "Vender el mínimo de Renko sin la lectura completa",
   "pregunta": "Vas a vender la pérdida del mínimo de Renko con una orden stop, pero el delta no es del todo vendedor y el footprint aún no te ha dado toda la confirmación que querías: la lectura no está completa. ¿Cómo planteas la entrada?",
   "opciones": [
    "Con tu tamaño de siempre: si la orden salta en el mínimo, el propio precio ya confirma la idea",
@@ -837,6 +886,7 @@
   "cat": "E",
   "tema": "E03",
   "titulo": "Compra con confluencias: footprint, POC y los dos VWAP",
+  "nombre": "Muchas cosas a favor: qué falta para comprar",
   "pregunta": "El NQ vuelve a una zona donde coinciden el footprint positivo de compradores, el POC del perfil de volumen, el VWAP y el VWAP americano. Tienes «un montón de cosas» a favor. ¿Qué te falta para comprar?",
   "opciones": [
    "Nada: con tantas confluencias en el mismo sitio dejas ya la compra límite y el stop debajo",
@@ -854,6 +904,7 @@
   "cat": "E",
   "tema": "E03",
   "titulo": "Compra por encima del imbalance, junto al VAL",
+  "nombre": "Cómo colocar una compra junto al VAL",
   "pregunta": "El NQ está fuera del área de valor y se acerca a un imbalance que queda junto al VAL, el borde bajo del área de valor, con un big trade en la zona. Buscas una compra. ¿Cómo colocas la orden?",
   "opciones": [
    "Con una compra límite por debajo del imbalance: si el precio lo pierde, compras más barato",
@@ -871,6 +922,7 @@
   "cat": "E",
   "tema": "E03",
   "titulo": "La última bala: promediar con el riesgo de la cuenta",
+  "nombre": "La última entrada que te permite tu riesgo",
   "pregunta": "Tu idea alcista no ha salido a la primera y, por tu gestión del riesgo en esa cuenta, solo te queda una entrada más: la «última bala». Sigues viendo el movimiento al alza. ¿Cómo la gestionas?",
   "opciones": [
    "La metes ya a mercado: cuanto antes estés dentro, menos recorrido te pierdes si por fin sube",
@@ -888,6 +940,7 @@
   "cat": "E",
   "tema": "E03",
   "titulo": "Vendedores sin fuerza: aguantar con el stop bajo el cluster comprador",
+  "nombre": "Aguantar una compra sin regalar lo ganado",
   "pregunta": "Estás comprado tras un Patrón Gonzi que el precio ha respetado. Los vendedores no tienen fuerza para tirarlo y la operación ya va a tu favor. Quieres aguantarla hasta el objetivo sin regalar lo ganado. ¿Qué haces con el stop?",
   "opciones": [
    "Lo dejas en su sitio inicial hasta el objetivo: moverlo es tocar el plan a mitad de operación",
@@ -905,6 +958,7 @@
   "cat": "E",
   "tema": "E04",
   "titulo": "Entrada en el cluster que se apila junto a los dos VWAP",
+  "nombre": "Te gusta la entrada, pero la vela no ha cerrado",
   "pregunta": "El precio cae hasta los dos VWAP, donde hay además un cluster de una hora, y en el footprint ves que el cluster se va apilando. La entrada te gusta, pero la vela aún no ha cerrado. ¿Qué haces?",
   "opciones": [
    "Esperas el cierre y dejas la compra por encima: si te recoge, entras; si no, retiras la orden",
@@ -922,6 +976,7 @@
   "cat": "E",
   "tema": "E04",
   "titulo": "Falsa ruptura en el imbalance de Renko y de una hora",
+  "nombre": "Comprar un imbalance justo encima de los 29.000",
   "pregunta": "Tienes un imbalance que coincide en Renko y en una hora, y justo por debajo queda el nivel mental de 29.000. El precio cae hacia la zona y te planteas comprarla. ¿Cómo lo enfocas?",
   "opciones": [
    "Compra límite en el borde del imbalance y stop pegado, un par de puntos por debajo de la zona",
@@ -939,6 +994,7 @@
   "cat": "E",
   "tema": "E04",
   "titulo": "Promediar en los compradores del footprint y vela de reversión",
+  "nombre": "Repartir una compra en entrada y promedio",
   "pregunta": "Quieres comprar un rechazo repartiendo la entrada en dos órdenes, la entrada y un promedio, dentro del mismo riesgo. ¿Dónde las colocas y qué tiene que confirmarlo después?",
   "opciones": [
    "A mercado ya y otra unos puntos más abajo: así el precio medio mejora pase lo que pase luego",
@@ -956,6 +1012,7 @@
   "cat": "E",
   "tema": "E04",
   "titulo": "Venta por agotamiento de compradores en mecha",
+  "nombre": "Mucha compra arriba y el precio no sube",
   "pregunta": "En la vela de una hora entra muchísima compra en la parte alta, con imbalances de compradores, pero el precio no sigue subiendo y todo ese volumen se va quedando en la mecha. ¿Qué operación plantea el método?",
   "opciones": [
    "Compra: tanto volumen comprador en la parte alta confirma la ruptura y el precio seguirá",
@@ -973,6 +1030,7 @@
   "cat": "E",
   "tema": "E05",
   "titulo": "Operar una noticia con stop corto",
+  "nombre": "Entrar en la noticia de las 14:30",
   "pregunta": "Normalmente no operas las noticias. En el dato de las 14:30 tienes un cluster con muchísimos compradores, una orden grande, el giro del Renko y, en 5 minutos, el POC y el VAL juntos. ¿Qué hace asumible entrar ahí?",
   "opciones": [
    "Que con una noticia el movimiento es seguro: da igual dónde entres si cargas más contratos",
@@ -990,6 +1048,7 @@
   "cat": "G",
   "tema": "G01",
   "titulo": "Aguantar la posición apoyado en el imbalance de Renko",
+  "nombre": "Vas largo a minutos de la apertura",
   "pregunta": "Vas largo a pocos minutos de la apertura, un momento que no te gusta para estar dentro. Pero el Renko ha dejado, por debajo del precio, un imbalance de compradores tras una ruptura. ¿Cómo gestionas la posición?",
   "opciones": [
    "Cerrarla ya: en preapertura no se mantiene nada abierto, diga lo que diga el imbalance",
@@ -1007,6 +1066,7 @@
   "cat": "G",
   "tema": "G01",
   "titulo": "Break even bajo el big trade y ahorcar por el footprint",
+  "nombre": "El stop después de añadir el promedio",
   "pregunta": "Vas largo y acabas de añadir el promedio en la zona alta del Renko: llevas más contratos y un precio medio más alto. El precio sigue a tu favor, hacia unos imbalances que quedan por arriba, y en la subida ha entrado un big trade. ¿Qué haces con el stop?",
   "opciones": [
    "Lo mantienes en el stop inicial hasta los imbalances, para que ningún retroceso te saque",
@@ -1024,6 +1084,7 @@
   "cat": "G",
   "tema": "G01",
   "titulo": "Cuando la entrada no convence, ahorcar a tiempo",
+  "nombre": "Vas corto y la operación no te convence",
   "pregunta": "Vas corto con un imbalance en Renko, un big trade y vendedores en el footprint. Aun así, la operación no te acaba de convencer: no te da confianza y no sabes si el precio seguirá cayendo. ¿Qué haces con el stop?",
   "opciones": [
    "Ahorcarlo ya, por encima del big trade y del nodo de volumen: si se gira, te cuesta poco",
@@ -1041,6 +1102,7 @@
   "cat": "G",
   "tema": "G01",
   "titulo": "No adelantarse aunque el contexto sea bajista",
+  "nombre": "Día bajista y una zona de venta marcada arriba",
   "pregunta": "Ves el día bajista. Más arriba hay una zona con imbalance vendedor, big trades en la mecha y una orden grande de venta en el libro, pero el precio cotiza bastante por debajo de ella y la vela aún no ha cerrado. ¿Qué haces?",
   "opciones": [
    "Vender ya a mercado: con el contexto tan claro, esperar es arriesgarte a perder la caída",
@@ -1058,6 +1120,7 @@
   "cat": "G",
   "tema": "G01",
   "titulo": "Por qué mantener la operación: footprint comprador y delta positivo",
+  "nombre": "El precio te da el movimiento que buscabas",
   "pregunta": "Vas largo y el precio te acaba de dar el movimiento que buscabas. Por arriba queda un imbalance que puede provocar un retroceso antes del objetivo. El delta es muy positivo y debajo quedan volumen comprador y dos big trades. ¿Qué haces?",
   "opciones": [
    "Cerrar entera ya: con beneficio en la mano, un imbalance por delante es motivo para salir",
@@ -1075,6 +1138,7 @@
   "cat": "G",
   "tema": "G01",
   "titulo": "Por qué promedio: el big trade descolgado en 30 segundos",
+  "nombre": "Venta grande en el gráfico de 30 segundos",
   "pregunta": "Vas corto. En el gráfico de 30 segundos entra una venta grande en la parte baja, pero esa agresión no causa efecto: el precio no sigue cayendo y ese volumen se queda ahí abajo, sin recorrido. No sabes si la caída continuará. ¿Cómo lo gestionas?",
   "opciones": [
    "Añades ya a mercado: una venta de ese tamaño confirma tu idea y hay que cargar antes de que caiga",
@@ -1092,6 +1156,7 @@
   "cat": "G",
   "tema": "G02",
   "titulo": "Ahorcar el stop donde manda el libro de órdenes",
+  "nombre": "Dónde ahorcar el stop de un largo en beneficio",
   "pregunta": "Vas largo y la operación ya va bien en beneficio. Quieres ahorcar el stop. En el libro de órdenes acaban de salir muchos compradores en un precio, unos puntos por debajo de la cotización actual. ¿Dónde lo colocas?",
   "opciones": [
    "Justo por debajo de esos compradores del libro: si el precio se los come, ya no hay sostén",
@@ -1109,6 +1174,7 @@
   "cat": "G",
   "tema": "G02",
   "titulo": "Ante la duda, ahorcar",
+  "nombre": "Sale una orden grande contra tu corto",
   "pregunta": "Vas corto y la idea te sigue gustando: tienes un cluster de volumen junto al VAH. Pero en el libro acaba de salir una orden de más de cien contratos que puede frenar la caída que buscas. Con esa duda, ¿qué haces?",
   "opciones": [
    "Cerrar y girarte a largo: una orden así en el libro basta para cambiar de lado",
@@ -1126,6 +1192,7 @@
   "cat": "G",
   "tema": "G02",
   "titulo": "Cerrar antes de tiempo si no hay intención de giro",
+  "nombre": "El precio se vuelve contra tu largo",
   "pregunta": "Vas largo y el precio se te vuelve en contra sin tocar el stop. Le das de margen el cierre de la vela para ver intención de giro al alza. La vela cierra y la siguiente te sigue tirando hacia abajo, sin rastro de compradores. ¿Qué haces?",
   "opciones": [
    "Esperar al stop o al objetivo: para eso está el stop, y tocar la operación es sobreoperar",
@@ -1143,6 +1210,7 @@
   "cat": "G",
   "tema": "G03",
   "titulo": "Leer la falsa ruptura: confluencias y delta",
+  "nombre": "Con un corto abierto, el precio en los 29.000",
   "pregunta": "Vas corto y el precio cae hasta una zona donde coinciden el nivel mental de 29.000, un imbalance de una hora y otro en Renko. Rompe los mínimos anteriores, pero el delta es cada vez menos negativo y la vela deja mecha por abajo. ¿Cómo lo lees?",
   "opciones": [
    "Falsa ruptura: zona con varias confluencias y venta que se agota; toca ceñir el stop del corto",
@@ -1160,6 +1228,7 @@
   "cat": "G",
   "tema": "G03",
   "titulo": "Scalping: ahorcar el stop bajo el big trade de vendedores",
+  "nombre": "Un big trade vendedor en pleno scalping",
   "pregunta": "Vas largo en un scalping y ya llevas un buen recorrido a favor. Cerca del máximo, justo donde cotiza ahora el precio, salta un big trade de vendedores. No sabes si la subida sigue o se acaba ahí. ¿Qué haces con el stop?",
   "opciones": [
    "Alejarlo unos puntos: un big trade vendedor trae retroceso y la operación necesita sitio",
@@ -1177,6 +1246,7 @@
   "cat": "P",
   "tema": "P01",
   "titulo": "Consistencia: aprovecha los días de recorrido largo",
+  "nombre": "El coste de un día de 2.000 $ en fondeo",
   "pregunta": "Tu cuenta fondeada tiene una regla de consistencia del 50 %. Hoy el NQ da un tramo amplio y limpio y, con tu gestión de siempre, te llevas 2.000 $: este día pesa ya más de la mitad de tu beneficio. ¿Qué te cuesta haberlo cogido entero?",
   "opciones": [
    "Dinero: lo que pasa de la mitad no cuenta como beneficio, así que ese tramo final sobraba",
@@ -1194,6 +1264,7 @@
   "cat": "P",
   "tema": "P01",
   "titulo": "Cumplir el plan: no operar más aunque la zona sea buena",
+  "nombre": "Una buena zona cuando ya has acabado el día",
   "pregunta": "Tu plan marca cuándo dejas de operar en el día, y hoy has llegado a ese punto tras una operación que ha salido mal. Poco después, el precio se acerca a un imbalance que te parece muy buena zona para buscar un rechazo. ¿Qué haces?",
   "opciones": [
    "No operas: la zona es buena, pero saltarte tu norma sería fallarte a ti como trader",
@@ -1211,6 +1282,7 @@
   "cat": "P",
   "tema": "P01",
   "titulo": "Día peligroso: menos riesgo y sin promediar",
+  "nombre": "Tu plan en una jornada electoral",
   "pregunta": "Hoy hay jornada electoral en Estados Unidos y esperas una sesión imprevisible. Tu plan habitual es una entrada pequeña y, si el setup es bueno, un promedio dentro del riesgo. ¿Cómo lo adaptas a un día así?",
   "opciones": [
    "No lo tocas: el plan es el plan, y si el setup es bueno el promedio también se hace",
@@ -1228,6 +1300,7 @@
   "cat": "P",
   "tema": "P01",
   "titulo": "Días de resultados: no anticiparse",
+  "nombre": "Ruptura a tres minutos de la apertura",
   "pregunta": "Hoy publican resultados varias grandes empresas. A tres minutos de la apertura, el NQ rompe al alza el rango previo; algo más arriba, aún sin tocar, queda la zona que te marca el Renko. Para comprar ya, el stop lógico iría a unos 150 ticks. ¿Qué haces?",
   "opciones": [
    "Compras la ruptura: en un día de resultados el primer tramo es el bueno y no espera",
@@ -1245,6 +1318,7 @@
   "cat": "P",
   "tema": "P01",
   "titulo": "La apertura es un demonio: no te anticipes",
+  "nombre": "Cuándo incorporarte si tu idea es vender",
   "pregunta": "Faltan pocos minutos para la apertura de Nueva York. En el libro ves órdenes de vendedores colocándose por encima del precio y tu idea es vender. ¿Cuándo te incorporas?",
   "opciones": [
    "Cuando la apertura enseñe qué hace: sus primeros minutos sacuden hacia los dos lados",
@@ -1262,6 +1336,7 @@
   "cat": "P",
   "tema": "P01",
   "titulo": "Por qué Alex opera la apertura",
+  "nombre": "La ventaja de la apertura de Nueva York",
   "pregunta": "Alex enseña su operativa en la apertura de Nueva York, y no a mediodía ni en la sesión de Asia. Para quien opera el NQ con Order Flow, ¿qué ventaja tiene esa franja sobre las demás?",
   "opciones": [
    "Es cuando más volumen hay, y con volumen los patrones del flujo aparecen y se trabajan mejor",
@@ -1279,6 +1354,7 @@
   "cat": "P",
   "tema": "P01",
   "titulo": "Regla de consistencia: dedícate a operar",
+  "nombre": "Un día de 1.000 $ en la prueba de fondeo",
   "pregunta": "Tu prueba de fondeo pide 1.500 $ de beneficio y tiene una regla de consistencia del 50 %: ningún día puede suponer más de la mitad del total. En una sesión, siguiendo tu plan, el mercado te da 1.000 $. ¿Cómo lo enfocas?",
   "opciones": [
    "Como un error: tenías que haber cerrado en 750 $, que es el tope; lo demás no te sirve",
@@ -1296,6 +1372,7 @@
   "cat": "P",
   "tema": "P01",
   "titulo": "Saber leer no basta: hay que ejecutar",
+  "nombre": "Qué trabajar tras una entrada que no hiciste",
   "pregunta": "Tu análisis marcaba la zona de 29.000 y, justo encima, un imbalance como zona de compra. El precio baja hasta el imbalance con el delta a favor. Lo lees bien, pero dudas y no disparas; el precio reacciona sin ti. ¿Qué tienes que trabajar?",
   "opciones": [
    "La lectura: añadir otra confirmación a la señal antes de atreverte a entrar en la zona",
@@ -1313,6 +1390,7 @@
   "cat": "P",
   "tema": "P01",
   "titulo": "Una entrada mal hecha que sale bien sigue estando mal hecha",
+  "nombre": "Apuntar en el diario una venta que salió bien",
   "pregunta": "Vendes NQ con dos micros porque una vela deja delta negativo: es tu único argumento, y justo debajo queda un nodo de volumen con el POC que el precio no ha atravesado. La venta sale bien y cierras en positivo. ¿Cómo la apuntas en tu diario?",
   "opciones": [
    "Como buena operación: el mercado te ha dado la razón y el resultado es lo que cuenta",
@@ -1330,6 +1408,7 @@
   "cat": "P",
   "tema": "P01",
   "titulo": "Vigila el horario: fuera de hora no hay velocidad",
+  "nombre": "Un compañero te enseña su compra en el Put Wall",
   "pregunta": "Un compañero compra a mediodía, más de una hora antes de la apertura de Nueva York: el cluster se le revierte justo en el Put Wall y el delta comprador va subiendo. Te enseña la entrada y te pregunta qué te parece. ¿Cómo la valoras?",
   "opciones": [
    "Redonda: con el Put Wall y el delta a favor, la hora a la que entres es lo de menos",
@@ -1347,6 +1426,7 @@
   "cat": "P",
   "tema": "P02",
   "titulo": "Al llegar al colchón, el drawdown se queda fijo",
+  "nombre": "El drawdown trailing al alcanzar el colchón",
   "pregunta": "Tu cuenta de fondeo de 50.000 $ tiene un drawdown trailing que te ha ido siguiendo desde que la estrenaste. Hoy has alcanzado el colchón que fija la empresa y sigues sumando beneficio. ¿Qué pasa con el drawdown a partir de ahora?",
   "opciones": [
    "Sigue subiendo detrás de tu saldo máximo, a la misma distancia que el primer día",
@@ -1364,6 +1444,7 @@
   "cat": "P",
   "tema": "P02",
   "titulo": "Cuando el precio se desploma, esperar a que se asiente",
+  "nombre": "Aprovechar una caída de casi el 3 %",
   "pregunta": "El NQ se hunde: cae casi un 3 % y sigue bajando con fuerza. Más abajo, en el mínimo de ayer, coinciden la desviación inferior del VWAP y varios imbalances. Quieres aprovechar el movimiento. ¿Cómo lo planteas?",
   "opciones": [
    "Vendes ya a mercado: con esa fuerza, el precio llegará al mínimo de ayer sin problema",
@@ -1381,6 +1462,7 @@
   "cat": "P",
   "tema": "P02",
   "titulo": "El drawdown que te persigue: trailing intradía y EOD",
+  "nombre": "Cuánto margen queda tras salir en break even",
   "pregunta": "Estrenas una cuenta de fondeo con drawdown trailing intradía de 1.500 $. Abres una operación, llega a ir +500 $ sin que la cierres, el precio se gira y sales en break even. ¿Cuánto margen te queda antes de perder la cuenta?",
   "opciones": [
    "1.500 $: has salido en break even, así que la cuenta está igual que antes de entrar",
@@ -1398,6 +1480,7 @@
   "cat": "P",
   "tema": "P02",
   "titulo": "En mínimos tras una caída fuerte: dejar que pase",
+  "nombre": "Caída en picado en la apertura y estás fuera",
   "pregunta": "En la apertura el NQ cae en picado: lleva un 1,6 % abajo y marca mínimos. Entran big trades vendedores, hay mucho volumen de venta y el stops tracker enseña saltos de stops. Por debajo no tienes ninguna zona de volumen. No estás dentro. ¿Qué haces?",
   "opciones": [
    "Dejas que pase: vender en mínimos es muy arriesgado, aunque la dirección sea esa",
@@ -1415,6 +1498,7 @@
   "cat": "P",
   "tema": "P02",
   "titulo": "Operar fuera de hora es un matacuentas",
+  "nombre": "Una costumbre que te está saliendo bien",
   "pregunta": "Llevas varios días vendiendo en los diez minutos previos a la apertura de Nueva York, cada vez que una vela deja un big trade pequeño en la mecha. Casi todas esas ventas te han salido bien. ¿Qué haces con esa costumbre?",
   "opciones": [
    "La mantienes: si varios días seguidos da dinero, es que a esa hora la señal funciona",
@@ -1432,6 +1516,7 @@
   "cat": "P",
   "tema": "P02",
   "titulo": "Stop bajo el nivel mental y aceptar la pérdida",
+  "nombre": "Es tu entrada, pero te da miedo disparar",
   "pregunta": "El NQ cae hasta un imbalance de tu plan en 29.020, justo encima del nivel mental de 29.000. Sabes que es tu entrada de compra, pero te da miedo disparar. ¿Cómo lo resuelves?",
   "opciones": [
    "No entras: si una entrada te da miedo es que no está clara, y es mejor dejarla pasar",
@@ -1449,6 +1534,7 @@
   "cat": "P",
   "tema": "P02",
   "titulo": "Tener el plan antes de la apertura",
+  "nombre": "Qué tener listo cuando abra el mercado",
   "pregunta": "Te sientas 10 o 15 minutos antes de la apertura de Nueva York para hacer el planteamiento del día sobre el NQ. ¿Qué tienes que tener listo cuando abra el mercado?",
   "opciones": [
    "Un sesgo claro: decides si el día será alcista o bajista y solo buscas entradas a ese lado",
@@ -1466,6 +1552,7 @@
   "cat": "P",
   "tema": "P03",
   "titulo": "Día hecho en un día feo: no forzar",
+  "nombre": "Llevas 400 $ en un día de noticias fuertes",
   "pregunta": "Día de noticias fuertes: el NQ rangea, el delta no marca dirección y no hay agresión. Aun así llevas tres entradas buenas y unos 400 $ de beneficio. Un compañero te anima a buscar una cuarta. ¿Qué haces?",
   "opciones": [
    "Das el día por hecho: en una sesión así, forzar otra entrada es jugarte lo ganado",
@@ -1483,6 +1570,7 @@
   "cat": "P",
   "tema": "P03",
   "titulo": "No por tener un imbalance hay que disparar",
+  "nombre": "Tras la apertura, un imbalance encima del precio",
   "pregunta": "Tras la apertura el NQ lateraliza, sin agresión: el precio ha subido algo y se ha frenado. Un poco más arriba tienes marcado un imbalance. Llevas un rato sin operar y te apetece hacer algo. ¿Qué haces?",
   "opciones": [
    "Vendes ya a mercado: con el imbalance encima, el precio tiene techo y el riesgo es poco",
@@ -1500,6 +1588,7 @@
   "cat": "P",
   "tema": "P03",
   "titulo": "No vender en mínimos por ego: sentarse y esperar",
+  "nombre": "Las ganas de vender tras un día entero de caída",
   "pregunta": "El NQ lleva todo el día cayendo con fuerza y tú, que lo veías bajista desde el principio, no has cogido ni una venta. El precio está ya en la desviación inferior del perfil y, aun así, te pide el cuerpo vender. ¿Qué hay detrás de esas ganas?",
   "opciones": [
    "Método: en un día bajista se vende mientras el precio siga marcando mínimos, esté donde esté",
@@ -1517,6 +1606,7 @@
   "cat": "P",
   "tema": "P04",
   "titulo": "Días de decisión de tipos: mercado lento y días mínimos",
+  "nombre": "La víspera de la decisión de tipos de la Fed",
   "pregunta": "Mañana la Fed comunica su decisión de tipos de interés y hoy operas la apertura del NQ como cada día. ¿Qué cabe esperar de la sesión de hoy y cómo planteas la de mañana?",
   "opciones": [
    "Hoy, tramos largos, que el mercado se adelanta; mañana, seguir la dirección que traiga",
