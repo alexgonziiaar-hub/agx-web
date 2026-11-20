@@ -2238,7 +2238,8 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .instalar-nota{margin:0;font-size:13px;line-height:1.4;color:var(--tinta-2)}
 /* ===================== TESTS DE LOS DIRECTOS ([D]) =====================
    Tercera pestaña de Formación. Portada: la placa oscura con el anillo-toro en dos tonos (aciertos en verde y, a continuación, fallos en rojo;
-   la pista que queda es lo que falta) y, debajo, los clips de cada categoría como tarjetas-tecla (.tecla.dir-card). La ficha de la izquierda
+   la pista que queda es lo que falta) y, debajo, las cuatro categorías como placas plegables (la receta .niv de los niveles de la ruta: ficha,
+   título, progreso y tecla de abrir) con sus clips dentro como tarjetas-tecla (.tecla.dir-card). La ficha de la izquierda de cada tarjeta
    dice el estado con icono y con material: hueco = sin responder, verde levantada = acertado, roja hundida = fallado, de marca = el siguiente.
    Test de un clip (.dir-test): la pregunta con las teclas .opcion de siempre y, al lado (debajo en móvil y tableta), la pantalla del clip:
    apagada (un pozo oscuro con la proporción del vídeo ya reservada) hasta que se responde; después, el vídeo. Sus ajustes de móvil van aquí dentro. */
@@ -2265,16 +2266,17 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .rev-dir{display:flex;align-items:center;gap:8px;margin:8px 0 0;font-size:14px;color:var(--tinta-2)}
 .rev-dir svg{flex:none;width:17px;height:17px;color:var(--morado)}
 .rev-dir b{color:var(--tinta);font-weight:700}
-.dir-cat{margin-top:30px}
-.dir-cat .ins-cab{align-items:flex-end;margin-bottom:13px}
-.dir-cat-d{margin:3px 0 0;font-size:13.5px;color:var(--tinta-2)}
-.dir-prog{display:flex;align-items:center;gap:11px;margin:0;font-size:13px;font-weight:650;color:var(--tinta-2);font-variant-numeric:tabular-nums}
+.dir-cats{display:flex;flex-direction:column;gap:13px;margin-top:26px}
+.dir-cat>summary{grid-template-columns:auto minmax(0,1fr) auto auto}
+.dir-cat .niv-num svg{width:20px;height:20px}
+.dir-cat .niv-tit h2{margin:0;font-size:16.5px;font-weight:740;line-height:1.3;letter-spacing:0}
+.dir-prog{display:flex;align-items:center;gap:14px;min-width:0}
 .dir-barra{flex:none;display:flex;width:132px}
+.dir-cat .dir-lista{padding:14px 14px 18px;border-top:1px solid var(--borde)}
 .dir-barra span{flex:none}
 .dir-barra .g{background:var(--barra-gana)}
 .dir-barra .p{background:var(--barra-pierde)}
 .dir-barra .g+.p{border-radius:0 2px 2px 0}
-.dir-atajos{display:none}
 .dir-lista{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px 12px;margin:0;padding:0 0 5px;list-style:none}
 .dir-lista li{display:flex;min-width:0}
 .dir-card{position:relative;flex:1;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px;min-width:0;min-height:66px;padding:10px 14px 11px 11px;border-radius:14px;text-decoration:none;--k-tinta:var(--tinta)}
@@ -2383,16 +2385,11 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .dir-banda{grid-template-columns:auto minmax(0,1fr) auto;padding:11px 12px 12px 11px}
   .dir-banda-n{grid-column:2;grid-row:2;justify-self:start}
   .dir-banda-ir{grid-column:3;grid-row:1 / 3}
-  .dir-cat{margin-top:26px}
-  .dir-cat .ins-cab{align-items:flex-start;flex-direction:column;gap:9px}
-  .dir-prog{width:100%;justify-content:space-between}
-  .dir-prog>span:first-child{white-space:nowrap}
-  .dir-barra{flex:0 1 132px;width:auto;min-width:48px}
-  /* accesos a las categorías bajo la placa: la portada es larga en el móvil */
-  .dir-atajos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0 0}
-  .dir-atajo{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;min-height:50px;padding:6px 13px 7px;border-radius:12px;text-align:left;cursor:pointer;--k-alto:3px;--k-tinta:var(--tinta)}
-  .dir-atajo b{font-size:14.5px;font-weight:720;line-height:1.2}
-  .dir-atajo small{font-size:12.5px;font-weight:650;color:var(--tinta-2);font-variant-numeric:tabular-nums}
+  .dir-cats{gap:11px;margin-top:18px}
+  .dir-cat>summary{grid-template-columns:auto minmax(0,1fr) auto}
+  .dir-prog{grid-row:2;grid-column:1 / -1;flex-direction:row-reverse;justify-content:space-between;gap:12px}
+  .dir-barra{flex:1 1 auto;width:auto;min-width:40px;max-width:150px}
+  .dir-cat .dir-lista{padding:12px 10px 16px}
   /* los clips sin responder no tienen título que enseñar: van de dos en dos y solo dicen «Clip 07 · 0:36» (la categoría es la del encabezado y el estado
      lo dice la ficha hueca; el texto completo sigue ahí para los lectores de pantalla). Los respondidos, con su título, a todo el ancho */
   .dir-lista{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -5387,6 +5384,17 @@ function dirDur(s){ return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
 let dirVista=null, dirDeNuevo=null, dirRep=null, dirReciente=null, dirAlResumen=false;   // dirVista: número del clip abierto (sale de la dirección) · dirDeNuevo: id del clip que se responde otra vez («Repetir» o repaso de fallos) · dirRep: {cola:[ids]}, el repaso de fallos en curso · dirReciente: id del clip que se acaba de responder en esta visita · dirAlResumen: la vuelta a la portada es para ver el resumen (empieza arriba). Solo viven en memoria
 function dirNuevo(){ if(DIRECTOS.some(d=>dirResp(d))) return false; try{ return localStorage.getItem('agx-directos')!=='visto'; }catch(e){ return true; } }   // distintivo «Nuevo»: hasta que el alumno entra por primera vez (si ya ha respondido algo en otro dispositivo, tampoco sale)
 function dirVisto(){ try{ localStorage.setItem('agx-directos','visto'); }catch(e){} }
+/* Categorías plegables de la portada (con 90 clips, las cuatro abiertas eran una decena de pantallas en el móvil). Sin nada respondido van las cuatro cerradas
+   y se ve el mapa entero; después, por defecto está abierta la del siguiente clip sin responder. Lo que el alumno abre o cierra a mano se recuerda en el
+   dispositivo (localStorage «agx-directos-cats» = {C:1,E:0…}), no en su estado: no viaja al servidor. Al completar una categoría se olvida su apunte, para que
+   se pliegue sola y quede abierta la siguiente. */
+let dirCats=null;
+function dirCatsLee(){
+  if(!dirCats){ dirCats={}; try{ const o=JSON.parse(localStorage.getItem('agx-directos-cats')||'null'); if(o && typeof o==='object') Object.keys(DIR_CAT).forEach(c=>{ if(o[c]===1 || o[c]===0) dirCats[c]=o[c]; }); }catch(e){} }
+  return dirCats;
+}
+function dirCatAbierta(c,porDefecto){ const m=dirCatsLee(); return c in m ? m[c]===1 : !!porDefecto; }
+function dirCatGuarda(c,abierta){ const m=dirCatsLee(); if(abierta==null) delete m[c]; else m[c]=abierta?1:0; try{ localStorage.setItem('agx-directos-cats',JSON.stringify(m)); }catch(e){} }
 function dirActual(){ return ruta==='formacion' && subForm==='directos' && dirVista ? DIRECTOS[dirVista-1]||null : null; }
 function dirLimpia(){ const d=dirActual(); if(dirDeNuevo && (!d || d.id!==dirDeNuevo)) dirDeNuevo=null; if(dirReciente && (!d || d.id!==dirReciente)) dirReciente=null; if(dirRep && (!d || !dirRep.cola.includes(d.id))) dirRep=null; }   // al salir del clip, «Repetir» y el repaso de fallos se olvidan
 function pararClip(){ const v=$('#dir-video'); if(v){ try{ v.pause(); }catch(e){} } }   // un vídeo quitado de la página puede seguir sonando: se para antes de repintar
@@ -5408,13 +5416,17 @@ function vistaDirectos(){
   const cta=(sig?`<a class="boton blanco" href="#formacion/directos/${sig}">${p.resp?'Continuar: clip '+dirNum(sig):'Empezar'}</a>`:'')
     +(nFal?`<button type="button" class="boton ${sig?'fantasma':'blanco'}" data-accion="dir-fallos">Repasar fallos (${nFal})</button>`:'');
   const cats=Object.keys(DIR_CAT).map((c,k)=>{
-    const pc=progresoDirectos(null,c), nom=DIR_CAT[c].nombre;
+    const pc=progresoDirectos(null,c), nom=DIR_CAT[c].nombre, actual=!!sig && DIRECTOS[sig-1].cat===c, verde=pc.ok===pc.total, ab=dirCatAbierta(c,actual && p.resp>0);
     const cards=DIRECTOS.map((d,i)=>{ if(d.cat!==c) return ''; const n=i+1, a=dirOk(d);
       return `<li${a===null?'':' class="resp"'}><a class="tecla dir-card ${a===null?'pend':(a?'ok':'ko')}${n===sig?' sig':''}" href="#formacion/directos/${n}"><span class="dir-ico" aria-hidden="true">${a===null?ICO.play:(a?ICO.check:ICO.cruz)}</span><span class="dir-txt"><span class="dir-meta"><small>Clip ${dirNum(n)}<span class="dir-m-cat"> · ${nom}</span> · ${dirDur(d.seg)}</small>${a===null?'':`<em class="dir-est ${a?'ok':'ko'}">${a?'Acertado':'Fallado'}</em>`}</span><b>${a===null?'Sin responder':esc(d.titulo)}</b></span></a></li>`; }).join('');
-    return `<section class="dir-cat entra" style="animation-delay:${0.05+k*0.04}s" aria-labelledby="dc-${c}">
-      <div class="ins-cab"><div class="ins-tit"><h2 id="dc-${c}">${nom}</h2><p class="dir-cat-d">${DIR_CAT[c].desc}</p></div>
-        <p class="dir-prog"><span>${pc.resp} de ${pc.total} respondidos${pc.resp?' · '+plural(pc.ok,'acierto','aciertos'):''}</span><span class="mini-barra dir-barra" aria-hidden="true">${pc.ok?`<span class="g" style="width:${pc.ok/pc.total*100}%"></span>`:''}${pc.ko?`<span class="p" style="width:${pc.ko/pc.total*100}%"></span>`:''}</span></p></div>
-      <ul class="dir-lista">${cards}</ul></section>`;
+    /* Placa plegable, la misma receta que los niveles de la ruta (.niv): la ficha dice el estado (verde con visto = todos acertados, de marca = aquí está el
+       siguiente clip, hueca = lo demás) y data-ab guarda cómo se pintó, para distinguir lo que abre o cierra el alumno de lo que abre el código. */
+    return `<section class="dir-sec entra" style="animation-delay:${0.05+k*0.04}s" aria-labelledby="dc-${c}">
+      <details class="niv dir-cat${actual?' actual':''}${verde?' ok':''}" data-c="${c}" data-ab="${ab?1:0}"${ab?' open':''}>
+        <summary><span class="niv-num" aria-hidden="true">${verde?ICO.check:ICO.play}</span><span class="niv-tit"><h2 id="dc-${c}">${nom}</h2><small>${DIR_CAT[c].desc}</small></span>
+          <span class="dir-prog"><span class="niv-est${verde?' ok':''}"><span>${pc.resp} de ${pc.total}<span class="sr"> respondidos</span>${pc.resp?' · '+plural(pc.ok,'acierto','aciertos'):''}</span></span><span class="mini-barra dir-barra" aria-hidden="true">${pc.ok?`<span class="g" style="width:${pc.ok/pc.total*100}%"></span>`:''}${pc.ko?`<span class="p" style="width:${pc.ko/pc.total*100}%"></span>`:''}</span></span>
+          <span class="niv-chev" aria-hidden="true">${ICO.chev}</span></summary>
+        <ul class="dir-lista">${cards}</ul></details></section>`;
   }).join('');
   return `<header class="cab-modulo entra"><div><h1>Formación AGX</h1><p class="sub">Tests sacados de los directos de Alex: ${T} momentos reales de mercado, cada uno con su pregunta. Al responder ves el clip, con su explicación.</p></div></header>
   ${tabsForm()}
@@ -5425,8 +5437,7 @@ function vistaDirectos(){
       ${cta?`<div class="f-acc">${cta}</div>`:''}</div>
     <ul class="ruta-datos"><li class="g"><b>${p.ok}</b><span>${p.ok===1?'acierto':'aciertos'}</span></li><li class="p"><b>${p.ko}</b><span>${p.ko===1?'fallo':'fallos'}</span></li><li><b>${quedan}</b><span>sin responder</span></li></ul>
   </section>
-  <nav class="dir-atajos" aria-label="Ir a una categoría">${Object.keys(DIR_CAT).map(c=>{ const pc=progresoDirectos(null,c); return `<button type="button" class="tecla dir-atajo" data-accion="dir-cat" data-c="${c}"><b>${DIR_CAT[c].nombre}</b><small>${pc.resp} de ${pc.total}</small></button>`; }).join('')}</nav>
-  ${cats}`;
+  <div class="dir-cats">${cats}</div>`;
 }
 /* El test de un clip. «fresco» = todavía no hay respuesta a la vista (sin responder, o respondiendo otra vez): ni el título, ni la clave, ni el vídeo
    se pintan. Con respuesta: la opción correcta y la fallada marcadas y, al lado (debajo en móvil y tableta), el veredicto con el clip y la explicación
@@ -5486,6 +5497,7 @@ function vistaDirecto(n){
   </div>`;
 }
 function trasDirectos(){
+  $$('details.dir-cat',vista).forEach(d=>d.addEventListener('toggle',()=>{ const ab=d.open?'1':'0'; if(d.dataset.ab===ab) return; d.dataset.ab=ab; dirCatGuarda(d.dataset.c,d.open); }));   // «toggle» no burbujea y también salta al pintar una categoría ya abierta: solo se apunta lo que cambia el alumno
   const v=$('#dir-video',vista); if(!v) return;
   v.addEventListener('error',()=>{ const e=$('#dir-error'); if(e) e.hidden=false; });        // el error de un <video> no burbujea: se escucha en él
   v.addEventListener('playing',()=>{ const e=$('#dir-error'); if(e) e.hidden=true; });
@@ -5510,7 +5522,8 @@ function dirTrasNavegar(deClip){
   if(ruta!=='formacion' || subForm!=='directos') return;
   if(dirVista==null){
     const a=deClip && !dirAlResumen ? $(`.dir-lista a[href="#formacion/directos/${deClip}"]`,vista) : null; dirAlResumen=false;
-    if(a){ a.scrollIntoView({block:'center'}); a.focus({preventScroll:true}); }
+    if(a){ const cat=a.closest('details'); if(cat && !cat.open){ cat.dataset.ab='1'; cat.open=true; }   // la categoría del clip del que se vuelve se abre para enseñar su tarjeta (sin apuntarlo: no lo ha pedido el alumno)
+      a.scrollIntoView({block:'center'}); a.focus({preventScroll:true}); }
     return;
   }
   const d=dirActual();
@@ -5519,9 +5532,10 @@ function dirTrasNavegar(deClip){
 function elegirDirecto(o){
   const d=dirActual(); if(!d || REV || !(o>=0 && o<d.opciones.length)) return;
   if(dirResp(d) && dirDeNuevo!==d.id) return;      // ya respondido: no se cambia sin pasar por «Repetir»
-  const antes=progresoDirectos().resp;
+  const antes=progresoDirectos().resp, antesCat=progresoDirectos(null,d.cat);
   if(!state.directos || typeof state.directos!=='object' || Array.isArray(state.directos)) state.directos={};
   state.directos[d.id]={o,ok:o===d.correcta,f:iso(new Date())};
+  if(antesCat.resp<antesCat.total && progresoDirectos(null,d.cat).resp===antesCat.total) dirCatGuarda(d.cat,null);      // categoría completada: vuelve a lo de por defecto (se pliega y queda abierta la siguiente)
   dirDeNuevo=null; dirReciente=d.id; if(SERVIDOR) dirSubir(); else guardar(); render(); dirALaVista();
   if(antes<DIRECTOS.length && progresoDirectos().resp===DIRECTOS.length) setTimeout(confeti,250);
 }
@@ -7979,7 +7993,6 @@ document.addEventListener('click',e=>{
     case 'dir-opcion': elegirDirecto(Number(b.dataset.o)); break;
     case 'dir-sig': dirSiguiente(); break;
     case 'dir-ant': if(dirActual() && dirVista>1) irRuta('formacion/directos/'+(dirVista-1)); break;
-    case 'dir-cat': { const t=$('#dc-'+b.dataset.c,vista); if(t){ t.closest('section').scrollIntoView({block:'start',behavior:REDUCIR?'auto':'smooth'}); t.tabIndex=-1; t.focus({preventScroll:true}); } } break;
     case 'dir-repetir': dirRepetir(); break;
     case 'dir-fallos': dirRepasar(); break;
     case 'dir-reintentar': { const v=$('#dir-video'), er=$('#dir-error'); if(v){ if(er) er.hidden=true; v.load(); const pr=v.play(); if(pr && pr.catch) pr.catch(()=>{}); v.focus({preventScroll:true}); } } break;
