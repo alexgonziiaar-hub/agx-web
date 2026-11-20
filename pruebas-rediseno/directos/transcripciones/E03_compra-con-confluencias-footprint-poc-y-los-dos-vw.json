@@ -1,0 +1,103 @@
+{
+ "archivo": "E03_compra-con-confluencias-footprint-poc-y-los-dos-vw.mp4",
+ "seg": 71.8,
+ "partes": [
+  {
+   "t": 0.4,
+   "texto": "Estoy pendiente si esta orden es spoofing."
+  },
+  {
+   "t": 2.8,
+   "texto": "Ahora lo explicaré."
+  },
+  {
+   "t": 7.3,
+   "texto": "toma nuestro vaca"
+  },
+  {
+   "t": 8.9,
+   "texto": "aquí"
+  },
+  {
+   "t": 10.1,
+   "texto": "sugra traspasa"
+  },
+  {
+   "t": 14.1,
+   "texto": "...tájarme este tipo de del"
+  },
+  {
+   "t": 17.3,
+   "texto": "tengo esto contexto"
+  },
+  {
+   "t": 20.2,
+   "texto": "Quiero que se vaya moviendo, quiero que vaya haciendo."
+  },
+  {
+   "t": 24.4,
+   "texto": "Para ahora sí que se nos ha mitigado aquí. Si se me gira el cluster, le voy a meter."
+  },
+  {
+   "t": 29.0,
+   "texto": "San bomba"
+  },
+  {
+   "t": 30.3,
+   "texto": "...na compro"
+  },
+  {
+   "t": 31.6,
+   "texto": "Sí."
+  },
+  {
+   "t": 32.8,
+   "texto": "por aquí"
+  },
+  {
+   "t": 36.9,
+   "texto": "pero me tienen que mitigar el cluster"
+  },
+  {
+   "t": 39.1,
+   "texto": "¿Por qué"
+  },
+  {
+   "t": 41.0,
+   "texto": "Me coloco por aquí porque es donde tengo..."
+  },
+  {
+   "t": 43.3,
+   "texto": "el footprint positivo de compradores,"
+  },
+  {
+   "t": 45.7,
+   "texto": "Tengo un book"
+  },
+  {
+   "t": 50.1,
+   "texto": "Tengo lo que es el POC del perfil de volumen, tengo el VWAP, tengo el VWAP americano."
+  },
+  {
+   "t": 55.4,
+   "texto": "Tengo un montón de cosas. Pero para eso me tiene que acompañar lo que es esta vela de aquí."
+  },
+  {
+   "t": 60.1,
+   "texto": "Sabes, la de aquí me tienes que acabar"
+  },
+  {
+   "t": 64.6,
+   "texto": "Esto es el movimiento. Esto es"
+  },
+  {
+   "t": 67.1,
+   "texto": "¿Qué pasa? Ahora sí que tengo vía"
+  },
+  {
+   "t": 70.1,
+   "texto": "¿Lo habéis visto cómo ha cambiado la"
+  }
+ ],
+ "texto": "Estoy pendiente si esta orden es spoofing. Ahora lo explicaré. toma nuestro vaca aquí sugra traspasa ...tájarme este tipo de del tengo esto contexto Quiero que se vaya moviendo, quiero que vaya haciendo. Para ahora sí que se nos ha mitigado aquí. Si se me gira el cluster, le voy a meter. San bomba ...na compro Sí. por aquí pero me tienen que mitigar el cluster ¿Por qué Me coloco por aquí porque es donde tengo... el footprint positivo de compradores, Tengo un book Tengo lo que es el POC del perfil de volumen, tengo el VWAP, tengo el VWAP americano. Tengo un montón de cosas. Pero para eso me tiene que acompañar lo que es esta vela de aquí. Sabes, la de aquí me tienes que acabar Esto es el movimiento. Esto es ¿Qué pasa? Ahora sí que tengo vía ¿Lo habéis visto cómo ha cambiado la"
+}

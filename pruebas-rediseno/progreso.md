@@ -459,3 +459,74 @@ y un tramo, «salir» en móvil, que falla igual en las dos por el propio script
   «Guardar» justo después. Falló una vez de las ocho pasadas completas de esta ronda (justo después de otro script con Chromium); repetida, pasa. No lanzar otros Chromium a la vez.
 - Al medir pulsaciones con Playwright, cerrar siempre los contextos: con páginas huérfanas la transición no avanza y sale un falso «sí».
 - `agx-verificar.sh v` borra los PNG de `…/agx/v/` antes de capturar: las `instalar-*.png` hay que volver a copiarlas desde `tmp/v/c3/cap/` (o regenerarlas con esa copia de `c3-aviso.cjs`).
+
+---
+
+## Comprobación de cierre ([C]) — TERMINADA
+
+Dos comprobadores de cierre (W1: los seis arreglos [V] y la navegación · W2: recorrido completo como alumna y como administrador, en móvil y ordenador) dejaron 5 problemas.
+Cada uno se comprobó antes de tocar: los 5 eran reales (P4 con un matiz) y los 5 quedan arreglados en 4 commits `[C]` (0dd74ca … 51e8f34); de P1 se arregla el aviso y **se deja pendiente
+a propósito el análisis automático** (decisión del cliente, ver punto 3). Cuaderno, problema a problema: `…/agx/cierre.md`.
+Scripts propios en `…/agx/tmp/c/` (`w.cjs` = montaje de `ver-3` con la publicada en :4442 y la rama tal como estaba al empezar, 63ab975, en :4441 desde `tmp/c/head/`):
+`nav2.cjs` (52 pasos de navegación con la página desplazada, antes y después: 19 cambian, todos a propósito; `nav2.log`), `rut.cjs` (ventana de la rutina con cuenta de fondeo en 9 tamaños), `rut-gesto.cjs` (arrastre táctil real),
+`rut-rueda.cjs` (rueda, Tab y guardar), `ent-foco.cjs` (teclado en la entrada). Copias de los scripts de los comprobadores con la salida en mi carpeta: `w7-nav.cjs`, `seg.cjs`, `seg2.cjs`,
+`c3/` y `v3/` (hoja de instalar) y `v4/` (prueba diferencial de datos).
+Verificación final: etiqueta `c` (`…/agx/c/`): prueba `RESULTADO: OK` (1.054), 225 capturas sin problemas ni errores de página, más las 18 `instalar-*.png` regeneradas.
+Frente a `…/agx/v/` (`tmp/p3/dif.py`): 179 idénticas, 45 con solo ruido y 1 distinta, `m-oscuro-22-rutina-preparar.png` (lo tocado). Hojas de contacto: solo cambia `contacto-movil-oscuro-3.png`
+(esa captura). Hubo que repetir a solas tres capturas con 1 px suelto (`d-claro-40`, `d-claro-42`, `d-claro-09`): con la rama y con el código de partida salen idénticas a `v/` (detalle en
+`cierre.md`, «Verificación final»). `limpia.py informe`: 0 declaraciones muertas.
+
+### 1. Arreglado
+| Problema | Qué pasaba | Qué se hizo y dónde |
+|---|---|---|
+| W1-1 (media) + P2 | Con la barra de navegación fija abajo (móvil y tableta), tocar «Formación» o «Ranking» con el Diario desplazado dejaba la vista nueva a media página, sin título. Lo mismo al abrir una lección desde la lista de la ruta (título a −547 px) o un alumno desde la lista del administrador. En ordenador pasaba igual que en la publicada | **JS** (0dd74ca), en «Transiciones y navegación»: `pedida` guarda adónde se ha pedido ir (clic en un enlace `a[href^="#"]`, `irRuta` o «Siguiente lección») y si el enlace es de `.nav`. En el `hashchange`, después de `render()`: si lo pedido coincide con la dirección a la que se ha llegado y ha cambiado el módulo, la lección o el alumno (`[ruta,lecVista,revId]`), o el clic era de la navegación principal, `window.scrollTo(0,0)`, antes de ejecutar `pendiente`. **No suben**: las pestañas del Diario y de Formación (conservan la posición, como antes) ni «atrás/adelante» del navegador (no hay nada pedido). Vale para todos los anchos |
+| P1 (media), el aviso | Tras «Preparar la sesión» el aviso decía «Sesión cerrada. Mañana, una cosa mejor.»: `guardarRutina()` llamaba a `cerrarRutina()` (que pone `rutModo=null`) antes de elegir el texto. Venía así de `main` | **JS** (fcfd437): `const pre=rutModo==='pre'` antes de cerrar; el aviso usa `pre`. La prueba de funcionamiento ya aceptaba los dos textos |
+| P3 | Con cuenta de fondeo, a 390×844 la ventana de «Preparar la sesión» medía 956 px y se abría sin «Cancelar / Guardar» a la vista (en la publicada cabían por 6 px; a 390×664, 360×740 o 320×568 tampoco cabían allí) | **CSS** (a34bb7f), junto a las reglas `.rut-*`: `@media (min-height:520px){ #rut .imp{max-height:100%} #rut .imp-cuerpo{overflow-y:auto;overscroll-behavior:contain} }`. La ventana no pasa del alto de la pantalla: cabecera y pie fijos y se desplaza el cuerpo. Por debajo de 520 px de alto (móvil apaisado) se desplaza la ventana entera, como antes. Solo `#rut`: `#imp` y `#instalar` no cambian |
+| P4 | Con la pantalla de entrada delante, Tab daba la vuelta por 5 controles tapados (búsqueda, navegación, botón del tema) y Ctrl/⌘+K y «N» abrían las acciones rápidas y el cajón por debajo, sin verse. En «login» el foco ya estaba en el botón (Intro entraba); en «sin acceso» y «error» hacían falta 6 Tab. Venía de `main` | **JS** (51e8f34): `pantallaEntrada()` pone `$('.app').inert=true` y `ocultarEntrada()` lo quita; el `keydown` global empieza con `if(!$('#entrada').hidden) return;`. Sin `inert` (Safari < 15.5, Firefox < 112) se queda como estaba |
+
+### 2. Lo que la web guarda y envía
+Repetida la prueba diferencial de V4 (`tmp/c/v4/`): **localStorage e IndexedDB idénticos a la publicada en los 24 bloques**; lo único nuevo que ve la prueba es el aviso tras «Preparar»
+(el arreglo de P1). Peticiones `/api/*`: la rama envía exactamente lo mismo que en la ronda [V] en los 24 tramos (métodos, rutas y cuerpos) y, frente a la publicada, salen los mismos 4 avisos de
+entonces (en Formación-móvil el último cuerpo enviado es idéntico). Cambios de comportamiento frente a la publicada hechos a propósito en esta ronda: la vista nueva empieza arriba, el aviso de
+«Sesión preparada», el cuerpo desplazable de la rutina y la entrada sin atajos por debajo. Ninguno cambia lo que se guarda ni lo que se envía.
+
+### 3. Pendiente, a propósito
+- **Análisis automático de la IA al cerrar la sesión (segunda mitad de P1).** El código lo prevé (`guardarRutina`: si se cierra la sesión con plan guardado y operaciones de hoy, pedir el parte del
+  día), pero nunca se ha ejecutado, tampoco en la publicada, por el mismo `rutModo` ya borrado. Activarlo es cambiar `rutModo==='post'` por `!pre` en esa línea (hay un comentario encima): al cerrar
+  saldrían `GET` y `POST /api/analisis` y el aviso «La IA ha revisado tu 30 oct. Lo tienes en Plan e IA» (lo demostró W2 con un parche en memoria). **Gasta uno de los análisis del día del alumno** y
+  es comportamiento nuevo: hay que decidirlo con el cliente. A favor de activarlo: el texto de Plan e IA ya dice «Cada noche, al cerrar la sesión, revisa tu día y te deja un parte». En contra:
+  puede que el servidor ya haga ese parte por la noche (el código habla de «sin esperar a la noche»; desde el repositorio de la web no se ve) y entonces se gastaría un análisis de más.
+- Siguen como en la ronda anterior: los defectos de teclado heredados de `#imp` y `#rut` (Tab se sale, Ctrl+K por debajo, no se cierran al navegar) y lo demás de «No tocado, a propósito» de [V].
+- Sin hacer: probar en teléfonos reales.
+
+### 4. Aviso para quien siga
+- Un enlace nuevo `a[href^="#"]` ya sube la página al cambiar de vista sin hacer nada. Si navegas por código, usa `irRuta()`; si asignas `location.hash` a mano, pon después `pedida={h:location.hash}`
+  (como en `ir-leccion`) o la vista nueva se quedará a la altura de la anterior. Una vista nueva dentro de un módulo solo sube si cambia `ruta`, `lecVista` o `revId`: añádela a esa clave del `hashchange`.
+- En la ventana de la rutina ahora desplaza `#rut-cuerpo` (no la capa) cuando la pantalla mide 520 px de alto o más: para medir o capturar su final, desplaza los dos.
+- Con parejas de capturas que difieren en 1 px (un botón de la barra lateral, o toda la vista), repite la escena a solas antes de buscar la causa en el código: bajo carga (3 contextos a la vez)
+  la herramienta deja a veces un desplazamiento suelto. Las `instalar-09-como-app-*` usan la hora real: siempre cambian.
+- No ejecutes los scripts de los comprobadores en su carpeta: sobrescriben sus capturas de prueba (me pasó con `cierre-1/w7-nav.cjs`; están regeneradas con el código de partida).
+
+---
+
+## Tests de los directos ([D]) — TERMINADO (rama `tests-directos`, desde `main`)
+
+Apartado nuevo de Formación: una pregunta por clip de los directos y, al responder, el clip dentro de la web. Cuaderno completo
+(qué ve el alumno, dónde vive cada cosa, estado guardado, decisiones, pruebas y pendientes): `…/agx/directos.md`.
+- **CSS:** bloque `TESTS DE LOS DIRECTOS ([D])` al final de `<style>`, con sus `@media` dentro. Teclas nuevas con la clase utilitaria `.tecla`
+  (no hay que tocar las listas): `.tecla.dir-card` (tarjeta de clip: `.pend`, `.ok`, `.ko`, `.sig`; la ficha `.dir-ico` dice el estado con icono y
+  material) y `.tecla.dir-banda` (acceso desde la ruta).
+- **Recetas nuevas:** anillo-toro en dos tonos (`anilloDirectos()`: dos `anillo()` apilados, `data-t="ok|ko"` en `.an-valor`; el segundo sin pista);
+  barra de progreso en dos tramos (`.mini-barra.dir-barra` con `.g` y `.p`); pantalla del clip `.dir-pantalla` (pozo oscuro con la proporción
+  16:9 reservada; `.apagada` antes de responder); pestañas de tres en dos líneas hasta 640 px (`.sub-tabs.tres`).
+- **JS:** todo en la sección `Tests de los directos` (delante de `const EXAMEN_N`). `render()` llama ahora a `pararClip(); dirLimpia();`.
+  Una vista nueva dentro de los directos sube arriba porque `dirVista` está en la clave del `hashchange`.
+- **Archivos nuevos en el repositorio:** `clips/<id>.mp4` y `clips/<id>.jpg` (45 + 45, 257 MB). `netlify.toml`: cabeceras de `/clips/*` y tipo del manifiesto.
+- **Pruebas:** `tools/agx-e2e-directos.cjs` (407 comprobaciones) y capturas 43–49 en `tools/agx-shots.cjs`. La prueba de siempre sigue en 1.054 sin tocarla.
+
+### Revisión del apartado ([DR]) — TERMINADA
+Tres commits `[DR]` sobre `tests-directos` (contenido; dos dispositivos y direcciones; pantallas). El detalle está en `directos.md`, apartado
+«Revisión del apartado». Para el sistema 3D, lo nuevo reutiliza recetas: el aviso de carga es un velo oscuro sobre el pozo del vídeo con una
+`.boton.blanco.peq`; los accesos a las categorías de la portada en el móvil son `.tecla.dir-atajo` (canto de 3 px); las tarjetas sin responder
+compactas son la misma `.tecla.dir-card`. Ajustes de disposición nuevos, todos dentro del bloque `TESTS DE LOS DIRECTOS ([D])` del CSS:
+«portátil bajo» (`min-width:1061px` y alto ≤ 880 px) y «móvil apaisado» (alto ≤ 520 px).

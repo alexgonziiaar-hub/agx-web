@@ -67,7 +67,7 @@ const TAGS = {
   'n-oscuro': { vp: { width: 360, height: 740 }, dsf: 2, movil: true, oscuro: true, todo: false },
 };
 // Vistas principales: las que se capturan también en los tamaños y temas que no llevan el juego completo
-const PRINCIPALES = new Set(['01', '05', '07', '11', '13', '30', '31', '32', '33', '35', '41', '50', '71']);
+const PRINCIPALES = new Set(['01', '05', '07', '11', '13', '30', '31', '32', '33', '35', '41', '43', '44', '45', '46', '47', '48', '49', '50', '71']);
 
 // Catálogo: número de captura -> nombre. El nombre del archivo es <tamaño-tema>-<número>-<nombre>.png
 const CAT = {
@@ -80,6 +80,8 @@ const CAT = {
   '30': 'formacion-ruta', '31': 'formacion-leccion', '32': 'test-pregunta-sin-responder', '33': 'test-pregunta-bien', '34': 'test-pregunta-mal',
   '35': 'test-resultado-aprobado', '36': 'test-resultado-suspendido', '37': 'examen-en-curso', '38': 'examen-poco-tiempo', '39': 'examen-resultado-no-apto',
   '40': 'examen-nivel-apto', '41': 'formacion-repaso-libre', '42': 'test-pregunta-con-figura',
+  '43': 'directos-portada', '44': 'directos-test-sin-responder', '45': 'directos-test-acertado-clip', '46': 'directos-test-fallado',
+  '47': 'directos-portada-con-progreso', '48': 'directos-repaso-fallos', '49': 'directos-todo-respondido',
   '50': 'ranking-mes', '51': 'ranking-historico',
   '60': 'srv-alumno-resumen', '61': 'srv-alumno-ruta-bloqueada', '62': 'srv-alumno-leccion-bloqueada', '63': 'srv-alumno-plan-ia', '64': 'srv-alumno-ranking', '65': 'srv-alumno-estadisticas',
   '70': 'entrada-cargando', '71': 'entrada-login', '72': 'entrada-login-error', '73': 'entrada-sin-acceso', '74': 'entrada-error',
@@ -130,7 +132,7 @@ function estadoLucia() {
   ['n1-1', 'n1-2', 'n1-3', 'n1-4', 'n1-5', 'n2-1', 'n2-2', 'n2-3'].forEach((id, i) => { lec[id] = { ok: true, mejor: [100, 90, 100, 90, 100, 90, 100, 90][i], intentos: 1 + (i % 2), fecha: '2026-10-' + String(3 + i * 2).padStart(2, '0') }; });
   lec['n2-4'] = { mejor: 70, intentos: 1 };
   const r = (s, a, c) => ({ checks: c || ['niveles', 'noticias', 'plan', 'descanso'], sueno: s, animo: a, nota: '', hora: null });
-  return { periodo: 'mes', trades, temas: {}, examen: null, fallos: ['delta-2', 'absorcion-4'], bloque: 'of', progresoEjemplo: false, objetivo: 3000, plan: PLAN_DEMO,
+  return { directos: respuestasDirectos([1, 2, 3, 4, 5, 13, 14, 30, 39], [3, 14]), periodo: 'mes', trades, temas: {}, examen: null, fallos: ['delta-2', 'absorcion-4'], bloque: 'of', progresoEjemplo: false, objetivo: 3000, plan: PLAN_DEMO,
     ruta: { lec, niv: { n1: { ok: true, fallos: 1, total: 20, fecha: '2026-10-12' } } },
     cuenta: { firma: 'Apex Trader Funding', tamano: 50000, ddMax: 2500, ddTipo: 'eod', bloqueo: true, limiteDiario: 1000, objetivo: 3000, desde: '2026-10-01', fase: 'evaluacion', actualizado: '2026-10-02T18:10:00.000Z' },
     rutinas: { '2026-10-05': { pre: r(4, 4) }, '2026-10-06': { pre: r(2, 3) }, '2026-10-13': { pre: r(5, 4) }, '2026-10-14': { pre: r(2, 2, ['niveles']) }, '2026-10-16': { pre: r(4, 5) }, '2026-10-20': { pre: r(3, 3) },
@@ -226,12 +228,22 @@ const CSV_ATAS = ['Account;Instrument;Open time;Open price;Open volume;Close tim
 
 /* ---------- Red: fuentes locales, BASE, host ficticio; el resto se corta ---------- */
 let INDEX_HTML = null;
+/* ---------- Tests de los directos: la clave se lee del propio index.html (const DIRECTOS=[…], una línea JSON por clip) ---------- */
+let DIRECTOS = [];
+function leerDirectos(html) { const a = html.indexOf('const DIRECTOS=['), b = html.indexOf('\n];', a); if (a < 0 || b < 0) return []; try { return JSON.parse(html.slice(a + 15, b + 2)); } catch (e) { return []; } }
+// Respuestas guardadas de los clips «nums» (1…45); los de «fallados» con una opción equivocada
+function respuestasDirectos(nums, fallados) {
+  const o = {};
+  nums.forEach((n) => { const d = DIRECTOS[n - 1]; if (d) { const mal = (fallados || []).includes(n); o[d.id] = { o: mal ? (d.correcta + 1) % 4 : d.correcta, ok: !mal, f: '2026-10-29' }; } });
+  return o;
+}
 function manejarServidor(route, req, u, srv) {
   const p = u.pathname.replace(/\/+$/, '') || '/', m = req.method();
   const json = (o, status) => route.fulfill({ status: status || 200, contentType: 'application/json; charset=utf-8', body: JSON.stringify(o) });
   const texto = (t) => route.fulfill({ status: 200, contentType: 'text/plain; charset=utf-8', body: t });
   if (p === '/' || p === '/index.html') return route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: INDEX_HTML });
   if (p === '/favicon.ico') return route.fulfill({ status: 204, body: '' });
+  if (p.startsWith('/clips/')) return route.fetch({ url: BASE + p.slice(1) }).then((r) => route.fulfill({ response: r })).catch(() => route.abort()); // los clips del host ficticio salen del servidor local
   if (p === '/api/yo') {
     if (srv.yo === 'cargando') { srv.pendiente = route; return; } // no se responde: la entrada se queda en «cargando»
     if (srv.yo === 'login') return json({ sesion: false }, 401);
@@ -674,6 +686,78 @@ escena('examen', ['37', '38', '39', '40', '41', '42'], async (S) => {
   }
 });
 
+/* Tests de los directos (modo ejemplo). El estado se siembra en localStorage para llegar a «con progreso» y «todo respondido» sin responder clip a clip.
+   Las categorías de la portada son plegables y lo que se abre a mano se recuerda (localStorage «agx-directos-cats»): cada siembra lo borra, para capturar
+   siempre lo que sale por defecto. Las variantes «-abierta» (43 y 49) abren una categoría a mano para ver sus tarjetas. */
+async function sembrarDirectos(S, nums, fallados, hash) {
+  const { page } = S;
+  await page.evaluate(({ dir }) => { const k = 'agx-alumnos-v4', s = JSON.parse(localStorage.getItem(k)); s.directos = dir; localStorage.setItem(k, JSON.stringify(s)); localStorage.removeItem('agx-directos-cats'); }, { dir: respuestasDirectos(nums, fallados) });
+  await page.goto('about:blank');
+  await S.abrir(hash);
+}
+// La portada del clip tiene que estar cargada antes de capturar (el vídeo no se pide: preload="none")
+async function portadaLista(S) { await S.page.waitForFunction(() => { const v = document.getElementById('dir-video'); if (!v) return false; if (!v._p) { v._p = new Image(); v._p.src = v.poster; } return v._p.complete && v._p.naturalWidth > 0; }, null, { timeout: 10000 }); }
+async function responderDirecto(S, bien) {
+  const { page } = S;
+  const n = Number(/directos\/(\d+)/.exec(page.url())[1]), d = DIRECTOS[n - 1];
+  await page.click(`.dir-test [data-accion="dir-opcion"][data-o="${bien ? d.correcta : (d.correcta + 1) % 4}"]`);
+  await page.waitForSelector('#dir-video');
+  await portadaLista(S);
+}
+// Variante «-abierta» de una captura de la portada: se pulsa la cabecera de una categoría y se captura la página entera
+async function abrirCategoria(S, num, cat, expect) {
+  const { page } = S, nombre = `${S.tag}-${num}-${CAT[num]}-abierta`;
+  try {
+    await page.click(`details.dir-cat[data-c="${cat}"] > summary`);
+    await S.fuera(); await S.sinTransicion(); await page.waitForTimeout(500);
+    for (const sel of expect || []) if (!(await page.locator(sel).first().isVisible())) throw new Error('no se ve «' + sel + '»');
+    await S.foto(nombre, true);
+  } catch (e) { problemas.push(`${nombre}: ${String(e.message).split('\n')[0]}`); }
+}
+escena('directos', ['43', '44', '45', '46', '47', '48', '49'], async (S) => {
+  const { page } = S;
+  if (!DIRECTOS.length) throw new Error('no encuentro const DIRECTOS en index.html');
+  await S.abrir('#formacion/directos');
+  await page.waitForSelector('.dir-hero');
+  await S.shot('43', { arriba: true, espera: 1300, expect: ['.dir-hero .dir-anillo', '.sub-tabs a[aria-current="page"][href="#formacion/directos"]', 'details.dir-cat.actual > summary', 'details.dir-cat:not([open]) .niv-chev'] });
+  if (S.quiere('43')) await abrirCategoria(S, '43', 'C', ['.dir-cat[open] .dir-card.sig', '.dir-cat[open] .dir-card.pend']);
+  if (!S.alguna('44', '45', '46', '47', '48', '49')) return;
+  await S.ir('#formacion/directos/13');
+  await page.waitForSelector('.dir-test.fresco .opcion');
+  await S.fuera();
+  await S.shot('44', { arriba: true, espera: 700, expect: ['.dir-test.fresco .opcion:not(:disabled)', '.dir-pantalla.apagada'] });
+  if (!S.alguna('45', '46', '47', '48', '49')) return;
+  await responderDirecto(S, true);
+  await S.fuera();
+  // «-ventana»: lo que ve el alumno justo después de responder. Se espera 1,3 s: Chromium enseña un instante su indicador de carga al crear el <video>
+  if (S.quiere('45')) { await S.quieto(); await page.waitForTimeout(1300); await S.foto(`${S.tag}-45-${CAT['45']}-ventana`, false); }
+  await S.shot('45', { espera: 700, expect: ['.opcion.bien', '.veredicto-txt.pos', '#dir-video', '.dir-exp', '[data-accion="dir-sig"]'] });
+  if (!S.alguna('46', '47', '48', '49')) return;
+  await page.click('[data-accion="dir-sig"]');
+  await page.waitForSelector('.dir-test.fresco .opcion');
+  await S.sinTransicion();
+  await responderDirecto(S, false);
+  await S.fuera();
+  if (S.quiere('46')) { await S.quieto(); await page.waitForTimeout(1300); await S.foto(`${S.tag}-46-${CAT['46']}-ventana`, false); }
+  await S.shot('46', { espera: 700, expect: ['.opcion.mal', '.opcion.bien', '.veredicto-txt.neg', '.fallo-buena', '#dir-video'] });
+  if (!S.alguna('47', '48', '49')) return;
+  await sembrarDirectos(S, [1, 2, 3, 4, 5, 6, 7, 8, 13, 14, 15, 16, 17, 18, 19, 30, 31, 39], [3, 7, 14, 17, 31], '#formacion/directos');
+  await page.waitForSelector('.dir-hero');
+  await S.shot('47', { arriba: true, espera: 1300, expect: ['.dir-card.ok', '.dir-card.ko', '.dir-card.sig', '[data-accion="dir-fallos"]', '.dir-barra .g', '.dir-barra .p'] });
+  if (S.quiere('48')) {
+    await page.click('[data-accion="dir-fallos"]');
+    await page.waitForSelector('.dir-test.fresco .opcion');
+    await S.sinTransicion();
+    await S.fuera();
+    await S.shot('48', { espera: 700, expect: ['.dir-rep', '.dir-test.fresco .opcion:not(:disabled)', '.dir-pantalla.apagada'] });
+  }
+  if (!S.quiere('49')) return;
+  await sembrarDirectos(S, DIRECTOS.map((d, i) => i + 1), [7, 21, 33], '#formacion/directos');
+  await page.waitForSelector('.dir-hero');
+  await S.shot('49', { arriba: true, espera: 1300, expect: ['.dir-hero [data-accion="dir-fallos"]', 'details.dir-cat:not([open]) > summary'] });
+  await abrirCategoria(S, '49', 'E', ['.dir-cat[open] .dir-card.ok', '.dir-cat[open] .dir-card.ko']);
+});
+
 escena('ranking', ['50', '51'], async (S) => {
   const { page } = S;
   await S.abrir('#ranking');
@@ -784,7 +868,7 @@ async function correr(browser, tag, esc) {
 (async () => {
   const t0 = Date.now();
   if (!ARCHIVO) problemas.push('fuentes: no se han encontrado los woff2 en ' + FONTS + ' (se captura con la tipografía de reserva)');
-  try { const r = await fetch(BASE); if (!r.ok) throw new Error('HTTP ' + r.status); INDEX_HTML = await r.text(); } catch (e) { console.error('FALLO: no responde ' + BASE + ' (' + e.message + ')'); process.exit(1); }
+  try { const r = await fetch(BASE); if (!r.ok) throw new Error('HTTP ' + r.status); INDEX_HTML = await r.text(); DIRECTOS = leerDirectos(INDEX_HTML); } catch (e) { console.error('FALLO: no responde ' + BASE + ' (' + e.message + ')'); process.exit(1); }
   // LANG en español: los campos de fecha y hora se pintan como dd/mm/aaaa y en 24 horas
   const opciones = { env: Object.assign({}, process.env, { LANG: 'es_ES.UTF-8', LC_ALL: 'es_ES.UTF-8', LANGUAGE: 'es_ES:es' }) };
   if (process.env.CANAL) opciones.channel = process.env.CANAL;
