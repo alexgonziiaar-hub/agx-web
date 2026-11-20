@@ -5225,7 +5225,7 @@ function renderFormacion(){
 }
 
 /* ---------- Tests de los directos: una pregunta por clip y, al responder, el extracto del directo ----------
-   Cada clip es clips/<id>.mp4 con su portada clips/<id>.jpg (el id es el nombre del clip en el material, con «gonzi» donde la transcripción puso «gonci»). En pantalla y en la dirección el clip va por su NÚMERO (1…45, el orden de DIRECTOS):
+   Cada clip es clips/<id>.mp4 con su portada clips/<id>.jpg (el id es el nombre del clip en el material, con «gonzi» donde la transcripción puso «gonci»). En pantalla y en la dirección el clip va por su NÚMERO (1, 2, 3…: el orden de DIRECTOS):
    el id es el título en minúsculas y el título es la lección, así que ni uno ni otro se pintan hasta que el alumno ha respondido.
    Estado del alumno: state.directos = { <id>: { o: opción elegida (0–3), ok: si acertó, f: 'AAAA-MM-DD' } }. Un estado antiguo no trae la clave: se lee como vacío.
    El acierto se decide siempre con «o» y la clave de respuestas de aquí, no con el «ok» guardado. */
@@ -5297,7 +5297,6 @@ function dirVisto(){ try{ localStorage.setItem('agx-directos','visto'); }catch(e
 function dirActual(){ return ruta==='formacion' && subForm==='directos' && dirVista ? DIRECTOS[dirVista-1]||null : null; }
 function dirLimpia(){ const d=dirActual(); if(dirDeNuevo && (!d || d.id!==dirDeNuevo)) dirDeNuevo=null; if(dirRep && (!d || !dirRep.cola.includes(d.id))) dirRep=null; }   // al salir del clip, «Repetir» y el repaso de fallos se olvidan
 function pararClip(){ const v=$('#dir-video'); if(v){ try{ v.pause(); }catch(e){} } }   // un vídeo quitado de la página puede seguir sonando: se para antes de repintar
-function plural(n,uno,varios){ return n+' '+(n===1?uno:varios); }
 /* Acceso desde la ruta por niveles: una banda-tecla entre la cabecera y los niveles */
 function bandaDirectos(){
   const p=progresoDirectos();
@@ -5412,8 +5411,61 @@ function elegirDirecto(o){
   const antes=progresoDirectos().resp;
   if(!state.directos || typeof state.directos!=='object' || Array.isArray(state.directos)) state.directos={};
   state.directos[d.id]={o,ok:o===d.correcta,f:iso(new Date())};
-  dirDeNuevo=null; guardar(); render(); dirALaVista();
+  dirDeNuevo=null; if(SERVIDOR) dirSubir(); else guardar(); render(); dirALaVista();
   if(antes<DIRECTOS.length && progresoDirectos().resp===DIRECTOS.length) setTimeout(confeti,250);
+}
+/* Dos dispositivos del mismo alumno (el diario en el portátil, los tests en el móvil). Cada guardado sube el estado ENTERO y el estado solo se lee al abrir
+   la web: un móvil que la llevaba abierta desde antes pisaba, al responder un clip, lo que el portátil había guardado después. Por eso la respuesta de un clip
+   no usa la subida aplazada de siempre (guardar): antes se pide el estado que hay AHORA en el servidor, se une con el de aquí y se sube en el momento.
+   · dirBase es la foto, clave a clave, del estado tal como estaba en el servidor la última vez que lo supimos (al abrir y tras cada subida hecha desde aquí).
+   · Lo que este dispositivo no ha tocado desde esa foto se toma del servidor; lo que sí ha tocado se queda como está (lo de siempre: manda el último que guarda).
+   · Las respuestas de los directos se unen clip a clip: no se pierde ninguna y, si los dos han respondido el mismo clip, gana la que es nueva aquí.
+   · Solo se une mientras el alumno sigue en los tests de los directos (ahí no hay nada más a medio editar); si ya se ha ido a otra vista, se sube tal cual.
+   · Si el servidor no contesta, tarda más de 6 s o devuelve algo que no es un estado, se sube tal cual, como siempre.
+   Mientras quede algo de esto sin confirmar, tGuardar sigue puesto: si el alumno se va, lo sube el guardado de salida (pagehide), igual que con guardar().
+   El resto de la web (diario, plan, lecciones) guarda exactamente como antes. */
+let dirBase=null, dirSubiendo=false, dirOtra=false;
+function dirFoto(st){ const f={}; Object.keys(st).forEach(k=>{ f[k]=JSON.stringify(st[k]); }); return f; }
+function dirUnir(st,remoto){
+  const base=dirBase, mios=estDirectos(st), rd=estDirectos(remoto), une=Object.assign({},rd); let bd={}, cambio=false;
+  try{ bd=JSON.parse(base.directos||'{}')||{}; }catch(e){}
+  Object.keys(remoto).forEach(k=>{
+    if(k==='directos') return;
+    const r=JSON.stringify(remoto[k]);
+    if(!(k in st) || (JSON.stringify(st[k])===base[k] && r!==base[k])){ st[k]=remoto[k]; base[k]=r; cambio=true; }
+  });
+  Object.keys(mios).forEach(id=>{ if(!(id in rd) || JSON.stringify(mios[id])!==JSON.stringify(bd[id])) une[id]=mios[id]; });
+  if(JSON.stringify(une)!==JSON.stringify(mios)) cambio=true;
+  st.directos=une; base.directos=JSON.stringify(rd);   // lo que quede distinto de esta foto es lo que aquí todavía no ha subido
+  return cambio;
+}
+function dirAplazar(){ clearTimeout(tGuardar); const t=tGuardar=setTimeout(()=>{ if(tGuardar===t) tGuardar=null; subirDatos(false); },9000); return t; }   // red de seguridad: si nada lo sube antes, sube como siempre
+async function dirSubir(){
+  if(!SERVIDOR) return;
+  dirAplazar();
+  if(dirSubiendo){ dirOtra=true; return; }
+  dirSubiendo=true;
+  try{
+    let remoto=null;
+    try{
+      const ctl=window.AbortController?new AbortController():null, t=setTimeout(()=>{ if(ctl) ctl.abort(); },6000);
+      try{ const r=await fetch('/api/datos',{credentials:'same-origin',cache:'no-store',signal:ctl?ctl.signal:undefined}); if(r.ok) remoto=normalizarEstado((await r.json()).datos); }
+      finally{ clearTimeout(t); }
+    }catch(e){}
+    if(!tGuardar) return;      // ya lo ha subido el guardado de salida (o la red de seguridad)
+    const st=estadoPropio||state;      // el administrador puede haber abierto mientras tanto el diario de un alumno: lo suyo es estadoPropio
+    if(remoto && dirBase && !estadoPropio && ruta==='formacion' && subForm==='directos' && dirUnir(st,remoto)){
+      pintarLateral();
+      const p=$('.dir-rep',vista); if(p && !dirRep && dirActual()) p.textContent=progresoDirectos().resp+' de '+DIRECTOS.length+' respondidos';
+    }
+    const t=dirAplazar(), foto=dirFoto(st);
+    const ok=(!!remoto && JSON.stringify(remoto)===JSON.stringify(st)) || await subirDatos(false,st);   // si el servidor ya tiene exactamente esto, no hace falta subir nada
+    if(ok) dirBase=foto;
+    if(tGuardar===t){ clearTimeout(t); tGuardar=null; }
+  }finally{
+    dirSubiendo=false;
+    if(dirOtra){ dirOtra=false; dirSubir(); }
+  }
 }
 function dirSiguiente(){
   const d=dirActual(); if(!d) return;
@@ -6368,11 +6420,12 @@ function guardar(){
   if(!SERVIDOR){ try{ localStorage.setItem(CLAVE,JSON.stringify(state)); }catch(e){} return; }
   clearTimeout(tGuardar); tGuardar=setTimeout(()=>{ tGuardar=null; subirDatos(false); },700);
 }
-async function subirDatos(salida){
+async function subirDatos(salida,st){      // st: el estado que se sube (por defecto el propio; estadoPropio es el del administrador mientras mira el diario de un alumno)
   try{
-    const r=await fetch('/api/datos',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(state),keepalive:!!salida,credentials:'same-origin'});
+    const r=await fetch('/api/datos',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(st||estadoPropio||state),keepalive:!!salida,credentials:'same-origin'});
     if(r.status===401||r.status===403){ if(!salida){ toast('Tu sesión ha caducado. Vuelve a entrar.'); setTimeout(()=>location.reload(),1600); } return; }
     if(!r.ok) throw new Error(r.status);
+    return true;
   }catch(e){ if(!salida) toast('No se ha podido guardar. Revisa tu conexión.'); }
 }
 window.addEventListener('pagehide',()=>{ if(SERVIDOR && tGuardar){ clearTimeout(tGuardar); tGuardar=null; subirDatos(true); } });
@@ -7725,7 +7778,7 @@ function trasAlumnos(){
 }
 
 /* ---------- Render y eventos ---------- */
-function leerRuta(){ const hs=location.hash, sub=s=>['estadisticas','plan'].includes(s)?s:'resumen'; if(/^#alumnos(\/|$)/.test(hs) && YO && YO.admin){ const pz=hs.split('/'); ruta='alumnos'; revId=pz[1]?decodeURIComponent(pz[1]):null; subDiario=sub(pz[2]); return; } revId=null; const m=/^#diario\/(\w+)$/.exec(hs); subDiario=sub(m&&m[1]); const mf=/^#formacion(?:\/(libre|directos(?:\/(\d{1,3}))?|l\/([\w-]+)))?$/.exec(hs); subForm=mf&&mf[1]==='libre'?'libre':(mf&&/^directos/.test(mf[1]||'')?'directos':'ruta'); lecVista=mf&&mf[3]?mf[3]:null; dirVista=mf&&mf[2]!=null?Number(mf[2]):null; ruta=mf?'formacion':(hs==='#ranking'?'ranking':'diario'); }
+function leerRuta(){ const hs=location.hash, sub=s=>['estadisticas','plan'].includes(s)?s:'resumen'; if(/^#alumnos(\/|$)/.test(hs) && YO && YO.admin){ const pz=hs.split('/'); ruta='alumnos'; revId=pz[1]?decodeURIComponent(pz[1]):null; subDiario=sub(pz[2]); return; } revId=null; const m=/^#diario\/(\w+)$/.exec(hs); subDiario=sub(m&&m[1]); const mf=/^#formacion(?:\/(libre|directos(?:\/(.*))?|l\/([\w-]+)))?$/.exec(hs); subForm=mf&&mf[1]==='libre'?'libre':(mf&&/^directos/.test(mf[1]||'')?'directos':'ruta'); lecVista=mf&&mf[3]?mf[3]:null; dirVista=mf&&mf[2]?(/^\d{1,3}\/?$/.test(mf[2])?parseInt(mf[2],10):0):null; ruta=mf?'formacion':(hs==='#ranking'?'ranking':'diario'); }
 function render(){
   pararClip(); dirLimpia();
   $$('.nav a').forEach(a=>{ if(a.dataset.ruta===ruta) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
@@ -7963,7 +8016,7 @@ async function arrancar(){
   YO=yo; MI_DISCORD=yo.id;
   try{
     const d=await (await fetch('/api/datos',{credentials:'same-origin',cache:'no-store'})).json();
-    state=normalizarEstado(d.datos)||estadoVacio();
+    state=normalizarEstado(d.datos)||estadoVacio(); dirBase=dirFoto(state);
   }catch(e){ pantallaEntrada('error'); return; }
   if(/[?&]error=/.test(location.search)) history.replaceState(null,'',location.pathname+location.hash);
   pintarAlumno(); ocultarEntrada(); iniciarApp();
