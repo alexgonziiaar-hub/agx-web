@@ -2274,6 +2274,7 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .dir-barra .g{background:var(--barra-gana)}
 .dir-barra .p{background:var(--barra-pierde)}
 .dir-barra .g+.p{border-radius:0 2px 2px 0}
+.dir-atajos{display:none}
 .dir-lista{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px 12px;margin:0;padding:0 0 5px;list-style:none}
 .dir-lista li{display:flex;min-width:0}
 .dir-card{position:relative;flex:1;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px;min-width:0;min-height:66px;padding:10px 14px 11px 11px;border-radius:14px;text-decoration:none;--k-tinta:var(--tinta)}
@@ -2332,16 +2333,49 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
 .dir-pantalla.apagada small{max-width:34ch;font-size:13px;line-height:1.4;font-variant-numeric:tabular-nums;text-wrap:balance}
 .dir-apagada-ico{display:grid;place-items:center;width:46px;height:46px;margin-bottom:4px;border:1px solid rgba(255,255,255,.16);border-radius:50%;color:#BBAFE6}
 .dir-apagada-ico svg{width:22px;height:22px}
-.dir-error{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:11px 14px;border-radius:10px;background:var(--venta-suave);color:var(--venta);font-size:14.5px;font-weight:650}
-.dir-error .enlace{color:inherit;font-weight:750}
+/* el aviso de «no se ha podido cargar» va DENTRO de la pantalla, sobre el vídeo: se ve siempre que se ve el vídeo y no cambia la altura de nada */
+.dir-error{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:12px 18px;background:rgba(11,7,25,.92);color:#F0ECFF;font-size:15px;font-weight:650;line-height:1.4;text-align:center;text-wrap:balance}
+.dir-error .boton:focus-visible{outline-color:var(--blanco)}
 @media (max-width:1060px){
   .dir-test{grid-template-columns:minmax(0,1fr);grid-template-areas:"preg" "lado" "nav";grid-template-rows:none}
   .dir-lista{grid-template-columns:repeat(2,minmax(0,1fr))}
   .dir-nav.sola{display:none}
 }
-@media (max-width:900px){
-  .dir-error .enlace{min-height:44px}
+@media (min-width:1061px) and (max-height:880px),(min-width:1061px) and (max-width:1380px) and (max-height:960px){
+  /* portátil bajo (1280×720, 1280×800, 1366×768 con la barra del navegador; algo más de alto si además es estrecho): la pregunta gana ancho y todo
+     se ciñe, para que las cuatro opciones se vean sin desplazar y, tras responder, «Siguiente clip» quede a la vista. A 1440×900 no cambia nada. */
+  .dir-cab{margin-bottom:10px}
+  .dir-cab-fila{margin-bottom:2px}
+  .dir-cab h1{font-size:22px}
+  .dir-test{grid-template-columns:minmax(0,7fr) minmax(0,6fr);gap:14px 18px}
+  .dir-preg .preg-cuerpo{padding:15px 20px 14px}
+  .dir-preg .p-num{margin-bottom:6px}
+  .dir-preg .enunciado{font-size:17px;line-height:1.36}
+  .dir-preg .opciones{gap:8px;margin-top:13px}
+  .dir-preg .opcion{grid-template-columns:34px minmax(0,1fr) 24px;gap:12px;padding:7px 14px 7px 10px;font-size:15.5px;line-height:1.36;--k-alto:4px}
+  .dir-preg .letra{width:34px;height:34px}
+  .dir-preg .opcion .ico{width:24px;height:24px}
+  .dir-clip .panel-cuerpo,.dir-exp .panel-cuerpo{gap:10px;padding:16px 18px}
+  .dir-res{gap:7px;padding-bottom:12px}
+  .dir-titulo{font-size:20px}
+  .dir-clave{font-size:14.5px;line-height:1.45}
+  .dir-nav{gap:10px}
 }
+@media (max-width:1060px) and (orientation:landscape) and (max-height:520px){
+  /* móvil apaisado: el vídeo cabe entero en lo que deja libre la barra de abajo y, con respuesta, el veredicto, el título y la clave van a su izquierda */
+  .dir-pantalla{width:min(100%,calc((100vh - var(--nav-movil) - 44px)*16/9));margin-inline:auto}
+  .dir-clip.hecho .panel-cuerpo{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);grid-auto-rows:min-content;column-gap:18px;align-content:start}
+  .dir-clip.hecho .panel-cuerpo>*{grid-column:1}
+  .dir-clip.hecho .dir-pantalla{grid-column:2;grid-row:1 / span 4;align-self:start;margin-top:0}
+  .dir-clip.hecho .dir-titulo{font-size:19px}
+  .dir-clip.hecho .dir-clave{font-size:14px;line-height:1.42}
+}
+@supports (height:100dvh){ @media (max-width:1060px) and (orientation:landscape) and (max-height:520px){
+  .dir-pantalla{width:min(100%,calc((100dvh - var(--nav-movil) - 44px)*16/9))}
+} }
+@supports not (aspect-ratio:1){ @media (max-width:1060px) and (orientation:landscape) and (max-height:520px){
+  .dir-pantalla{width:100%}
+} }
 @media (max-width:640px){
   /* las tres pestañas caben a 360 px: cada rótulo en dos líneas */
   .sub-tabs.tres{gap:5px}
@@ -2354,8 +2388,21 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .dir-prog{width:100%;justify-content:space-between}
   .dir-prog>span:first-child{white-space:nowrap}
   .dir-barra{flex:0 1 132px;width:auto;min-width:48px}
-  .dir-lista{grid-template-columns:minmax(0,1fr);gap:11px}
+  /* accesos a las categorías bajo la placa: la portada es larga en el móvil */
+  .dir-atajos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0 0}
+  .dir-atajo{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;min-height:50px;padding:6px 13px 7px;border-radius:12px;text-align:left;cursor:pointer;--k-alto:3px;--k-tinta:var(--tinta)}
+  .dir-atajo b{font-size:14.5px;font-weight:720;line-height:1.2}
+  .dir-atajo small{font-size:12.5px;font-weight:650;color:var(--tinta-2);font-variant-numeric:tabular-nums}
+  /* los clips sin responder no tienen título que enseñar: van de dos en dos y solo dicen «Clip 07 · 0:36» (la categoría es la del encabezado y el estado
+     lo dice la ficha hueca; el texto completo sigue ahí para los lectores de pantalla). Los respondidos, con su título, a todo el ancho */
+  .dir-lista{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .dir-lista li.resp{grid-column:1 / -1}
   .dir-card{padding:9px 12px 10px 10px;gap:11px}
+  .dir-card.pend{min-height:54px;padding:7px 9px 8px 8px;gap:9px}
+  .dir-card.pend .dir-ico{width:36px;height:36px;border-radius:10px}
+  .dir-card.pend .dir-meta small{font-size:13.5px;font-weight:700;color:var(--tinta)}
+  .dir-card.pend.sig .dir-meta small{color:var(--morado)}
+  .dir-card.pend .dir-m-cat,.dir-card.pend .dir-txt b{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .dir-cab h1{font-size:22px}
   .dir-rep{padding:4px 10px;font-size:13px}
   .dir-preg .preg-cuerpo{padding:18px 14px 18px}
@@ -2367,7 +2414,7 @@ button.nq.resp{--k-cara:var(--morado-suave);--k-tinta:var(--morado);--k-borde:va
   .dir-titulo{font-size:20px}
   /* el vídeo, a todo el ancho de la placa */
   .dir-pantalla{margin:2px -14px 0;border-inline:0;border-radius:0}
-  .dir-clip .dir-pantalla:last-child,.dir-clip .dir-pantalla:has(+[hidden]:last-child){margin-bottom:-14px;border-bottom:0;border-radius:0 0 15px 15px;box-shadow:none}
+  .dir-clip .dir-pantalla:last-child{margin-bottom:-14px;border-bottom:0;border-radius:0 0 15px 15px;box-shadow:none}
   .dir-nav{gap:14px 10px}
   .dir-nav .boton{flex:1 1 auto}
   .dir-nav .boton[data-accion="dir-sig"]{flex-basis:100%}
@@ -5291,11 +5338,11 @@ function dirPendiente(desde){ const n=DIRECTOS.length; for(let k=0;k<n;k++){ con
 function dirFallados(){ return DIRECTOS.filter(d=>dirOk(d)===false); }
 function dirNum(n){ return String(n).padStart(2,'0'); }
 function dirDur(s){ return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
-let dirVista=null, dirDeNuevo=null, dirRep=null;   // dirVista: número del clip abierto (sale de la dirección) · dirDeNuevo: id del clip que se responde otra vez («Repetir» o repaso de fallos) · dirRep: {cola:[ids]}, el repaso de fallos en curso. Los dos últimos solo viven en memoria
+let dirVista=null, dirDeNuevo=null, dirRep=null, dirReciente=null, dirAlResumen=false;   // dirVista: número del clip abierto (sale de la dirección) · dirDeNuevo: id del clip que se responde otra vez («Repetir» o repaso de fallos) · dirRep: {cola:[ids]}, el repaso de fallos en curso · dirReciente: id del clip que se acaba de responder en esta visita · dirAlResumen: la vuelta a la portada es para ver el resumen (empieza arriba). Solo viven en memoria
 function dirNuevo(){ if(DIRECTOS.some(d=>dirResp(d))) return false; try{ return localStorage.getItem('agx-directos')!=='visto'; }catch(e){ return true; } }   // distintivo «Nuevo»: hasta que el alumno entra por primera vez (si ya ha respondido algo en otro dispositivo, tampoco sale)
 function dirVisto(){ try{ localStorage.setItem('agx-directos','visto'); }catch(e){} }
 function dirActual(){ return ruta==='formacion' && subForm==='directos' && dirVista ? DIRECTOS[dirVista-1]||null : null; }
-function dirLimpia(){ const d=dirActual(); if(dirDeNuevo && (!d || d.id!==dirDeNuevo)) dirDeNuevo=null; if(dirRep && (!d || !dirRep.cola.includes(d.id))) dirRep=null; }   // al salir del clip, «Repetir» y el repaso de fallos se olvidan
+function dirLimpia(){ const d=dirActual(); if(dirDeNuevo && (!d || d.id!==dirDeNuevo)) dirDeNuevo=null; if(dirReciente && (!d || d.id!==dirReciente)) dirReciente=null; if(dirRep && (!d || !dirRep.cola.includes(d.id))) dirRep=null; }   // al salir del clip, «Repetir» y el repaso de fallos se olvidan
 function pararClip(){ const v=$('#dir-video'); if(v){ try{ v.pause(); }catch(e){} } }   // un vídeo quitado de la página puede seguir sonando: se para antes de repintar
 /* Acceso desde la ruta por niveles: una banda-tecla entre la cabecera y los niveles */
 function bandaDirectos(){
@@ -5317,7 +5364,7 @@ function vistaDirectos(){
   const cats=Object.keys(DIR_CAT).map((c,k)=>{
     const pc=progresoDirectos(null,c), nom=DIR_CAT[c].nombre;
     const cards=DIRECTOS.map((d,i)=>{ if(d.cat!==c) return ''; const n=i+1, a=dirOk(d);
-      return `<li><a class="tecla dir-card ${a===null?'pend':(a?'ok':'ko')}${n===sig?' sig':''}" href="#formacion/directos/${n}"><span class="dir-ico" aria-hidden="true">${a===null?ICO.play:(a?ICO.check:ICO.cruz)}</span><span class="dir-txt"><span class="dir-meta"><small>Clip ${dirNum(n)} · ${nom} · ${dirDur(d.seg)}</small>${a===null?'':`<em class="dir-est ${a?'ok':'ko'}">${a?'Acertado':'Fallado'}</em>`}</span><b>${a===null?'Sin responder':esc(d.titulo)}</b></span></a></li>`; }).join('');
+      return `<li${a===null?'':' class="resp"'}><a class="tecla dir-card ${a===null?'pend':(a?'ok':'ko')}${n===sig?' sig':''}" href="#formacion/directos/${n}"><span class="dir-ico" aria-hidden="true">${a===null?ICO.play:(a?ICO.check:ICO.cruz)}</span><span class="dir-txt"><span class="dir-meta"><small>Clip ${dirNum(n)}<span class="dir-m-cat"> · ${nom}</span> · ${dirDur(d.seg)}</small>${a===null?'':`<em class="dir-est ${a?'ok':'ko'}">${a?'Acertado':'Fallado'}</em>`}</span><b>${a===null?'Sin responder':esc(d.titulo)}</b></span></a></li>`; }).join('');
     return `<section class="dir-cat entra" style="animation-delay:${0.05+k*0.04}s" aria-labelledby="dc-${c}">
       <div class="ins-cab"><div class="ins-tit"><h2 id="dc-${c}">${nom}</h2><p class="dir-cat-d">${DIR_CAT[c].desc}</p></div>
         <p class="dir-prog"><span>${pc.resp} de ${pc.total} respondidos${pc.resp?' · '+plural(pc.ok,'acierto','aciertos'):''}</span><span class="mini-barra dir-barra" aria-hidden="true">${pc.ok?`<span class="g" style="width:${pc.ok/pc.total*100}%"></span>`:''}${pc.ko?`<span class="p" style="width:${pc.ko/pc.total*100}%"></span>`:''}</span></p></div>
@@ -5332,6 +5379,7 @@ function vistaDirectos(){
       ${cta?`<div class="f-acc">${cta}</div>`:''}</div>
     <ul class="ruta-datos"><li class="g"><b>${p.ok}</b><span>${p.ok===1?'acierto':'aciertos'}</span></li><li class="p"><b>${p.ko}</b><span>${p.ko===1?'fallo':'fallos'}</span></li><li><b>${quedan}</b><span>sin responder</span></li></ul>
   </section>
+  <nav class="dir-atajos" aria-label="Ir a una categoría">${Object.keys(DIR_CAT).map(c=>{ const pc=progresoDirectos(null,c); return `<button type="button" class="tecla dir-atajo" data-accion="dir-cat" data-c="${c}"><b>${DIR_CAT[c].nombre}</b><small>${pc.resp} de ${pc.total}</small></button>`; }).join('')}</nav>
   ${cats}`;
 }
 /* El test de un clip. «fresco» = todavía no hay respuesta a la vista (sin responder, o respondiendo otra vez): ni el título, ni la clave, ni el vídeo
@@ -5361,19 +5409,20 @@ function vistaDirecto(n){
         <h2 class="dir-kicker" id="d-clip-t">${ICO.video}El clip del directo</h2>
         <div class="dir-pantalla apagada"><span class="dir-apagada-ico" aria-hidden="true">${ICO.candado}</span><p>Responde para ver el clip</p><small>El momento del directo en el que Alex lo explica · ${dirDur(d.seg)}</small></div>
       </div></section>`
-    :`<section class="panel dir-clip entra-lado" aria-labelledby="d-clip-t"><div class="panel-cuerpo">
+    :`<section class="panel dir-clip hecho entra-lado" aria-labelledby="d-clip-t"><div class="panel-cuerpo">
         ${res}
         <p class="dir-kicker">${ICO.video}Así lo explica Alex en el directo</p>
         <h2 class="dir-titulo" id="d-clip-t">${esc(d.titulo)}</h2>
         <p class="dir-clave">${esc(d.clave)}</p>
-        <div class="dir-pantalla"><video id="dir-video" controls playsinline preload="none" poster="clips/${d.id}.jpg" src="clips/${d.id}.mp4" aria-label="Clip del directo: ${esc(d.titulo)}"></video></div>
-        <p class="dir-error" id="dir-error" role="alert" hidden><span>No se ha podido cargar el clip. Revisa tu conexión.</span><button type="button" class="enlace" data-accion="dir-reintentar">Reintentar</button></p>
+        <div class="dir-pantalla"><video id="dir-video" controls playsinline preload="none" poster="clips/${d.id}.jpg" src="clips/${d.id}.mp4" aria-label="Clip del directo: ${esc(d.titulo)}"></video>
+          <p class="dir-error" id="dir-error" role="alert" hidden><span>No se ha podido cargar el clip. Revisa tu conexión.</span><button type="button" class="boton blanco peq" data-accion="dir-reintentar">Reintentar</button></p></div>
       </div></section>`;
   let nav='';
   if(!fresco){
+    const sig=dirSig(n), ant=iRep<0 && !dirPendiente(n) && dirReciente!==d.id && n>1;      // «Anterior» solo cuando se repasa con todo respondido
     if(iRep>=0) nav=`<button type="button" class="boton grande" data-accion="dir-sig">${iRep<dirRep.cola.length-1?'Siguiente clip':'Terminar el repaso'}</button>`;
-    else nav=`<button type="button" class="boton grande" data-accion="dir-sig">${dirPendiente(n)?'Siguiente clip':'Ver el resumen'}</button><button type="button" class="boton sec grande" data-accion="dir-repetir">Repetir</button>`;
-    if(iRep>=0 || dirPendiente(n)) nav+='<a class="boton sec grande" href="#formacion/directos">Volver</a>';
+    else nav=`<button type="button" class="boton grande" data-accion="dir-sig">${sig?'Siguiente clip':'Ver el resumen'}</button>${ant?'<button type="button" class="boton sec grande" data-accion="dir-ant">Anterior</button>':''}<button type="button" class="boton sec grande" data-accion="dir-repetir">Repetir</button>`;
+    if(iRep>=0 || sig) nav+='<a class="boton sec grande" href="#formacion/directos">Volver</a>';
   }
   nav+=`<p class="atajos">Atajos: <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> para responder, <kbd>Intro</kbd> para seguir</p>`;
   return `<header class="quiz-cab dir-cab">
@@ -5382,7 +5431,7 @@ function vistaDirecto(n){
   </header>
   <div class="dir-test${fresco?' fresco':''}">
     <section class="panel dir-preg" aria-labelledby="d-preg"><div class="preg-cuerpo">
-      <p class="p-num">Pregunta · clip de ${dirDur(d.seg)}</p>
+      <p class="p-num">Pregunta · ${d.opciones.length} opciones · clip de ${dirDur(d.seg)}</p>
       <p class="enunciado" id="d-preg">${esc(d.pregunta)}</p>
       <ol class="opciones">${opciones}</ol>
     </div></section>
@@ -5397,13 +5446,29 @@ function trasDirectos(){
 }
 /* Tras responder: la placa del clip (veredicto arriba, vídeo abajo) entera a la vista con el menor desplazamiento posible; si no cabe, manda el veredicto.
    En ordenador va al lado de la pregunta y casi nunca hay que mover nada; en el móvil queda justo debajo de las opciones. */
-function dirALaVista(){
+function dirALaVista(alAbrir){      // alAbrir: un clip ya respondido que se abre para repasarlo (sin mover el foco y sin animación)
   const ver=$('#d-ver'), clip=$('.dir-clip',vista); if(!ver || !clip) return;
-  ver.focus({preventScroll:true});
+  if(!alAbrir) ver.focus({preventScroll:true});
   const cs=getComputedStyle(document.documentElement), arriba=parseFloat(cs.scrollPaddingTop)||12, abajo=parseFloat(cs.scrollPaddingBottom)||12, r=clip.getBoundingClientRect();
   const t=r.top-arriba, b=r.bottom-(window.innerHeight-abajo);
   const dy=b>0?Math.min(b,Math.max(0,t)):(t<0?t:0);
-  if(Math.abs(dy)>1) window.scrollBy({top:dy,behavior:REDUCIR?'auto':'smooth'});
+  if(Math.abs(dy)>1) window.scrollBy({top:dy,behavior:REDUCIR||alAbrir?'auto':'smooth'});
+}
+/* Adónde lleva el botón principal de un clip respondido: al siguiente SIN responder (da la vuelta). Si no queda ninguno: al resumen cuando el clip se acaba
+   de responder (es el final) y al siguiente por orden cuando se ha abierto para repasarlo. 0 = a la portada. */
+function dirSig(n){ const p=dirPendiente(n); if(p) return p; const d=DIRECTOS[n-1]; return d && dirReciente!==d.id && n<DIRECTOS.length ? n+1 : 0; }
+/* Tras navegar (con un enlace o un botón, no con «atrás»): al volver de un clip a la portada queda a la vista y con el foco su tarjeta (antes se volvía arriba y,
+   en el móvil, la tarjeta quedaba cuatro pantallas más abajo); «Ver el resumen» y el final del repaso sí van arriba. En móvil y tableta, un clip ya respondido se
+   abre por su placa (veredicto y vídeo), que es lo que se viene a ver, igual que queda justo después de responder. */
+function dirTrasNavegar(deClip){
+  if(ruta!=='formacion' || subForm!=='directos') return;
+  if(dirVista==null){
+    const a=deClip && !dirAlResumen ? $(`.dir-lista a[href="#formacion/directos/${deClip}"]`,vista) : null; dirAlResumen=false;
+    if(a){ a.scrollIntoView({block:'center'}); a.focus({preventScroll:true}); }
+    return;
+  }
+  const d=dirActual();
+  if(d && dirResp(d) && dirDeNuevo!==d.id && window.matchMedia && window.matchMedia('(max-width:1060px)').matches) dirALaVista(true);
 }
 function elegirDirecto(o){
   const d=dirActual(); if(!d || REV || !(o>=0 && o<d.opciones.length)) return;
@@ -5411,7 +5476,7 @@ function elegirDirecto(o){
   const antes=progresoDirectos().resp;
   if(!state.directos || typeof state.directos!=='object' || Array.isArray(state.directos)) state.directos={};
   state.directos[d.id]={o,ok:o===d.correcta,f:iso(new Date())};
-  dirDeNuevo=null; if(SERVIDOR) dirSubir(); else guardar(); render(); dirALaVista();
+  dirDeNuevo=null; dirReciente=d.id; if(SERVIDOR) dirSubir(); else guardar(); render(); dirALaVista();
   if(antes<DIRECTOS.length && progresoDirectos().resp===DIRECTOS.length) setTimeout(confeti,250);
 }
 /* Dos dispositivos del mismo alumno (el diario en el portátil, los tests en el móvil). Cada guardado sube el estado ENTERO y el estado solo se lee al abrir
@@ -5473,9 +5538,9 @@ function dirSiguiente(){
     const cola=dirRep.cola, sig=cola[cola.indexOf(d.id)+1];
     if(sig){ dirDeNuevo=sig; irRuta('formacion/directos/'+(DIRECTOS.findIndex(x=>x.id===sig)+1)); return; }
     const bien=DIRECTOS.filter(x=>cola.includes(x.id) && dirOk(x)===true).length, nc=cola.length;
-    dirRep=null; irRuta('formacion/directos',()=>toast(`Repaso terminado: ${bien} de ${nc} ${nc===1?'acertado':'acertados'}`)); return;
+    dirRep=null; dirAlResumen=true; irRuta('formacion/directos',()=>toast(`Repaso terminado: ${bien} de ${nc} ${nc===1?'acertado':'acertados'}`)); return;
   }
-  const n=dirPendiente(dirVista); irRuta(n?'formacion/directos/'+n:'formacion/directos');
+  const n=dirSig(dirVista); if(!n) dirAlResumen=true; irRuta(n?'formacion/directos/'+n:'formacion/directos');
 }
 function dirRepetir(){
   const d=dirActual(); if(!d || REV) return;
@@ -7867,6 +7932,8 @@ document.addEventListener('click',e=>{
     case 'fallos': empezar('fallos'); break;
     case 'dir-opcion': elegirDirecto(Number(b.dataset.o)); break;
     case 'dir-sig': dirSiguiente(); break;
+    case 'dir-ant': if(dirActual() && dirVista>1) irRuta('formacion/directos/'+(dirVista-1)); break;
+    case 'dir-cat': { const t=$('#dc-'+b.dataset.c,vista); if(t){ t.closest('section').scrollIntoView({block:'start',behavior:REDUCIR?'auto':'smooth'}); t.tabIndex=-1; t.focus({preventScroll:true}); } } break;
     case 'dir-repetir': dirRepetir(); break;
     case 'dir-fallos': dirRepasar(); break;
     case 'dir-reintentar': { const v=$('#dir-video'), er=$('#dir-error'); if(v){ if(er) er.hidden=true; v.load(); const pr=v.play(); if(pr && pr.catch) pr.catch(()=>{}); v.focus({preventScroll:true}); } } break;
@@ -7907,6 +7974,7 @@ document.addEventListener('keydown',e=>{
     const k=e.key.toLowerCase(), mapa={a:0,b:1,c:2,d:3,'1':0,'2':1,'3':2,'4':3}, fresco=!dirResp(d) || dirDeNuevo===d.id;
     if(k in mapa){ if(fresco){ e.preventDefault(); elegirDirecto(mapa[k]); } }
     else if((k==='enter'||k==='arrowright') && !fresco){ if((tg==='BUTTON'||tg==='A') && k==='enter') return; e.preventDefault(); dirSiguiente(); }
+    else if(k==='arrowleft' && !fresco){ const b=$('[data-accion="dir-ant"]',vista); if(b){ e.preventDefault(); b.click(); } }
     return;
   }
   /* Atajos del test: A, B, C (o 1, 2, 3) para responder; Intro o flecha derecha para seguir */
@@ -7962,9 +8030,9 @@ form.addEventListener('submit',e=>{
 });
 window.addEventListener('hashchange',()=>{
   if(!$('#instalar').hidden){ if(instalarFoco && vista.contains(instalarFoco)) instalarFoco=null; cerrarInstalar(); } // la hoja de instalar no se queda abierta sobre otra vista (gesto «atrás»); el foco no vuelve a algo que se va a repintar
-  const p=pedida && pedida.h===location.hash?pedida:null, antes=[ruta,lecVista,revId,dirVista].join(); pedida=null;
+  const p=pedida && pedida.h===location.hash?pedida:null, antes=[ruta,lecVista,revId,dirVista].join(), deClip=ruta==='formacion' && subForm==='directos'?dirVista:null; pedida=null;
   transicion(()=>{ leerRuta(); render();
-    if(p && (p.nav || antes!==[ruta,lecVista,revId,dirVista].join())) window.scrollTo(0,0); // otra vista (módulo, lección o alumno) empieza arriba: antes se quedaba a la altura de la anterior. Las pestañas de dentro de una vista y «atrás/adelante» siguen como estaban
+    if(p && (p.nav || antes!==[ruta,lecVista,revId,dirVista].join())){ window.scrollTo(0,0); if(!p.nav) dirTrasNavegar(deClip); } // otra vista (módulo, lección o alumno) empieza arriba: antes se quedaba a la altura de la anterior. Las pestañas de dentro de una vista y «atrás/adelante» siguen como estaban
     if(pendiente){ const f=pendiente; pendiente=null; f(); } });
 });
 const pin=$('#paleta-in');
