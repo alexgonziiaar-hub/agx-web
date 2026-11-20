@@ -5528,7 +5528,12 @@ function dirALaVista(alAbrir){      // alAbrir: un clip ya respondido que se abr
   const ver=$('#d-ver'), clip=$('.dir-clip',vista); if(!ver || !clip) return;
   if(!alAbrir) ver.focus({preventScroll:true});
   const cs=getComputedStyle(document.documentElement), arriba=parseFloat(cs.scrollPaddingTop)||12, abajo=parseFloat(cs.scrollPaddingBottom)||12, r=clip.getBoundingClientRect();
-  const t=r.top-arriba, b=r.bottom-(window.innerHeight-abajo);
+  let arr=r.top, aba=r.bottom;
+  /* En ordenador, «Siguiente pregunta» va debajo de la pregunta, no de la placa del clip: si los dos caben a la vez, se cuenta también con él (en un portátil
+     bajo, 1280×720, se quedaba unos píxeles bajo el pliegue en algunas preguntas) */
+  const sig=$('[data-accion="dir-sig"]',vista);
+  if(sig && window.matchMedia && window.matchMedia('(min-width:1061px)').matches){ const s=sig.getBoundingClientRect(), a2=Math.min(arr,s.top), b2=Math.max(aba,s.bottom); if(b2-a2<=window.innerHeight-arriba-abajo){ arr=a2; aba=b2; } }
+  const t=arr-arriba, b=aba-(window.innerHeight-abajo);
   const dy=b>0?Math.min(b,Math.max(0,t)):(t<0?t:0);
   if(Math.abs(dy)>1) window.scrollBy({top:dy,behavior:REDUCIR||alAbrir?'auto':'smooth'});
 }
