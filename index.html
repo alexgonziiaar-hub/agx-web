@@ -5272,10 +5272,11 @@ function renderFormacion(){
 }
 
 /* ---------- Tests de los directos: una pregunta por clip y, al responder, el extracto del directo ----------
-   Cada clip es clips/<id>.mp4 con su portada clips/<id>.jpg (el id es el nombre del clip en el material, con «gonzi» donde la transcripción puso «gonci»). En pantalla y en la dirección el clip va por su NÚMERO (1, 2, 3…: el orden de DIRECTOS):
+   Cada clip es <CLIPS_BASE><id>.mp4 con su portada <CLIPS_BASE><id>.jpg (el id es el nombre del clip en el material, con «gonzi» donde la transcripción puso «gonci»). En pantalla y en la dirección el clip va por su NÚMERO (1, 2, 3…: el orden de DIRECTOS):
    el id es el título en minúsculas y el título es la lección, así que ni uno ni otro se pintan hasta que el alumno ha respondido.
    Estado del alumno: state.directos = { <id>: { o: opción elegida (0–3), ok: si acertó, f: 'AAAA-MM-DD' } }. Un estado antiguo no trae la clave: se lee como vacío.
    El acierto se decide siempre con «o» y la clave de respuestas de aquí, no con el «ok» guardado. */
+const CLIPS_BASE='clips/';   // dónde están los vídeos y sus portadas (<id>.mp4 y <id>.jpg). Para alojarlos en otro sitio basta cambiar esta línea por la dirección completa de la carpeta nueva, acabada en barra
 const DIR_CAT={
   C:{nombre:'Conceptos',desc:'Cómo lee Alex el footprint, los big trades y el perfil'},
   E:{nombre:'Entradas',desc:'Dónde entra, con qué confirmación y por qué'},
@@ -5459,7 +5460,7 @@ function vistaDirecto(n){
         <p class="dir-kicker">${ICO.video}Así lo explica Alex en el directo</p>
         <h2 class="dir-titulo" id="d-clip-t">${esc(d.titulo)}</h2>
         <p class="dir-clave">${esc(d.clave)}</p>
-        <div class="dir-pantalla"><video id="dir-video" controls playsinline preload="none" poster="clips/${d.id}.jpg" src="clips/${d.id}.mp4" aria-label="Clip del directo: ${esc(d.titulo)}"></video>
+        <div class="dir-pantalla"><video id="dir-video" controls playsinline preload="none" poster="${CLIPS_BASE}${d.id}.jpg" src="${CLIPS_BASE}${d.id}.mp4" aria-label="Clip del directo: ${esc(d.titulo)}"></video>
           <p class="dir-error" id="dir-error" role="alert" hidden><span>No se ha podido cargar el clip. Revisa tu conexión.</span><button type="button" class="boton blanco peq" data-accion="dir-reintentar">Reintentar</button></p></div>
       </div></section>`;
   let nav='';
