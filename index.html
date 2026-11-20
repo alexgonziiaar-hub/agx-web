@@ -5544,10 +5544,16 @@ function dirSig(n){ const p=dirPendiente(n); if(p) return p; const d=DIRECTOS[n-
 /* Tras navegar (con un enlace o un botón, no con «atrás»): al volver de un clip a la portada queda a la vista y con el foco su tarjeta (antes se volvía arriba y,
    en el móvil, la tarjeta quedaba cuatro pantallas más abajo); «Ver el resumen» y el final del repaso sí van arriba. En móvil y tableta, un clip ya respondido se
    abre por su placa (veredicto y vídeo), que es lo que se viene a ver, igual que queda justo después de responder. */
-function dirTrasNavegar(deClip){
+function dirTrasNavegar(deClip,recien){   // recien: se vuelve de una pregunta que se acaba de responder (no de un repaso ni de volver a ver una ya respondida)
   if(ruta!=='formacion' || subForm!=='directos') return;
   if(dirVista==null){
-    const a=deClip && !dirAlResumen ? $(`.dir-lista a[href="#formacion/directos/${deClip}"]`,vista) : null; dirAlResumen=false;
+    let a=deClip && !dirAlResumen ? $(`.dir-lista a[href="#formacion/directos/${deClip}"]`,vista) : null; dirAlResumen=false;
+    /* Recién respondida, su tarjeta ya está al final, en el plegable de respondidas: si en la categoría queda algo pendiente, se lleva al alumno a la
+       siguiente pendiente (la primera con número mayor; si no hay, la primera) y el plegable sigue cerrado. Sin nada pendiente, a la tarjeta, como antes. */
+    if(a && recien && a.closest('.dir-hechas')){
+      const pend=$$('.dir-cuerpo>.dir-lista a.dir-card.pend',a.closest('.dir-cuerpo'));
+      a=pend.find(x=>+x.getAttribute('href').split('/').pop()>deClip)||pend[0]||a;
+    }
     if(a){ for(let det=a.closest('details');det;det=det.parentElement.closest('details')) if(!det.open){ if(det.dataset.c) det.dataset.ab='1'; det.open=true; }   // la categoría del clip del que se vuelve se abre para enseñar su tarjeta (sin apuntarlo: no lo ha pedido el alumno)
       a.scrollIntoView({block:'center'}); a.focus({preventScroll:true}); }
     return;
@@ -8061,9 +8067,9 @@ form.addEventListener('submit',e=>{
 });
 window.addEventListener('hashchange',()=>{
   if(!$('#instalar').hidden){ if(instalarFoco && vista.contains(instalarFoco)) instalarFoco=null; cerrarInstalar(); } // la hoja de instalar no se queda abierta sobre otra vista (gesto «atrás»); el foco no vuelve a algo que se va a repintar
-  const p=pedida && pedida.h===location.hash?pedida:null, antes=[ruta,lecVista,revId,dirVista,ruta==='formacion'&&subForm==='directos'].join(), deClip=ruta==='formacion' && subForm==='directos'?dirVista:null; pedida=null;
+  const p=pedida && pedida.h===location.hash?pedida:null, antes=[ruta,lecVista,revId,dirVista,ruta==='formacion'&&subForm==='directos'].join(), deClip=ruta==='formacion' && subForm==='directos'?dirVista:null, dirRecien=!!(deClip && !dirRep && dirReciente && DIRECTOS[deClip-1] && DIRECTOS[deClip-1].id===dirReciente); pedida=null;
   transicion(()=>{ leerRuta(); render();
-    if(p && (p.nav || antes!==[ruta,lecVista,revId,dirVista,ruta==='formacion'&&subForm==='directos'].join())){ window.scrollTo(0,0); if(!p.nav) dirTrasNavegar(deClip); } // otra vista (módulo, lección o alumno) empieza arriba: antes se quedaba a la altura de la anterior. Las pestañas de dentro de una vista y «atrás/adelante» siguen como estaban
+    if(p && (p.nav || antes!==[ruta,lecVista,revId,dirVista,ruta==='formacion'&&subForm==='directos'].join())){ window.scrollTo(0,0); if(!p.nav) dirTrasNavegar(deClip,dirRecien); } // otra vista (módulo, lección o alumno) empieza arriba: antes se quedaba a la altura de la anterior. Las pestañas de dentro de una vista y «atrás/adelante» siguen como estaban
     if(pendiente){ const f=pendiente; pendiente=null; f(); } });
 });
 const pin=$('#paleta-in');
